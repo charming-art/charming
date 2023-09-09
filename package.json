@@ -2,18 +2,22 @@
   "name": "@charming-art/app",
   "version": "0.0.1",
   "description": "The data-driven JavaScript renderer.",
+  "author": {
+    "name": "pearmini",
+    "url": "https://github.com/pearmini"
+  },
+  "license": "ISC",
+  "type": "module",
   "main": "src/index.js",
+  "module": "src/index.js",
+  "files": [
+    "src/**/*.js",
+    "dist/*/**.js"
+  ],
   "scripts": {
     "dev": "vite dev"
   },
-  "keywords": [
-    "renderer",
-    "creative code",
-    "data-driven",
-    "visualization"
-  ],
-  "author": "pearmini",
-  "license": "ISC",
+  "sideEffect": false,
   "devDependencies": {
     "vite": "^4.4.9"
   }
