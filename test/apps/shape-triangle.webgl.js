@@ -2,7 +2,7 @@ import * as cm from "./_cm.js";
 import { frame } from "./_frame.js";
 import { dispose } from "./_dispose.js";
 
-export function TriangleWebGL() {
+export function ShapeTriangleWebGL() {
   const app = cm.app({
     width: 600,
     height: 200,
