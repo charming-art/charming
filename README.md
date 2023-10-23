@@ -13,21 +13,17 @@ const app = cm.app({
 });
 
 app
-  .data(Array.from({ length: 240 }, (_, i) => i))
-  .map((_, i, data) => (i * Math.PI * 2) / data.length)
+  .data(cm.range(240))
+  .process(cm.map, (_, i, data) => (i * Math.PI * 2) / data.length)
   .append(cm.circle, {
-    x: {
-      value: (t) => Math.cos(t) * Math.cos(t * 3),
-      range: [15, app.prop("width") - 30],
-    },
-    y: {
-      value: (t) => Math.sin(t) * Math.cos(t * 3),
-      range: [15, app.prop("height") - 30],
-    },
-    r: {
-      value: (_, i) => i,
-      range: [1, 15],
-    },
+    x: (t) => Math.cos(t) * Math.cos(t * 3),
+    y: (t) => Math.sin(t) * Math.cos(t * 3),
+    r: (_, i) => i,
+  })
+  .transform(cm.scale, {
+    x: { range: [15, app.prop("width") - 30] },
+    y: { range: [15, app.prop("height") - 30] },
+    r: { range: [1, 15] },
   });
 
 document.body.appendChild(app.render());
