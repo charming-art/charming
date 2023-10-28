@@ -33,7 +33,6 @@ export function randomCurve() {
       .append(cm.line, {
         x: (_, i) => i,
         y: (d) => curve(d),
-        r: 1,
         stroke: "black",
         strokeWidth: 2,
       })
