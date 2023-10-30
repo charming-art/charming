@@ -1,11 +1,11 @@
-# @charming-art/app
+# Charming: Charm Computing
 
-The data-driven JavaScript renderer.
+The data-driven creative coding language with high performance and multi styles.
 
 ## Installing
 
 ```js
-import * as cm from "@charming-art/app";
+import * as cm from "@charming-art/charming";
 
 const app = cm.app({
   width: 640,
