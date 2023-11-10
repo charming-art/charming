@@ -71,5 +71,5 @@ app
     r: { range: [1, 15] },
   });
 
-document.body.appendChild(app.render());
+document.body.appendChild(app.render().node());
 ```
