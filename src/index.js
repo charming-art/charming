@@ -51,7 +51,7 @@ export { vecNeg, vecNegX, vecNegY } from "./vector/neg.js";
 export { vecInX, vecInY } from "./vector/in.js";
 export { vecAngle } from "./vector/angle.js";
 export { vecFromAngle } from "./vector/fromAngle.js";
-export { pathArray } from "./pathArray.js";
+export { pathArray } from "./helper/pathArray.js";
 export { ghost as fontGhost } from "./font/ghost.js";
 export { standard as fontStandard } from "./font/standard.js";
 export { rainbowX as gradientRainBowX } from "./gradient/rainbowX.js";

@@ -2,6 +2,7 @@ import * as cm from "../../src/index.js";
 import { dispose } from "../dispose.js";
 import { stats } from "../stats.js";
 
+// @see https://asciinema.org/a/19919
 export async function terminalWhiteNoise() {
   const app = cm.app({
     renderer: await cm.terminal(),
