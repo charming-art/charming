@@ -19,7 +19,6 @@ export { log as scaleLog } from "./scale/log.js";
 export { canvas } from "./canvas/index.js";
 export { webgl } from "./webgl/index.js";
 export { terminal } from "./terminal/index.js";
-export { radian } from "./math/radian.js";
 export { clamp } from "./math/clamp.js";
 export { random } from "./math/random.js";
 export { randomNoise } from "./math/randomNoise.js";
