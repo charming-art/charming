@@ -4,6 +4,10 @@
 
 The data-driven language for creative coding and ASCII art.
 
+- [Why is Charming](#why-is-charming)
+- [Examples](https://observablehq.com/d/2f9bf9f52cb24090)
+- [API Reference](#api-reference)
+
 ## Installing
 
 Charming is typically installed via a package manager such as Yarn or NPM.
