@@ -89,6 +89,8 @@ document.body.appendChild(app.render());
 
 ### Charming will be composable
 
+### Charming embraces existing libraries
+
 ### Compared to P5.js
 
 ### Compared to D3.js
