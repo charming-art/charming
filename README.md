@@ -81,9 +81,11 @@ document.body.appendChild(app.render());
 
 ## Why is Charming?
 
+### Charming supports ASCII art
+
 ### Charming is data-driven
 
-### Charming supports ASCII art
+### Charming prefers functional programming
 
 ### Charming will be high performance
 
