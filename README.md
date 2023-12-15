@@ -2,7 +2,7 @@
 
 **Charming** is a free, open-source, creative code language for Charming Computing, which means making arts by computational algorithm. It has data-driven, concise, inclusive, yet expressive API inspired by [G2.js](https://github.com/antvis/G2), [D3.js](https://github.com/d3) and [P5.js](https://p5js.org/).
 
-The data-driven API style endows Charming with the potential for high performance, as it can take advantage of WebGL's [batch rendering](https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/drawArraysInstancedANGLE) capabilities: rendering hundreds to thousands of instanced elements with just a single draw call. At the same time, some GLSL properties can be defined to offload expensive calculations to the GPU, thereby significantly increasing the frame rate.
+The data-driven API style endows Charming with the potential for high performance, as it can take advantage of WebGL's [batch rendering](https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/drawArraysInstancedANGLE) capabilities: rendering hundreds to thousands of instanced elements with just a single draw call. At the same time, some GLSL properties can be defined to offload expensive calculations to the GPU, thereby significantly increasing the FPS.
 
 <img alt="example-circles-glsl-code" src="./img/example-circles-glsl-code.png" height="420px" style="margin-right:1em"/><img alt="example-circles-glsl" src="./img/example-circles-glsl.gif" height="420px"/>
 
