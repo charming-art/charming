@@ -1,4 +1,4 @@
-# Charming: Charm Computing
+# Charming: Charming Computing
 
 > WIP
 
@@ -36,20 +36,20 @@ In vanilla HTML, Charming can be imported as an ES module, say from jsDelivr:
 
   // ...
 
-  document.body.append(app.render());
+  document.body.append(app.render().node());
 </script>
 ```
 
 Charming is also available as a UMD bundle for legacy browsers.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@charming-art/charming@0.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@charming-art/charming@0.0.2"></script>
 <script>
   const app = cm.app();
 
   // ...
 
-  document.body.append(app.render());
+  document.body.append(app.render().node());
 </script>
 ```
 
@@ -108,7 +108,7 @@ The core concepts of Charming, which are included in [core build](./src/core.js)
 - [Transform](#transform) - deriving shape attribute values
 - [Scale](#scale) - mapping abstract data to visual representation
 - [Event](#event) - handling hooks and events
-- [Prop](#prop) - returning properties of app
+- [Prop](#prop) - returning properties of the app
 
 The advanced concepts of Charming, which are included in [full build](./src/index.js):
 
@@ -1119,7 +1119,7 @@ app.call(measure);
 
 ### Prop
 
-Returning properties of app.
+Returning properties of the app.
 
 <a name="prop-width" href="#prop-width">#</a> _app_.**prop**(_"width"_)
 
