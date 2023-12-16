@@ -10,7 +10,7 @@ In addition to high performance, Charming also focus on making **ASCII art** acc
 
 <a href="https://observablehq.com/d/9e951c5e9d721ef5"><img alt="example-white-noise-code" src="./img/example-white-noise-code.png" height="430px" style="margin-right:1em"/></a><img alt="example-white-noise" src="./img/example-white-noise.gif" height="430px"/>
 
-Charming also put strong emphasis on **lightweight**: the core bundle is just 23kb minified. ([Smaller libraries have smaller carbon footprint!](https://observablehq.com/@mrchrisadams/carbon-footprint-of-sending-data-around)) With that in mind, Charming is designed to be flexible and incrementally adoptable. It is also means that Charming is **beginner friendly**, because you don't have to start by diving to complex concepts: think of it as a collection of syntactic sugars for [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
+Charming also put strong emphasis on **lightweight**: the [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js) is just 23kb minified. ([Smaller libraries have smaller carbon footprint!](https://observablehq.com/@mrchrisadams/carbon-footprint-of-sending-data-around)) With that in mind, Charming is designed to be flexible, incrementally adoptable and support fully [tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking). It is also means that Charming is **beginner friendly**, because you don't have to start by diving into complex concepts: think of it as a collection of syntactic sugars for [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
 
 Our hope with Charming is that you spend less time wrangling the machinery of programming and more time "using computing to tell stories". Or put more simply: **with Charming, you'll express more, more easily.** If you are new to Charming, we highly recommend first reading this article to introduce Charming's [inspiration](#why-is-charming) and core concepts:
 
@@ -141,7 +141,7 @@ document.body.appendChild(app.render().node(()));
 
 ## API Reference
 
-The core concepts of Charming, which are included in [core build](./src/core.js):
+The core concepts of Charming, which are included in [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js):
 
 - [App](#app) - rendering app to DOM and animating it
 - [Flow](#flow) - binding data to shapes
@@ -152,7 +152,7 @@ The core concepts of Charming, which are included in [core build](./src/core.js)
 - [Event](#event) - handling hooks and events
 - [Prop](#prop) - returning properties of the app
 
-The advanced concepts of Charming, which are included in [full build](./src/index.js):
+The advanced concepts of Charming, which are included in [full bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.umd.min.js):
 
 - [Renderer](#renderer) - different rendering technologies and styles
 - [Color](#color) - defining colors for shapes
