@@ -1,18 +1,18 @@
 # Charming: Charming Computing
 
-**Charming** is a free, open-source, creative code language for Charming Computing, which means making arts by computational algorithm. It has **data-driven**, declarative, concise, inclusive, yet expressive API inspired by [G2.js](https://github.com/antvis/G2), [D3.js](https://github.com/d3) and [P5.js](https://p5js.org/).
+**Charming** is a free, open-source, creative code language for Charming Computing, which means making arts by computational algorithm. It has **declarative**, **data-driven**,  concise, inclusive, yet expressive API inspired by [G2.js](https://github.com/antvis/G2), [D3.js](https://github.com/d3) and [P5.js](https://p5js.org/).
 
 The data-driven API style endows Charming with the potential for **high performance**, as it can take advantage of WebGL's [batch rendering](https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/drawArraysInstancedANGLE) technique: rendering hundreds to thousands of objects or elements with just a single draw call. At the same time, some GLSL properties can be defined to offload expensive calculations to the GPU, thereby significantly increasing the FPS.
 
 <a href="https://observablehq.com/d/86d2c1fe79fac300"><img alt="example-circles-glsl-code" src="./img/example-circles-glsl-code.png" height="420px" style="margin-right:1em"/></a><img alt="example-circles-glsl" src="./img/example-circles-glsl.gif" height="420px"/>
 
-In addition to high performance, Charming also focus on making **ASCII art** accessible for artists, designers, educators, beginners, and anyone else! It provided a consistent API for both styles, and the [terminal canvas](./src/terminal/) for ASCII art is embedded in JavaScript and uses a [software renderer](./rust/) written in Rust compiled to WASM, to gain high performance hopefully.
+In addition to high performance, Charming focuses on making **ASCII art** accessible for artists, designers, educators, beginners, and anyone else! It provided a consistent API for both styles, and the [terminal canvas](./src/terminal/) for ASCII art is embedded in JavaScript and uses a [software renderer](./rust/) written in Rust compiled to WASM, to gain high performance hopefully.
 
 <a href="https://observablehq.com/d/9e951c5e9d721ef5"><img alt="example-white-noise-code" src="./img/example-white-noise-code.png" height="430px" style="margin-right:1em"/></a><img alt="example-white-noise" src="./img/example-white-noise.gif" height="430px"/>
 
-Charming also put strong emphasis on **lightweight**: the [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js) is just 23kb minified. ([Smaller libraries have smaller carbon footprint!](https://observablehq.com/@mrchrisadams/carbon-footprint-of-sending-data-around)) With that in mind, Charming is designed to be flexible, incrementally adoptable and support fully [tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking). It is also means that Charming is **beginner friendly**, because you don't have to start by diving into complex concepts: think of it as a collection of syntactic sugars for [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
+Moreover, Charming also puts strong emphasis on **lightweight**: the [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js) is just 23kb minified. ([Smaller libraries have smaller carbon footprint!](https://observablehq.com/@mrchrisadams/carbon-footprint-of-sending-data-around)) With that in mind, Charming is designed to be flexible, incrementally adoptable and supports fully [tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking). It's also means that Charming is **beginner friendly**, because you don't have to start by diving into complex concepts: think of it as a collection of syntactic sugars for [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
 
-Our hope with Charming is that you spend less time wrangling the machinery of programming and more time "using computing to tell stories". Or put more simply: **with Charming, you'll express more, more easily.** If you are new to Charming, we highly recommend first reading this article to introduce Charming's [inspiration](#why-is-charming) and core concepts:
+Most importantly, our hope with Charming is that you spend less time wrangling the machinery of programming and more time "using computing to tell stories". Or put more simply: **with Charming, you'll express more, more easily.** If you are new to Charming, we highly recommend first reading this article to introduce Charming's [inspiration](#why-is-charming) and core concepts:
 
 - [App](#app) - rendering app to DOM and animating it
 - [Flow](#flow) - binding data to shapes
@@ -123,7 +123,7 @@ document.body.appendChild(app.render().node(()));
 
 ## Why is Charming?
 
-### Charming is data-driven
+### Charming is declarative and data-driven
 
 ### Charming is high performance
 
