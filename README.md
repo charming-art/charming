@@ -101,8 +101,10 @@ document.body.appendChild(app.render().node());
 <img src="./img/example-ascii-text.png" />
 
 ```js
+import * as cm from "@charming-art/charming";
+
 const app = cm.app({
-  width,
+  width: 1200,
   renderer: await cm.terminal(),
 });
 
