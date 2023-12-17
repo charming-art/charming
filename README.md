@@ -342,7 +342,7 @@ app
 
 <img src="./img/example-noise.png" width=640 />
 
-Simple components gain power through composition, you can even define more complex shape to extend Charming's abilities. [For example](https://observablehq.com/@pearmini/bar), to define and use a barY shape to plot a bar chart:
+Simple components gain power through composition, you can even define more complex shape to extend Charming's features while maintaining a consistent API style and cohesive architecture. [For example](https://observablehq.com/@pearmini/bar), to define and use a barY shape to plot a bar chart:
 
 ```js
 app.data(data).append(barY, {
@@ -351,7 +351,9 @@ app.data(data).append(barY, {
 });
 ```
 
-<img src="./img/example-bar.png"  />
+<img src="./img/example-bar-chart.png"  />
+
+### Charming is lightweight
 
 ### Charming is beginner friendly
 
@@ -375,7 +377,7 @@ for (let i = 0; i < 100; i++) {
 }
 ```
 
-Beginners can learn new concepts progressively to increase efficiency as they master the basics, gradually unlocking the full potential of Charming. It is also possible for Charming to provide some wrappers to reduce the learning curve in the future.
+Beginners can learn new concepts progressively to increase efficiency as they master the basics, gradually unlocking the full potential of Charming. It is also possible for Charming to provide some wrappers to reduce the learning curve in the future:
 
 ```js
 import * as cm from "@charming-art/charming";
@@ -390,8 +392,6 @@ const node = cm.render({
 
 document.body.append(node);
 ```
-
-### Charming embraces existing libraries
 
 ### Compared to P5.js
 
