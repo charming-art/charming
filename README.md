@@ -322,7 +322,7 @@ function arrow(flow, { length, angle, x, y, rotate, ...options }) {
 }
 ```
 
-You can use this composite shape like any built-in shape. [For example](https://observablehq.com/d/82d4b52694a7f370), to draw a flow field:
+This composite shape can be used like any built-in shape. [For example](https://observablehq.com/d/82d4b52694a7f370), to draw a flow field:
 
 ```js
 app
@@ -342,7 +342,7 @@ app
 
 <img src="./img/example-noise.png" width=640 />
 
-Simple components gain power through composition, you can even define more complex shape to extend Charming's features while maintaining a consistent API style and cohesive architecture. [For example](https://observablehq.com/@pearmini/bar), to define and use a barY shape to plot a bar chart:
+Simple components gain power through composition, more complex shape can be defined to extend Charming's features while maintaining a consistent API style and cohesive architecture. [For example](https://observablehq.com/@pearmini/bar), to define and use a barY shape to plot a bar chart:
 
 ```js
 app.data(data).append(barY, {
@@ -401,7 +401,7 @@ While Charming try it best to minimize the learning curve, it must be acknowledg
 
 ### Compared to D3.js
 
-D3.js is great, great of all time. In fact, Charming is able to work seamlessly with most of helper modules from D3.js, such as [d3-array](https://github.com/d3/d3-scale) and [d3-scale](https://github.com/d3/d3-scale), and it is encouraged to do so. But [d3-selection](https://github.com/d3/d3-selection) is an exception, which can be considered the "renderer" for D3's ecosystem. It is built on SVG, which excels at interactive visualizations but is less suited for animations commonly used in computational art, owing to performance constraints. Although, in theory, d3-selection can work with any rendering technology that implements the [SVG standard](https://www.w3.org/TR/SVG2/), the complexity of the standard would inevitably introduce additional runtime overhead and increase the bundle size. In a word, for the majority of visualizations, D3.js is the preferred choice, while for computational art or performance-centric visualizations, Charming.js is the better option.
+D3.js is great, great of all time. In fact, Charming is able to work seamlessly with most of helper modules from D3.js, such as [d3-array](https://github.com/d3/d3-scale) and [d3-scale](https://github.com/d3/d3-scale), and it is encouraged to do so. But [d3-selection](https://github.com/d3/d3-selection) is an exception, which can be considered the "renderer" for D3's ecosystem. It is built on SVG, which excels at interactive visualizations but is less suited for animations commonly used in computational art, owing to performance constraints. Although, in theory, d3-selection can work with any rendering technology that implements the [SVG standard](https://www.w3.org/TR/SVG2/), the complexity of the standard would inevitably introduce additional runtime overhead and increase the bundle size. In a word, for the majority of visualizations, D3.js is the preferred choice, while for computational art or performance-centric visualizations, Charming.js may be the better option.
 
 ## API Reference
 
@@ -1221,7 +1221,7 @@ app
   });
 ```
 
-A scale's domain is typically inferred automatically. You can custom a scale explicitly using these options:
+A scale's domain is typically inferred automatically. It can be customized explicitly by these options:
 
 - **scale** - [scale](#scale), defaults to [scaleLinear](#cm-scaleLinear)
 - **domain** - abstract values, typically _[min, max]_
