@@ -1,8 +1,10 @@
 # Charming: Charming Computing
 
+> Charming is currently in the experimental stage; the stability and completeness of its API cannot be guaranteed.
+
 **Charming** is a free, open-source, creative code language for Charming Computing, which means making arts by computational algorithm. It has **declarative**, **data-driven**, concise, inclusive, yet expressive API inspired by [G2.js](https://github.com/antvis/G2), [D3.js](https://github.com/d3) and [P5.js](https://p5js.org/).
 
-The data-driven API style endows Charming with the potential for **high performance**, as it can take advantage of WebGL's [batch rendering](https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/drawArraysInstancedANGLE) technique: rendering hundreds to thousands of objects or elements with just a single draw call. At the same time, some GLSL properties can be defined to offload expensive calculations to the GPU, thereby significantly increasing the FPS.
+The data-driven API style provides Charming with the potential for **high performance**, as it can take advantage of WebGL's [batch rendering](https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/drawArraysInstancedANGLE) technique: rendering hundreds to thousands of objects or elements with just a single draw call. At the same time, some GLSL properties can be defined to offload expensive calculations to the GPU, thereby significantly increasing the FPS.
 
 <a href="https://observablehq.com/d/86d2c1fe79fac300"><img alt="example-circles-glsl-code" src="./img/example-circles-glsl-code.png" height="420px" style="margin-right:1em"/></a><img alt="example-circles-glsl" src="./img/example-circles-glsl.gif" height="420px"/>
 
@@ -307,7 +309,7 @@ In addition to supporting ASCII Art, Charming will also be able to support a var
 
 ### Charming is composable
 
-Inspired by component philosophy in [React](https://react.dev/), Charming makes it easy to define custom composite shape through pure function, such as this arrow shape:
+Inspired by the component philosophy in [React](https://react.dev/), Charming makes it easy to define custom composite shape through pure function, such as this arrow shape:
 
 ```js
 function arrow(flow, { length, angle, x, y, rotate, ...options }) {
@@ -355,7 +357,7 @@ app.data(data).append(barY, {
 
 ### Charming is lightweight but extensible
 
-Charming is lightweight because it focuses solely on one thing: drawing shapes driven by data, with the minified [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js) coming it at just 23kb. The other features are exposed as helper modules and can be adopted incrementally. Each modules have a thoughtfully designed interface, letting users plug in their own functions for processors, transforms, shapes...even custom renderers. In the future, there is potential to expand Charming with the development of various plugins, including a physics engine, plotting library, computational geometry toolkit, and image processing modules.
+Charming is lightweight because it focuses solely on one thing: drawing shapes driven by data, with the minified [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js) coming it at just 23kb. The other features are exposed as helper modules and can be adopted incrementally. Each modules have a thoughtfully designed interface, letting users plug in their own functions or objects for processors, transforms, shapes...even custom renderers. In the future, there is possibility to expand Charming with the development of various plugins, including a physics engine, plotting library, computational geometry toolkit, and image processing module.
 
 ### Charming is beginner friendly
 
@@ -397,11 +399,11 @@ document.body.append(node);
 
 ### Compared to P5.js
 
-While Charming try it best to minimize the learning curve, it must be acknowledged that P5.js remains more accessible to beginners, particularly those with no prior programming experience. Thus this convince bring some issues for advanced project, such as namespace pollution, large bundle size and additional overhead introduced by the Friendly Error System (FES). Therefore, for those who are new to programming or JavaScript, P5.js is still the best starting point. For others, Charming seems to be a more promising option.
+While Charming try it best to minimize the learning curve, it must be acknowledged that P5.js remains more accessible to beginners, particularly for those with no prior programming experience. Thus this convince bring some issues for advanced projects, such as namespace pollution, large bundle size and additional overhead introduced by the Friendly Error System (FES). Therefore, for those who are new to programming or JavaScript, P5.js is still the best starting point. For others, Charming seems to be a more promising option.
 
 ### Compared to D3.js
 
-D3.js is great, great of all time. In fact, Charming is able to work seamlessly with most of helper modules from D3.js, such as [d3-array](https://github.com/d3/d3-scale) and [d3-scale](https://github.com/d3/d3-scale), and it is encouraged to do so. But [d3-selection](https://github.com/d3/d3-selection) is an exception, which can be considered the "renderer" for D3's ecosystem. It is built on SVG, which excels at interactive visualizations but is less suited for animations commonly used in computational art, owing to performance constraints. Although, in theory, d3-selection can work with any rendering technology that implements the [SVG standard](https://www.w3.org/TR/SVG2/), the complexity of the standard would inevitably introduce additional runtime overhead and increase the bundle size. In a word, for the majority of visualizations, D3.js is the preferred choice, while for computational art or performance-centric visualizations, Charming.js may be the better option.
+D3.js is great, great of all time. In fact, Charming is able to work seamlessly with most of helper modules from D3.js, such as [d3-array](https://github.com/d3/d3-scale) and [d3-scale](https://github.com/d3/d3-scale), and it is encouraged to do so. But [d3-selection](https://github.com/d3/d3-selection) is an exception, which can be considered the "renderer" for D3's ecosystem. It is built on SVG, which excels at interactive visualizations but is less suited for animation-based computational art, owing to performance constraints. Although, in theory, d3-selection can work with any rendering technology that implements the [SVG standard](https://www.w3.org/TR/SVG2/), the complexity of the standard would inevitably introduce additional runtime overhead and increase the bundle size. In a word, for the majority of visualizations, D3.js is the preferred choice, while for computational art or performance-centric visualizations, Charming.js may be the better option.
 
 ## API Reference
 
