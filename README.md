@@ -1,6 +1,6 @@
 # Charming: Charming Computing
 
-> Charming is currently in the experimental stage; the stability and completeness of its API cannot be guaranteed.
+> Charming is still in testing; the APIs are not fully implemented and may not be stable.
 
 **Charming** is a free, open-source, creative code language for Charming Computing, which means making arts by computational algorithm. It has **declarative**, **data-driven**, concise, inclusive, yet expressive API inspired by [G2.js](https://github.com/antvis/G2), [D3.js](https://github.com/d3) and [P5.js](https://p5js.org/).
 
