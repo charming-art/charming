@@ -1,6 +1,6 @@
 # Charming: Charming Computing
 
-> On my programming journey, two tools have shaped me: [Processing](https://www.processing.org/) and [D3.js](https://d3js.org/). The former makes coding fun, while the latter makes coding elegant. What about Charming? Let's see...
+> Charming is still in testing; the APIs are not fully implemented and may not be stable.
 
 **Charming** is a free, open-source, creative code language for Charming Computing, which means making arts by computational algorithm. It has **declarative**, **data-driven**, concise, inclusive, yet expressive API inspired by [G2.js](https://github.com/antvis/G2), [D3.js](https://github.com/d3) and [P5.js](https://p5js.org/).
 
@@ -26,9 +26,6 @@ Most importantly, our hope with Charming is that you spend less time wrangling t
 - [Prop](#prop) - returning properties of the app
 
 And there are [a plenty of examples](https://observablehq.com/d/2f9bf9f52cb24090) to get started with.
-
-> [!WARNING]
-> Charming is still in testing; the APIs are not fully implemented and may not be stable.
 
 ## Installing
 
@@ -127,6 +124,8 @@ document.body.appendChild(app.render().node(()));
 ```
 
 ## Why is Charming?
+
+> On my programming journey, two tools have shaped me: [Processing](https://www.processing.org/) and [D3.js](https://d3js.org/). The former makes coding fun, while the latter makes coding elegant. What about Charming? Let's see...
 
 As I began my journey into computational art, I found [P5.js](https://p5js.org/) and [Processing](https://processing.org/) to be excellent starting points. Their artist-centered APIs really helped me get stuff drawn onto the screen quick and easy, allowing me to focus on creative expression. And I quickly publish a series of artworks on [OpenProcessing](https://openprocessing.org/user/144707?view=sketches&o=25), instead of spending time on wondering why the computer didn't work as I expected, before my time or patience run out. Additionally, I also designed a creative coding language [Charming.py](https://github.com/charming-art/charming-py) with the same style of APIs, for ASCII art in the terminal.
 
