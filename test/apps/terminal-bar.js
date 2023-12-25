@@ -103,8 +103,8 @@ export async function terminalBar() {
 
   // Annotation.
   app.append(cm.text, {
-    x: marginX + innerWidth,
-    y: marginY + innerHeight,
+    x: marginX + plotWidth,
+    y: marginY + plotHeight,
     fontSize: "large",
     text: "2023",
     textBaseline: "bottom",
