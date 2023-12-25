@@ -12,7 +12,7 @@ In addition to high performance, Charming focuses on making **ASCII art** access
 
 <a href="https://observablehq.com/d/9e951c5e9d721ef5"><img alt="example-white-noise-code" src="./img/example-white-noise-code.png" height="430px" style="margin-right:1em"/></a><img alt="example-white-noise" src="./img/example-white-noise.gif" height="430px"/>
 
-Moreover, Charming also puts strong emphasis on **lightweight**: the [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js) is just 23kb minified. With that in mind, Charming is designed to be flexible, incrementally adoptable and supports fully [tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking). It's also means that Charming is **beginner friendly**, because you don't have to start by diving into complex concepts: think of it as a collection of syntactic sugars for [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
+Moreover, Charming also puts strong emphasis on **lightweight**: the [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js) is just 25kb minified. With that in mind, Charming is designed to be flexible, incrementally adoptable and supports fully [tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking). It's also means that Charming is **beginner friendly**, because you don't have to start by diving into complex concepts: think of it as a collection of syntactic sugars for [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
 
 Most importantly, our hope with Charming is that you spend less time wrangling the machinery of programming and more time "using computing to tell stories". Or put more simply: **with Charming, you'll express more, more easily.** If you are new to Charming, we highly recommend first reading this article to introduce Charming's [inspiration and features](#why-is-charming), as well as core concepts:
 
@@ -359,7 +359,7 @@ app.data(data).append(barY, {
 
 ### Charming is lightweight but extensible
 
-Charming is lightweight because it focuses solely on one thing: drawing shapes driven by data, with the minified [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js) coming it at just 23kb. The other features are exposed as helper modules and can be adopted incrementally. Each modules have a thoughtfully designed interface, letting users plug in their own functions or objects for processors, transforms, shapes...even custom renderers. In the future, there is possibility to expand Charming with the development of various plugins, including a physics engine, plotting library, computational geometry toolkit, and image processing module.
+Charming is lightweight because it focuses solely on one thing: drawing shapes driven by data, with the minified [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js) coming it at just 25kb. The other features are exposed as helper modules and can be adopted incrementally. Each modules have a thoughtfully designed interface, letting users plug in their own functions or objects for processors, transforms, shapes...even custom renderers. In the future, there is possibility to expand Charming with the development of various plugins, including a physics engine, plotting library, computational geometry toolkit, and image processing module.
 
 ### Charming is beginner friendly
 
