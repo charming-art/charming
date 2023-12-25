@@ -149,6 +149,8 @@ Charming supports method chaining for brevity when applying multiple operators: 
 
 For example, to draw circles positioned by a curve function, with radius and index maintaining a positive correlation:
 
+<img src="./img/example-clover.png" width=640 />
+
 ```js
 // Import the methods from the charming module into the namespace cm.
 import * as cm from "@charming-art/charming";
@@ -181,8 +183,6 @@ app
 document.body.appendChild(app.render().node());
 ```
 
-<img src="./img/example-clover.png" width=640 />
-
 ### Charming is high performance
 
 By decoupling specification (the what) from execution (the how), Charming can use **WebGL** to render shapes. Compared to traditional rendering technologies like Canvas, where each shape requires an individual draw call, WebGL's [batch rendering](https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/drawArraysInstancedANGLE) technique allows for the rendering of hundreds or even thousands of similar objects in a single draw call. This cuts down communication overhead between the CPU and GPU, thus enhancing rendering efficiency. Batch rendering is particularly well-suited for computational art, as algorithms often generate a large number of similar graphics. Meanwhile Charming's _flow_ operand is perfect for batch rendering, as it naturally groups similar objects together without introducing additional overhead.
@@ -190,6 +190,8 @@ By decoupling specification (the what) from execution (the how), Charming can us
 In addition to optimizing rendering, Charming further enhances performance by offloading expensive computations to the GPU, thereby optimizing calculation efficiency. **GLSL functions** can be conveniently defined using _cm.glsl_, a tagged template literal specifically for GLSL that supports the interpolation of dynamic and non-serializable _JavaScript numbers_. Each shape attribute ought to be encapsulated within a GLSL function that carries the _name_ of the corresponding attribute. This function is invoked with each data item(_d_) hold by the flow and is expected to return a _value_ of the specified attribute type. Charming enables moving expensive computations into GLSL attributes, which are then compiled into shader programs, allowing the GPU to handle these operations efficiently.
 
 [For example](https://observablehq.com/d/86d2c1fe79fac300), to render specific number of circles while dynamically updating their positions, strokes and radii using trigonometric functions. While the Canvas renderer can maintain 60 FPS for up to _5.5k_ circles, the WebGL renderer can sustain the same 60 FPS for as many as _22k_ circles. Moreover, when faced with the task of rendering _100k_ circles, the WebGL renderer fails to draw them, but WebGL combined with GLSL attributes can still manage to render at a reduced frame rate of 10 FPS.
+
+<img alt="example-circles-glsl" src="./img/example-circles-glsl.gif" height="420px"/>
 
 ```js
 import * as cm from "@charming-art/charming";
@@ -245,8 +247,6 @@ function update(app) {
 }
 ```
 
-<img alt="example-circles-glsl" src="./img/example-circles-glsl.gif" height="420px"/>
-
 Please note that _cm.webgl_ is currently in the experimental stage, having only implemented the circle shape as a proof of concept. The implementation for the remaining shapes is expected to be released soon.
 
 ### Charming supports ASCII art
@@ -256,6 +256,8 @@ Charming is designed to offer users a broader spectrum of artistic expression. T
 Charming introduces the **terminal renderer**, enabling users to create ASCII art as effortlessly as they would with traditional art forms. Instead of using pixels, this renderer takes a unique approach by shifting the coordinate system from pixels to cells, allowing shapes to be rendered into printable characters and emojis. Each 'cell' in the ASCII art can be defined by a _character (ch)_, with a _foreground color (fg)_ and _background color (bg)_, vastly enhancing the expressive potential compared to the traditional color encoding methods.
 
 [For example](https://observablehq.com/d/9e951c5e9d721ef5), to draw text in the style of ASCII art and render points into random characters to simulate white noise effect:
+
+<img alt="example-white-noise" src="./img/example-white-noise.gif" height="430px"/>
 
 ```js
 let characters;
@@ -305,8 +307,6 @@ function update(app) {
 }
 ```
 
-<img alt="example-white-noise" src="./img/example-white-noise.gif" height="430px"/>
-
 In addition to supporting ASCII Art, Charming will also be able to support a variety of styles in the future, such as [hand-drawn](https://github.com/rough-stuff/rough) style. Why not have a little fun? Life' not just about work, you know.
 
 ### Charming is composable
@@ -328,6 +328,8 @@ function arrow(flow, { length, angle, x, y, rotate, ...options }) {
 
 This composite shape can be used like any built-in shape. [For example](https://observablehq.com/d/82d4b52694a7f370), to draw a flow field:
 
+<img src="./img/example-noise.png" width=640 />
+
 ```js
 app
   .data(fields)
@@ -344,9 +346,9 @@ app
   });
 ```
 
-<img src="./img/example-noise.png" width=640 />
-
 Simple components gain power through composition, more complex shape can be defined to extend Charming's features while maintaining a consistent API style and cohesive architecture. [For example](https://observablehq.com/@pearmini/bar), to define and use a barY shape to plot a bar chart:
+
+<img src="./img/example-bar-chart.png"  />
 
 ```js
 app.data(data).append(barY, {
@@ -354,8 +356,6 @@ app.data(data).append(barY, {
   y: (d) => d.frequency,
 });
 ```
-
-<img src="./img/example-bar-chart.png"  />
 
 ### Charming is lightweight but extensible
 
