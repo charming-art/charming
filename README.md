@@ -1101,7 +1101,7 @@ app.data(lines).append(cm.line, {
 
 Appends path defined by _d_. In addition to the [standard shape attributes](#shape), the following attributes are supported:
 
-- _d_: an array of [path commands](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d)
+- **d**: an array of [path commands](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d)
 
 If appends one path, assigns the specified path commands to its d attribute.
 
