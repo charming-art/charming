@@ -726,7 +726,7 @@ flow.data([1]);
 
 <a name="flow-process" href="#flow-process">#</a> _flow_.**process**(_process, options_)
 
-Processes the data of this flow with the specified _process_ function receiving the specified _options_, returning a flow with the processed data. It provide a convenient mechanism to manipulate data before calling [flow.append](#flow-append) to bind it with shapes.
+Processes the data of this flow with the specified _process_ function receiving the specified _options_, returning a flow with the processed data. It provides a convenient mechanism to manipulate data before calling [flow.append](#flow-append) to bind it with shapes.
 
 For example, to draw a particle system with two shape types:
 
@@ -764,7 +764,7 @@ flow.append(cm.circle, {
 
 <a name="flow-transform" href="#flow-transform">#</a> _flow_.**transform**(_transform, options_)
 
-Transforms shapes' attribute values with the specified _transform_ function receiving the specified _options_, returning a flow with the transformed attribute values. It provide a convenient mechanism to manipulate attribute values after calling [flow.append](#flow-append) to binding data with shapes.
+Transforms shapes' attribute values with the specified _transform_ function receiving the specified _options_, returning a flow with the transformed attribute values. It provides a convenient mechanism to manipulate attribute values after calling [flow.append](#flow-append) to binding data with shapes.
 
 For example, to map abstract values produced by [Math.sin](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sin) into visual values, drawing a sine wave:
 
