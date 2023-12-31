@@ -423,8 +423,8 @@ The core modules of Charming, which are included in [core bundle](https://cdn.js
 
 The other modules are included in [full bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.umd.min.js). Different renderers and related modules will be placed in the following separate modules:
 
-- [WebGL](#webgl) - WebGL renderer and related helpers
-- [Terminal](#terminal) - Terminal renderer and related helpers
+- [WebGL](#webgl) - the WebGL renderer and related helpers
+- [Terminal](#terminal) - the terminal renderer and related helpers
 
 For common problems, Charming provides a series of optional modules encapsulate reusable solutions, increasing efficiency and alleviating the burden of common tasks:
 

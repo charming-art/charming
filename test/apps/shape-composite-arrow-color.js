@@ -55,7 +55,6 @@ export function shapeCompositeArrowColor() {
     .append(arrow, {
       x: (d) => d.x * size + size / 2,
       y: (d) => d.y * size + size / 2,
-      length: size * 0.8,
       angle: Math.PI / 6,
       rotate: (d) => d.value,
       stroke: (d) => d.value,
