@@ -6,7 +6,7 @@
 
 Charming is built on the observation that both visualization and generative art are, to some extent, data-driven. Therefore, it provides a flow-based API for processing data, as well as appending and transforming shapes. Charming also supports batch rendering of 2D primitives using a [WebGL renderer](https://observablehq.com/d/db16249bd7174a24), and defines some [GLSL functions](https://observablehq.com/d/86d2c1fe79fac300) to offload expensive computations to the GPU. Additionally, a [terminal renderer](https://observablehq.com/d/8152c4d46e22d446) for ASCII art, embedded in JavaScript, utilizes a software rasterizer written in Rust and compiled to WASM, aiming to achieve high performance.
 
-Charming also puts strong emphasis on lightweight, extensible, composable and beginner-friendly. My hope with Charming is that you spend less time wrangling the machinery of programming and more time "using computing to tell stories". Or put more simply: **with Charming, you'll express more, and more easily.**
+Charming also puts strong emphasis on lightweight, extensible, composable and beginner-friendly. My hope with Charming is that you spend less time wrangling the machinery of programming and more time "using computing to tell stories". Or put more simply: **With Charming, you'll express more, and more easily.**
 
 <a href="https://observablehq.com/d/2f9bf9f52cb24090"><img alt="examples" src="./img/examples.png" /></a>
 
