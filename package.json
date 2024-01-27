@@ -1,6 +1,6 @@
 {
   "name": "@charming-art/charming",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "The declarative language for computational art with high performance.",
   "author": {
     "name": "pearmini",
