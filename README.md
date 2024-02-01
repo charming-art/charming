@@ -17,8 +17,9 @@ D3 is the GOAT for visualization, let's make Charming the D3 of computational ar
 If you are new to Charming, I highly recommend first reading following links to get started with:
 
 - [What is Charming](https://observablehq.com/d/477368f7e5423ff6) - a brief introduction
-- [Why Charming](https://observablehq.com/d/535654add5972bd2) - inspiration
+- [Why Charming](https://observablehq.com/d/535654add5972bd2) - motivation
 - [How is Charming](https://observablehq.com/d/c5e87fb195e2166d) - features
+- [Roadmap](https://github.com/charming-art/charming/issues/216) - what's next
 
 And there are [a plenty of examples](https://observablehq.com/d/2f9bf9f52cb24090) to learn from, as well as [API reference](#api-reference) and core concepts:
 
