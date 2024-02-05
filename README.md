@@ -8,7 +8,7 @@ Charming is built on the observation that both visualization and generative art 
 
 If you are new to programming or JavaScript, P5 is still a good starting point, otherwise you should consider Charming. My hope with Charming is that you spend less time wrangling the machinery of programming and more time "using computing to tell stories". Or put more simply: **With Charming, you'll express more, and more easily.**
 
-D3 is the GOAT for visualization, let's make Charming the D3 of computational art.
+> _Think of Charming as Lodash for graphics, or D3 for computational art._
 
 <a href="https://observablehq.com/d/2f9bf9f52cb24090"><img alt="examples" src="./img/examples.png" /></a>
 
@@ -1416,7 +1416,7 @@ function bar(
 
 WebGL renderer and related helpers.
 
-<a name="cm-webgl" href="#cm-webgl">#</a> _cm_.**terminal()**
+<a name="cm-webgl" href="#cm-webgl">#</a> _cm_.**webgl()**
 
 Returns a WebGL renderer, rendering shapes by WebGL.
 
