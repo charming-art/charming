@@ -3,7 +3,7 @@
   "version": "0.0.9",
   "description": "The declarative language for computational art with high performance.",
   "author": {
-    "name": "pearmini",
+    "name": "Bairui SU",
     "url": "https://github.com/pearmini"
   },
   "license": "ISC",
@@ -13,8 +13,7 @@
   "jsdelivr": "dist/cm.umd.min.js",
   "unpkg": "dist/cm.umd.min.js",
   "exports": {
-    "umd": "./dist/cm.umd.min.js",
-    "default": "./dist/es/index.js"
+    "./umd": "./dist/cm.umd.min.js"
   },
   "repository": {
     "type": "git",
