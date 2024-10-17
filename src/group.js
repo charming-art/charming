@@ -1,4 +1,4 @@
-import {attribute} from "./attribute.js";
+import {attribute} from "./transform/attribute.js";
 
 function rotateMatrix(angle) {
   const cos = Math.cos(angle);

@@ -1,3 +1,3 @@
-export function background({fill}) {
-  return (data) => ({...data, transform: (renderer) => renderer.background({fill})});
-}
+import {shape} from "./shape.js";
+
+export const background = shape((renderer, I, value) => renderer.background(I, value));
