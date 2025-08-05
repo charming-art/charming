@@ -1,25 +1,25 @@
-# Charming: Charming Computing
+# Ccomp: Charming Computing
 
-> Charming is still in testing; the APIs are not fully implemented and may not be stable.
+> Ccomp is still in testing; the APIs are not fully implemented and may not be stable.
 
-**Charming**, short for _Charming Computing_, is a free, open-source creative coding language designed for computational and ASCII art, offering high performance. It has a declarative, concise, yet expressive API inspired by [G2.js](https://github.com/antvis/G2), [D3.js](https://github.com/d3) and [P5.js](https://p5js.org/).
+**Ccomp**, short for _Charming Computing_, is a free, open-source creative coding language designed for computational and ASCII art, offering high performance. It has a declarative, concise, yet expressive API inspired by [G2.js](https://github.com/antvis/G2), [D3.js](https://github.com/d3) and [P5.js](https://p5js.org/).
 
-Charming is built on the observation that both visualization and generative art are, to some extent, data-driven. Therefore, it provides a novel [flow-based](cm-flow) API for processing data, appending and transforming shapes. Charming also supports batch rendering of 2D primitives using a [WebGL renderer](https://observablehq.com/d/db16249bd7174a24), and defining some [GLSL functions](https://observablehq.com/d/86d2c1fe79fac300) to offload expensive computations to the GPU. Additionally, a [terminal renderer](https://observablehq.com/d/8152c4d46e22d446) for ASCII art, embedded in JavaScript, utilizes a software rasterizer written in Rust and compiled to WASM, aiming to achieve high performance. Charming also puts strong emphasis on extensible, composable, beginner-friendly and lightweight (29kb minified [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js)).
+Ccomp is built on the observation that both visualization and generative art are, to some extent, data-driven. Therefore, it provides a novel [flow-based](cm-flow) API for processing data, appending and transforming shapes. Ccomp also supports batch rendering of 2D primitives using a [WebGL renderer](https://observablehq.com/d/db16249bd7174a24), and defining some [GLSL functions](https://observablehq.com/d/86d2c1fe79fac300) to offload expensive computations to the GPU. Additionally, a [terminal renderer](https://observablehq.com/d/8152c4d46e22d446) for ASCII art, embedded in JavaScript, utilizes a software rasterizer written in Rust and compiled to WASM, aiming to achieve high performance. Ccomp also puts strong emphasis on extensible, composable, beginner-friendly and lightweight (29kb minified [core bundle](https://cdn.jsdelivr.net/npm/ccomp-js/dist/cm.core.umd.min.js)).
 
-If you are new to programming or JavaScript, P5 is still a good starting point, otherwise you should consider Charming. My hope with Charming is that you spend less time wrangling the machinery of programming and more time "using computing to tell stories". Or put more simply: **With Charming, you'll express more, and more easily.**
+If you are new to programming or JavaScript, P5 is still a good starting point, otherwise you should consider Ccomp. My hope with Ccomp is that you spend less time wrangling the machinery of programming and more time "using computing to tell stories". Or put more simply: **With Ccomp, you'll express more, and more easily.**
 
-> _Think of Charming as Lodash for graphics, or D3 for computational art._
+> _Think of Ccomp as Lodash for graphics, or D3 for computational art._
 
 <a href="https://observablehq.com/d/2f9bf9f52cb24090"><img alt="examples" src="./img/examples.png" /></a>
 
 ## Links
 
-If you are new to Charming, I highly recommend first reading following links to get started with:
+If you are new to Ccomp, I highly recommend first reading following links to get started with:
 
-- [What is Charming](https://observablehq.com/d/477368f7e5423ff6) - a brief introduction
-- [Why Charming](https://observablehq.com/d/535654add5972bd2) - motivation
-- [How is Charming](https://observablehq.com/d/c5e87fb195e2166d) - features
-- [Roadmap](https://github.com/charming-art/charming/issues/216) - what's next
+- [What is Ccomp](https://observablehq.com/d/477368f7e5423ff6) - a brief introduction
+- [Why Ccomp](https://observablehq.com/d/535654add5972bd2) - motivation
+- [How is Ccomp](https://observablehq.com/d/c5e87fb195e2166d) - features
+- [Roadmap](https://github.com/pearmini/ccomp/issues/216) - what's next
 
 And there are [a plenty of examples](https://observablehq.com/d/2f9bf9f52cb24090) to learn from, as well as [API reference](#api-reference) and core concepts:
 
@@ -33,31 +33,31 @@ And there are [a plenty of examples](https://observablehq.com/d/2f9bf9f52cb24090
 - [Prop](#prop) - returning properties of the app
 - [Attribute](#attribute) - defining attributes for shapes
 
-If you want to have a comprehensive understanding of Charming, such as design choice, discussion and future work, you can skip links above and read [Charming: Charming Computing](https://observablehq.com/d/dd59b4c4f9f1d9d3) directly.
+If you want to have a comprehensive understanding of Ccomp, such as design choice, discussion and future work, you can skip links above and read [Ccomp: Computational Art Language](https://observablehq.com/d/dd59b4c4f9f1d9d3) directly.
 
 ## Installing
 
-Charming is typically installed via a package manager such as Yarn or NPM.
+Ccomp is typically installed via a package manager such as Yarn or NPM.
 
 ```bash
-yarn add @charming-art/charming
+yarn add ccomp-js
 ```
 
 ```bash
-npm install @charming-art/charming
+npm install ccomp-js
 ```
 
-Charming can then imported as a namespace:
+Ccomp can then imported as a namespace:
 
 ```js
-import * as cm from "@charming-art/charming";
+import * as cm from "ccomp-js";
 ```
 
-In vanilla HTML, Charming can be imported as an ES module, say from jsDelivr:
+In vanilla HTML, Ccomp can be imported as an ES module, say from jsDelivr:
 
 ```html
 <script type="module">
-  import * as cm from "https://cdn.jsdelivr.net/npm/@charming-art/charming/+esm";
+  import * as cm from "https://cdn.jsdelivr.net/npm/ccomp-js/+esm";
 
   const app = cm.app();
 
@@ -67,10 +67,10 @@ In vanilla HTML, Charming can be imported as an ES module, say from jsDelivr:
 </script>
 ```
 
-Charming is also available as a UMD bundle for legacy browsers.
+Ccomp is also available as a UMD bundle for legacy browsers.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@charming-art/charming"></script>
+<script src="https://cdn.jsdelivr.net/npm/ccomp-js"></script>
 <script>
   const app = cm.app();
 
@@ -85,7 +85,7 @@ Charming is also available as a UMD bundle for legacy browsers.
 <img src="./img/example-clover.png" width=640 />
 
 ```js
-import * as cm from "@charming-art/charming";
+import * as cm from "ccomp-js";
 
 const app = cm.app({
   width: 640,
@@ -111,7 +111,7 @@ document.body.appendChild(app.render().node());
 <img src="./img/example-ascii-text.png" />
 
 ```js
-import * as cm from "@charming-art/charming";
+import * as cm from "ccomp-js";
 
 const app = cm.app({
   width: 1200,
@@ -133,7 +133,7 @@ document.body.appendChild(app.render().node(()));
 
 ## API Reference
 
-The core modules of Charming, which are included in [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js):
+The core modules of Ccomp, which are included in [core bundle](https://cdn.jsdelivr.net/npm/ccomp-js/dist/cm.core.umd.min.js):
 
 - [App](#app) - rendering app to DOM and animating it
 - [Flow](#flow) - binding data to shapes
@@ -145,12 +145,12 @@ The core modules of Charming, which are included in [core bundle](https://cdn.js
 - [Prop](#prop) - returning properties of the app
 - [Attribute](#attribute) - defining attributes for shapes
 
-The other modules are included in [full bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.umd.min.js). Different renderers and related modules will be placed in the following separate modules:
+The other modules are included in [full bundle](https://cdn.jsdelivr.net/npm/ccomp-js/dist/cm.umd.min.js). Different renderers and related modules will be placed in the following separate modules:
 
 - [WebGL](#webgl) - the WebGL renderer and related helpers
 - [Terminal](#terminal) - the terminal renderer and related helpers
 
-For common problems, Charming provides a series of optional modules encapsulate reusable solutions, increasing efficiency and alleviating the burden of common tasks:
+For common problems, Ccomp provides a series of optional modules encapsulate reusable solutions, increasing efficiency and alleviating the burden of common tasks:
 
 - [Array](#array) - array generation and manipulation
 - [Math](#math) - processing numbers, randomness, etc.
@@ -1508,7 +1508,7 @@ const app = cm.app({
 app.append(cm.text, {
   x: app.prop("width") / 2,
   y: app.prop("height") / 2,
-  text: "charming",
+  text: "Ccomp",
   textBaseline: "middle",
   textAlign: "center",
 });
@@ -1568,7 +1568,7 @@ const app = cm.app({
 });
 
 app.append(cm.text, {
-  text: cm.figlet("Charming"),
+  text: cm.figlet("Ccomp"),
 });
 ```
 
@@ -2335,7 +2335,7 @@ Useful unities.
 
 <a name="cm-pathContext" href="#cm-pathContext">#</a> _cm_.**pathContext**()
 
-Constructs a new path generator like [d3-path](https://d3js.org/d3-path#path) serializer, expect returns an array of path commands instead of a path string. Useful for charming to render the path generated by [d3-shape](https://d3js.org/d3-shape) or [d3-geo](https://d3js.org/d3-geo/path) without parsing it, which is good for performance.
+Constructs a new path generator like [d3-path](https://d3js.org/d3-path#path) serializer, expect returns an array of path commands instead of a path string. Useful for Ccomp to render the path generated by [d3-shape](https://d3js.org/d3-shape) or [d3-geo](https://d3js.org/d3-geo/path) without parsing it, which is good for performance.
 
 ```js
 const circle = d3.geoCircle()();

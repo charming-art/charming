@@ -15,7 +15,7 @@ export async function terminalWhiteNoise() {
   const characters = cm.cross(cm.range(w), cm.range(h)).map((d) => ({ x: d[0], y: d[1] }));
 
   const textOptions = {
-    text: cm.figlet("Charming"),
+    text: cm.figlet("Ccomp"),
     x: w / 2,
     y: h / 2,
     textAlign: "center",
