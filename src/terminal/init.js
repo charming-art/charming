@@ -2,7 +2,7 @@ import { context2d } from "../context.js";
 import { Backend } from "../backend/index.js";
 import { measureText } from "../measure.js";
 
-export const TERMINAL_CLASS = "charming-terminal";
+export const TERMINAL_CLASS = "ccomp-terminal";
 
 function dimensionOf(count, pixel, unit) {
   if (count === undefined) return (pixel / unit) | 0;

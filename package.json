@@ -1,6 +1,6 @@
 {
-  "name": "@charming-art/charming",
-  "version": "0.0.9",
+  "name": "ccomp-js",
+  "version": "0.0.2",
   "description": "The declarative language for computational art with high performance.",
   "author": {
     "name": "Bairui SU",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/charming-art/charming.git"
+    "url": "git@github.com:charming-art/ccomp.git"
   },
   "files": [
     "dist/**/*.wasm",
