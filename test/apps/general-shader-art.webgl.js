@@ -34,7 +34,7 @@ export function generalShaderArtWebGL() {
     app.append(cc.rect, { x: 0, y: 0, width, height, fill });
   }
 
-  return cm
+  return cc
     .app({
       renderer: cc.webgl(),
       width,

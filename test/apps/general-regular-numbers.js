@@ -7,7 +7,7 @@ export function generalRegularNumbers() {
   const x = ([i, j, k]) => 0.5 * i + 2 * j - 3.6 * k;
   const value = ([i, j, k]) => 2 ** i * 3 ** j * 5 ** k;
 
-  const numbers = cm
+  const numbers = cc
     .cross(
       cc.range(1 + Math.log(N) / Math.log(2)),
       cc.range(1 + Math.log(N) / Math.log(3)),

@@ -33,7 +33,7 @@ export function generalCirclesWebGL() {
       .transform(cc.mapAttrs, { r: { range: [24, 96] } });
   }
 
-  return cm
+  return cc
     .app({
       width,
       height,

@@ -135,7 +135,7 @@ export function generalBrokenHeart() {
       .call(drawTexts, { x, y, chars, radius, noise, time, ...font });
   }
 
-  return cm
+  return cc
     .app({ width, height })
     .on("beforeAll", step)
     .on("update", update)

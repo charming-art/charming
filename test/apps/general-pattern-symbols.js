@@ -104,7 +104,7 @@ export async function generalPatternSymbols() {
       });
   }
 
-  return cm
+  return cc
     .app({
       width: size,
       height: size,

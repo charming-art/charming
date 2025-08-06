@@ -34,7 +34,7 @@ export function randomDragon() {
       });
   }
 
-  return cm
+  return cc
     .app({ width: 640, height: 640 })
     .on("beforeAll", setup)
     .on("update", update)
