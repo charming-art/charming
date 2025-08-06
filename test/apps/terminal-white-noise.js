@@ -1,50 +1,50 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 import { stats } from "../utils/stats.js";
 
 // @see https://asciinema.org/a/19919
 export async function terminalWhiteNoise() {
-  const app = cm.app({
-    renderer: await cm.terminal(),
+  const app = cc.app({
+    renderer: await cc.terminal(),
     frameRate: 20,
   });
 
   const w = app.prop("width");
   const h = app.prop("height");
 
-  const characters = cm.cross(cm.range(w), cm.range(h)).map((d) => ({ x: d[0], y: d[1] }));
+  const characters = cc.cross(cc.range(w), cc.range(h)).map((d) => ({ x: d[0], y: d[1] }));
 
   const textOptions = {
-    text: cm.figlet("Ccomp"),
+    text: cc.figlet("Ccomp"),
     x: w / 2,
     y: h / 2,
     textAlign: "center",
     textBaseline: "middle",
-    fill: cm.gradientRainBowX(),
+    fill: cc.gradientRainBowX(),
   };
   const bbox = app.textBBox(textOptions);
   const { x: tx, y: ty, width: tw, height: th } = bbox;
   const outside = ({ x, y }) => x < tx || x > tx + tw || y < ty || y > ty + th;
 
   function update() {
-    app.append(cm.clear, { fill: "black" });
+    app.append(cc.clear, { fill: "black" });
 
-    app.append(cm.text, textOptions);
+    app.append(cc.text, textOptions);
 
     app
       .data(characters)
-      .process(cm.each, (d) => {
+      .process(cc.each, (d) => {
         if (d.lifespan) return d.lifespan--;
-        d.ch = cm.randomChar();
-        d.lifespan = cm.randomInt(3, 10);
+        d.ch = cc.randomChar();
+        d.lifespan = cc.randomInt(3, 10);
       })
-      .process(cm.filter, (d) => {
+      .process(cc.filter, (d) => {
         if (outside(d)) return true;
-        const p = cm.random(10);
+        const p = cc.random(10);
         if (p < 0.5) return true;
         return false;
       })
-      .append(cm.point, {
+      .append(cc.point, {
         x: (d) => d.x,
         y: (d) => d.y,
         stroke0: (d) => d.ch,

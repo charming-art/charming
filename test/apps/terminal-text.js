@@ -1,19 +1,19 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 
 export async function terminalText() {
-  const app = cm.app({
+  const app = cc.app({
     width: 1200,
-    renderer: await cm.terminal(),
+    renderer: await cc.terminal(),
   });
 
-  app.append(cm.text, {
-    text: cm.figlet("hello world"),
+  app.append(cc.text, {
+    text: cc.figlet("hello world"),
     x: app.prop("width") / 2,
     y: app.prop("height") / 2,
     textAlign: "center",
     textBaseline: "middle",
-    fontFamily: cm.fontGhost(),
+    fontFamily: cc.fontGhost(),
   });
 
   return app.call(dispose).start().node();

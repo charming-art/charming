@@ -10,10 +10,10 @@
   "type": "module",
   "main": "dist/es/index.js",
   "module": "dist/es/index.js",
-  "jsdelivr": "dist/cm.umd.min.js",
-  "unpkg": "dist/cm.umd.min.js",
+  "jsdelivr": "dist/cc.umd.min.js",
+  "unpkg": "dist/cc.umd.min.js",
   "exports": {
-    "./umd": "./dist/cm.umd.min.js"
+    "./umd": "./dist/cc.umd.min.js"
   },
   "repository": {
     "type": "git",

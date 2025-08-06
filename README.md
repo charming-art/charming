@@ -57,9 +57,9 @@ In vanilla HTML, Ccomp can be imported as an ES module, say from jsDelivr:
 
 ```html
 <script type="module">
-  import * as cm from "https://cdn.jsdelivr.net/npm/ccomp-js/+esm";
+  import * as cc from "https://cdn.jsdelivr.net/npm/ccomp-js/+esm";
 
-  const app = cm.app();
+  const app = cc.app();
 
   // ...
 
@@ -72,7 +72,7 @@ Ccomp is also available as a UMD bundle for legacy browsers.
 ```html
 <script src="https://cdn.jsdelivr.net/npm/ccomp-js"></script>
 <script>
-  const app = cm.app();
+  const app = cc.app();
 
   // ...
 
@@ -85,23 +85,23 @@ Ccomp is also available as a UMD bundle for legacy browsers.
 <img src="./img/example-clover.png" width=640 />
 
 ```js
-import * as cm from "ccomp-js";
+import * as cc from "ccomp-js";
 
-const app = cm.app({
+const app = cc.app({
   width: 640,
   height: 640,
 });
 
 app
-  .data(cm.range(240))
-  .process(cm.map, (_, i, data) => (i * Math.PI) / data.length)
-  .append(cm.circle, {
+  .data(cc.range(240))
+  .process(cc.map, (_, i, data) => (i * Math.PI) / data.length)
+  .append(cc.circle, {
     x: (t) => Math.cos(t) * Math.cos(t * 3),
     y: (t) => Math.sin(t) * Math.cos(t * 3),
     r: (_, i) => i,
   })
-  .transform(cm.mapPosition, { padding: 15 })
-  .transform(cm.mapAttrs, {
+  .transform(cc.mapPosition, { padding: 15 })
+  .transform(cc.mapAttrs, {
     r: { range: [8, 20] },
   });
 
@@ -111,21 +111,21 @@ document.body.appendChild(app.render().node());
 <img src="./img/example-ascii-text.png" />
 
 ```js
-import * as cm from "ccomp-js";
+import * as cc from "ccomp-js";
 
-const app = cm.app({
+const app = cc.app({
   width: 1200,
-  renderer: await cm.terminal(),
+  renderer: await cc.terminal(),
 });
 
-app.append(cm.text, {
-  text: cm.figlet("hello world"),
+app.append(cc.text, {
+  text: cc.figlet("hello world"),
   x: app.prop("width") / 2,
   y: app.prop("height") / 2,
-  fill: cm.gradientSineBowX(),
+  fill: cc.gradientSineBowX(),
   textAlign: "center",
   textBaseline: "middle",
-  fontFamily: cm.fontGhost(),
+  fontFamily: cc.fontGhost(),
 });
 
 document.body.appendChild(app.render().node(()));
@@ -133,7 +133,7 @@ document.body.appendChild(app.render().node(()));
 
 ## API Reference
 
-The core modules of Ccomp, which are included in [core bundle](https://cdn.jsdelivr.net/npm/ccomp-js/dist/cm.core.umd.min.js):
+The core modules of Ccomp, which are included in [core bundle](https://cdn.jsdelivr.net/npm/ccomp-js/dist/cc.core.umd.min.js):
 
 - [App](#app) - rendering app to DOM and animating it
 - [Flow](#flow) - binding data to shapes
@@ -145,7 +145,7 @@ The core modules of Ccomp, which are included in [core bundle](https://cdn.jsdel
 - [Prop](#prop) - returning properties of the app
 - [Attribute](#attribute) - defining attributes for shapes
 
-The other modules are included in [full bundle](https://cdn.jsdelivr.net/npm/ccomp-js/dist/cm.umd.min.js). Different renderers and related modules will be placed in the following separate modules:
+The other modules are included in [full bundle](https://cdn.jsdelivr.net/npm/ccomp-js/dist/cc.umd.min.js). Different renderers and related modules will be placed in the following separate modules:
 
 - [WebGL](#webgl) - the WebGL renderer and related helpers
 - [Terminal](#terminal) - the terminal renderer and related helpers

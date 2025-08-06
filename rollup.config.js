@@ -13,7 +13,7 @@ const umd = {
   input: "src/index.js",
   output: {
     format: "umd",
-    name: "cm",
+    name: "cc",
   },
   plugins: [wasm({ targetEnv: "auto-inline" }), commonjs(), polyfill(), node()],
   onwarn,
@@ -23,7 +23,7 @@ const core = {
   input: "src/core.js",
   output: {
     format: "umd",
-    name: "cm",
+    name: "cc",
   },
   plugins: [commonjs(), polyfill(), node()],
   onwarn,
@@ -45,14 +45,14 @@ export default [
     ...umd,
     output: {
       ...umd.output,
-      file: "dist/cm.umd.js",
+      file: "dist/cc.umd.js",
     },
   },
   {
     ...umd,
     output: {
       ...umd.output,
-      file: "dist/cm.umd.min.js",
+      file: "dist/cc.umd.min.js",
     },
     plugins: [...umd.plugins, terser()],
   },
@@ -60,14 +60,14 @@ export default [
     ...core,
     output: {
       ...umd.output,
-      file: "dist/cm.core.umd.js",
+      file: "dist/cc.core.umd.js",
     },
   },
   {
     ...core,
     output: {
       ...umd.output,
-      file: "dist/cm.core.umd.min.js",
+      file: "dist/cc.core.umd.min.js",
     },
     plugins: [...core.plugins, terser()],
   },
