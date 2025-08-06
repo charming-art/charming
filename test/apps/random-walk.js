@@ -1,10 +1,10 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { frame } from "../utils/frame.js";
 import { dispose } from "../utils/dispose.js";
 import { stats } from "../utils/stats.js";
 
 export function randomWalk() {
-  const app = cm.app({
+  const app = cc.app({
     width: 600,
     height: 200,
   });
@@ -12,8 +12,8 @@ export function randomWalk() {
   let x = app.prop("width") / 2;
   let y = app.prop("height") / 2;
   app.on("update", () => {
-    app.append(cm.circle, { x, y, r: 1, fill: "#000" });
-    const direction = Math.floor(cm.random(4));
+    app.append(cc.circle, { x, y, r: 1, fill: "#000" });
+    const direction = Math.floor(cc.random(4));
     if (direction === 0) y -= 1;
     else if (direction === 1) x += 1;
     else if (direction === 2) y += 1;

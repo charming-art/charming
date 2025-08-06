@@ -1,4 +1,4 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 import { frame } from "../utils/frame.js";
 
@@ -8,17 +8,17 @@ function multiple(d, x) {
 }
 
 function arrow(flow, { length, angle, ...options }) {
-  const group = flow.append(cm.group, options);
+  const group = flow.append(cc.group, options);
   const halfLength = multiple(length, 0.5);
 
-  group.append(cm.link, {
+  group.append(cc.link, {
     x: multiple(halfLength, -1),
     y: 0,
     x1: halfLength,
     y1: 0,
   });
 
-  group.append(cm.link, {
+  group.append(cc.link, {
     x: 0,
     y: 0,
     x1: halfLength,
@@ -27,7 +27,7 @@ function arrow(flow, { length, angle, ...options }) {
     transformOrigin: "end",
   });
 
-  group.append(cm.link, {
+  group.append(cc.link, {
     x: 0,
     y: 0,
     x1: halfLength,
@@ -38,7 +38,7 @@ function arrow(flow, { length, angle, ...options }) {
 }
 
 export function a2FlowRandom() {
-  const app = cm.app({
+  const app = cc.app({
     width: 640,
     height: 240,
   });
@@ -47,8 +47,8 @@ export function a2FlowRandom() {
   const cols = Math.floor(app.prop("width") / resolution);
   const rows = Math.floor(app.prop("height") / resolution);
 
-  const noise = cm.randomNoise(0, cm.TWO_PI);
-  const fields = cm.range(cols * rows).map((_, d) => {
+  const noise = cc.randomNoise(0, cc.TWO_PI);
+  const fields = cc.range(cols * rows).map((_, d) => {
     const i = d % cols;
     const j = (d / cols) | 0;
     return noise(j * 0.1, i * 0.1);

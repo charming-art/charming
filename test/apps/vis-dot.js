@@ -1,15 +1,15 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 
 function dot(flow, { x, y, marginLeft = 40, marginTop = 30, marginRight = 0, marginBottom = 30 }) {
   const app = flow.app();
   const [data] = flow.data();
-  const I = cm.range(data.length);
-  const scaleX = cm.scaleLinear(cm.extent(x), [marginLeft, app.prop("width") - marginRight]);
-  const scaleY = cm.scaleLinear(cm.extent(y), [app.prop("height") - marginBottom, marginTop]);
+  const I = cc.range(data.length);
+  const scaleX = cc.scaleLinear(cc.extent(x), [marginLeft, app.prop("width") - marginRight]);
+  const scaleY = cc.scaleLinear(cc.extent(y), [app.prop("height") - marginBottom, marginTop]);
   const X = x.map(scaleX);
   const Y = y.map(scaleY);
-  flow.data(I).append(cm.circle, {
+  flow.data(I).append(cc.circle, {
     x: (i) => X[i],
     y: (i) => Y[i],
     fill: "black",
@@ -18,9 +18,9 @@ function dot(flow, { x, y, marginLeft = 40, marginTop = 30, marginRight = 0, mar
 }
 
 export function visDot() {
-  const data = cm.range(100).map(() => [cm.random(), cm.random()]);
+  const data = cc.range(100).map(() => [cc.random(), cc.random()]);
 
-  const app = cm.app({
+  const app = cc.app({
     width: 640,
     height: 480,
   });

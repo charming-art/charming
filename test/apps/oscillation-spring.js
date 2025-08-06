@@ -1,10 +1,10 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 import { frame } from "../utils/frame.js";
 import { stats } from "../utils/stats.js";
 
 export function oscillationSpring() {
-  const app = cm.app({
+  const app = cc.app({
     width: 600,
     height: 200,
   });
@@ -20,20 +20,20 @@ export function oscillationSpring() {
   const y = (d) => d.r * Math.cos(d.angle);
 
   app
-    .on("update", () => app.append(cm.clear, { fill: cm.rgb(255) }))
+    .on("update", () => app.append(cc.clear, { fill: cc.rgb(255) }))
     .on("update", () => {
-      const group = app.append(cm.group, { x: app.prop("width") / 2, y: 0 });
+      const group = app.append(cc.group, { x: app.prop("width") / 2, y: 0 });
       group
         .datum(pendulum)
-        .process(cm.each, update)
-        .call((d) => d.append(cm.link, { x: 0, y: 0, x1: x, y1: y }))
+        .process(cc.each, update)
+        .call((d) => d.append(cc.link, { x: 0, y: 0, x1: x, y1: y }))
         .call((d) =>
-          d.append(cm.circle, {
+          d.append(cc.circle, {
             x,
             y,
             r: 20,
-            fill: cm.rgb(175),
-            stroke: cm.rgb(0),
+            fill: cc.rgb(175),
+            stroke: cc.rgb(0),
           }),
         );
     });

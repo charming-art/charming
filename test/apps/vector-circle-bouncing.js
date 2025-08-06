@@ -1,16 +1,16 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { frame } from "../utils/frame.js";
 import { dispose } from "../utils/dispose.js";
 import { stats } from "../utils/stats.js";
 
 export function vectorCircleBouncing() {
-  const app = cm.app({
+  const app = cc.app({
     width: 600,
     height: 200,
   });
 
-  const location = cm.vec(app.prop("width") / 2, app.prop("height") / 2);
-  const velocity = cm.vec(1, 2.3);
+  const location = cc.vec(app.prop("width") / 2, app.prop("height") / 2);
+  const velocity = cc.vec(1, 2.3);
 
   app
     .on("update", () => {
@@ -19,13 +19,13 @@ export function vectorCircleBouncing() {
       if (!location.inY(app.prop("height"))) velocity.negY();
     })
     .on("update", () => {
-      app.append(cm.clear, { fill: cm.rgb(255) });
-      app.append(cm.circle, {
+      app.append(cc.clear, { fill: cc.rgb(255) });
+      app.append(cc.circle, {
         x: location.x,
         y: location.y,
         r: 16,
-        stroke: cm.rgb(0),
-        fill: cm.rgb(175),
+        stroke: cc.rgb(0),
+        fill: cc.rgb(175),
       });
     });
 

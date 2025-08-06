@@ -1,13 +1,13 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { frame } from "../utils/frame.js";
 import { dispose } from "../utils/dispose.js";
 import { snapshot } from "../utils/snapshot.js";
 
 export function _webglTriangle() {
-  const app = cm.app({
+  const app = cc.app({
     width: 600,
     height: 200,
-    renderer: cm.webgl(),
+    renderer: cc.webgl(),
   });
 
   app
@@ -15,7 +15,7 @@ export function _webglTriangle() {
       [10, 10, 100, 10, 100, 100],
       [210, 10, 300, 10, 300, 100],
     ])
-    .append(cm.triangle, {
+    .append(cc.triangle, {
       x: (d) => d[0],
       y: (d) => d[1],
       x1: (d) => d[2],

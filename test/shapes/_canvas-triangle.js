@@ -1,10 +1,10 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { frame } from "../utils/frame.js";
 import { dispose } from "../utils/dispose.js";
 import { snapshot } from "../utils/snapshot.js";
 
 export function _canvasTriangle() {
-  const app = cm.app({
+  const app = cc.app({
     width: 600,
     height: 200,
   });
@@ -14,7 +14,7 @@ export function _canvasTriangle() {
       [10, 10, 100, 10, 100, 100],
       [210, 10, 300, 10, 300, 100],
     ])
-    .append(cm.triangle, {
+    .append(cc.triangle, {
       x: (d) => d[0],
       y: (d) => d[1],
       x1: (d) => d[2],
@@ -23,9 +23,9 @@ export function _canvasTriangle() {
       y2: (d) => d[5],
       fill: (_, i) => i,
     })
-    .transform(cm.mapAttrs, {
+    .transform(cc.mapAttrs, {
       fill: {
-        scale: cm.scaleOrdinal,
+        scale: cc.scaleOrdinal,
         range: ["steelblue", "orange"],
       },
     });

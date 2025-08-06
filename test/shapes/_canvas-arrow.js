@@ -1,16 +1,16 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 import { frame } from "../utils/frame.js";
 import { snapshot } from "../utils/snapshot.js";
 
 function arrow(flow, { length, angle, x, y, rotate, ...options }) {
-  const group = flow.append(cm.group, { x, y, rotate });
+  const group = flow.append(cc.group, { x, y, rotate });
   const halfLengthPos = length.map((d) => d / 2);
   const halfLengthNeg = length.map((d) => -d / 2);
   const anglePos = angle.map((d) => d);
   const angleNeg = angle.map((d) => -d);
 
-  group.append(cm.link, {
+  group.append(cc.link, {
     x: halfLengthNeg,
     y: 0,
     x1: halfLengthPos,
@@ -18,7 +18,7 @@ function arrow(flow, { length, angle, x, y, rotate, ...options }) {
     ...options,
   });
 
-  group.append(cm.link, {
+  group.append(cc.link, {
     x: 0,
     y: 0,
     x1: halfLengthPos,
@@ -28,7 +28,7 @@ function arrow(flow, { length, angle, x, y, rotate, ...options }) {
     ...options,
   });
 
-  group.append(cm.link, {
+  group.append(cc.link, {
     x: 0,
     y: 0,
     x1: halfLengthPos,
@@ -49,10 +49,10 @@ export function _canvasArrow() {
     size = 16,
     cols = width / size,
     rows = height / size,
-    noise = cm.randomNoise(0, 1, { seed: 1 }),
-    fields = cm.cross(cm.range(cols), cm.range(rows)).map(([x, y]) => ({ x, y, value: noise(y * 0.1, x * 0.1) }));
+    noise = cc.randomNoise(0, 1, { seed: 1 }),
+    fields = cc.cross(cc.range(cols), cc.range(rows)).map(([x, y]) => ({ x, y, value: noise(y * 0.1, x * 0.1) }));
 
-  const app = cm.app({ width, height });
+  const app = cc.app({ width, height });
 
   app
     .data(fields)
@@ -63,13 +63,13 @@ export function _canvasArrow() {
       angle: Math.PI / 6,
       rotate: (d) => d.value,
     })
-    .transform(cm.mapAttrs, {
+    .transform(cc.mapAttrs, {
       rotate: {
         domain: [0, 1],
-        range: [0, cm.TWO_PI],
+        range: [0, cc.TWO_PI],
       },
     })
-    .append(cm.circle, {
+    .append(cc.circle, {
       x: 0,
       y: 0,
       fill: "blue",
@@ -78,7 +78,7 @@ export function _canvasArrow() {
 
   app
     .data(fields)
-    .process(cm.filter, (d) => d.value > 0.01)
+    .process(cc.filter, (d) => d.value > 0.01)
     .append(arrowRed, {
       x: (d) => d.x * size + size / 2,
       y: (d) => d.y * size + size / 2,
@@ -86,10 +86,10 @@ export function _canvasArrow() {
       angle: Math.PI / 6,
       rotate: (d) => d.value,
     })
-    .transform(cm.mapAttrs, {
+    .transform(cc.mapAttrs, {
       rotate: {
         domain: [0, 1],
-        range: [0, cm.TWO_PI],
+        range: [0, cc.TWO_PI],
       },
     });
 

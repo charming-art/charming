@@ -1,4 +1,4 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 
 function circle(context, size) {
@@ -87,14 +87,14 @@ export async function generalPatternSymbols() {
 
   function draw(app) {
     app
-      .data(cm.range(symbols.length))
-      .append(cm.group, {
+      .data(cc.range(symbols.length))
+      .append(cc.group, {
         x: (d) => (d % n) * cellSize + cellSize / 2,
         y: (d) => Math.floor(d / n) * cellSize + cellSize / 2,
       })
-      .append(cm.path, {
+      .append(cc.path, {
         d: (i) => {
-          const context = cm.pathContext();
+          const context = cc.pathContext();
           symbols[i](context, cellSize * 0.9);
           return context.toArray();
         },

@@ -1,23 +1,23 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 
 export async function terminalMatrix() {
-  const app = cm.app({
+  const app = cc.app({
     cols: 3,
     rows: 3,
     mode: "double",
-    renderer: await cm.terminal(),
+    renderer: await cc.terminal(),
   });
 
   app
     .data([
       [" +", "-", "+ "],
-      [" |", cm.wch("🚀"), "| "],
+      [" |", cc.wch("🚀"), "| "],
       [" +", "-", "+ "],
     ])
-    .append(cm.group, { y: (_, i) => i })
+    .append(cc.group, { y: (_, i) => i })
     .data((d) => d)
-    .append(cm.point, {
+    .append(cc.point, {
       y: 0,
       x: (_, i) => i,
       stroke0: (d) => d,

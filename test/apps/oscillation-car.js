@@ -1,11 +1,11 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 import { force, object, location } from "../utils/force.js";
 import { frame } from "../utils/frame.js";
 import { stats } from "../utils/stats.js";
 
 export function oscillationCar() {
-  const app = cm.app({
+  const app = cc.app({
     width: 600,
     height: 200,
   });
@@ -15,7 +15,7 @@ export function oscillationCar() {
   const update = location();
   const toMouse = (d, i, _, flow) => {
     const app = flow.app();
-    const mouse = cm.vec(app.prop("mouseX"), app.prop("mouseY"));
+    const mouse = cc.vec(app.prop("mouseX"), app.prop("mouseY"));
     return mouse.sub(d.location).mag(0.5);
   };
   const constrain = (d) => {
@@ -24,20 +24,20 @@ export function oscillationCar() {
   };
 
   app
-    .on("update", () => app.append(cm.clear, { fill: cm.rgb(255) }))
+    .on("update", () => app.append(cc.clear, { fill: cc.rgb(255) }))
     .on("update", () => {
       app
         .datum(mover)
-        .process(cm.each, force(toMouse))
-        .process(cm.each, update)
-        .process(cm.each, constrain)
-        .append(cm.rect, {
+        .process(cc.each, force(toMouse))
+        .process(cc.each, update)
+        .process(cc.each, constrain)
+        .append(cc.rect, {
           x: (d) => d.location.x,
           y: (d) => d.location.y,
           width: 30,
           height: 10,
-          fill: cm.rgb(175),
-          stroke: cm.rgb(0),
+          fill: cc.rgb(175),
+          stroke: cc.rgb(0),
           rotate: (d) => d.velocity.angle(),
         });
     });

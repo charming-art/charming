@@ -1,25 +1,25 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 import { frame } from "../utils/frame.js";
 import { stats } from "../utils/stats.js";
 
 export function oscillationWaveSnake() {
-  const app = cm.app({
+  const app = cc.app({
     width: 600,
     height: 200,
   });
 
-  const I = cm.range(50);
-  const X = cm.range(I.length, cm.TWO_PI);
-  const X1 = cm.range(I.length, cm.TWO_PI * 2);
-  const X2 = cm.range(I.length, cm.TWO_PI / 3);
+  const I = cc.range(50);
+  const X = cc.range(I.length, cc.TWO_PI);
+  const X1 = cc.range(I.length, cc.TWO_PI * 2);
+  const X2 = cc.range(I.length, cc.TWO_PI / 3);
 
   app
-    .on("update", () => app.append(cm.clear, { fill: cm.rgb(255) }))
+    .on("update", () => app.append(cc.clear, { fill: cc.rgb(255) }))
     .on("update", () => {
       app
         .data(I)
-        .append(cm.circle, {
+        .append(cc.circle, {
           x: (d) => d,
           y: (d) => {
             const offset = app.prop("frameCount") / 120;
@@ -33,7 +33,7 @@ export function oscillationWaveSnake() {
           stroke: "#000",
           strokeWidth: 1,
         })
-        .transform(cm.mapAttrs, {
+        .transform(cc.mapAttrs, {
           x: { range: [0, app.prop("width")] },
           y: { range: [0, app.prop("height")] },
         });

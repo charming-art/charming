@@ -1,9 +1,9 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 
 export async function terminalPoint() {
-  const app = cm.app({
-    renderer: await cm.terminal(),
+  const app = cc.app({
+    renderer: await cc.terminal(),
   });
 
   let x = 0;
@@ -11,8 +11,8 @@ export async function terminalPoint() {
   app.on("update", () => {
     const i = x % app.prop("width");
     const j = (x / app.prop("width")) | 0;
-    app.append(cm.clear, { fill: "#000" });
-    app.append(cm.point, { x: i, y: j, stroke0: "@" });
+    app.append(cc.clear, { fill: "#000" });
+    app.append(cc.point, { x: i, y: j, stroke0: "@" });
     x += 1;
   });
 

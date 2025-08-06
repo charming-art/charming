@@ -1,24 +1,24 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { interpolateRainbow } from "d3-scale-chromatic";
 import { dispose } from "../utils/dispose.js";
 
 export function generalCircleClover() {
-  const app = cm.app({
+  const app = cc.app({
     width: 640,
     height: 640,
   });
 
   app
-    .data(cm.range(120))
-    .process(cm.map, (_, i, a) => i * (Math.PI / a.length))
-    .append(cm.circle, {
+    .data(cc.range(120))
+    .process(cc.map, (_, i, a) => i * (Math.PI / a.length))
+    .append(cc.circle, {
       x: (t) => Math.cos(t) * Math.cos(t * 3),
       y: (t) => Math.sin(t) * Math.cos(t * 3),
       r: (t) => t,
       fill: (t) => t,
     })
-    .transform(cm.mapPosition, { padding: 20 })
-    .transform(cm.mapAttrs, {
+    .transform(cc.mapPosition, { padding: 20 })
+    .transform(cc.mapAttrs, {
       r: { range: [8, 20] },
       fill: { interpolate: interpolateRainbow },
     });

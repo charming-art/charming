@@ -1,4 +1,4 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { frame } from "../utils/frame.js";
 import { dispose } from "../utils/dispose.js";
 import { stats } from "../utils/stats.js";
@@ -8,7 +8,7 @@ const { VerletPhysics2D, VerletParticle2D, VerletSpring2D } = physics2d;
 const { GravityBehavior } = physics2d.behaviors;
 
 export function toxicGrid() {
-  const app = cm.app({
+  const app = cc.app({
     width: 640,
     height: 240,
   });
@@ -24,7 +24,7 @@ export function toxicGrid() {
   const x = (i) => i % cols;
   const y = (i) => (i / cols) | 0;
 
-  const particles = cm.range(cols * rows).map((i) => {
+  const particles = cc.range(cols * rows).map((i) => {
     const m = x(i);
     const n = y(i);
     const particle = new VerletParticle2D(m * w, 0);
@@ -54,13 +54,13 @@ export function toxicGrid() {
 
   function update() {
     world.update();
-    app.append(cm.clear, { fill: "#fff" });
-    app.data(springs).append(cm.link, {
+    app.append(cc.clear, { fill: "#fff" });
+    app.data(springs).append(cc.link, {
       x: (d) => d.a.x,
       y: (d) => d.a.y,
       x1: (d) => d.b.x,
       y1: (d) => d.b.y,
-      stroke: cm.rgb(0),
+      stroke: cc.rgb(0),
       strokeWidth: 2,
     });
   }

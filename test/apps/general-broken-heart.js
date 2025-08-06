@@ -1,4 +1,4 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 import { frame } from "../utils/frame.js";
 import { stats } from "../utils/stats.js";
@@ -19,13 +19,13 @@ function noiseAngle(theta, radius, time, noise) {
 
 function drawHeart(flow, { x, y, count, radius, noise, time }) {
   flow
-    .append(cm.group, { x, y })
-    .data(cm.range(count, 0, cm.TWO_PI))
-    .process(cm.derive, {
+    .append(cc.group, { x, y })
+    .data(cc.range(count, 0, cc.TWO_PI))
+    .process(cc.derive, {
       t: (d) => d,
       r: (d) => noiseRadius(d, radius, time, noise),
     })
-    .append(cm.polygon, {
+    .append(cc.polygon, {
       x: (d) => Math.cos(d.t) * d.r,
       y: (d) => Math.sin(d.t) * d.r,
       fill: "red",
@@ -40,19 +40,19 @@ function drawEyes(flow, { x, y, r, radius }) {
 
   const group = flow
     .data([-1, 1])
-    .process(cm.derive, {
+    .process(cc.derive, {
       x: (d) => x + (d * radius) / 1.8,
       y: y + height / 6,
     })
-    .process(cm.derive, {
+    .process(cc.derive, {
       rotate: (d) => Math.atan2(mouseY - d.y, mouseX - d.x),
     })
-    .append(cm.group, {
+    .append(cc.group, {
       x: (d) => d.x,
       y: (d) => d.y,
     });
 
-  group.append(cm.circle, {
+  group.append(cc.circle, {
     x: 0,
     y: 0,
     r: r,
@@ -60,10 +60,10 @@ function drawEyes(flow, { x, y, r, radius }) {
   });
 
   group
-    .append(cm.group, {
+    .append(cc.group, {
       rotate: (d) => d.rotate,
     })
-    .append(cm.circle, {
+    .append(cc.circle, {
       x: r / 3,
       y: 0,
       r: r / 2,
@@ -78,21 +78,21 @@ function drawTexts(flow, { chars, x, y, radius, time, noise, ...font }) {
   const start = Math.atan2(mouseY - y, mouseX - x);
 
   flow
-    .append(cm.group, { x, y })
+    .append(cc.group, { x, y })
     .data(chars)
-    .process(cm.derive, {
+    .process(cc.derive, {
       t: (d) => d.t + start,
     })
-    .process(cm.derive, {
+    .process(cc.derive, {
       r: (d) => noiseRadius(d.t, radius, time, noise),
       a: (d) => noiseAngle(d.t, radius, time, noise),
     })
-    .append(cm.group, {
+    .append(cc.group, {
       x: (d) => Math.cos(d.t) * d.r,
       y: (d) => Math.sin(d.t) * d.r,
       rotate: (d) => d.a,
     })
-    .append(cm.text, {
+    .append(cc.text, {
       x: 0,
       y: 0,
       text: (d) => d.c,
@@ -106,7 +106,7 @@ export function generalBrokenHeart() {
     height = 640,
     count = 200,
     radius = 100,
-    noise = cm.randomNoise(),
+    noise = cc.randomNoise(),
     string = "Sad News!!!",
     chars = null,
     font = { fontSize: 100 };
@@ -127,7 +127,7 @@ export function generalBrokenHeart() {
     const x = width / 2;
     const y = height / 3;
 
-    app.append(cm.clear, { fill: "black" });
+    app.append(cc.clear, { fill: "black" });
 
     app
       .call(drawHeart, { x, y, count, radius, noise, time })

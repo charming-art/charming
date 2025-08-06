@@ -1,17 +1,17 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 import { interpolateViridis } from "d3-scale-chromatic";
 import { frame } from "../utils/frame.js";
 import { snapshot } from "../utils/snapshot.js";
 
 function arrow(flow, { length, angle, x, y, rotate, ...options }) {
-  const group = flow.append(cm.group, { x, y, rotate });
+  const group = flow.append(cc.group, { x, y, rotate });
   const halfLengthPos = length.map((d) => d / 2);
   const halfLengthNeg = length.map((d) => -d / 2);
   const anglePos = angle.map((d) => d);
   const angleNeg = angle.map((d) => -d);
 
-  group.append(cm.link, {
+  group.append(cc.link, {
     x: halfLengthNeg,
     y: 0,
     x1: halfLengthPos,
@@ -19,7 +19,7 @@ function arrow(flow, { length, angle, x, y, rotate, ...options }) {
     ...options,
   });
 
-  group.append(cm.link, {
+  group.append(cc.link, {
     x: 0,
     y: 0,
     x1: halfLengthPos,
@@ -29,7 +29,7 @@ function arrow(flow, { length, angle, x, y, rotate, ...options }) {
     ...options,
   });
 
-  group.append(cm.link, {
+  group.append(cc.link, {
     x: 0,
     y: 0,
     x1: halfLengthPos,
@@ -46,10 +46,10 @@ export function _canvasArrowColor() {
     size = 16,
     cols = width / size,
     rows = height / size,
-    noise = cm.randomNoise(0, 1, { seed: 1 }),
-    fields = cm.cross(cm.range(cols), cm.range(rows)).map(([x, y]) => ({ x, y, value: noise(y * 0.1, x * 0.1) }));
+    noise = cc.randomNoise(0, 1, { seed: 1 }),
+    fields = cc.cross(cc.range(cols), cc.range(rows)).map(([x, y]) => ({ x, y, value: noise(y * 0.1, x * 0.1) }));
 
-  const app = cm.app({ width, height });
+  const app = cc.app({ width, height });
 
   app
     .data(fields)
@@ -61,8 +61,8 @@ export function _canvasArrowColor() {
       stroke: (d) => d.value,
       length: (d) => d.value,
     })
-    .transform(cm.mapAttrs, {
-      rotate: { range: [0, cm.TWO_PI] },
+    .transform(cc.mapAttrs, {
+      rotate: { range: [0, cc.TWO_PI] },
       length: { range: [size * 0.3, size * 0.9] },
       stroke: { interpolate: interpolateViridis },
     });

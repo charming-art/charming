@@ -1,4 +1,4 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 import { stats } from "../utils/stats.js";
 
@@ -6,7 +6,7 @@ import { stats } from "../utils/stats.js";
 export function generalShaderArtWebGL() {
   const width = 640;
   const height = 360;
-  const palette = cm.glsl`vec3 palette(float t) {
+  const palette = cc.glsl`vec3 palette(float t) {
     vec3 a = vec3(0.5, 0.5, 0.5);
     vec3 b = vec3(0.5, 0.5, 0.5);
     vec3 c = vec3(1.0, 1.0, 1.0);
@@ -16,7 +16,7 @@ export function generalShaderArtWebGL() {
 
   function update(app) {
     const time = app.prop("frameCount") / 50;
-    const fill = cm.glsl`vec4 fill(vec2 coord, vec4 color) {
+    const fill = cc.glsl`vec4 fill(vec2 coord, vec4 color) {
       vec2 uv = (coord - vec2(${width}, ${height})) / ${height};
       vec2 uv0 = uv;
       vec3 rgb = vec3(0.0);
@@ -31,12 +31,12 @@ export function generalShaderArtWebGL() {
       }
       return vec4(rgb, 1.0);
     }`;
-    app.append(cm.rect, { x: 0, y: 0, width, height, fill });
+    app.append(cc.rect, { x: 0, y: 0, width, height, fill });
   }
 
   return cm
     .app({
-      renderer: cm.webgl(),
+      renderer: cc.webgl(),
       width,
       height,
     })

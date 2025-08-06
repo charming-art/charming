@@ -1,4 +1,4 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 import { stats } from "../utils/stats.js";
 
@@ -14,18 +14,18 @@ function updateString(d, i, array, flow) {
   if (lifespan < 0) array[i] = createString(height);
   else if (lifespan <= curLength) chars[curLength - lifespan] = "";
   else if (lifespan > curLength) {
-    for (let i = length - 1; i < curLength; i++) chars[i] = cm.randomChar();
-    chars.push(cm.randomChar());
+    for (let i = length - 1; i < curLength; i++) chars[i] = cc.randomChar();
+    chars.push(cc.randomChar());
   }
 
   d.lifespan--;
 }
 
 function createString(height) {
-  const lifespan = cm.randomInt(height);
-  const length = cm.randomInt(lifespan);
-  const chars = cm.range(length).map(cm.randomChar);
-  const y = cm.randomInt(0, 15);
+  const lifespan = cc.randomInt(height);
+  const length = cc.randomInt(lifespan);
+  const chars = cc.range(length).map(cc.randomChar);
+  const y = cc.randomInt(0, 15);
   return { lifespan, length, chars, y };
 }
 
@@ -36,19 +36,19 @@ export async function terminalCharacterMatrix() {
   function update(app) {
     const width = app.prop("width");
     const height = app.prop("height");
-    if (!strings) strings = cm.range(width).map(() => createString(height));
+    if (!strings) strings = cc.range(width).map(() => createString(height));
 
-    app.append(cm.clear, { fill: "black" });
+    app.append(cc.clear, { fill: "black" });
 
     app
       .data(strings)
-      .process(cm.eachRight, updateString)
-      .append(cm.group, {
+      .process(cc.eachRight, updateString)
+      .append(cc.group, {
         x: (_, i) => i,
         y: (d) => d.y,
       })
       .data((d) => d.chars)
-      .append(cm.point, {
+      .append(cc.point, {
         x: 0,
         y: (_, i) => i,
         stroke0: (d) => d,
@@ -56,8 +56,8 @@ export async function terminalCharacterMatrix() {
       });
   }
 
-  const app = cm.app({
-    renderer: await cm.terminal(),
+  const app = cc.app({
+    renderer: await cc.terminal(),
     frameRate: 10,
     fontWeight: "bold",
   });

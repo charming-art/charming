@@ -1,22 +1,22 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 import { frame } from "../utils/frame.js";
 import { stats } from "../utils/stats.js";
 
 export function oscillationWave() {
-  const app = cm.app({
+  const app = cc.app({
     width: 600,
     height: 200,
   });
 
-  const X = cm.range(50, cm.TWO_PI);
+  const X = cc.range(50, cc.TWO_PI);
 
   app
-    .on("update", () => app.append(cm.clear, { fill: cm.rgb(255) }))
+    .on("update", () => app.append(cc.clear, { fill: cc.rgb(255) }))
     .on("update", () => {
       app
         .data(X)
-        .append(cm.circle, {
+        .append(cc.circle, {
           x: (d) => d,
           y: (d) => Math.sin(d + app.prop("frameCount") / 30),
           r: 20,
@@ -24,7 +24,7 @@ export function oscillationWave() {
           stroke: "#000",
           strokeWidth: 1,
         })
-        .transform(cm.mapAttrs, {
+        .transform(cc.mapAttrs, {
           x: { range: [0, app.prop("width")] },
           y: { range: [0, app.prop("height")] },
         });

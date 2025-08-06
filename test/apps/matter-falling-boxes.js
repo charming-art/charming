@@ -1,4 +1,4 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { frame } from "../utils/frame.js";
 import { dispose } from "../utils/dispose.js";
 import { stats } from "../utils/stats.js";
@@ -11,10 +11,10 @@ function createBoundary(parent, x, y, width, height) {
 }
 
 function createBox(parent, x, y) {
-  const width = cm.random(8, 16);
-  const height = cm.random(8, 16);
+  const width = cc.random(8, 16);
+  const height = cc.random(8, 16);
   const body = Bodies.rectangle(x, y, width, height, { restitution: 0.6 });
-  Body.setVelocity(body, Vector.create(cm.random(-5, 5), 0));
+  Body.setVelocity(body, Vector.create(cc.random(-5, 5), 0));
   Body.setAngularVelocity(body, 0.1);
   Composite.add(parent, body);
   return { body, width, height };
@@ -30,7 +30,7 @@ function checkBox(d, i, array, flow) {
 }
 
 export function matterFallingBoxes() {
-  const app = cm.app({
+  const app = cc.app({
     width: 600,
     height: 200,
   });
@@ -56,20 +56,20 @@ export function matterFallingBoxes() {
     width,
     height,
     rotate,
-    fill: cm.rgb(127),
-    stroke: cm.rgb(0),
+    fill: cc.rgb(127),
+    stroke: cc.rgb(0),
     strokeWeight: 2,
     anchor: "center",
   };
 
   function update() {
-    if (cm.random(1) < 0.1) boxes.push(createBox(engine.world, w / 2, 50));
+    if (cc.random(1) < 0.1) boxes.push(createBox(engine.world, w / 2, 50));
 
-    app.append(cm.clear, { fill: "#fff" });
+    app.append(cc.clear, { fill: "#fff" });
 
-    app.data(boxes).process(cm.eachRight, checkBox).append(cm.rect, rectOptions);
+    app.data(boxes).process(cc.eachRight, checkBox).append(cc.rect, rectOptions);
 
-    app.data(boundaries).append(cm.rect, rectOptions);
+    app.data(boundaries).append(cc.rect, rectOptions);
 
     Engine.update(engine);
   }

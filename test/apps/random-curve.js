@@ -1,11 +1,11 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { frame } from "../utils/frame.js";
 import { dispose } from "../utils/dispose.js";
 import { stats } from "../utils/stats.js";
 
 function bellCurve(mu = 0, sigma = 1) {
   const e = 2.71828183;
-  const sq2pi = Math.sqrt(cm.TWO_PI);
+  const sq2pi = Math.sqrt(cc.TWO_PI);
   const sdsq = sigma * sigma;
   return (x) => {
     const xmsq = -1 * (x - mu) * (x - mu);
@@ -14,29 +14,29 @@ function bellCurve(mu = 0, sigma = 1) {
 }
 
 export function randomCurve() {
-  const app = cm.app({
+  const app = cc.app({
     width: 600,
     height: 200,
   });
 
-  const X = cm.range(app.prop("width"), -3, 3);
+  const X = cc.range(app.prop("width"), -3, 3);
   let sigma = 0.5;
   let step = 0.01;
 
   app.on("update", () => {
     const curve = bellCurve(0, sigma);
 
-    app.append(cm.clear, { fill: "#fff" });
+    app.append(cc.clear, { fill: "#fff" });
 
     app
       .data(X)
-      .append(cm.line, {
+      .append(cc.line, {
         x: (_, i) => i,
         y: (d) => curve(d),
         stroke: "black",
         strokeWidth: 2,
       })
-      .transform(cm.mapAttrs, {
+      .transform(cc.mapAttrs, {
         y: {
           domain: [0, 1],
           range: [app.prop("height") - 2, 2],

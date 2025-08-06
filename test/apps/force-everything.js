@@ -1,21 +1,21 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { frame } from "../utils/frame.js";
 import { location, attraction, object } from "../utils/force.js";
 import { dispose } from "../utils/dispose.js";
 import { stats } from "../utils/stats.js";
 
 export function forceEverything() {
-  const app = cm.app({
+  const app = cc.app({
     width: 600,
     height: 200,
   });
 
   const movers = Array.from({ length: 20 }, () =>
     object({
-      location: cm.vec(cm.random(app.prop("width")), cm.random(app.prop("height"))),
-      velocity: cm.vec(cm.random(-1, 1), cm.random(-1, 1)),
-      acceleration: cm.vec(),
-      mass: cm.random(2, 5),
+      location: cc.vec(cc.random(app.prop("width")), cc.random(app.prop("height"))),
+      velocity: cc.vec(cc.random(-1, 1), cc.random(-1, 1)),
+      acceleration: cc.vec(),
+      mass: cc.random(2, 5),
       G: 0.4,
     }),
   );
@@ -23,22 +23,22 @@ export function forceEverything() {
   const update = location();
 
   app
-    .on("update", () => app.append(cm.clear, { fill: cm.rgb(255) }))
+    .on("update", () => app.append(cc.clear, { fill: cc.rgb(255) }))
     .on("update", () => {
       app
         .data(movers)
-        .process(cm.each, (i) =>
+        .process(cc.each, (i) =>
           app
             .data(movers)
-            .process(cm.filter, (j) => i !== j)
-            .process(cm.each, (j) => attraction(j)(i)),
+            .process(cc.filter, (j) => i !== j)
+            .process(cc.each, (j) => attraction(j)(i)),
         )
-        .process(cm.each, update)
-        .append(cm.circle, {
+        .process(cc.each, update)
+        .append(cc.circle, {
           x: (d) => d.location.x,
           y: (d) => d.location.y,
           r: (d) => d.mass * 2,
-          fill: cm.rgb(175),
+          fill: cc.rgb(175),
           stroke: "#000",
           strokeWidth: 2,
         });

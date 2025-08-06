@@ -1,16 +1,16 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { cell } from "../utils/cell.js";
 
 function testDefaults(app) {
-  app.append(cm.circle, {});
+  app.append(cc.circle, {});
 }
 
 function testDefaultPositions(app) {
-  app.append(cm.circle, { r: 100 });
+  app.append(cc.circle, { r: 100 });
 }
 
 function testColors(app, width, height) {
-  app.append(cm.circle, {
+  app.append(cc.circle, {
     x: width / 2,
     y: height / 2,
     r: 50,
@@ -20,7 +20,7 @@ function testColors(app, width, height) {
 }
 
 function testStrokeWidth(app, width, height) {
-  app.append(cm.circle, {
+  app.append(cc.circle, {
     x: width / 2,
     y: height / 2,
     r: 50,
@@ -31,7 +31,7 @@ function testStrokeWidth(app, width, height) {
 }
 
 function testOpacity1(app, width, height) {
-  app.append(cm.circle, {
+  app.append(cc.circle, {
     x: width / 2,
     y: height / 2,
     r: 50,
@@ -44,7 +44,7 @@ function testOpacity1(app, width, height) {
 }
 
 function testOpacity2(app, width, height) {
-  app.append(cm.circle, {
+  app.append(cc.circle, {
     x: width / 2,
     y: height / 2,
     r: 50,
@@ -55,7 +55,7 @@ function testOpacity2(app, width, height) {
 }
 
 function testOpacityPriority(app, width, height) {
-  app.append(cm.circle, {
+  app.append(cc.circle, {
     x: width / 2,
     y: height / 2,
     r: 50,

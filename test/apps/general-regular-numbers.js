@@ -1,4 +1,4 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { dispose } from "../utils/dispose.js";
 
 // @see https://observablehq.com/@fil/regular-numbers
@@ -9,23 +9,23 @@ export function generalRegularNumbers() {
 
   const numbers = cm
     .cross(
-      cm.range(1 + Math.log(N) / Math.log(2)),
-      cm.range(1 + Math.log(N) / Math.log(3)),
-      cm.range(1 + Math.log(N) / Math.log(5)),
+      cc.range(1 + Math.log(N) / Math.log(2)),
+      cc.range(1 + Math.log(N) / Math.log(3)),
+      cc.range(1 + Math.log(N) / Math.log(5)),
     )
     .filter((d) => value(d) <= N);
 
   const applyScale = (flow) => {
-    flow.transform(cm.mapPosition, {
-      scaleY: cm.scaleLog,
+    flow.transform(cc.mapPosition, {
+      scaleY: cc.scaleLog,
       padding: 15,
-      domainX: cm.extent(numbers, x),
-      domainY: cm.extent(numbers, value),
+      domainX: cc.extent(numbers, x),
+      domainY: cc.extent(numbers, value),
       reverseY: true,
     });
   };
 
-  const app = cm.app();
+  const app = cc.app();
 
   app
     .data(
@@ -46,7 +46,7 @@ export function generalRegularNumbers() {
         ])
         .filter(([n]) => Math.min(...n) >= 0),
     )
-    .append(cm.link, {
+    .append(cc.link, {
       x: ([n]) => x(n),
       y: ([n]) => value(n),
       x1: ([, n]) => x(n),
@@ -57,7 +57,7 @@ export function generalRegularNumbers() {
 
   app
     .data(numbers)
-    .append(cm.circle, {
+    .append(cc.circle, {
       x: x,
       y: value,
       r: 12,
@@ -68,7 +68,7 @@ export function generalRegularNumbers() {
 
   app
     .data(numbers)
-    .append(cm.text, {
+    .append(cc.text, {
       x: x,
       y: value,
       text: value,

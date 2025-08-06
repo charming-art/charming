@@ -1,4 +1,4 @@
-import * as cm from "../../src/index.js";
+import * as cc from "../../src/index.js";
 import { frame } from "../utils/frame.js";
 import { dispose } from "../utils/dispose.js";
 import { stats } from "../utils/stats.js";
@@ -19,7 +19,7 @@ function createBox(parent, x, y) {
     Vector.create(-20, 15),
   ];
   const body = Bodies.fromVertices(x, y, vertices, { restitution: 0.2 });
-  Body.setVelocity(body, Vector.create(cm.random(-5, 5), 0));
+  Body.setVelocity(body, Vector.create(cc.random(-5, 5), 0));
   Body.setAngularVelocity(body, 0.1);
   Composite.add(parent, body);
   return { body };
@@ -35,7 +35,7 @@ function checkBox(d, i, array, flow) {
 }
 
 export function matterFallingPolygons() {
-  const app = cm.app({
+  const app = cc.app({
     width: 600,
     height: 200,
   });
@@ -51,29 +51,29 @@ export function matterFallingPolygons() {
   ];
 
   function update() {
-    if (cm.random(1) < 0.1) boxes.push(createBox(engine.world, w / 2, 50));
+    if (cc.random(1) < 0.1) boxes.push(createBox(engine.world, w / 2, 50));
 
-    app.append(cm.clear, { fill: "#fff" });
+    app.append(cc.clear, { fill: "#fff" });
 
     app
       .data(boxes)
-      .process(cm.eachRight, checkBox)
-      .append(cm.polygon, {
+      .process(cc.eachRight, checkBox)
+      .append(cc.polygon, {
         x: (d) => d.body.vertices.map((d) => d.x),
         y: (d) => d.body.vertices.map((d) => d.y),
-        fill: cm.rgb(127),
-        stroke: cm.rgb(0),
+        fill: cc.rgb(127),
+        stroke: cc.rgb(0),
         strokeWeight: 2,
       });
 
-    app.data(boundaries).append(cm.rect, {
+    app.data(boundaries).append(cc.rect, {
       x: (d) => d.body.position.x,
       y: (d) => d.body.position.y,
       rotate: (d) => d.body.angle,
       width: (d) => d.width,
       height: (d) => d.height,
-      fill: cm.rgb(127),
-      stroke: cm.rgb(0),
+      fill: cc.rgb(127),
+      stroke: cc.rgb(0),
       strokeWeight: 2,
       anchor: "center",
     });
