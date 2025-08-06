@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 
 describe("vector", () => {
   test("cc.vec()", () => {
-  const v = cc.vec();
+    const v = cc.vec();
     expect(v.x).toBe(0);
     expect(v.y).toBe(0);
   });

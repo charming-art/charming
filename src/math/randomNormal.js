@@ -5,7 +5,7 @@ export function randomNormal(mu = 0, sigma = 1) {
   let r = null;
   return () => {
     let y;
-    if (x !== null) (y = x), (x = null);
+    if (x !== null) ((y = x), (x = null));
     else
       do {
         x = Math.random() * 2 - 1;
