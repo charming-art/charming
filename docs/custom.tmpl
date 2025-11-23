@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <style type="text/css">
       @import url("observable:styles/index.css");
       @import url("@fontsource/spline-sans-mono/400.css");
@@ -26,13 +26,25 @@
       @import url("@fontsource/inter/700-italic.css");
     </style>
     <style>
-        p, table, figure, figcaption, h1, h2, h3, h4, h5, h6, .katex-display {
-          max-width: unset;
-        }
+      p,
+      table,
+      figure,
+      figcaption,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      .katex-display {
+        max-width: unset;
+      }
 
-        blockquote, ol, ul {
-          max-width: unset;
-        }
+      blockquote,
+      ol,
+      ul {
+        max-width: unset;
+      }
     </style>
     <style>
       .charming-banner {
@@ -78,56 +90,87 @@
       }
     </style>
     <script src="/dist/cm.umd.min.js"></script>
+    <script src="/stats.min.js"></script>
+    <script>
+      function stats(app) {
+        let stats;
+
+        app
+          .on("beforeAll", () => {
+            const canvas = app.node();
+            stats = new Stats();
+            stats.dom.style.position = "inherit";
+            stats.dom.style.marginBottom = "0.5em";
+            requestAnimationFrame(() => {
+              canvas.parentNode.insertBefore(stats.dom, canvas);
+            });
+          })
+          .on("beforeEach", () => {
+            stats.begin();
+          })
+          .on("afterEach", () => {
+            stats.end();
+          })
+          .on("afterAll", () => {
+            stats.dom.remove();
+          });
+      }
+      window.stats = stats;
+    </script>
   </head>
   <body>
     <div class="charming-banner">
-      <span class="full-text">This is Charming1. For Charming2, go to <a href="https://charmingjs.org">charmingjs.org</a>.</span>
+      <span class="full-text"
+        >This is Charming1. For Charming2, go to <a href="https://charmingjs.org">charmingjs.org</a>.</span
+      >
       <span class="short-text">This is v1. For v2, go to <a href="https://charmingjs.org">charmingjs.org</a>.</span>
     </div>
     <nav id="breadcrumb"></nav>
     <main></main>
     <script>
-      (function() {
+      (function () {
         const path = window.location.pathname;
-        const pathParts = path.split('/').filter(s => s);
-        const htmlFile = pathParts[pathParts.length - 1] || '';
-        
+        const pathParts = path.split("/").filter((s) => s);
+        const htmlFile = pathParts[pathParts.length - 1] || "";
+
         // Hide breadcrumb on home page
         // Home page can be: /, /index, or /index.html
-        if (pathParts.length === 0 || 
-            (pathParts.length === 1 && (htmlFile === 'index.html' || htmlFile === 'index'))) {
+        if (pathParts.length === 0 || (pathParts.length === 1 && (htmlFile === "index.html" || htmlFile === "index"))) {
           return;
         }
-        
-        const breadcrumb = document.getElementById('breadcrumb');
+
+        const breadcrumb = document.getElementById("breadcrumb");
         const sectionMap = {
-          'examples': 'Examples',
-          'api-reference': 'API Reference',
-          'introduction': 'Introduction'
+          examples: "Examples",
+          "api-reference": "API Reference",
+          introduction: "Introduction",
         };
-        
+
         // Calculate relative path to home based on depth
         const depth = pathParts.length - 1;
-        const homePath = '../';
-        
-        let breadcrumbHTML = '<a href="' + homePath + '" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit; cursor: pointer;"><img src="/logo.svg" alt="Charming" style="width: 1.25rem; height: 1.25rem; display: block; flex-shrink: 0; pointer-events: none;">Charming</a>';
-        
+        const homePath = "../";
+
+        let breadcrumbHTML =
+          '<a href="' +
+          homePath +
+          '" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit; cursor: pointer;"><img src="/logo.svg" alt="Charming" style="width: 1.25rem; height: 1.25rem; display: block; flex-shrink: 0; pointer-events: none;">Charming</a>';
+
         // If we're in a section folder and not on the section's index page
         // pathParts.length === 2 means: [section, file.html]
-        if (pathParts.length === 2 && htmlFile !== 'index.html') {
+        if (pathParts.length === 2 && htmlFile !== "index.html") {
           const section = pathParts[0];
           const sectionName = sectionMap[section] || section.charAt(0).toUpperCase() + section.slice(1);
-          const sectionIndexPath = './';
-          breadcrumbHTML += ' <span style="margin: 0 0.25rem;">/</span> <a href="' + sectionIndexPath + '">' + sectionName + '</a>';
+          const sectionIndexPath = "./";
+          breadcrumbHTML +=
+            ' <span style="margin: 0 0.25rem;">/</span> <a href="' + sectionIndexPath + '">' + sectionName + "</a>";
         }
-        
+
         breadcrumb.innerHTML = breadcrumbHTML;
-        breadcrumb.style.marginBottom = '1em';
-        breadcrumb.style.fontSize = '0.875rem';
-        breadcrumb.style.display = 'flex';
-        breadcrumb.style.alignItems = 'center';
+        breadcrumb.style.marginBottom = "1em";
+        breadcrumb.style.fontSize = "0.875rem";
+        breadcrumb.style.display = "flex";
+        breadcrumb.style.alignItems = "center";
       })();
     </script>
   </body>
 </html>
-
