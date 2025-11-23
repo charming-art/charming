@@ -155,12 +155,14 @@ b.fillRect(d,m,n,p);b.fillStyle=l;b.globalAlpha=.9;b.fillRect(d,m,n,p);return{do
 
         // Calculate relative path to home based on depth
         const depth = pathParts.length - 1;
-        const homePath = "../";
+        const homePath = depth === 0 ? './' : '../';
 
+        // Use absolute path for logo to ensure it works in all deployment scenarios
+        const logoPath = '/logo.svg';
         let breadcrumbHTML =
           '<a href="' +
           homePath +
-          '" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit; cursor: pointer;"><img src="/logo.svg" alt="Charming" style="width: 1.25rem; height: 1.25rem; display: block; flex-shrink: 0; pointer-events: none;">Charming</a>';
+          '" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit; cursor: pointer;"><img src="' + logoPath + '" alt="Charming" style="width: 1.25rem; height: 1.25rem; display: block; flex-shrink: 0; pointer-events: none;">Charming</a>';
 
         // If we're in a section folder and not on the section's index page
         // pathParts.length === 2 means: [section, file.html]
