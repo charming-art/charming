@@ -1,0 +1,35 @@
+<!doctype html>
+<notebook theme="air">
+  <title>ASCII Text</title>
+  <script id="0" type="text/markdown">
+    # ASCII Text
+
+    ${quote}
+  </script>
+  <script id="5" type="application/vnd.observable.javascript" pinned="">
+    {
+      const app = cm.app({
+        width,
+        renderer: await cm.terminal()
+      });
+
+      app.append(cm.text, {
+        text: cm.figlet("hello world"),
+        x: app.prop("width") / 2,
+        y: app.prop("height") / 2,
+        fill: cm.gradientSineBowX(),
+        textAlign: "center",
+        textBaseline: "middle",
+        fontFamily: cm.fontGhost()
+      });
+
+      return app.render().node();
+    }
+  </script>
+  <script id="8" type="application/vnd.observable.javascript" pinned="">
+    cm = require("@charming-art/charming@0.0.6")
+  </script>
+  <script id="19" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>

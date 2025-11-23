@@ -1,0 +1,167 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Car Wandering</title>
+  <script id="0" type="text/markdown">
+    # Car Wandering
+
+    ${quote}
+  </script>
+  <script id="5" type="application/vnd.observable.javascript" pinned="">
+    {
+      const width = 600,
+        height = 200,
+        car = object({
+          location: cm.vec(width / 2, height / 2),
+          maxSpeed: 2,
+          maxForce: 0.05,
+          r: 6,
+          wanderR: 25,
+          wanderD: 80,
+          wanderT: 0,
+          wanderC: 0.3
+        });
+
+      function update(app) {
+        app.append(cm.clear, { fill: cm.rgb(255) });
+
+        const groups = app
+          .datum(car)
+          .process(cm.each, target)
+          .process(cm.each, seek)
+          .process(cm.each, constrainX)
+          .process(cm.each, constrainY)
+          .process(cm.each, move);
+
+        groups.append(cm.circle, {
+          x: (d) => d.circle.x,
+          y: (d) => d.circle.y,
+          r: (d) => d.wanderR,
+          fill: cm.rgb(255),
+          stroke: cm.rgb(0)
+        });
+
+        groups.append(cm.link, {
+          x: (d) => d.circle.x,
+          y: (d) => d.circle.y,
+          x1: (d) => d.location.x,
+          y1: (d) => d.location.y
+        });
+
+        groups.append(cm.circle, {
+          x: (d) => d.target.x,
+          y: (d) => d.target.y,
+          r: 2,
+          fill: cm.rgb(175),
+          stroke: cm.rgb(0)
+        });
+
+        groups.append(cm.link, {
+          x: (d) => d.circle.x,
+          y: (d) => d.circle.y,
+          x1: (d) => d.target.x,
+          y1: (d) => d.target.y
+        });
+
+        groups
+          .append(cm.group, {
+            x: (d) => d.location.x,
+            y: (d) => d.location.y,
+            rotate: (d) => d.velocity.angle()
+          })
+          .append(cm.triangle, {
+            x: (d) => d.r * 2,
+            y: 0,
+            x1: (d) => -d.r * 2,
+            y1: (d) => -d.r,
+            x2: (d) => -d.r * 2,
+            y2: (d) => d.r,
+            fill: cm.rgb(175),
+            stroke: cm.rgb(0),
+            strokeWidth: 2
+          });
+      }
+
+      function dispose(app) {
+        invalidation.then(() => app.dispose());
+      }
+
+      return cm
+        .app({ width, height })
+        .on("update", update)
+        .call(border)
+        .call(dispose)
+        .start()
+        .node();
+    }
+  </script>
+  <script id="46" type="application/vnd.observable.javascript" pinned="">
+    function target(d) {
+      const circle = d.velocity.clone();
+      circle.mag(d.wanderD).add(d.location);
+      const heading = d.velocity.angle();
+      const theta = (d.wanderT += cm.random(-d.wanderC, d.wanderC)) + heading;
+      const r = cm.vec(d.wanderR * Math.cos(theta), d.wanderR * Math.sin(theta));
+      d.target = cm.vecAdd(circle, r);
+      d.circle = circle;
+    }
+  </script>
+  <script id="90" type="application/vnd.observable.javascript" pinned="">
+    function seek(d) {
+      const desired = cm.vecSub(d.target, d.location).mag(d.maxSpeed);
+      const steer = cm.vecSub(desired, d.velocity);
+      steer.clamp(d.maxForce);
+      applyForce(d, steer);
+    }
+  </script>
+  <script id="94" type="application/vnd.observable.javascript" pinned="">
+    function constrainX(d, i, _, flow) {
+      const app = flow.app();
+      const width = app.prop("width");
+      if (d.location.x < 0) d.location.x += width;
+      if (d.location.x > width) d.location.x -= width;
+    }
+  </script>
+  <script id="97" type="application/vnd.observable.javascript" pinned="">
+    function constrainY(d, i, _, flow) {
+      const app = flow.app();
+      const height = app.prop("height");
+      if (d.location.y < 0) d.location.y += height;
+      if (d.location.y > height) d.location.y -= height;
+    }
+  </script>
+  <script id="34" type="application/vnd.observable.javascript" pinned="">
+    function move(d) {
+      d.velocity.add(d.acceleration);
+      d.location.add(d.velocity);
+      d.acceleration.mult(0);
+    }
+  </script>
+  <script id="53" type="application/vnd.observable.javascript" pinned="">
+    function applyForce(d, force) {
+      const a = cm.vecDiv(force, d.mass);
+      d.acceleration.add(a);
+    }
+  </script>
+  <script id="11" type="application/vnd.observable.javascript" pinned="">
+    function object(options) {
+      return {
+        location: cm.vec(),
+        velocity: cm.vec(),
+        acceleration: cm.vec(),
+        mass: 1,
+        ...options
+      };
+    }
+  </script>
+  <script id="38" type="application/vnd.observable.javascript" pinned="">
+    function border(app) {
+      app.node().style.border = "solid #000 1px"
+    }
+  </script>
+  <script id="7" type="application/vnd.observable.javascript" pinned="">
+    cm = require("@charming-art/charming@0.0.6")
+  </script>
+  <script id="111" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>

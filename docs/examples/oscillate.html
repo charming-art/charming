@@ -1,0 +1,57 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Oscillate</title>
+  <script id="0" type="text/markdown">
+    # Oscillate
+
+    ${quote}
+  </script>
+  <script id="8" type="application/vnd.observable.javascript" pinned="">
+    {
+      const width = 600,
+        height = 200,
+        amplitude = 100,
+        period = 120;
+
+      function clear(app) {
+        app.append(cm.clear, { fill: cm.rgb(255) });
+      }
+
+      function draw(app) {
+        const frameCount = app.prop("frameCount");
+        const x = amplitude * Math.cos((cm.TWO_PI * frameCount) / period);
+        const y = 0;
+        const group = app.append(cm.group, {
+          x: width / 2,
+          y: height / 2
+        });
+        group.append(cm.link, { x: 0, y: 0, x1: x, y1: y });
+        group.append(cm.circle, { x, y, r: 10, fill: "black" });
+      }
+
+      function dispose(app) {
+        invalidation.then(() => app.dispose());
+      }
+
+      return cm
+        .app({ width, height })
+        .on("update", clear)
+        .on("update", draw)
+        .call(dispose)
+        .call(frame)
+        .start()
+        .node();
+    }
+  </script>
+  <script id="24" type="application/vnd.observable.javascript" pinned="">
+    function frame(app) {
+      app.node().style.border = "solid #000 1px";
+    }
+  </script>
+  <script id="5" type="application/vnd.observable.javascript" pinned="">
+    cm = require("@charming-art/charming@0.0.6")
+  </script>
+  <script id="44" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>

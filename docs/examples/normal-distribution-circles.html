@@ -1,0 +1,57 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Normal Distribution Circles</title>
+  <script id="0" type="text/markdown">
+    # Normal Distribution Circles
+
+    ${quote}
+  </script>
+  <script id="9" type="application/vnd.observable.javascript">
+    viewof replay = Inputs.button("Replay")
+  </script>
+  <script id="7" type="application/vnd.observable.javascript" pinned="">
+    {
+      replay;
+
+      const width = 640,
+        height = 240,
+        random = cm.randomNormal(width / 2, 60);
+
+      function update(app) {
+        const x = random();
+        app
+          .append(cm.circle, {
+            x,
+            y: height / 2,
+            r: Math.abs(x - width / 2),
+            fill: "#000",
+            fillOpacity: 0.1
+          })
+          .transform(cm.mapAttrs, {
+            r: {
+              scale: cm.scaleLog,
+              domain: [0.01, width / 2],
+              range: [60, 10]
+            }
+          });
+      }
+
+      function dispose(app) {
+        invalidation.then(() => app.dispose());
+      }
+
+      return cm
+        .app({ width, height })
+        .on("update", update)
+        .call(dispose)
+        .start()
+        .node();
+    }
+  </script>
+  <script id="5" type="application/vnd.observable.javascript" pinned="">
+    cm = require("@charming-art/charming@0.0.6")
+  </script>
+  <script id="60" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>

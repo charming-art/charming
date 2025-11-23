@@ -1,0 +1,154 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Genuary#19: Flocking.</title>
+  <script id="0" type="text/markdown">
+    # Genuary#19: Flocking.
+
+    ${quote}
+
+    - Title: **Green Growth**
+    - Twitter: https://twitter.com/subairui/status/1749061506556416302
+    - Prompt: https://genuary.art/prompts#jan19
+
+    Reimplement Elisabeth's [Blue Growth](https://openprocessing.org/sketch/178381) in [OpenProcessing](https://openprocessing.org/user/45318?view=sketches&o=23) by Charming.js, inspired by [Raven Kwok](flickr.com/photos/ravenkwok)'s work originally.
+  </script>
+  <script id="82" type="application/vnd.observable.javascript">
+    viewof clear = Inputs.button("Clear")
+  </script>
+  <script id="7" type="application/vnd.observable.javascript" pinned="">
+    {
+      clear;
+
+      let width = 640,
+        height = 640,
+        onPressed = false,
+        particles = [],
+        init = true,
+        noise = cm.randomNoise();
+
+      function update(app) {
+        if (init) {
+          app.append(cm.clear, { fill: "#eee" });
+          app.append(cm.text, {
+            text: "Drag and Draw.",
+            x: app.prop("width") / 2,
+            y: app.prop("height") / 2,
+            fill: "black",
+            textAlign: "center",
+            textBaseline: "middle",
+            fontSize: 50,
+            fontFamily: "Source Serif Pro"
+          });
+        }
+
+        if (onPressed) {
+          const mouseX = app.prop("mouseX");
+          const mouseY = app.prop("mouseY");
+          particles.push(
+            ...cm
+              .range(10)
+              .map((i) =>
+                createParticle(
+                  mouseX,
+                  mouseY,
+                  d3.interpolateCool(cm.random()),
+                  particles.length + i
+                )
+              )
+          );
+        }
+
+        const frameCount = app.prop("frameCount");
+
+        app
+          .data(particles)
+          .process(cm.each, age)
+          .process(cm.each, move(noise, frameCount))
+          .process(cm.eachRight, remove)
+          .process(cm.derive, {
+            t: (d) => (d.lifespan - d.age) / d.lifespan
+          })
+          .append(cm.circle, {
+            x: (d) => d.loc.x,
+            y: (d) => d.loc.y,
+            r: (d) => d.weight * d.t * 0.5,
+            fill: (d) => d.fill,
+            stroke: "black",
+            strokeWeight: 1.5,
+            strokeOpacity: (d) => d.t * 0.25 + 0.2
+          });
+      }
+
+      function mouseDown(app) {
+        if (init) {
+          init = false;
+          app.append(cm.clear, { fill: "#fff" });
+        }
+        onPressed = true;
+      }
+
+      function mouseUp() {
+        onPressed = false;
+      }
+
+      function dispose(app) {
+        invalidation.then(() => app.dispose());
+      }
+
+      return cm
+        .app({ width, height, frameRate: 30 })
+        .on("update", update)
+        .on("mouseDown", mouseDown)
+        .on("mouseUp", mouseUp)
+        .call(dispose)
+        .start()
+        .node();
+    }
+  </script>
+  <script id="462" type="application/vnd.observable.javascript" pinned="">
+    function createParticle(x, y, fill, index) {
+      return {
+        loc: cm.vec(x, y),
+        acc: cm.vec(),
+        vel: cm.vecFromAngle(cm.random(cm.TWO_PI)).mult(cm.random(5)),
+        lifespan: cm.randomInt(30, 90),
+        decay: cm.random(0.75, 0.9),
+        weight: cm.random(3, 50),
+        age: 0,
+        fill,
+        i: index
+      };
+    }
+  </script>
+  <script id="469" type="application/vnd.observable.javascript" pinned="">
+    function move(noise, t) {
+      return (d, i) => {
+        const head = noise((d.loc.x + t + d.i) * 0.01, (d.loc.y + d.i) * 0.01);
+        const angle = (head - 0.5) * Math.PI * 4;
+        const mag = noise((d.loc.y + t) * 0.01, (d.loc.x + t) * 0.01);
+        const acc1 = cm.vecFromAngle(angle).mult(mag);
+        const acc2 = cm.vecFromAngle(cm.random(cm.TWO_PI)).mult(0.5);
+        d.acc.add(acc1).add(acc2);
+        d.vel.add(d.acc).mult(d.decay).clamp(3);
+        d.loc.add(d.vel);
+        d.acc.set(0, 0);
+      };
+    }
+  </script>
+  <script id="479" type="application/vnd.observable.javascript" pinned="">
+    function age(d) {
+      d.age++;
+    }
+  </script>
+  <script id="472" type="application/vnd.observable.javascript" pinned="">
+    function remove(d, i, array) {
+      if (d.age > d.lifespan) array.splice(i, 1);
+    }
+  </script>
+  <script id="269" type="application/vnd.observable.javascript" pinned="">
+    cm = require(await FileAttachment("cm@2.umd.min.js").url())
+  </script>
+  <script id="41" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>

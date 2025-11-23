@@ -1,0 +1,138 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Genuary#17: Inspired by Islamic art.</title>
+  <script id="0" type="text/markdown">
+    # Genuary#17: Inspired by Islamic art.
+
+    ${quote}
+
+    - Title: **Islamic Avatar**
+    - Twitter: https://twitter.com/subairui/status/1747657785104576681
+    - Prompt: https://genuary.art/prompts#jan17
+
+  </script>
+  <script id="118" type="application/vnd.observable.javascript">
+    viewof upload = Inputs.file({ label: "Image File" })
+  </script>
+  <script id="201" type="application/vnd.observable.javascript">
+    viewof count = Inputs.range([500, 2000], {
+      label: "Circle Count",
+      step: 1,
+      value: 1200
+    })
+  </script>
+  <script id="206" type="application/vnd.observable.javascript">
+    viewof useFilter = Inputs.radio(["Open", "Off"], {
+      label: "Image Filter",
+      value: "Open"
+    })
+  </script>
+  <script id="211" type="application/vnd.observable.javascript">
+    viewof theme = Inputs.radio(["Dark", "Light"], {
+      label: "Theme",
+      value: "Dark"
+    })
+  </script>
+  <script id="82" type="application/vnd.observable.javascript">
+    viewof regenerate = Inputs.button("Regenerate")
+  </script>
+  <script id="7" type="application/vnd.observable.javascript" pinned="">
+    {
+      regenerate;
+
+      const width = 640,
+        height = 640,
+        image = await (upload ?? FileAttachment("bear.png")).image(),
+        imageData = getImageDate(image),
+        color = imageColor(imageData, width, height),
+        position = cm.randomNoise(3, 8),
+        rotate = cm.randomNoise(0, cm.TWO_PI * width),
+        filter = useFilter === "Open" ? filterColor(cm.random()) : (d) => d,
+        background = theme === "Dark" ? "black" : "white",
+        pack = d3.pack().size([width, height]).padding(3),
+        data = {
+          name: "0",
+          children: cm
+            .range(count)
+            .map((d) => ({ name: `0-${d}`, value: cm.random(0, 1000) }))
+        };
+
+      function draw(app) {
+        const root = pack(d3.hierarchy(data).sum((d) => d.value));
+        const circles = root.leaves();
+
+        app.append(cm.clear, { fill: background });
+
+        app
+          .data(circles)
+          .process(cm.derive, {
+            rotate: (d) => rotate(d.x / width, d.y / height),
+            position: (d) => {
+              const vertex = position(d.x / width, d.y / height) | 0;
+              const T = cm.range(vertex, 0, cm.TWO_PI);
+              const X = T.map((t) => d.r * Math.cos(t));
+              const Y = T.map((t) => d.r * Math.sin(t));
+              return [X, Y];
+            }
+          })
+          .append(cm.group, {
+            x: (d) => d.x,
+            y: (d) => d.y,
+            rotate: (d) => d.rotate
+          })
+          .append(cm.polygon, {
+            x: (d) => d.position[0],
+            y: (d) => d.position[1],
+            fill: (d) => filter(color(d.x, d.y))
+          });
+      }
+
+      function dispose(app) {
+        invalidation.then(() => app.dispose());
+      }
+
+      return cm.app({ width, height }).call(draw).call(dispose).start().node();
+    }
+  </script>
+  <script id="116" type="application/vnd.observable.javascript" pinned="">
+    function getImageDate(image) {
+      const { width, height } = image;
+      const context = DOM.context2d(width, height);
+      context.drawImage(image, 0, 0, width, height);
+      return context.getImageData(0, 0, width * 2, height * 2);
+    }
+  </script>
+  <script id="139" type="application/vnd.observable.javascript" pinned="">
+    function imageColor(imageData, width, height) {
+      const { data, width: imageWidth, height: imageHeight } = imageData;
+      const scaleX = cm.scaleLinear([0, width], [0, imageWidth]);
+      const scaleY = cm.scaleLinear([0, height], [0, imageHeight]);
+      return (x0, y0) => {
+        const x = Math.round(scaleX(x0));
+        const y = Math.round(scaleY(y0));
+        const i = x + y * imageWidth;
+        const r = data[i * 4];
+        const g = data[i * 4 + 1];
+        const b = data[i * 4 + 2];
+        const a = data[i * 4 + 3];
+        return `rgba(${r}, ${g}, ${b}, ${a})`;
+      };
+    }
+  </script>
+  <script id="167" type="application/vnd.observable.javascript" pinned="">
+    function filterColor(offset) {
+      const scale = cm.scaleLinear([0, 1], [0, 360]);
+      return (color) => {
+        const { s, l } = d3.hsl(color);
+        const s1 = (s + offset) % 1;
+        return cm.hsl(scale(s1), 50, l * 100);
+      };
+    }
+  </script>
+  <script id="73" type="application/vnd.observable.javascript" pinned="">
+    cm = require("@charming-art/charming@0.0.7")
+  </script>
+  <script id="41" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>

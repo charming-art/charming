@@ -1,0 +1,67 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Rainbow Dragon</title>
+  <script id="0" type="text/markdown">
+    # Rainbow Dragon
+
+    ${quote}
+
+  </script>
+  <script id="82" type="application/vnd.observable.javascript">
+    viewof replay = Inputs.button("Replay")
+  </script>
+  <script id="7" type="application/vnd.observable.javascript" pinned="">
+    {
+      replay;
+
+      const width = 640,
+        height = 640,
+        x = cm.randomNoise(0, width),
+        y = cm.randomNoise(0, height),
+        size = cm.randomNoise(0, 100),
+        rotate = cm.randomNoise(0, cm.TWO_PI),
+        hue = cm.randomNoise(0, 360);
+
+      function setup(app) {
+        app.append(cm.clear, { fill: "orange" });
+      }
+
+      function update(app) {
+        const t = app.prop("frameCount") / 100;
+        app
+          .append(cm.group, {
+            rotate: rotate(t),
+            x: x(t),
+            y: y(t)
+          })
+          .append(cm.rect, {
+            x: 0,
+            y: 0,
+            width: size(t),
+            height: size(t),
+            fill: cm.hsl(hue(t), 100, 50),
+            stroke: "black",
+            fillOpacity: 0.5
+          });
+      }
+
+      function dispose(app) {
+        invalidation.then(() => app.dispose());
+      }
+
+      return cm
+        .app({ width, height })
+        .on("beforeAll", setup)
+        .on("update", update)
+        .call(dispose)
+        .start()
+        .node();
+    }
+  </script>
+  <script id="73" type="application/vnd.observable.javascript" pinned="">
+    cm = require("@charming-art/charming@0.0.7")
+  </script>
+  <script id="41" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>

@@ -1,0 +1,149 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Bar</title>
+  <script id="0" type="text/markdown">
+    # Bar
+
+    ${quote}
+
+    This chart shows the relative frequency of letters in the English language, from [D3 Example](https://observablehq.com/@d3/bar-chart/2?intent=fork). 
+
+  </script>
+  <script id="8" type="application/vnd.observable.javascript" pinned="">
+    {
+      const app = cm.app({ width: 928, height: 500 });
+
+      app.data(data).append(barY, {
+        x: (d) => d.letter,
+        y: (d) => d.frequency
+      });
+
+      return app.render().node();
+    }
+  </script>
+  <script id="105" type="text/markdown">
+    How to use this code in Observable?
+
+    ```js
+    import {barY} from '@pearmini/bar'
+    ```
+  </script>
+  <script id="12" type="application/vnd.observable.javascript" pinned="">
+    // A composite barY shape.
+    function barY(
+      flow,
+      {
+        x,
+        y,
+        fill = "steelblue",
+        marginLeft = 40,
+        marginTop = 30,
+        marginRight = 0,
+        marginBottom = 30,
+        ...rest
+      }
+    ) {
+      const app = flow.app();
+      const [data] = flow.data();
+      const width = app.prop("width");
+      const height = app.prop("height");
+
+      const scaleX = d3
+        .scaleBand(Array.from(new Set(x)), [marginLeft, width - marginRight])
+        .padding(0.1);
+
+      const scaleY = d3.scaleLinear(
+        [0, d3.max(y)],
+        [height - marginBottom, marginTop]
+      );
+
+      const I = d3.range(data.length);
+      const X = x.map(scaleX);
+      const Y = y.map(scaleY);
+
+      flow.data(I).append(cm.rect, {
+        x: (i) => X[i],
+        y: (i) => Y[i],
+        width: scaleX.bandwidth(),
+        height: (i) => scaleY(0) - Y[i],
+        fill,
+        ...rest
+      });
+
+      flow
+        .datum(0)
+        .append(cm.group, { x: 0, y: height - marginBottom })
+        .call(axisX, { scale: scaleX });
+
+      flow
+        .datum(0)
+        .append(cm.group, { x: marginLeft, y: 0 })
+        .call(axisY, { scale: scaleY });
+    }
+  </script>
+  <script id="33" type="application/vnd.observable.javascript" pinned="">
+    function axisX(flow, { scale }) {
+      const range = scale.range();
+      const ticks = scale.domain();
+      const tickX = (d) => scale(d) + scale.bandwidth() / 2;
+
+      flow.append(cm.link, {
+        x: range[0],
+        y: 0,
+        x1: range[1],
+        y1: 0,
+        stroke: "#000"
+      });
+
+      flow.data(ticks).append(cm.link, {
+        x: tickX,
+        y: 0,
+        x1: tickX,
+        y1: 4,
+        stroke: "#000"
+      });
+
+      flow.data(ticks).append(cm.text, {
+        text: (d) => d,
+        x: tickX,
+        y: 6,
+        stroke: "#000",
+        textAlign: "center",
+        textBaseline: "top"
+      });
+    }
+  </script>
+  <script id="71" type="application/vnd.observable.javascript" pinned="">
+    function axisY(flow, { scale }) {
+      const range = scale.range();
+      const ticks = scale.ticks();
+      const tickY = (d) => scale(d);
+
+      flow.data(ticks).append(cm.link, {
+        x: 0,
+        y: tickY,
+        x1: -4,
+        y1: tickY,
+        stroke: "#000"
+      });
+
+      flow.data(ticks).append(cm.text, {
+        text: (d) => d,
+        x: -6,
+        y: tickY,
+        stroke: "#000",
+        textAlign: "end",
+        textBaseline: "middle"
+      });
+    }
+  </script>
+  <script id="10" type="application/vnd.observable.javascript">
+    data = FileAttachment("alphabet.csv").csv({ typed: "auto" })
+  </script>
+  <script id="5" type="application/vnd.observable.javascript" pinned="">
+    cm = require("@charming-art/charming@0.0.6")
+  </script>
+  <script id="124" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>

@@ -1,0 +1,75 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Waltz of Circles, WebGL</title>
+  <script id="0" type="text/markdown">
+    # Waltz of Circles, WebGL
+
+    ${quote}
+
+    - Charming Canvas Version: https://observablehq.com/d/8ea313824f5ad74a
+    - Charming GLSL Version: https://observablehq.com/d/86d2c1fe79fac300
+    - Processing Version: https://openprocessing.org/sketch/748916
+    - Original Ref: https://observablehq.com/@rreusser/instanced-webgl-circles
+  </script>
+  <script id="30" type="application/vnd.observable.javascript">
+    viewof count = Inputs.range([1000, 50000], {
+      label: "Circle Count",
+      step: 1,
+      value: 10000
+    })
+  </script>
+  <script id="8" type="application/vnd.observable.javascript" pinned="">
+    {
+      const width = 700,
+        height = 700,
+        theta = cm.range(count, 0, cm.TWO_PI);
+
+      function update(app) {
+        const time = app.prop("frameCount") / 50;
+        const dist = (d) =>
+          0.6 + 0.2 * Math.cos(d * 6.0 + Math.cos(d * 8.0 + time));
+
+        app.append(cm.clear, { fill: "black" });
+
+        app
+          .data(theta)
+          .append(cm.circle, {
+            x: (d) => Math.cos(d) * dist(d),
+            y: (d) => Math.sin(d) * dist(d),
+            r: (d) => 0.2 + 0.12 * Math.cos(d * 9.0 - time * 2.0),
+            stroke: (d) => {
+              const th = 8.0 * d + time * 2.0;
+              const r = 0.6 + 0.4 * Math.cos(th);
+              const g = 0.6 + 0.4 * Math.cos(th - (Math.PI * 2) / 3);
+              const b = 0.6 + 0.4 * Math.cos(th - (Math.PI * 4.0) / 3.0);
+              return cm.rgb(r * 255, g * 255, b * 255);
+            },
+            strokeOpacity: (0.15 * 2000) / count
+          })
+          .transform(cm.mapPosition, { padding: 100 })
+          .transform(cm.mapAttrs, { r: { range: [24, 96] } });
+      }
+
+      function dispose(app) {
+        invalidation.then(() => app.dispose());
+      }
+
+      return cm
+        .app({ width, height, renderer: cm.webgl() })
+        .on("update", update)
+        .call(dispose)
+        .call(stats)
+        .start()
+        .node();
+    }
+  </script>
+  <script id="5" type="application/vnd.observable.javascript" pinned="">
+    cm = require("@charming-art/charming@0.0.6")
+  </script>
+  <script id="42" type="application/vnd.observable.javascript" pinned="">
+    import { stats } from "@pearmini/charming-stats"
+  </script>
+  <script id="57" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>

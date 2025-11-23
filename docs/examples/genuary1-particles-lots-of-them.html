@@ -1,0 +1,95 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Genuary#1: Particles, lots of them.</title>
+  <script id="0" type="text/markdown">
+    # Genuary#1: Particles, lots of them.
+
+    ${quote}
+
+    - Title: **Noise Swirl**
+    - Prompt: https://genuary.art/prompts#jan1
+    - Twitter: https://twitter.com/subairui/status/1747284496603353286
+    - Ref. https://openprocessing.org/sketch/494102
+  </script>
+  <script id="82" type="application/vnd.observable.javascript">
+    viewof replay = Inputs.button("Replay")
+  </script>
+  <script id="7" type="application/vnd.observable.javascript" pinned="">
+    {
+      replay;
+
+      const w = width,
+        h = w * 0.618,
+        speed = 0.4,
+        scale = 800,
+        count = 200,
+        noise = cm.randomNoise(0, cm.TWO_PI * scale),
+        particles = cm.range(count * 3).map((d, i) => ({
+          type: (i / count) | 0,
+          index: i % count,
+          location: cm.vec(cm.random(w), cm.random(h))
+        }));
+
+      function setup(app) {
+        app.append(cm.clear, { fill: cm.rgb(21, 8, 50) });
+      }
+
+      function update(app) {
+        app
+          .data(particles)
+          .process(cm.each, (d) => {
+            const angle = noise(d.location.x / scale, d.location.y / scale);
+            d.location.add(cm.vecFromAngle(angle).mult(speed).clamp(0.1, Infinity));
+          })
+          .process(cm.each, (d) => {
+            if (d.location.inX(0, w) && d.location.inY(0, h)) return;
+            d.location = cm.vec(cm.random(50, w), cm.random(50, h));
+          })
+          .append(cm.circle, {
+            x: (d) => d.location.x,
+            y: (d) => d.location.y,
+            r: (d) => d.index,
+            fillOpacity: (d) => d.index,
+            fill: (d) => d.type
+          })
+          .transform(cm.mapAttrs, {
+            r: { range: [0.5, 1] },
+            fillOpacity: { range: [0, 1] },
+            fill: {
+              scale: cm.scaleOrdinal,
+              range: [
+                cm.rgb(69, 33, 124),
+                cm.rgb(7, 153, 242),
+                cm.rgb(255, 255, 255)
+              ]
+            }
+          });
+      }
+
+      function dispose(app) {
+        invalidation.then(() => app.dispose());
+      }
+
+      const node = cm
+        .app({ width: w, height: h })
+        .on("beforeAll", setup)
+        .on("update", update)
+        .call(dispose)
+        .start()
+        .node();
+
+      yield node;
+
+      fullscreen(node, { center: true });
+    }
+  </script>
+  <script id="121" type="application/vnd.observable.javascript" pinned="">
+    cm = require(await FileAttachment("cm.umd.min.js").url())
+  </script>
+  <script id="41" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+  <script id="128" type="application/vnd.observable.javascript" pinned="">
+    import { fullscreen } from "@fil/fullscreen"
+  </script>
+</notebook>

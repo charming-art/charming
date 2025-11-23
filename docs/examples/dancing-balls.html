@@ -1,0 +1,118 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Dancing Balls</title>
+  <script id="0" type="text/markdown">
+    # Dancing Balls
+
+    ${quote}
+  </script>
+  <script id="11" type="application/vnd.observable.javascript">
+    viewof replay = Inputs.button("Replay")
+  </script>
+  <script id="8" type="application/vnd.observable.javascript" pinned="">
+    {
+      replay;
+
+      const width = 600,
+        height = 200,
+        applyGravity = force(cm.vec(0, 0.2)),
+        applyFriction = force(cm.vec(0.02, 0)),
+        movers = cm.range(25).map(() =>
+          object({
+            location: cm.vec(),
+            velocity: cm.vec(),
+            acceleration: cm.vec(),
+            mass: cm.random(0.1, 5)
+          })
+        );
+
+      function update(app) {
+        app.append(cm.clear, { fill: cm.rgb(255) });
+
+        app
+          .data(movers)
+          .process(cm.each, applyFriction)
+          .process(cm.each, applyGravity)
+          .process(cm.each, move)
+          .process(cm.each, collision)
+          .append(cm.circle, {
+            x: (d) => d.location.x,
+            y: (d) => d.location.y,
+            fill: "rgba(175, 175, 175, 0.5)",
+            stroke: cm.rgb(0),
+            r: (d) => d.mass
+          })
+          .transform(cm.mapAttrs, {
+            r: { scale: cm.scaleSqrt, range: [2, 20] }
+          });
+      }
+
+      function dispose(app) {
+        invalidation.then(() => app.dispose());
+      }
+
+      function frame(app) {
+        app.node().style.border = "solid #000 1px";
+      }
+
+      return cm
+        .app({ width, height })
+        .on("update", update)
+        .call(dispose)
+        .call(frame)
+        .start()
+        .node();
+    }
+  </script>
+  <script id="20" type="application/vnd.observable.javascript" pinned="">
+    function object(options) {
+      return {
+        location: cm.vec(),
+        velocity: cm.vec(),
+        acceleration: cm.vec(),
+        mass: 1,
+        aVelocity: 0,
+        aAcceleration: 0,
+        rotation: 0,
+        ...options
+      };
+    }
+  </script>
+  <script id="22" type="application/vnd.observable.javascript" pinned="">
+    function force(d) {
+      const callback = typeof d === "function" ? d : () => d;
+      return (d, ...params) => {
+        const f = callback(d, ...params);
+        if (f === null || f === undefined) return;
+        const a = cm.vecDiv(f, d.mass);
+        d.acceleration.add(a);
+      };
+    }
+  </script>
+  <script id="25" type="application/vnd.observable.javascript" pinned="">
+    function move(d) {
+      d.velocity.add(d.acceleration);
+      d.location.add(d.velocity);
+      d.acceleration.mult(0);
+    }
+  </script>
+  <script id="27" type="application/vnd.observable.javascript" pinned="">
+    function collision(d, i, _, flow) {
+      const app = flow.app();
+      if (!d.location.inX(app.prop("width"))) {
+        d.location.clampX(app.prop("width"));
+        d.velocity.negX();
+      }
+      if (d.location.y > app.prop("height")) {
+        d.velocity.negY();
+        d.location.y = app.prop("height");
+      }
+    }
+  </script>
+  <script id="5" type="application/vnd.observable.javascript" pinned="">
+    cm = require("@charming-art/charming@0.0.6")
+  </script>
+  <script id="56" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>

@@ -1,0 +1,165 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Genuary#25: Recreate Image with Code.</title>
+  <script id="0" type="text/markdown">
+    # Genuary#25: Recreate Image with Code.
+
+    ${quote}
+
+    - Title: **Islamic Avatar**
+    - Twitter: https://twitter.com/subairui/status/1751115408571265398
+    - Prompt: https://genuary.art/prompts#jan25
+
+    Reimplement Jason Labbe's [Art gallery painter](https://openprocessing.org/sketch/520387) in [OpenProcessing](https://openprocessing.org/user/60876?view=sketches&o=48) by Charming.js.
+  </script>
+  <script id="118" type="application/vnd.observable.javascript">
+    viewof upload = Inputs.file({ label: "Image File" })
+  </script>
+  <script id="331" type="application/vnd.observable.javascript">
+    viewof scale = Inputs.range([0.2, 1], { label: "Scale", step: 0.1, value: 1 })
+  </script>
+  <script id="82" type="application/vnd.observable.javascript">
+    viewof regenerate = Inputs.button("Regenerate")
+  </script>
+  <script id="7" type="application/vnd.observable.javascript" pinned="">
+    {
+      regenerate;
+
+      const maxFrame = 400,
+        image = await (upload ?? FileAttachment("steven@1.jpeg")).image(),
+        width = image.width * scale,
+        height = image.height * scale,
+        imageData = getImageDate(image),
+        { normal, darker, brighter } = filterColor(cm.random()),
+        color = createColor(imageData, width, height),
+        scaleColor = (d) => gray(color(d)),
+        scaleLength = cm.scaleLinear([0, maxFrame], [80, 5]),
+        scaleWeight = cm.scaleLinear([0, maxFrame], [1, 0.1]),
+        scaleRotate = cm.scaleLinear([0, 1], [-Math.PI, Math.PI]),
+        SO = {
+          x: (d) => -d.length / 2,
+          x1: (d) => d.length / 2,
+          strokeWidth: (d) => d.weight,
+          strokeCap: "round"
+        };
+
+      function update(app) {
+        const frameCount = app.prop("frameCount");
+
+        const points = cm.range(40).map(() => ({
+          x: cm.randomInt(width),
+          y: cm.randomInt(height)
+        }));
+
+        const groups = app
+          .data(points)
+          .process(cm.derive, {
+            color: scaleColor,
+            length: scaleLength(frameCount),
+            weight: scaleWeight(frameCount) * cm.randomInt(2, 15)
+          })
+          .process(cm.derive, {
+            rotate: (d) => scaleRotate(d3.hsl(d.color).l)
+          })
+          .append(cm.group, {
+            x: (d) => d.x,
+            y: (d) => d.y,
+            rotate: (d) => d.rotate
+          });
+
+        if (frameCount % 3 === 0) {
+          groups.append(cm.link, {
+            ...SO,
+            x: 0,
+            y: 0,
+            x1: 5,
+            y1: 0,
+            stroke: normal
+          });
+        } else {
+          groups
+            .call((d) => d.append(cm.link, { ...SO, y: 1, y1: 1, stroke: darker }))
+            .call((d) => d.append(cm.link, { ...SO, y: 0, y1: 0, stroke: normal }))
+            .call((d) =>
+              d.append(cm.link, { ...SO, y: 2, y1: 2, stroke: brighter })
+            );
+        }
+
+        if (frameCount > maxFrame) app.stop();
+      }
+
+      function dispose(app) {
+        invalidation.then(() => app.dispose());
+      }
+
+      return cm
+        .app({ width, height })
+        .on("update", update)
+        .call(dispose)
+        .start()
+        .node();
+    }
+  </script>
+  <script id="116" type="application/vnd.observable.javascript" pinned="">
+    function getImageDate(image) {
+      const { width, height } = image;
+      const context = DOM.context2d(width, height);
+      context.drawImage(image, 0, 0, width, height);
+      return context.getImageData(0, 0, width * 2, height * 2);
+    }
+  </script>
+  <script id="287" type="application/vnd.observable.javascript" pinned="">
+    function gray(color) {
+      const { r, g, b } = d3.color(color);
+      const gray = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+      return `rgb(${gray}, ${gray}, ${gray})`;
+    }
+  </script>
+  <script id="139" type="application/vnd.observable.javascript" pinned="">
+    function createColor(imageData, width, height) {
+      const { data, width: imageWidth, height: imageHeight } = imageData;
+      const scaleX = cm.scaleLinear([0, width], [0, imageWidth]);
+      const scaleY = cm.scaleLinear([0, height], [0, imageHeight]);
+      return ({ x, y }) => {
+        const x1 = Math.round(scaleX(x));
+        const y1 = Math.round(scaleY(y));
+        const i = x1 + y1 * imageWidth;
+        const r = data[i * 4];
+        const g = data[i * 4 + 1];
+        const b = data[i * 4 + 2];
+        const a = data[i * 4 + 3];
+        return `rgba(${r}, ${g}, ${b}, ${a / 255})`;
+      };
+    }
+  </script>
+  <script id="167" type="application/vnd.observable.javascript" pinned="">
+    function filterColor(offset) {
+      const scaleH = cm.scaleLinear([0, 1], [0, 360]);
+      const scaleLDark = cm.scaleLinear([0, 1], [0, 0.4]);
+      const scaleLBright = cm.scaleLinear([0, 1], [0.6, 1]);
+      return {
+        darker({ color }) {
+          const { l } = d3.hsl(color);
+          const l1 = (l + offset) % 1;
+          return `hsla(${scaleH(l1)}, 50%, ${scaleLDark(l) * 100}%, 0.2)`;
+        },
+        normal({ color }) {
+          const { l } = d3.hsl(color);
+          const l1 = (l + offset) % 1;
+          return `hsl(${scaleH(l1)}, 50%, ${l * 100}%)`;
+        },
+        brighter({ color }) {
+          const { l } = d3.hsl(color);
+          const l1 = (l + offset) % 1;
+          return `hsla(${scaleH(l1)}, 50%, ${scaleLBright(l) * 100}%, 0.1)`;
+        }
+      };
+    }
+  </script>
+  <script id="73" type="application/vnd.observable.javascript" pinned="">
+    cm = require(await FileAttachment("cm.umd.min.js").url())
+  </script>
+  <script id="41" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>

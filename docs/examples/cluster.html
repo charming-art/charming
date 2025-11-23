@@ -1,0 +1,67 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Cluster</title>
+  <script id="0" type="text/markdown">
+    # Cluster
+
+    ${quote}
+  </script>
+  <script id="8" type="application/vnd.observable.javascript" pinned="">
+    {
+      const width = 600,
+        height = 200,
+        particles = [];
+
+      function update(app) {
+        app.append(cm.clear, { fill: cm.rgb(255) });
+        app
+          .data(particles)
+          .process(cm.push, {
+            location: cm.vec(app.prop("width") / 2, 50),
+            velocity: cm.vec(cm.random(-1, 1), cm.random(-2, 0)),
+            acceleration: cm.vec(0, 0.05),
+            lifespan: 255
+          })
+          .process(
+            cm.eachRight,
+            (d, i, array) => d.lifespan < 0 && array.splice(i, 1)
+          )
+          .process(cm.each, (d) => (d.lifespan -= 2))
+          .process(cm.each, (d) => {
+            d.velocity.add(d.acceleration);
+            d.location.add(d.velocity);
+          })
+          .append(cm.circle, {
+            x: (d) => d.location.x,
+            y: (d) => d.location.y,
+            r: 5,
+            fill: cm.rgb(0),
+            stroke: cm.rgb(0),
+            fillOpacity: (d) => d.lifespan,
+            strokeOpacity: (d) => d.lifespan
+          })
+          .transform(cm.mapAttrs, {
+            fillOpacity: { domain: [0, 255], range: [0, 0.6] },
+            strokeOpacity: { domain: [0, 255], range: [0, 1] }
+          });
+      }
+
+      function dispose(app) {
+        invalidation.then(() => app.dispose());
+      }
+
+      return cm
+        .app({ width, height })
+        .on("update", update)
+        .call(dispose)
+        .start()
+        .node();
+    }
+  </script>
+  <script id="5" type="application/vnd.observable.javascript" pinned="">
+    cm = require("@charming-art/charming@0.0.6")
+  </script>
+  <script id="31" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>

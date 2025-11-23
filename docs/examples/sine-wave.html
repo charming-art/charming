@@ -1,0 +1,46 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Sine Wave</title>
+  <script id="0" type="text/markdown">
+    # Sine Wave
+
+    ${quote}
+  </script>
+  <script id="10" type="application/vnd.observable.javascript" pinned="">
+    {
+      const X = cm.range(50, cm.TWO_PI);
+
+      function update(app) {
+        app.append(cm.clear, { fill: cm.rgb(255) });
+        app
+          .data(X)
+          .append(cm.circle, {
+            x: (d) => d,
+            y: (d) => Math.sin(d + app.prop("frameCount") / 30),
+            r: 20,
+            fill: "rgba(175, 175, 175, 0.5)",
+            stroke: "#000",
+            strokeWidth: 1
+          })
+          .transform(cm.mapPosition);
+      }
+
+      function dispose(app) {
+        invalidation.then(() => app.dispose());
+      }
+
+      return cm
+        .app({ width: 600, height: 200 })
+        .on("update", update)
+        .call(dispose)
+        .start()
+        .node();
+    }
+  </script>
+  <script id="5" type="application/vnd.observable.javascript" pinned="">
+    cm = require("@charming-art/charming@0.0.6")
+  </script>
+  <script id="20" type="application/vnd.observable.javascript" pinned="">
+    import { quote } from "@pearmini/charming-shared"
+  </script>
+</notebook>
