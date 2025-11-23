@@ -1,4 +1,5 @@
-import { textSync } from "figlet";
+import figlet from "figlet";
+const { textSync } = figlet;
 import { standard as fontStandard } from "../font/standard.js";
 
 export function bboxOf(matrix, { x, y, textAlign, textBaseline }) {

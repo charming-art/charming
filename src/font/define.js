@@ -1,4 +1,5 @@
-import { parseFont } from "figlet";
+import figlet from "figlet";
+const { parseFont } = figlet;
 
 export function define(name, font) {
   let parsed = false;
