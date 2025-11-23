@@ -4,4 +4,4 @@
 
 > _Think of Charming as Lodash for graphics, or D3 for computational art._
 
-<a href="./examples/index"><img alt="examples" src="./img/examples.png" /></a>
+<a href="./examples/"><img alt="examples" src="./img/examples.png" /></a>

@@ -84,6 +84,7 @@
     }
   </script>
   <script id="5" type="module" pinned="">
-    matter = require("matter-js");
+    const matterModule = await import("matter-js");
+    const matter = matterModule.default || matterModule;
   </script>
 </notebook>

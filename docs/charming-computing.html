@@ -6,20 +6,29 @@
 
     > _The declarative data-driven language for creative coding and ASCII art with high performance._ (2023.09 - Present)
     >
-    > - [Examples](examples/index)
+    > - [Examples](examples/)
     > - [Github](https://github.com/charming-art/charming)
-    > - [API Reference](api-reference/index)
+    > - [API Reference](api-reference/)
   </script>
   <script id="62" type="text/markdown">
+
+    <style>
+      @media (max-width: 768px) {
+        .responsive-image {
+          height: 300px !important;
+        }
+      }
+    </style>
+
     **Charming** short for _Charming Computing_, is a free, open-source, creative coding language for computational art with high performance. It has a declarative, concise, yet expressive API inspired by [G2.js](https://github.com/antvis/G2), [D3.js](https://github.com/d3) and [P5.js](https://p5js.org/).
 
     The data-driven API style provides Charming with the potential for **high performance**, as it can take advantage of WebGL's [batch rendering](https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/drawArraysInstancedANGLE) technique: rendering hundreds to thousands of objects or elements with just a single draw call. At the same time, some GLSL functions can be defined to offload expensive calculations to the GPU, thereby significantly increasing the FPS. It may also implement a [WebGPU](https://www.w3.org/TR/webgpu/) renderer in the future to accomplish this more easily with Compute Shader.
 
-    <a href="examples/waltz-of-circles-glsl"><img alt="example-circles-glsl-code" src="${await FileAttachment("./assets/example-circles-glsl-code.png").url()}" height="320px" style="margin-right:1em"/></a><img alt="example-circles-glsl" src="${await FileAttachment("./assets/example-circles-glsl.gif").url()}" height="320px"/>
+    <div style="white-space: nowrap; overflow-x: auto;"><a href="examples/waltz-of-circles-glsl"><img alt="example-circles-glsl-code" src="./public/example-circles-glsl-code.png" class="responsive-image" style="height: 500px; margin-right:1em;"/></a><img alt="example-circles-glsl" src="./public/example-circles-glsl.gif" class="responsive-image" style="height: 500px;"/></div>
 
     In addition to high performance, Charming focuses on making **ASCII art** accessible for artists, designers, educators, beginners, and anyone else! It provided a consistent API for both styles, and the [terminal canvas](./src/terminal/) for ASCII art is embedded in JavaScript and uses a [software rasterizer](./rust/) written in Rust compiled to WASM, to gain high-performance hopefully.
 
-    <a href="examples/white-noise"><img alt="example-white-noise-code" src="${await FileAttachment("./assets/example-white-noise-code.png").url()}" height="320px" style="margin-right:1em"/></a><img alt="example-white-noise" src="${await FileAttachment("./assets/example-white-noise.gif").url()}" height="320px"/>
+    <div style="white-space: nowrap; overflow-x: auto;"><a href="examples/white-noise"><img alt="example-white-noise-code" src="./public/example-white-noise-code.png" class="responsive-image" style="height: 500px; margin-right:1em;"/></a><img alt="example-white-noise" src="./public/example-white-noise.gif" class="responsive-image" style="height: 500px;"/></div>
 
     Moreover, Charming also puts a strong emphasis on **lightweight**: the [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js) is just 25kb minified. With that in mind, Charming is designed to be flexible, incrementally adoptable, and supports fully [tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking). It also means that Charming is **beginner friendly**, because you don't have to start by diving into complex concepts: think of it as a collection of syntactic sugars for [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
 
@@ -28,7 +37,7 @@
   <script id="80" type="text/markdown">
     ## Table of Contents
   </script>
-  <script id="77" type="module">
+  <script id="77" type="application/vnd.observable.javascript">
     toc("h2");
   </script>
   <script id="86" type="text/markdown">

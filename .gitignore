@@ -4,4 +4,5 @@ yarn.lock
 package-lock.json
 **/target
 src/wasm
-dist
+dist/
+!docs/dist/

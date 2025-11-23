@@ -78,6 +78,7 @@
     display(node);
   </script>
   <script id="22" type="module" pinned="">
-    tox = require(await FileAttachment("toxiclibsjs.min.js").url());
+    const toxModule = await import("toxiclibsjs");
+    const tox = toxModule.default || toxModule;
   </script>
 </notebook>
