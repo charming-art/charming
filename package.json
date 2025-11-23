@@ -1,6 +1,6 @@
 {
   "name": "@charming-art/charming",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "The declarative language for computational art with high performance.",
   "author": {
     "name": "Bairui SU",
