@@ -154,8 +154,10 @@ b.fillRect(d,m,n,p);b.fillStyle=l;b.globalAlpha=.9;b.fillRect(d,m,n,p);return{do
         };
 
         // Calculate relative path to home based on depth
-        const depth = pathParts.length - 1;
-        const homePath = depth === 0 ? './' : '../';
+        // If we're at root (/), pathParts.length is 0, use './'
+        // If we're at /examples/, pathParts.length is 1, need '../' to go up one level
+        // If we're at /examples/file.html, pathParts.length is 2, need '../../' to go up two levels
+        const homePath = pathParts.length === 0 ? './' : '../'.repeat(pathParts.length);
 
         // Use absolute path for logo to ensure it works in all deployment scenarios
         const logoPath = '/public/logo.svg';
