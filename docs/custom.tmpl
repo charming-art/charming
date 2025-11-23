@@ -57,7 +57,7 @@
         
         // Calculate relative path to home based on depth
         const depth = pathParts.length - 1;
-        const homePath = '../index.html';
+        const homePath = '../';
         
         let breadcrumbHTML = '<a href="' + homePath + '">Charming</a>';
         
@@ -66,7 +66,7 @@
         if (pathParts.length === 2 && htmlFile !== 'index.html') {
           const section = pathParts[0];
           const sectionName = sectionMap[section] || section.charAt(0).toUpperCase() + section.slice(1);
-          const sectionIndexPath = './index.html';
+          const sectionIndexPath = './';
           breadcrumbHTML += ' / <a href="' + sectionIndexPath + '">' + sectionName + '</a>';
         }
         
