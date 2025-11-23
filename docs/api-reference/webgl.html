@@ -31,19 +31,17 @@
     
     Some numbers can also be interpolated:
     
-    ```js
-    const scale = 300;
-    const width = 640;
-    const height = 480;
-    const position = cm.glsl`vec2 position(float theta) {
-      vec2 xy = vec2(
+    <pre><code class="language-js">const scale = 300;
+const width = 640;
+const height = 480;
+const position = cm.glsl`vec2 position(float theta) {
+  vec2 xy = vec2(
         cos(theta), 
-        sin(theta)) * (0.6 + 0.2 * cos(theta * 6.0 + cos(theta * 8.0 + ${time}))
-      );
-      return xy * ${scale} + vec2(${width / 2}, ${height / 2});
-    }`;
-    
-    app.data(theta).append(cm.circle, { position });
-    ```
+        sin(theta)) * (0.6 + 0.2 * cos(theta * 6.0 + cos(theta * 8.0 + &#36;{time}))
+  );
+  return xy * &#36;{scale} + vec2(&#36;{width / 2}, &#36;{height / 2});
+}`;
+
+app.data(theta).append(cm.circle, { position });</code></pre>
   </script>
 </notebook>

@@ -16,12 +16,12 @@
     - [Prop](prop.html) - returning properties of the app
     - [Attribute](attribute.html) - defining attributes for shapes
 
-    The other modules are included in [full bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.umd.min.js). Different renderers and related modules will be placed in the following separate modules:
+    The other modules are included in [full bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.umd.min.js). Different renderers:
 
     - [WebGL](webgl.html) - the WebGL renderer and related helpers
     - [Terminal](terminal.html) - the terminal renderer and related helpers
 
-    For common problems, Charming provides a series of optional modules encapsulate reusable solutions, increasing efficiency and alleviating the burden of common tasks:
+    Reusable solutions for common tasks:
 
     - [Array](array.html) - array generation and manipulation
     - [Math](math.html) - processing numbers, randomness, etc.
@@ -86,8 +86,7 @@
     - [cm.text](shape.html#cm-text) - append text
     - [cm.group](shape.html#cm-group) - append groups
     - [cm.clear](shape.html#cm-clear) - clear the canvas
-    - [function](shape.html#cm-composite-shape) - defines a composite shape by a _function_, passing the current flow(_flow_) and attribute value(_value_)
-
+    - [function](shape.html#cm-composite-shape) - defines a composite shape
     ## [Transform](transform.html)
 
     Deriving shape attribute values.
@@ -140,111 +139,111 @@
 
     Defining attributes for shapes.
 
-    - [cm.rgb](attribute.html#cm-rgb) - returns a string representing the rgb color according to the css object model specification
-    - [cm.hsl](attribute.html#cm-hsl) - returns a string representing the hsl color according to the css object model specification
-    - [cm.constant](attribute.html#cm-constant) - defines a attribute with the specified constant _value_, which is useful for defining some non-data-driven options for composite shape
+    - [cm.rgb](attribute.html#cm-rgb) - create an RGB color
+    - [cm.hsl](attribute.html#cm-hsl) - create an HSL color
+    - [cm.constant](attribute.html#cm-constant) - define a constant attribute
 
     ## [WebGL](webgl.html)
 
     The WebGL renderer and related helpers.
 
-    - [cm.webgl()](webgl.html#cm-webgl) - returns a webgl renderer, rendering shapes by webgl
-    - [cm.glsl](webgl.html#cm-glsl) - defines a attribute with the specified glsl>) function through template literals
+    - [cm.webgl](webgl.html#cm-webgl) - create a WebGL renderer
+    - [cm.glsl](webgl.html#cm-glsl) - define a GLSL attribute
 
     ## [Terminal](terminal.html)
 
     The terminal renderer and related helpers.
 
-    - [cm.terminal()](terminal.html#cm-terminal) - returns a promise resolved to a terminal renderer, drawing shapes in a terminal like context
-    - [cm.cfb](terminal.html#cm-cfb) - returns a terminal color object, which is only for app with a terminal renderer
-    - [cm.wch](terminal.html#cm-wch) - returns a character marked as a wide character, which is only for app with a terminal in double mode
-    - [cm.figlet](terminal.html#cm-figlet) - defines a figlet text with the specified _text_ for terminal renderer
-    - [cm.fontStandard](terminal.html#cm-fontStandard) - parses and returns the standard font for the fontfamily attribute
-    - [cm.fontGhost](terminal.html#cm-fontGhost) - parses and returns the ghost font for the fontfamily attribute
-    - [cm.gradientRainBowX](terminal.html#cm-gradientRainBowX) - returns the fill attribute with the vertical rainbow gradient
-    - [cm.gradientSineBowX](terminal.html#cm-gradientSineBowX) - returns the fill attribute with the vertical sinebox gradient
+    - [cm.terminal](terminal.html#cm-terminal) - create a terminal renderer
+    - [cm.cfb](terminal.html#cm-cfb) - create a terminal color
+    - [cm.wch](terminal.html#cm-wch) - mark a wide character
+    - [cm.figlet](terminal.html#cm-figlet) - create figlet text
+    - [cm.fontStandard](terminal.html#cm-fontStandard) - get the standard font
+    - [cm.fontGhost](terminal.html#cm-fontGhost) - get the ghost font
+    - [cm.gradientRainBowX](terminal.html#cm-gradientRainBowX) - create a vertical rainbow gradient
+    - [cm.gradientSineBowX](terminal.html#cm-gradientSineBowX) - create a vertical sinebow gradient
 
     ## [Array](array.html)
 
     Array generation and manipulation.
 
-    - [cm.range](array.html#cm-range) - returns an array of exactly _count_ uniformly-spaced values between _start_ and _end_
-    - [cm.cross](array.html#cm-cross) - returns the cartesian product of the specified arrays
-    - [cm.extent](array.html#cm-extent) - returns the minium and maximum value in given _array_ using natural order
+    - [cm.range](array.html#cm-range) - create an array of uniformly-spaced values
+    - [cm.cross](array.html#cm-cross) - create the cartesian product
+    - [cm.extent](array.html#cm-extent) - get the extent
 
     ## [Math](math.html)
 
     Processing numbers, randomness, etc..
 
-    - [cm.clamp](math.html#cm-clamp) - constrains the input _value_ within the specified range _[min, max]_
-    - [cm.random](math.html#cm-random) - generates random number with a uniform distribution, which is within range _\[min, max\)_
-    - [cm.randomInt](math.html#cm-randomInt) - random`, expect returns integers
-    - [cm.randomNoise](math.html#cm-randomNoise) - returns a function with the specified _options_ for generating random numbers with a smooth, continuous random-like distribution, commonly referred to as perlin noise, which is within range _\[min, max\)_
-    - [cm.randomNormal](math.html#cm-randomNormal) - returns a function for generating random numbers with a normal(gaussian) distribution
-    - [cm.randomChar](math.html#cm-randomChar) - returns a random printable and non-empty character
+    - [cm.clamp](math.html#cm-clamp) - clamp a value
+    - [cm.random](math.html#cm-random) - generate a random number
+    - [cm.randomInt](math.html#cm-randomInt) - generate a random integer
+    - [cm.randomNoise](math.html#cm-randomNoise) - create a Perlin noise function
+    - [cm.randomNormal](math.html#cm-randomNormal) - create a normal distribution function
+    - [cm.randomChar](math.html#cm-randomChar) - generate a random character
 
     ## [Constant](constant.html)
 
     Useful constants.
 
-    - [cm.TWO_PI](constant.html#cm-two-pi) - it is twice the ratio of the circumference of a circle to its diameter
+    - [cm.TWO_PI](constant.html#cm-two-pi) - 2π
 
     ## [Vector](vector.html)
 
     Basics for simulating physical laws.
 
-    - [cm.vec](vector.html#cm-vec) - constructs a vector with the specified _x_ and _y_ component
-    - [cm.vecFromAngle](vector.html#cm-vecFromAngle) - constructs a vector from the specified _angle_ in radians
-    - [cm.vecAdd](vector.html#cm-vecAdd) - adds the specified _vectors_ and returns a new vector
-    - [cm.vecAngle](vector.html#cm-vecAngle) - computes the angle of the specified _vector_
-    - [cm.vecClamp](vector.html#cm-vecClamp) - constrains the magnitude of the specified _vector_ within the specified range _[min, max]_, and returns a new _vector_
-    - [cm.vecClampX](vector.html#cm-vecClampX) - constrains the x component of the specified _vector_ within the specified range _[min, max]_, and returns a new _vector_
-    - [cm.vecClampY](vector.html#cm-vecClampY) - constrains the y component of the specified _vector_ within the specified range _[min, max]_, and returns a new _vector_
-    - [cm.vecCross](vector.html#cm-vecCross) - computes the cross product of the specified _vectors_
-    - [cm.vecDist](vector.html#cm-vecDist) - computes the distance of the specified _vectors_
-    - [cm.vecDist2](vector.html#cm-vecDist2) - computes the square distance of the specified _vectors_
-    - [cm.vecDiv](vector.html#cm-vecDiv) - divides the specified _vector's_ x and y component by the specified _value_, and returns a new _vector_
-    - [cm.vecDot](vector.html#cm-vecDot) - computes the dot product of the specified _vectors_
-    - [cm.vecInX](vector.html#cm-vecInX) - returns true if the specified _vector's_ x component is within the specified range _[min, max]_
-    - [cm.vecInY](vector.html#cm-vecInY) - returns true if the specified _vector's_ y component is within the specified range _[min, max]_
-    - [cm.vecMag](vector.html#cm-vecMag) - if only one argument is specified, computes the magnitude of the specified _vector_
-    - [cm.vecMult](vector.html#cm-vecMult) - multiplies the specified _vector's_ x and y component by the specified _value_, and returns a new vector
-    - [cm.vecNeg](vector.html#cm-vecNeg) - negates the specified _vector's_ x and y component, and returns a new vector
-    - [cm.vecNegX](vector.html#cm-vecNegX) - negates the specified _vector's_ x component, and returns a new vector
-    - [cm.vecNegY](vector.html#cm-vecNegY) - negates the specified _vector's_ y component, and returns a new vector
-    - [cm.vecNorm](vector.html#cm-vecNorm) - normalizes the specified _vector_, and returns a new vector
-    - [cm.vecRandom](vector.html#cm-vecRandom) - returns a unit vector with a random heading, following a uniform distribution
-    - [cm.vecSub](vector.html#cm-vecSub) - subtracts the specified _vectors_ and returns a new vector
-    - [vec.clone](vector.html#vec-clone) - clones the _vector_ and returns a new vector
-    - [vec.add](vector.html#vec-add) - adds the specified _vector_ to the target vector, and returns the target vector
-    - [vec.angle](vector.html#vec-angle) - computes the angle of the target vector
-    - [vec.clamp](vector.html#vec-clamp) - constrains the magnitude of the target vector within the specified range _[min, max]_, and returns it
-    - [vec.clampX](vector.html#vec-clampX) - constrains the x component of the target _vector_ within the specified range _[min, max]_, and returns it
-    - [vec.clampY](vector.html#vec-clampY) - constrains the y component of the target _vector_ within the specified range _[min, max]_, and returns it
-    - [vec.cross](vector.html#vec-cross) - computes the cross product of the specified _vector_ and the target vector
-    - [vec.dist](vector.html#vec-dist) - computes the distance of the specified _vector_ and the target vector
-    - [vec.dist2](vector.html#vec-dist2) - computes the square distance of the specified _vector_ and the target vector
-    - [vec.div](vector.html#vec-div) - divides the target vector' x and y component by the specified _value_, and returns it
-    - [vec.dot](vector.html#vec-dot) - computes the dot product of the specified _vector_ and the target vector
-    - [vec.inX](vector.html#vec-inX) - returns true if the target vector's x component is within the specified range _[min, max]_
-    - [vec.inY](vector.html#vec-inY) - returns true if the target vector's y component is within the specified range _[min, max]_
-    - [vec.mag](vector.html#vec-mag) - if no argument is specified, computes the magnitude of the target vector
-    - [vec.mult](vector.html#vec-mult) - multiplies the specified component's x and y by the specified _value_, and returns a new vector
-    - [vec.neg](vector.html#vec-neg) - negates the target vector's x and y component, and returns it
-    - [vec.negX](vector.html#vec-negX) - negates the target vector's x component, and returns it
-    - [vec.negY](vector.html#vec-negY) - negates the target vector's y component, and returns it
-    - [vec.norm](vector.html#vec-norm) - normalizes the target vector, and returns it
-    - [vec.set](vector.html#vec-set) - if only one argument is specified and it is a vector instance, sets the target vector's x and y component with the source _vector's_ x and y component, and returns the target vector
-    - [vec.setX](vector.html#vec-setX) - sets the target vector's x component with the specified _x_, and returns it
-    - [vec.setY](vector.html#vec-setY) - sets the target vector's y component with the specified _y_, and returns it
-    - [vec.sub](vector.html#vec-sub) - subtracts the target vector with the specified vector and returns the target vector
+    - [cm.vec](vector.html#cm-vec) - create a vector
+    - [cm.vecFromAngle](vector.html#cm-vecFromAngle) - create a vector from angle
+    - [cm.vecAdd](vector.html#cm-vecAdd) - add vectors
+    - [cm.vecAngle](vector.html#cm-vecAngle) - compute the angle
+    - [cm.vecClamp](vector.html#cm-vecClamp) - constrain the magnitude
+    - [cm.vecClampX](vector.html#cm-vecClampX) - constrain the x component
+    - [cm.vecClampY](vector.html#cm-vecClampY) - constrain the y component
+    - [cm.vecCross](vector.html#cm-vecCross) - compute the cross product
+    - [cm.vecDist](vector.html#cm-vecDist) - compute the distance
+    - [cm.vecDist2](vector.html#cm-vecDist2) - compute the square distance
+    - [cm.vecDiv](vector.html#cm-vecDiv) - divide by value
+    - [cm.vecDot](vector.html#cm-vecDot) - compute the dot product
+    - [cm.vecInX](vector.html#cm-vecInX) - check if x is in range
+    - [cm.vecInY](vector.html#cm-vecInY) - check if y is in range
+    - [cm.vecMag](vector.html#cm-vecMag) - compute the magnitude
+    - [cm.vecMult](vector.html#cm-vecMult) - multiply by value
+    - [cm.vecNeg](vector.html#cm-vecNeg) - negate the vector
+    - [cm.vecNegX](vector.html#cm-vecNegX) - negate the x component
+    - [cm.vecNegY](vector.html#cm-vecNegY) - negate the y component
+    - [cm.vecNorm](vector.html#cm-vecNorm) - normalize the vector
+    - [cm.vecRandom](vector.html#cm-vecRandom) - create a random unit vector
+    - [cm.vecSub](vector.html#cm-vecSub) - subtract vectors
+    - [vec.clone](vector.html#vec-clone) - clone the vector
+    - [vec.add](vector.html#vec-add) - add to target vector
+    - [vec.angle](vector.html#vec-angle) - compute the angle
+    - [vec.clamp](vector.html#vec-clamp) - constrain the magnitude
+    - [vec.clampX](vector.html#vec-clampX) - constrain the x component
+    - [vec.clampY](vector.html#vec-clampY) - constrain the y component
+    - [vec.cross](vector.html#vec-cross) - compute the cross product
+    - [vec.dist](vector.html#vec-dist) - compute the distance
+    - [vec.dist2](vector.html#vec-dist2) - compute the square distance
+    - [vec.div](vector.html#vec-div) - divide by value
+    - [vec.dot](vector.html#vec-dot) - compute the dot product
+    - [vec.inX](vector.html#vec-inX) - check if x is in range
+    - [vec.inY](vector.html#vec-inY) - check if y is in range
+    - [vec.mag](vector.html#vec-mag) - compute the magnitude
+    - [vec.mult](vector.html#vec-mult) - multiply by value
+    - [vec.neg](vector.html#vec-neg) - negate the vector
+    - [vec.negX](vector.html#vec-negX) - negate the x component
+    - [vec.negY](vector.html#vec-negY) - negate the y component
+    - [vec.norm](vector.html#vec-norm) - normalize the vector
+    - [vec.set](vector.html#vec-set) - set from source vector
+    - [vec.setX](vector.html#vec-setX) - set the x component
+    - [vec.setY](vector.html#vec-setY) - set the y component
+    - [vec.sub](vector.html#vec-sub) - subtract from target vector
 
     ## [Helper](helper.html)
 
     Useful unities.
 
-    - [cm.pathContext](helper.html#cm-pathContext) - constructs a new path generator like d3-path serializer, expect returns an array of path commands instead of a path string
-    - [pathContext.toArray](helper.html#pathContext-toArray) - returns the array of path commands
+    - [cm.pathContext](helper.html#cm-pathContext) - create a path generator
+    - [pathContext.toArray](helper.html#pathContext-toArray) - get the array of path commands
 
   </script>
 </notebook>
