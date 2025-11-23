@@ -67,7 +67,7 @@
 
     The data-driven API style provides Charming with the potential for **high performance**, as it can take advantage of WebGL's [batch rendering](https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/drawArraysInstancedANGLE) technique: rendering hundreds to thousands of objects or elements with just a single draw call. At the same time, some GLSL functions can be defined to offload expensive calculations to the GPU, thereby significantly increasing the FPS. It may also implement a [WebGPU](https://www.w3.org/TR/webgpu/) renderer in the future to accomplish this more easily with Compute Shader.
 
-    [For example](https://observablehq.com/d/86d2c1fe79fac300), to render specific number of circles while dynamically updating their positions, strokes and radii using trigonometric functions. While the Canvas renderer can maintain 60 FPS for up to _5.5k_ circles, the WebGL renderer can sustain the same 60 FPS for as many as _22k_ circles. Moreover, when faced with the task of rendering _100k_ circles, the WebGL renderer fails to draw them, but WebGL combined with GLSL attributes can still manage to render at a reduced frame rate of 10 FPS.
+    [For example](examples/waltz-of-circles-glsl), to render specific number of circles while dynamically updating their positions, strokes and radii using trigonometric functions. While the Canvas renderer can maintain 60 FPS for up to _5.5k_ circles, the WebGL renderer can sustain the same 60 FPS for as many as _22k_ circles. Moreover, when faced with the task of rendering _100k_ circles, the WebGL renderer fails to draw them, but WebGL combined with GLSL attributes can still manage to render at a reduced frame rate of 10 FPS.
   </script>
   <script id="73" type="module">
     const count = view(
@@ -252,7 +252,7 @@
     }
   </script>
   <script id="55" type="text/markdown">
-    This composite shape can be used like any built-in shape, and supports transform operator as well. [For example](https://observablehq.com/d/82d4b52694a7f370), to draw a flow field:
+    This composite shape can be used like any built-in shape, and supports transform operator as well. [For example](examples/flow-field), to draw a flow field:
   </script>
   <script id="58" type="module" pinned="">
     {

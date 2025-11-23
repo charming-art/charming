@@ -346,7 +346,7 @@
 
     Terminal renderer enables users to create ASCII art as effortlessly as they would with traditional art forms. Instead of using pixels, this renderer takes a unique approach by shifting the coordinate system from pixels to cells, allowing shapes to be rendered into printable characters and emojis. Each "cell" in the ASCII art can be defined by a _character (ch)_, with a _foreground color (fg)_ and _background color (bg)_, vastly enhancing the expressive potential compared to the traditional color encoding methods.
 
-    [For example](https://observablehq.com/d/9e951c5e9d721ef5), to draw text in the style of ASCII art and render points into random characters to simulate character matrix effect:
+    [For example](examples/fire), to draw text in the style of ASCII art and render points into random characters to simulate character matrix effect:
   </script>
   <script id="244" type="module" pinned="">
     {
@@ -455,7 +455,7 @@
   <script id="297" type="text/markdown">
     This composite shape can be used like any built-in shape, and supports transform operator as well.
 
-    [For example](https://observablehq.com/d/82d4b52694a7f370), to draw a flow field:
+    [For example](examples/flow-field), to draw a flow field:
   </script>
   <script id="237" type="module" pinned="">
     {
@@ -531,28 +531,6 @@
   <script id="397" type="text/markdown">
     **High Performance.** Render the effects mentioned in [Instanced WebGL Circles](https://observablehq.com/@rreusser/instanced-webgl-circles) in three different ways. While the Canvas renderer can maintain 60 FPS for up to _5.5k_ circles, the WebGL renderer can sustain the same 60 FPS for as many as _22k_ circles. Moreover, when faced with the task of rendering _100k_ circles, the WebGL renderer fails to draw them, but WebGL combined with GLSL attributes can still manage to render at a reduced frame rate of 10 FPS.
   </script>
-  <script id="396" type="module">
-    previews([
-      {
-        path: "https://observablehq.com/d/8ea313824f5ad74a",
-        thumbnail: "3c62d09fdc0369a40426c8a6610816f8c2e813c54e06461437c2cef549d7528c",
-        title: "Waltz of Circles, Canvas",
-        author: "MiniPear",
-      },
-      {
-        path: "https://observablehq.com/d/db16249bd7174a24",
-        thumbnail: "c48b36951a43b5aa9ed3eb92bb59bb84c4e2bd8ca6e99e9f0ea9552acc477244",
-        title: "Waltz of Circles, WebGL",
-        author: "MiniPear",
-      },
-      {
-        path: "https://observablehq.com/d/86d2c1fe79fac300",
-        thumbnail: "7a8d4055a17d74d5dfec218f2bcfb34ae8953c3c1a14151e7b50533c9753db4e",
-        title: "Waltz of Circles, GLSL",
-        author: "MiniPear",
-      },
-    ]);
-  </script>
   <script id="395" type="text/markdown">
     **ASCII Art.** By providing a terminal renderer and smoothing out differences in coordinate systems and colors, Charming allows you to use the same flow API to render ASCII art, such as drawing a bar chart in ASCII style.
   </script>
@@ -595,7 +573,7 @@
         fontSize: "large",
         text: cm.figlet("2023"),
         textBaseline: "bottom",
-        textAlign: "left",
+        textAlign: "end",
         fill: cm.gradientSineBowX(),
       });
 
@@ -882,26 +860,6 @@
         observed();
         return () => observer.disconnect();
       });
-    }
-  </script>
-  <script id="388" type="module">
-    function previews(notebooks) {
-      return htl.html`<div style="display: grid; grid-gap: .875rem; grid-template-columns: repeat(auto-fill, minmax(160px, 5fr));">${notebooks.map(
-        preview,
-      )}</div>`;
-    }
-  </script>
-  <script id="387" type="module">
-    function preview({ path, title, author, thumbnail }) {
-      return htl.html`<a href="${path}" target="_blank" title="${title} by ${author}" style="display: inline-flex; flex-direction: column; align-items: start; font: 400 .75rem var(--sans-serif); color: #1b1e23; width: 100%;" onmouseover=${(
-        event,
-      ) => (event.currentTarget.firstElementChild.style.borderColor = "#1b1e23")} onmouseout=${(event) =>
-        (event.currentTarget.firstElementChild.style.borderColor = "#e8e8e8")}>
-      <div style="border: solid 1px #e8e8e8; border-radius: 4px; box-sizing: border-box; width: 100%; padding-top: 62.5%; background-size: cover; background-image: url(https://static.observableusercontent.com/thumbnail/${encodeURI(
-        thumbnail,
-      )}.jpg);"></div>
-      <div style="width: 100%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;">${title}</div>
-    </a>`;
     }
   </script>
   <script id="386" type="module">
