@@ -43,8 +43,10 @@
         const pathParts = path.split('/').filter(s => s);
         const htmlFile = pathParts[pathParts.length - 1] || '';
         
-        // Hide breadcrumb on home page (just index.html at root)
-        if (pathParts.length === 1 && htmlFile === 'index.html') {
+        // Hide breadcrumb on home page
+        // Home page can be: /, /index, or /index.html
+        if (pathParts.length === 0 || 
+            (pathParts.length === 1 && (htmlFile === 'index.html' || htmlFile === 'index'))) {
           return;
         }
         
