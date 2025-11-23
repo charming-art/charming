@@ -58,6 +58,10 @@
       body {
         padding-top: 2rem;
       }
+      #breadcrumb a {
+        position: relative;
+        z-index: 1;
+      }
       .charming-banner .full-text {
         display: block;
       }
@@ -106,7 +110,7 @@
         const depth = pathParts.length - 1;
         const homePath = '../';
         
-        let breadcrumbHTML = '<a href="' + homePath + '" style="display: inline-flex; align-items: center; gap: 0.5rem;"><img src="/logo.svg" alt="Charming" style="width: 1.25rem; height: 1.25rem; vertical-align: middle;">Charming</a>';
+        let breadcrumbHTML = '<a href="' + homePath + '" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; color: inherit; cursor: pointer;"><img src="/logo.svg" alt="Charming" style="width: 1.25rem; height: 1.25rem; display: block; flex-shrink: 0; pointer-events: none;">Charming</a>';
         
         // If we're in a section folder and not on the section's index page
         // pathParts.length === 2 means: [section, file.html]
@@ -114,12 +118,14 @@
           const section = pathParts[0];
           const sectionName = sectionMap[section] || section.charAt(0).toUpperCase() + section.slice(1);
           const sectionIndexPath = './';
-          breadcrumbHTML += ' / <a href="' + sectionIndexPath + '">' + sectionName + '</a>';
+          breadcrumbHTML += ' <span style="margin: 0 0.25rem;">/</span> <a href="' + sectionIndexPath + '">' + sectionName + '</a>';
         }
         
         breadcrumb.innerHTML = breadcrumbHTML;
         breadcrumb.style.marginBottom = '1em';
         breadcrumb.style.fontSize = '0.875rem';
+        breadcrumb.style.display = 'flex';
+        breadcrumb.style.alignItems = 'center';
       })();
     </script>
   </body>
