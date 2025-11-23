@@ -1,0 +1,78 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Math</title>
+  <script id="0" type="text/markdown">
+    # Math
+    
+    Processing numbers, randomness, etc.
+    
+    ## _cm_.**clamp**(_value, min, max_)
+    
+    Constrains the input _value_ within the specified range _[min, max]_.
+    
+    ```js
+    const x = 10;
+    cm.clamp(10, 2, 8); // 8
+    cm.clamp(10, 2, 12); // 10
+    cm.clamp(10, 12, 20); // 12
+    ```
+    
+    ## _cm_.**random**(_[min[, max]]_)
+    
+    Generates random number with a uniform distribution, which is within range _\[min, max\)_. If _min_ is not specified, it defaults to 0; if _max_ is not specified, it defaults to 1.
+    
+    ```js
+    cm.random(); // 0.4418278691734798
+    cm.random(10); // 3.747820060823679
+    cm.random(2, 10); // 6.649642684087617
+    ```
+    
+    ## _cm_.**randomInt**(_[min[, max]]_)
+    
+    Like `cm.random`, expect returns integers.
+    
+    ```js
+    cm.randomInt(0, 10); // 5
+    ```
+    
+    ## _cm_.**randomNoise**(_min[, max[, options]]_)
+    
+    Returns a function with the specified _options_ for generating random numbers with a smooth, continuous random-like distribution, commonly referred to as [Perlin Noise](Perlin Noise), which is within range _\[min, max\)_. If _min_ is not specified, it defaults to 0; if _max_ is not specified, it defaults to 1.
+    
+    Supports following options:
+    
+    - **octaves** - layers of noise, default to 4.
+    - **seed** - seed for generated sequence, a real number or as any integer, defaults to random number.
+    - **falloff** - falloff factor for each octave, a real number or as any integer, defaults to 0.5.
+    
+    Increasing the number of octaves results in a more variable sequence, and two generators instanced with the same seed and octaves generate the same sequence.
+    
+    The returned function accept two parameters: _x_ is x coordinate in noise space; _y_ is y coordinate in noise space.
+    
+    ```js
+    cm.randomNoise()(0.2, 0.1); // 0.04076453205333332
+    cm.randomNoise(6, 2)(0.2, 0.1); // -0.08489767172063487
+    ```
+    
+    <img src="../img/cm-randomNoise.png" width=600 alt="cm-randomNoise">
+    
+    ## _cm_.**randomNormal**(_[mu[, sigma]]_)
+    
+    Returns a function for generating random numbers with a [normal(Gaussian) distribution](normal(Gaussian) distribution). The expected value of the generated number is _mu_, with given standard deviation sigma. If _mu_ is not specified, it defaults to 0; if _sigma_ is not specified, it defaults to 1.
+    
+    ```js
+    cm.randomNormal()(); // -2.0897431210663022
+    cm.randomNormal(30, 10)(); // 31.94829616303788
+    ```
+    
+    <img src="../img/cm-randomNormal.png" width=600 alt="cm-randomNormal">
+    
+    ## _cm_.**randomChar**()
+    
+    Returns a random printable and non-empty character.
+    
+    ```js
+    cm.randomChar(); // 'A'
+    ```
+  </script>
+</notebook>

@@ -1,0 +1,257 @@
+<!doctype html>
+<notebook theme="air">
+  <title>App</title>
+  <script id="0" type="text/markdown">
+    # App
+    
+    Rendering app to DOM and animating it.
+    
+    ## _cm_.**app**(_[options]_)
+    
+    Constructs a new app with the specified _options_. If no argument is specified, constructs with default options.
+    
+    All the apps support the following options:
+    
+    - **width** - the outer width of the app, number in pixels
+    - **height** - the outer height of the app, number in pixels
+    - **frameRate** - the number of frames to draw per second
+    - **renderer** - the [renderer](#renderer) to draw shapes and handle events, defaults to [canvas](cm-canvas) renderer
+    
+    ```js
+    const app = cm.app({
+      width: 600,
+      height: 400,
+      renderer: cm.canvas(),
+    });
+    ```
+    
+    Apps with [terminal](#cm-terminal) renderer support the extra options:
+    
+    - **cols** - the number of columns, with a priority level higher than the _width_
+    - **rows** - the number of rows, with a priority level higher than the _height_
+    - **fontSize** - the font size used to render text, see [CSS font-size](CSS font-size)
+    - **fontWeight** - the font weight used to render text, see [CSS font-weight](CSS font-weight)
+    - **fontFamily** - the font family used to render text, see [CSS font-family](CSS font-family)
+    - **mode** - the render mode, _single_ or _double_, defaults to _single_
+    
+    ```js
+    const app = cm.app({
+      cols: 30,
+      rows: 30,
+      renderer: await cm.terminal(),
+      fontSize: 20,
+      fontWeight: "bold",
+      fontFamily: "Georgia, serif",
+      mode: "double",
+    });
+    ```
+    
+    If _mode_ is _single_, a cell in terminal renders both single-width and double-width character once . If _mode_ is _double_, a cell in terminal renders single-width character twice and double-width character once.
+    
+    Single-width characters include characters like _A_, _a_, _1_, _@_, etc,. Double-width characters are characters include characters like _中_, _🚀_ and strings made of two single-width characters like _AB_. Double mode aims to address the overlapping issues that arise from the inconsistent widths of single-width and double-width characters.
+    
+    ## _app_.**data**(_data_)
+    
+    Appends a new flow with the specified array of _data_ to the root flow of app, returning the new flow.
+    
+    ```js
+    app.data([1, 2, 3]);
+    ```
+    
+    ## _app_.**datum**(_[datum]_)
+    
+    Appends a new flow with an array containing the specified _datum_ to the root flow app, returning the new flow.
+    
+    ```js
+    app.datum(1);
+    ```
+    
+    The shorthand is thus equivalent to:
+    
+    ```js
+    app.data([1]);
+    ```
+    
+    If no argument is specified, return groups of this app:
+    
+    ```js
+    app.datum(); // [[1]]
+    ```
+    
+    ## _app_.**append**(_shape[, options]_)
+    
+    Appends a shape with the specified options to this app, returning the new flow that contains the shape. Each shape has its own options, and different shape types support different options. See the respective [shape](#shape) type for details.
+    
+    ```js
+    app.append(cm.circle, { x: 100, y: 100, r: 50, fill: "orange" });
+    ```
+    
+    ## _app_.**render**()
+    
+    Renders shapes in flows to canvas and removes existing flows, returning this app.
+    
+    ```js
+    app.append(cm.circle, {
+      x: cm.random(50, 100),
+      y: cm.random(50, 100),
+      r: 25,
+      fill: "orange",
+    });
+    
+    app.render();
+    
+    app.append(cm.circle, {
+      x: cm.random(50, 100),
+      y: cm.random(50, 100),
+      r: 25,
+      fill: "steelblue",
+    });
+    
+    app.render();
+    ```
+    
+    ## _app_.**start**()
+    
+    Starts this app and returns it, firing [_update_](#event-update) event repeatedly until calling [app.stop](#app-stop). This allows this app to invoke the update callback every delay milliseconds, which is controlled by the [frameCount](#cm-app) option. Note that [app.render](#app-render) will be invoked automatically at the end of each frame, so there is no need to call it explicitly. For example, to draw a moving rect:
+    
+    ```js
+    let x = 0;
+    
+    function update() {
+      app.append(cm.rect, {
+        x: x++,
+        y: 0,
+        width: 100,
+        height: 50,
+      });
+    }
+    
+    app.on("update", update);
+    app.start();
+    ```
+    
+    ## _app_.**stop**()
+    
+    Stops this app and returns it, cancelling firing [_update_](#event-update), thereby stops the animation.
+    
+    ```js
+    app.on("update", update);
+    app.start();
+    
+    // Stops animation after 5 seconds.
+    setTimeout(() => app.stop(), 5000);
+    ```
+    
+    ## _app_.**dispose**()
+    
+    Disposes this app and returns it, stopping the timer to firing [_update_](#event-update) event and removing all event listeners.
+    
+    ```js
+    app.on("update", update);
+    app.on("mouseMove", mouseMove);
+    app.dispose();
+    ```
+    
+    ## _app_.**node**()
+    
+    Returns the [canvas element](canvas element) for drawing shapes.
+    
+    ```js
+    document.body.append(app.node());
+    ```
+    
+    ## _app_.**prop**(_name_)
+    
+    Returns the property with the _specified_ name for this app. See the respective [property](#prop) name for details.
+    
+    ```js
+    app.prop("width"); // 640
+    ```
+    
+    ## _app_.**on**(_type, listener_)
+    
+    Adds a _listener_ for the specified event _type_. Multiple listeners can be registered to receive the same event.
+    
+    ```js
+    function mouseMove() {}
+    
+    function mouseMove1() {}
+    
+    app.on("mouseMove", mouseMove).on("mouseMove", mouseMove1);
+    ```
+    
+    See the respective [event](#event) type for details.
+    
+    ## _app_.**call**(_callback[, ...argument]_)
+    
+    Calls the specified _function_ on this app with any optional _arguments_ and returns this app. This is equivalent to calling the function by hand but avoids to break method chaining. For example, to draw two concentric circles in a reusable function:
+    
+    ```js
+    function ring(app, { x, y, r, r1, fill, fill1 }) {
+      app.append(cm.circle, { x, y, r, fill });
+      app.append(cm.circle, { x, y, r1, fill2 });
+    }
+    
+    ring(app, {
+      x: 100,
+      y: 100,
+      r: 25,
+      r1: 50,
+      fill: "orange",
+      fill1: "steelblue",
+    });
+    ```
+    
+    Instead of invoking this function directly on app, now say:
+    
+    ```js
+    app.call(ring, {
+      x: 100,
+      y: 100,
+      r: 25,
+      r1: 50,
+      fill: "orange",
+      fill2: "steelblue",
+    });
+    ```
+    
+    ## _app_.**textBBox**(_text_, _textOptions_)
+    
+    Computes the bounding box for the specified [_textOptions_](#cm-text). The returned bounding box has the following properties:
+    
+    - **x** - the x coordinate of the text
+    - **y** - the y coordinate of the text
+    - **width** - the width of the text
+    - **height** - the height of the text
+    
+    ```js
+    const bbox = app.textBBox({
+      text: "hello world",
+      fontSize: 20,
+      fontWeight: "bold",
+    });
+    ```
+    
+    ## _cm_.**canvas()**
+    
+    Constructs a canvas renderer, drawing shapes with [CanvasRenderingContext2D](CanvasRenderingContext2D). It is the default renderer for [app](#cm-app) and there is no need to specify it explicitly.
+    
+    ```js
+    const app = cm.app({
+      height: 200,
+      renderer: cm.canvas(), // not necessary
+    });
+    
+    app.append(cm.circle, {
+      x: 100,
+      y: 100,
+      r: 50,
+      fill: "orange",
+    });
+    
+    app.render();
+    ```
+    
+    <img src="../img/cm-canvas.png" width=640>
+  </script>
+</notebook>

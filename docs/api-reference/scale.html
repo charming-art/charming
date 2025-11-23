@@ -1,0 +1,51 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Scale</title>
+  <script id="0" type="text/markdown">
+    # Scale
+    
+    Mapping abstract data to visual representation.
+    
+    ## _cm_.**scaleLinear**(_domain, range_)
+    
+    Constructs a new linear scale with the specified _domain_ and _range_. Linear scales map a continuous, quantitative to a continuous output using a linear transformation.
+    
+    ```js
+    const scale = cm.scaleLinear([0, 1], [0, 100]);
+    scale(0); // 0;
+    scale(0.5); // 50;
+    scale(1); // 100;
+    ```
+    
+    ## _cm_.**scaleSqrt**(_domain, range_)
+    
+    Constructs a new sqrt scale with the specified _domain_ and _range_. Sqrt scales are similar to [linear scale](#cm-scaleLinear), except a square root transform is applied to the input domain value before the output range is computed.
+    
+    ```js
+    const scale = cm.scaleSqrt([0, 1], [0, 100]);
+    scale(0.09); // 30
+    scale(0.64); // 80
+    scale(0.81); // 90
+    ```
+    
+    ## _cm_.**scaleLog**(_domain, range_)
+    
+    Constructs a new log scale with the specified _domain_ and _range_. Log scales are similar to [linear scale](#cm-scaleLinear), except a logarithmic transform transform is applied to the input domain value before the output range is computed.
+    
+    ```js
+    const scale = cm.scaleLog([1, 10], [0, 960]);
+    ```
+    
+    ## _cm_.**scaleOrdinal**(_domain, range_)
+    
+    Constructs a new ordinal scale with the specified _domain_ and _range_. Unlike [linear scale](cm-scaleLinear), ordinal scales have a discrete domain and range. Given a _value_ in the input domain, returns the corresponding in the output range.
+    
+    ```js
+    const scale = cm.scaleOrdinal(["A", "B", "C"], ["steelblue", "yellow", "red"]);
+    
+    scale("A"); // "steelblue"
+    scale("B"); // "yellow"
+    scale("C"); // "red"
+    ```
+  </script>
+</notebook>

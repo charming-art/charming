@@ -1,0 +1,49 @@
+<!doctype html>
+<notebook theme="air">
+  <title>WebGL</title>
+  <script id="0" type="text/markdown">
+    # WebGL
+    
+    WebGL renderer and related helpers.
+    
+    ## _cm_.**webgl()**
+    
+    Returns a WebGL renderer, rendering shapes by WebGL.
+    
+    ```js
+    const app = cm.app({
+      renderer: cm.webgl(),
+    });
+    ```
+    
+    ## _cm_.**glsl**
+    
+    Defines a attribute with the specified [GLSL](<https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)>) function through template literals. The name of the function should match the assigned attribute, being passed the current datum(_d_), returning value with corresponding type.
+    
+    ```js
+    const r = cm.glsl`float r(float theta) {
+      float d = 0.2 + 0.12 * cos(theta * 9.0 - 2.0);
+      return d * 300.0;
+    }`;
+    
+    app.data(theta).append(cm.circle, { r });
+    ```
+    
+    Some numbers can also be interpolated:
+    
+    ```js
+    const scale = 300;
+    const width = 640;
+    const height = 480;
+    const position = cm.glsl`vec2 position(float theta) {
+      vec2 xy = vec2(
+        cos(theta), 
+        sin(theta)) * (0.6 + 0.2 * cos(theta * 6.0 + cos(theta * 8.0 + ${time}))
+      );
+      return xy * ${scale} + vec2(${width / 2}, ${height / 2});
+    }`;
+    
+    app.data(theta).append(cm.circle, { position });
+    ```
+  </script>
+</notebook>

@@ -1,0 +1,138 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Event</title>
+  <script id="0" type="text/markdown">
+    # Event
+    
+    Handling hooks and events.
+    
+    ## _app_.**on**(_"update", callback_)
+    
+    The _update_ event is fired repeatedly until [app.stop](#app-stop) is called after calling [app.start](#app-start). For example, to draw a moving rect:
+    
+    ```js
+    let x = 0;
+    
+    function update() {
+      app.append(cm.rect, {
+        x: x++,
+        y: 0,
+        width: 100,
+        height: 50,
+      });
+    }
+    
+    app.on("update", update);
+    ```
+    
+    ## _app_.**on**(_"mouseDown", callback_)
+    
+    The _mouseDown_ event is fired when a mouse button is pressed. For example, to change the background color:
+    
+    ```js
+    let background = "red";
+    
+    function mouseDown() {
+      background = "blue";
+    }
+    
+    app.on("mouseDown", mouseDown);
+    ```
+    
+    ## _app_.**on**(_"mouseUp", callback_)
+    
+    The _mouseUp_ event is fired when a mouse button is released. For example, to change the background color:
+    
+    ```js
+    let background = "red";
+    
+    function mouseUp() {
+      background = "blue";
+    }
+    
+    app.on("mouseUp", mouseUp);
+    ```
+    
+    ## _app_.**on**(_"mouseClick", callback_)
+    
+    The _mouseClick_ event is fired when a mouse button is clicked. For example, to change the background color:
+    
+    ```js
+    let background = "red";
+    
+    function mouseClick() {
+      background = "blue";
+    }
+    
+    app.on("mouseClick", mouseClick);
+    ```
+    
+    ## _app_.**on**(_"beforeEach", callback_)
+    
+    The _beforeEach_ event is fired before each [update event](#event-update) is fired. For example, to begin measuring frame rate by [stats.js](stats.js):
+    
+    ```js
+    function measure(app) {
+      // ...
+      app.on("beforeEach", () => {
+        stats.begin();
+      });
+    }
+    
+    app.call(measure);
+    ```
+    
+    ## _app_.**on**(_"afterEach", callback_)
+    
+    The _afterEach_ event is fired after each [update event](#event-update) is fired. For example, to end measuring frame rate by [stats.js](stats.js):
+    
+    ```js
+    function measure(app) {
+      // ...
+      app.on("afterEach", () => {
+        stats.end();
+      });
+    }
+    
+    app.call(measure);
+    ```
+    
+    ## _app_.**on**(_"beforeAll", callback_)
+    
+    The _beforeAll_ event is fired before calling [app.start](#app-start). For example, to construct a Stats instance from [stats.js](stats.js):
+    
+    ```js
+    function measure(app) {
+      let stats;
+    
+      //...
+      app.on("beforeAll", () => {
+        const container = document.getElementById("tool");
+        stats = new Stats();
+        stats.dom.style.position = "inherit";
+        stats.dom.style.marginLeft = "1em";
+        container.appendChild(stats.dom);
+      });
+    }
+    
+    app.call(measure);
+    ```
+    
+    ## _app_.**on**(_"afterAll", callback_)
+    
+    The _afterAll_ event is fired after calling [app.dispose](#app-dispose). For example, to remove the DOM of a Stats instance from [stats.js](stats.js):
+    
+    ```js
+    function measure(app) {
+      let stats;
+    
+      //...
+      app.on("afterAll", () => {
+        stats.dom.remove();
+      });
+    }
+    
+    app.call(measure);
+    ```
+  </script>
+</notebook>

@@ -1,0 +1,56 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Attribute</title>
+  <script id="0" type="text/markdown">
+    # Attribute
+    
+    Defining Attributes for shapes.
+    
+    ## _cm_.**rgb**(_r[, g[, b]]_)
+    
+    Returns a string representing the RGB color according to the [CSS Object Model specification](CSS Object Model specification).
+    
+    ```js
+    cm.rgb(234, 260, 180); // 'rgb(234, 260, 180)'
+    ```
+    
+    If only on argument is specified, sets all channels to the same _value_.
+    
+    ```js
+    cm.rgb(100); // 'rgb(100, 100, 100)'
+    ```
+    
+    ## _cm_.**hsl**(_h[, s[, l]]_)
+    
+    Returns a string representing the HSL color according to the [CSS Object Model specification](CSS Object Model specification).
+    
+    ```js
+    cm.hsl(234, 50, 50); // 'hsl(234, 50%, 50%)'
+    ```
+    
+    ## _cm_.**constant**(_value_)
+    
+    Defines a attribute with the specified constant _value_, which is useful for defining some non-data-driven options for [composite shape](#cm-composite-shape).
+    
+    ```js
+    app.data(["A", "B", "C"]).append(bar, {
+      x: (d) => d,
+      y: (_, i) => i,
+      axis: cm.constant(false),
+      colors: cm.constant(["yellow", "red"]),
+    });
+    
+    function bar(
+      flow,
+      {
+        x, // ["A", "B", "C"]
+        y, // [0, 1, 2]
+        axis, // false
+        colors, // ["yellow", "red"]
+      },
+    ) {
+      // ...
+    }
+    ```
+  </script>
+</notebook>
