@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <link rel="icon" type="image/svg+xml" href="/public/logo.svg" />
     <style type="text/css">
       @import url("observable:styles/index.css");
       @import url("@fontsource/spline-sans-mono/400.css");
@@ -158,7 +158,7 @@ b.fillRect(d,m,n,p);b.fillStyle=l;b.globalAlpha=.9;b.fillRect(d,m,n,p);return{do
         const homePath = depth === 0 ? './' : '../';
 
         // Use absolute path for logo to ensure it works in all deployment scenarios
-        const logoPath = '/logo.svg';
+        const logoPath = '/public/logo.svg';
         let breadcrumbHTML =
           '<a href="' +
           homePath +

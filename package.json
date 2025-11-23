@@ -35,7 +35,7 @@
     "build:rust": "rm -rf ./src/backend && wasm-pack build ./rust --out-dir ../src/backend --out-name index --target web",
     "docs:dist": "mkdir -p docs/dist && cp dist/cm.umd.min.js docs/dist/",
     "docs:preview": "notebooks preview --root docs --template docs/custom.tmpl",
-    "docs:build": "notebooks build --root docs --template docs/custom.tmpl -- docs/*.html docs/**/*.html",
+    "docs:build": "notebooks build --root docs --template docs/custom.tmpl -- docs/*.html docs/**/*.html && mkdir -p docs/.observable/dist/public && cp -r docs/public/* docs/.observable/dist/public/",
     "preview": "npm run build && vite preview",
     "prepublishOnly": "npm run build"
   },
