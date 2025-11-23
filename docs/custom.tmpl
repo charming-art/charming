@@ -33,9 +33,52 @@
           max-width: unset;
         }
     </style>
+    <style>
+      .charming-banner {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background-color: #ffc107;
+        color: #1b1e23;
+        padding: 0.5rem 1rem;
+        text-align: center;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+      .charming-banner a {
+        color: #1b1e23;
+        text-decoration: underline;
+      }
+      .charming-banner a:hover {
+        text-decoration: none;
+      }
+      body {
+        padding-top: 2rem;
+      }
+      .charming-banner .full-text {
+        display: block;
+      }
+      .charming-banner .short-text {
+        display: none;
+      }
+      @media (max-width: 768px) {
+        .charming-banner .full-text {
+          display: none;
+        }
+        .charming-banner .short-text {
+          display: block;
+        }
+      }
+    </style>
     <script src="/dist/cm.umd.min.js"></script>
   </head>
   <body>
+    <div class="charming-banner">
+      <span class="full-text">This is Charming1. For Charming2, go to <a href="https://charmingjs.org">charmingjs.org</a>.</span>
+      <span class="short-text">This is v1. For v2, go to <a href="https://charmingjs.org">charmingjs.org</a>.</span>
+    </div>
     <nav id="breadcrumb"></nav>
     <main></main>
     <script>
