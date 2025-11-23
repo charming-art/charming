@@ -1,0 +1,108 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Get Started</title>
+  <script id="0" type="text/markdown">
+    # Get Started
+
+    This guide will help you get started with Charming by showing you how to install it and run your first examples.
+  </script>
+  <script id="1" type="text/markdown">
+    ## Installing
+
+    Charming is typically installed via a package manager such as Yarn or NPM.
+
+    ```bash
+    yarn add @charming-art/charming
+    ```
+
+    ```bash
+    npm install @charming-art/charming
+    ```
+
+    Charming can then imported as a namespace:
+
+    ```js
+    import * as cm from "@charming-art/charming";
+    ```
+
+    In vanilla HTML, Charming can be imported as an ES module, say from jsDelivr:
+
+```html
+<script type="module">
+  import * as cm from "https://cdn.jsdelivr.net/npm/@charming-art/charming/+esm";
+
+  const app = cm.app();
+
+  // ...
+
+  document.body.append(app.render().node());
+</script>
+```
+
+Charming is also available as a UMD bundle for legacy browsers.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@charming-art/charming"></script>
+<script>
+  const app = cm.app();
+
+  // ...
+
+  document.body.append(app.render().node());
+</script>
+```
+  </script>
+  <script id="2" type="text/markdown">
+    ## Quick Examples
+
+    <img src="./img/example-clover.png" width=640 />
+
+    ```js
+    import * as cm from "@charming-art/charming";
+
+    const app = cm.app({
+      width: 640,
+      height: 640,
+    });
+
+    app
+      .data(cm.range(240))
+      .process(cm.map, (_, i, data) => (i * Math.PI) / data.length)
+      .append(cm.circle, {
+        x: (t) => Math.cos(t) * Math.cos(t * 3),
+        y: (t) => Math.sin(t) * Math.cos(t * 3),
+        r: (_, i) => i,
+      })
+      .transform(cm.mapPosition, { padding: 15 })
+      .transform(cm.mapAttrs, {
+        r: { range: [8, 20] },
+      });
+
+    document.body.appendChild(app.render().node());
+    ```
+
+    <img src="./img/example-ascii-text.png" />
+
+    ```js
+    import * as cm from "@charming-art/charming";
+
+    const app = cm.app({
+      width: 1200,
+      renderer: await cm.terminal(),
+    });
+
+    app.append(cm.text, {
+      text: cm.figlet("hello world"),
+      x: app.prop("width") / 2,
+      y: app.prop("height") / 2,
+      fill: cm.gradientSineBowX(),
+      textAlign: "center",
+      textBaseline: "middle",
+      fontFamily: cm.fontGhost(),
+    });
+
+    document.body.appendChild(app.render().node(()));
+    ```
+  </script>
+</notebook>
+

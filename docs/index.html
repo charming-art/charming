@@ -4,17 +4,31 @@
   <script id="0" type="text/markdown">
     # Charming
 
-    Welcome to the Charming documentation! Here you can learn about Charming, understand its motivation, and explore examples.
+    **Charming**, short for _Charming Computing_, is a [free](https://github.com/charming-art/charming/blob/main/LICENSE), [open-source](https://github.com/charming-art/charming) creative coding language designed for computational and ASCII art, offering high performance. It has a declarative, concise, yet expressive API inspired by [G2.js](https://github.com/antvis/G2), [D3.js](https://github.com/d3) and [P5.js](https://p5js.org/).
 
-    ## Introduction
+    > _Think of Charming as Lodash for graphics, or D3 for computational art._
 
-    If you are new to Charming, we recommend reading these notebooks in order:
+    <a href="./examples/index.html"><img alt="examples" src="./img/examples.png" /></a>
+
+    ## Links
 
     - [What is Charming?](introduction/what-is-charming.html) - A brief introduction to Charming
     - [Why Charming?](introduction/why-charming.html) - The inspiration and motivation behind Charming
+    - [Get Started](introduction/get-started.html) - Installation instructions and quick examples
+    - [Examples](examples/index.html) - Explore a collection of Charming examples
+    - [API Reference](api-reference/index.html) - Core API reference
+    - [GitHub](https://github.com/charming-art/charming) - Source code and issues
 
-    ## Gallery
+    ## Features
 
-    Explore a [collection](examples/index.html) of Charming examples.
+    Charming is built on the observation that both visualization and generative art are, to some extent, data-driven.
+
+    Therefore, it provides a novel [flow-based](cm-flow) API for processing data, appending and transforming shapes. Charming also supports batch rendering of 2D primitives using a [WebGL renderer](https://observablehq.com/d/db16249bd7174a24), and defining some [GLSL functions](https://observablehq.com/d/86d2c1fe79fac300) to offload expensive computations to the GPU. Additionally, a [terminal renderer](https://observablehq.com/d/8152c4d46e22d446) for ASCII art, embedded in JavaScript, utilizes a software rasterizer written in Rust and compiled to WASM, aiming to achieve high performance. Charming also puts strong emphasis on extensible, composable, beginner-friendly and lightweight (29kb minified [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js)).
+
+    My hope with Charming is that you spend less time wrangling the machinery of programming and more time "using computing to tell stories". Or put more simply: **With Charming, you'll express more, and more easily.**
+
+    ## License
+
+    Charming is released under the [ISC License](https://github.com/charming-art/charming/blob/main/LICENSE).
   </script>
 </notebook>
