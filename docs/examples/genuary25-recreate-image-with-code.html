@@ -23,7 +23,7 @@
     regenerate;
 
     const maxFrame = 400,
-      image = await (upload ?? FileAttachment("steven@1.jpeg")).image(),
+      image = await (upload ?? FileAttachment("../assets/steven.jpeg")).image(),
       width = image.width * scale,
       height = image.height * scale,
       imageData = getImageDate(image),

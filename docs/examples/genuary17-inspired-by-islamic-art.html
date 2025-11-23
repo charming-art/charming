@@ -44,7 +44,7 @@
 
     const width = 640,
       height = 640,
-      image = await (upload ?? FileAttachment("bear.png")).image(),
+      image = await (upload ?? FileAttachment("../assets/bear.png")).image(),
       imageData = getImageDate(image),
       color = imageColor(imageData, width, height),
       position = cm.randomNoise(3, 8),
