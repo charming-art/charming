@@ -1,0 +1,153 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Draggable Spring</title>
+  <script id="0" type="text/markdown">
+    # Draggable Spring
+  </script>
+  <script id="50" type="module">
+    const replay = view(Inputs.button("Replay"));
+  </script>
+  <script id="8" type="module" pinned="">
+    replay;
+
+    let width = 600,
+      height = 200,
+      dragging = false,
+      spring = { k: 0.1, length: 100 },
+      bob = object({ location: cm.vec(0, spring.length) }),
+      anchor = object();
+
+    function clear(app) {
+      app.append(cm.clear, { fill: cm.rgb(255) });
+    }
+
+    function draw(app) {
+      const group = app.append(cm.group, { x: app.prop("width") / 2, y: 0 });
+
+      group.datum(bob).call(updateBob, { dragging, spring, anchor }).call(drawBob, { dragging });
+
+      group.datum(anchor).call(drawAnchor);
+    }
+
+    function mouseDown(params) {
+      dragging = true;
+    }
+
+    function mouseUp(params) {
+      dragging = false;
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm
+      .app({ width, height })
+      .on("update", clear)
+      .on("update", draw)
+      .on("mouseDown", mouseDown)
+      .on("mouseUp", mouseUp)
+      .call(dispose)
+      .call(frame)
+      .start()
+      .node();
+
+    display(node);
+  </script>
+  <script id="46" type="module" pinned="">
+    function object(options) {
+      return {
+        location: cm.vec(),
+        velocity: cm.vec(),
+        acceleration: cm.vec(),
+        mass: 1,
+        ...options,
+      };
+    }
+  </script>
+  <script id="71" type="module" pinned="">
+    function drawBob(d, { dragging }) {
+      const x = (d) => d.location.x;
+      const y = (d) => d.location.y;
+      d.append(cm.link, { x: 0, y: 0, x1: x, y1: y });
+      d.append(cm.circle, {
+        x,
+        y,
+        r: 20,
+        fill: dragging ? "black" : cm.rgb(175),
+        stroke: cm.rgb(0),
+      });
+    }
+  </script>
+  <script id="73" type="module" pinned="">
+    function updateBob(d, { dragging, anchor, spring }) {
+      if (dragging) return d.process(cm.each, applyDrag);
+      d.process(cm.each, applyGravity)
+        .process(cm.each, applySpring(anchor, spring))
+        .process(cm.each, applyDamping)
+        .process(cm.each, move);
+    }
+  </script>
+  <script id="105" type="module" pinned="">
+    function drawAnchor(d) {
+      d.append(cm.rect, {
+        x: (d) => d.location.x - 5,
+        y: (d) => d.location.y,
+        width: 10,
+        height: 10,
+        fill: cm.rgb(175),
+        stroke: cm.rgb(0),
+      });
+    }
+  </script>
+  <script id="75" type="module" pinned="">
+    function applyForce(d, f) {
+      const a = cm.vecDiv(f, d.mass);
+      d.acceleration.add(a);
+    }
+  </script>
+  <script id="78" type="module" pinned="">
+    function applyGravity(d) {
+      const f = cm.vec(0, 1).mult(d.mass);
+      applyForce(d, f);
+    }
+  </script>
+  <script id="83" type="module" pinned="">
+    function applySpring(anchor, spring) {
+      return (d) => {
+        const f = cm.vecSub(d.location, anchor.location);
+        const length = f.mag();
+        const stretch = length - spring.length;
+        const m = -1 * spring.k * stretch;
+        f.mag(m);
+        applyForce(d, f);
+      };
+    }
+  </script>
+  <script id="88" type="module" pinned="">
+    function applyDamping(d) {
+      d.velocity.mult(0.98);
+    }
+  </script>
+  <script id="91" type="module" pinned="">
+    function applyDrag(d, i, data, flow) {
+      const app = flow.app();
+      d.location.x = app.prop("mouseX") - app.prop("width") / 2;
+      d.location.y = app.prop("mouseY");
+      d.velocity.mult(0);
+      d.acceleration.mult(0);
+    }
+  </script>
+  <script id="97" type="module" pinned="">
+    function move(d) {
+      d.velocity.add(d.acceleration);
+      d.location.add(d.velocity);
+      d.acceleration.mult(0);
+    }
+  </script>
+  <script id="24" type="module" pinned="">
+    function frame(app) {
+      app.node().style.border = "solid #000 1px";
+    }
+  </script>
+</notebook>

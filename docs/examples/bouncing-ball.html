@@ -1,0 +1,44 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Bouncing Ball</title>
+  <script id="0" type="text/markdown">
+    # Bouncing Ball
+  </script>
+  <script id="11" type="module">
+    const replay = view(Inputs.button("Replay"));
+  </script>
+  <script id="8" type="module" pinned="">
+    replay;
+
+    const width = 600,
+      height = 200,
+      location = cm.vec(width / 2, height / 2),
+      velocity = cm.vec(1, 2.3);
+
+    function update(app) {
+      location.add(velocity);
+      if (!location.inX(app.prop("width"))) velocity.negX();
+      if (!location.inY(app.prop("height"))) velocity.negY();
+      app.append(cm.clear, { fill: cm.rgb(255) });
+      app.append(cm.circle, {
+        x: location.x,
+        y: location.y,
+        r: 16,
+        stroke: cm.rgb(0),
+        fill: cm.rgb(175),
+      });
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    function frame(app) {
+      app.node().style.border = "solid #000 1px";
+    }
+
+    const node = cm.app({ width, height }).on("update", update).call(dispose).call(frame).start().node();
+
+    display(node);
+  </script>
+</notebook>

@@ -1,0 +1,60 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Oscillates</title>
+  <script id="0" type="text/markdown">
+    # Oscillates
+  </script>
+  <script id="8" type="module" pinned="">
+    const width = 600,
+      height = 200,
+      oscillators = cm.range(20).map(() => ({
+        angle: cm.vec(),
+        velocity: cm.vec(cm.random(-0.05, 0.05), cm.random(-0.05, 0.05)),
+        amplitude: cm.vec(cm.random(width / 2), cm.random(height / 2)),
+      }));
+
+    function clear(app) {
+      app.append(cm.clear, { fill: cm.rgb(255) });
+    }
+
+    function draw(app) {
+      const x = (d) => Math.sin(d.angle.x) * d.amplitude.x;
+      const y = (d) => Math.sin(d.angle.y) * d.amplitude.y;
+      const group = app.append(cm.group, { x: width / 2, y: height / 2 });
+      group
+        .data(oscillators)
+        .process(cm.each, (d) => d.angle.add(d.velocity))
+        .call((d) => d.append(cm.link, { x: 0, y: 0, x1: x, y1: y }))
+        .call((d) =>
+          d.append(cm.circle, {
+            x,
+            y,
+            r: 16,
+            stroke: "#000",
+            fill: cm.rgb(175),
+            fillOpacity: 0.5,
+          }),
+        );
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm
+      .app({ width, height })
+      .on("update", clear)
+      .on("update", draw)
+      .call(dispose)
+      .call(frame)
+      .start()
+      .node();
+
+    display(node);
+  </script>
+  <script id="24" type="module" pinned="">
+    function frame(app) {
+      app.node().style.border = "solid #000 1px";
+    }
+  </script>
+</notebook>

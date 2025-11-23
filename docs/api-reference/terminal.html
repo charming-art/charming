@@ -1,0 +1,173 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Terminal</title>
+  <script id="0" type="text/markdown">
+    # Terminal
+    
+    Terminal renderer and related helpers.
+    
+    ## _cm_.**terminal()**
+    
+    Returns a promise resolved to a terminal renderer, drawing shapes in a terminal like context.
+    
+    ```js
+    const app = cm.app({
+      renderer: await cm.terminal(),
+    });
+    ```
+    
+    Shapes drawn by terminal renders are (typically) not positioned in literal pixels, or colored in literal colors, as in a conventional graphics system. Instead they are positioned in count of terminal's cell and colored by [characters](#cm-cfb).
+    
+    ```js
+    const app = cm.app({
+      mode: "double",
+      renderer: await cm.terminal(),
+    });
+    
+    app
+      .data(cm.range(240, 0, Math.PI * 2))
+      .append(cm.group, {
+        x: app.prop("width") / 2,
+        y: app.prop("height") / 2,
+      })
+      .append(cm.point, {
+        x: (t) => 10 * Math.cos(t) * Math.cos(t * 3),
+        y: (t) => 10 * Math.sin(t) * Math.cos(t * 3),
+        stroke: cm.cfb(cm.wch("🌟")),
+      });
+    
+    app.render();
+    ```
+    
+    <img src="../img/cm-terminal-shape.png" width=640 />
+    
+    Moreover, it draws ASCII text powered by [figlet.js](figlet.js).
+    
+    ```js
+    const app = cm.app({
+      width: 800,
+      height: 200,
+      mode: "double",
+      renderer: await cm.terminal(),
+    });
+    
+    app.append(cm.text, {
+      x: app.prop("width") / 2,
+      y: app.prop("height") / 2,
+      text: "charming",
+      textBaseline: "middle",
+      textAlign: "center",
+    });
+    
+    app.render();
+    ```
+    
+    <img src="../img/cm-terminal-text.png" width=800 />
+    
+    ## _cm_.**cfb**(_ch[, f[, b]]_)
+    
+    Returns a terminal color object, which is only for app with a [terminal](#cm-terminal) renderer. A terminal color comprises the following three channels:
+    
+    - _ch_: character
+    - _f_: CSS Color for the color of the character
+    - _b_: CSS color for the background cell of the character
+    
+    If neither _f_ or _b_ are not specified, each defaults to null.
+    
+    ```js
+    app.append(cm.rect, {
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 5,
+      fill: cm.cfb("@", "steelblue", "orange"),
+      stroke: cm.cfg("+"),
+    });
+    ```
+    
+    ## _cm_.**wch**(_ch_)
+    
+    Returns a character marked as a wide character, which is only for app with a [terminal](#cm-terminal) in double mode.
+    
+    ```js
+    const app = cm.app({
+      terminal: await cm.terminal(),
+      mode: "double",
+    });
+    
+    app.append(cm.rect, {
+      x: 0,
+      y: 0,
+      width: 10,
+      height: 5,
+      fill: cm.cfb(cm.wch("😊")),
+    });
+    ```
+    
+    ## _cm_.**figlet**(_text_)
+    
+    Defines a figlet text with the specified _text_ for [terminal renderer](#cm-terminal).
+    
+    ```js
+    const app = cm.app({
+      renderer: await cm.terminal(),
+    });
+    
+    app.append(cm.text, {
+      text: cm.figlet("Charming"),
+    });
+    ```
+    
+    ## _cm_.**fontStandard**()
+    
+    Parses and returns the standard font for the fontFamily attribute.
+    
+    ```js
+    app.append(cm.text, {
+      // ...
+      fontFamily: cm.fontStandard(),
+    });
+    ```
+    
+    <img src="../img/cm-fontStandard.png" width=800 alt="cm-fontStandard">
+    
+    ## _cm_.**fontGhost**()
+    
+    Parses and returns the ghost font for the fontFamily attribute.
+    
+    ```js
+    app.append(cm.text, {
+      // ...
+      fontFamily: cm.fontGhost(),
+    });
+    ```
+    
+    <img src="../img/cm-fontGhost.png" width=800 alt="cm-fontGhost">
+    
+    ## _cm_.**gradientRainBowX**()
+    
+    Returns the fill attribute with the vertical rainbow gradient.
+    
+    ```js
+    app.append(cm.text, {
+      // ...
+      fill: cm.gradientRainBowX(),
+    });
+    ```
+    
+    <img src="../img/cm-gradientRainBowX.png" width=800 alt="cm-gradientRainBowX">
+    
+    ## _cm_.**gradientSineBowX**()
+    
+    Returns the fill attribute with the vertical sinebox gradient.
+    
+    ```js
+    app.append(cm.text, {
+      // ...
+      fill: cm.gradientRainBowX(),
+    });
+    ```
+    
+    <img src="../img/cm-gradientSineBowX.png" width=800 alt="cm-gradientSineBowX">
+  </script>
+</notebook>

@@ -1,0 +1,106 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Falling Polygons, Matter.js</title>
+  <script id="0" type="text/markdown">
+    # Falling Polygons, Matter.js
+  </script>
+  <script id="30" type="module">
+    const replay = view(Inputs.button("Replay"));
+  </script>
+  <script id="10" type="module" pinned="">
+    replay;
+
+    const w = 600,
+      h = 200,
+      engine = matter.Engine.create(),
+      boxes = [],
+      boundaries = [
+        createBoundary(engine.world, w / 4, h - 5, w / 2 - 50, 10),
+        createBoundary(engine.world, (3 * w) / 4, h - 50, w / 2 - 50, 10),
+      ];
+
+    function update(app) {
+      if (cm.random(1) < 0.1) boxes.push(createPolygon(engine.world, w / 2, 50));
+
+      app.append(cm.clear, { fill: "#fff" });
+
+      app.data(boxes).process(cm.eachRight, checkBox).call(appendMatterPolygon);
+
+      app.data(boundaries).call(appendMatterRect);
+
+      matter.Engine.update(engine);
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm.app({ width: w, height: h }).on("update", update).call(dispose).start().node();
+
+    display(node);
+  </script>
+  <script id="48" type="module" pinned="">
+    function appendMatterPolygon(flow, options) {
+      flow.append(cm.polygon, {
+        x: (d) => d.body.vertices.map((d) => d.x),
+        y: (d) => d.body.vertices.map((d) => d.y),
+        fill: cm.rgb(127),
+        stroke: cm.rgb(0),
+        strokeWeight: 2,
+        ...options,
+      });
+    }
+  </script>
+  <script id="34" type="module" pinned="">
+    function appendMatterRect(flow, options) {
+      flow.append(cm.rect, {
+        x: (d) => d.body.position.x,
+        y: (d) => d.body.position.y,
+        width: (d) => d.width,
+        height: (d) => d.height,
+        rotate: (d) => d.body.angle,
+        fill: cm.rgb(127),
+        stroke: cm.rgb(0),
+        strokeWeight: 2,
+        anchor: "center",
+        ...options,
+      });
+    }
+  </script>
+  <script id="12" type="module" pinned="">
+    function createBoundary(parent, x, y, width, height) {
+      const body = matter.Bodies.rectangle(x, y, width, height, { isStatic: true });
+      matter.Composite.add(parent, body);
+      return { body, width, height };
+    }
+  </script>
+  <script id="14" type="module" pinned="">
+    function createPolygon(parent, x, y) {
+      const vertices = [
+        matter.Vector.create(-10, -10),
+        matter.Vector.create(20, -15),
+        matter.Vector.create(15, 0),
+        matter.Vector.create(0, 10),
+        matter.Vector.create(-20, 15),
+      ];
+      const body = matter.Bodies.fromVertices(x, y, vertices, { restitution: 0.2 });
+      matter.Body.setVelocity(body, matter.Vector.create(cm.random(-5, 5), 0));
+      matter.Body.setAngularVelocity(body, 0.1);
+      matter.Composite.add(parent, body);
+      return { body };
+    }
+  </script>
+  <script id="16" type="module" pinned="">
+    function checkBox(d, i, array, flow) {
+      const { body } = d;
+      const app = flow.app();
+      if (body.bounds.min.y > app.prop("height")) {
+        array.splice(i, 1);
+        matter.Composite.remove(body.parent, d);
+      }
+    }
+  </script>
+  <script id="5" type="module" pinned="">
+    matter = require("matter-js");
+  </script>
+</notebook>

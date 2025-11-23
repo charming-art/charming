@@ -1,0 +1,63 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Flow Noise</title>
+  <script id="0" type="text/markdown">
+    # Flow Noise
+  </script>
+  <script id="9" type="module" pinned="">
+    const width = 640,
+      height = 240,
+      size = 16,
+      cols = width / size,
+      rows = height / size,
+      noise = cm.randomNoise(),
+      fields = cm.cross(cm.range(cols), cm.range(rows)).map(([x, y]) => ({ x, y, value: noise(y * 0.1, x * 0.1) }));
+
+    const app = cm.app({ width, height });
+
+    app
+      .data(fields)
+      .append(arrow, {
+        x: (d) => d.x * size + size / 2,
+        y: (d) => d.y * size + size / 2,
+        length: size * 0.8,
+        angle: Math.PI / 6,
+        rotate: (d) => d.value,
+      })
+      .transform(cm.mapAttrs, {
+        rotate: { range: [0, cm.TWO_PI] },
+      });
+
+    const node = app.render().node();
+
+    display(node);
+  </script>
+  <script id="14" type="module" pinned="">
+    function arrow(flow, { length, angle, x, y, rotate, ...options }) {
+      const group = flow.append(cm.group, { x, y, rotate });
+      const l1 = length.map((d) => d / 2);
+      const l2 = length.map((d) => -d / 2);
+      const a1 = angle.map((d) => d);
+      const a2 = angle.map((d) => -d);
+      group.append(cm.link, { x: l2, y: 0, x1: l1, y1: 0, ...options });
+      group.append(cm.link, {
+        x: 0,
+        y: 0,
+        x1: l1,
+        y1: 0,
+        rotate: a2,
+        transformOrigin: "end",
+        ...options,
+      });
+      group.append(cm.link, {
+        x: 0,
+        y: 0,
+        x1: l1,
+        y1: 0,
+        rotate: a1,
+        transformOrigin: "end",
+        ...options,
+      });
+    }
+  </script>
+</notebook>

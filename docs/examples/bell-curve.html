@@ -1,0 +1,55 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Bell Curve</title>
+  <script id="0" type="text/markdown">
+    # Bell Curve
+  </script>
+  <script id="8" type="module" pinned="">
+    let width = 600,
+      height = 200,
+      X = cm.range(width, -3, 3),
+      sigma = 0.5,
+      step = 0.01;
+
+    function update(app) {
+      const curve = bellCurve(0, sigma);
+
+      app.append(cm.clear, { fill: "#fff" });
+
+      app
+        .data(X)
+        .append(cm.line, {
+          x: (_, i) => i,
+          y: (d) => curve(d),
+          stroke: "black",
+          strokeWidth: 2,
+        })
+        .transform(cm.mapPosition, {
+          domainY: [0, 1],
+          padding: 5,
+          reverseY: true,
+        });
+
+      sigma += step;
+      if (sigma > 2 || sigma < 0.3) step *= -1;
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm.app({ width: 600, height: 200 }).on("update", update).call(dispose).start().node();
+
+    display(node);
+  </script>
+  <script id="9" type="module" pinned="">
+    function bellCurve(mu = 0, sigma = 1) {
+      const sq2pi = Math.sqrt(cm.TWO_PI);
+      const sdsq = sigma * sigma;
+      return (x) => {
+        const xmsq = -1 * (x - mu) * (x - mu);
+        return (1 / (sigma * sq2pi)) * Math.pow(Math.E, xmsq / sdsq);
+      };
+    }
+  </script>
+</notebook>

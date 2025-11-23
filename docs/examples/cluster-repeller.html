@@ -1,0 +1,112 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Cluster, Repeller</title>
+  <script id="0" type="text/markdown">
+    # Cluster, Repeller
+  </script>
+  <script id="8" type="module" pinned="">
+    const width = 600,
+      height = 200,
+      particles = [],
+      repeller = {
+        location: cm.vec(width / 2, height - 50),
+        power: 150,
+      },
+      applyRepeller = createRepel(repeller);
+
+    function update(app) {
+      app.append(cm.clear, { fill: cm.rgb(255) });
+
+      app.datum(repeller).append(cm.circle, {
+        x: (d) => d.location.x,
+        y: (d) => d.location.y,
+        r: 16,
+        stroke: "black",
+        fill: cm.rgb(127),
+      });
+
+      app
+        .data(particles)
+        .process(
+          cm.push,
+          object({
+            location: cm.vec(app.prop("width") / 2, 50),
+            velocity: cm.vec(cm.random(-1, 1), cm.random(-2, 0)),
+            lifespan: 255,
+          }),
+        )
+        .process(cm.eachRight, fadeOut)
+        .process(cm.each, applyRepeller)
+        .process(cm.each, applyGravity)
+        .process(cm.each, move)
+        .append(cm.circle, {
+          x: (d) => d.location.x,
+          y: (d) => d.location.y,
+          r: 5,
+          fill: cm.rgb(0),
+          stroke: cm.rgb(0),
+          fillOpacity: (d) => d.lifespan,
+          strokeOpacity: (d) => d.lifespan,
+        })
+        .transform(cm.mapAttrs, {
+          fillOpacity: { domain: [0, 255], range: [0, 0.6] },
+          strokeOpacity: { domain: [0, 255], range: [0, 1] },
+        });
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm.app({ width, height }).on("update", update).call(dispose).start().node();
+
+    display(node);
+  </script>
+  <script id="28" type="module" pinned="">
+    function applyForce(d, f) {
+      const a = cm.vecDiv(f, d.mass);
+      d.acceleration.add(a);
+    }
+  </script>
+  <script id="33" type="module" pinned="">
+    function applyGravity(d) {
+      const f = cm.vec(0, 0.1).mult(d.mass);
+      applyForce(d, f);
+    }
+  </script>
+  <script id="30" type="module" pinned="">
+    function fadeOut(d, i, array) {
+      if (d.lifespan < 0) array.splice(i, 1);
+      d.lifespan -= 2;
+    }
+  </script>
+  <script id="35" type="module" pinned="">
+    function createRepel(repeller) {
+      return (d) => {
+        const force = cm.vecSub(repeller.location, d.location);
+        const distance = cm.clamp(force.mag(), 5, 50);
+        const strength = (-1 * repeller.power) / (distance * distance);
+        force.mag(strength);
+        applyForce(d, force);
+      };
+    }
+  </script>
+  <script id="42" type="module" pinned="">
+    function move(d) {
+      d.velocity.add(d.acceleration);
+      d.location.add(d.velocity);
+      d.acceleration.mult(0);
+    }
+  </script>
+  <script id="46" type="module" pinned="">
+    function object(options) {
+      return {
+        location: cm.vec(),
+        velocity: cm.vec(),
+        acceleration: cm.vec(),
+        mass: 1,
+        ...options,
+      };
+    }
+  </script>
+</notebook>

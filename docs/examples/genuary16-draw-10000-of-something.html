@@ -1,0 +1,79 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Genuary#16: Draw 10000 of something.</title>
+  <script id="0" type="text/markdown">
+    # Genuary#16: Draw 10000 of something.
+
+    - Title: **Waltz of Circles, GLSL**
+    - Prompt: https://genuary.art/prompts#jan16
+    - Twitter: https://twitter.com/subairui/status/1747289173730672661
+    - Charming Canvas Version: <a href="waltz-of-circles-canvas">waltz-of-circles-canvas</a>
+    - Charming WebGL Version: <a href="waltz-of-circles-webgl">waltz-of-circles-webgl</a>
+    - Processing Version: https://openprocessing.org/sketch/748916
+    - Original Ref: https://observablehq.com/@rreusser/instanced-webgl-circles
+  </script>
+  <script id="39" type="module">
+    const count = view(
+      Inputs.range([10000, 100000], {
+        label: "Circle Count",
+        step: 1,
+        value: 10000,
+      }),
+    );
+  </script>
+  <script id="8" type="module" pinned="">
+    const width = 700,
+      height = 700,
+      scale = 300,
+      theta = cm.range(count, 0, cm.TWO_PI);
+
+    function update(app) {
+      const time = app.prop("frameCount") / 50;
+
+      app.append(cm.clear, { fill: "black" });
+
+      app
+        .data(theta) // Bind Data.
+        .append(cm.circle, {
+          // Define some glsl attributes.
+          position: cm.glsl`vec2 position(float theta) {
+              vec2 xy = vec2(
+                cos(theta), 
+                sin(theta)) * (0.6 + 0.2 * cos(theta * 6.0 + cos(theta * 8.0 + ${time}))
+              );
+              return xy * ${scale} + vec2(${width / 2}, ${height / 2});
+            }`,
+          r: cm.glsl`float r(float theta) {
+              float d = 0.2 + 0.12 * cos(theta * 9.0 - ${time} * 2.0);
+              return d * ${scale};
+            }`,
+          stroke: cm.glsl`vec4 stroke(float theta) {
+              float th = 8.0 * theta + ${time} * 2.0;
+              vec3 rgb = 0.6 + 0.4 * vec3(
+                cos(th - ${Math.PI} * 2.0 / 3.0),
+                cos(th),
+                cos(th - ${Math.PI} * 5.0 / 3.0)
+              );
+              return vec4(rgb, 0.0);
+            }`,
+          strokeOpacity: cm.glsl`float strokeOpacity(float theta) {
+              return 0.15 * 2000.0 / ${count};
+            }`,
+        });
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm
+      .app({ width, height, renderer: cm.webgl() })
+      .on("update", update)
+      .call(dispose)
+      .call(stats)
+      .start()
+      .node();
+
+    display(node);
+  </script>
+</notebook>

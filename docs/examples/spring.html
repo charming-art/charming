@@ -1,0 +1,67 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Spring</title>
+  <script id="0" type="text/markdown">
+    # Spring
+  </script>
+  <script id="50" type="module">
+    const replay = view(Inputs.button("Replay"));
+  </script>
+  <script id="8" type="module" pinned="">
+    replay;
+
+    const width = 600,
+      height = 200,
+      x = (d) => d.r * Math.sin(d.angle),
+      y = (d) => d.r * Math.cos(d.angle),
+      pendulum = { angle: Math.PI / 4, aVelocity: 0, r: 150, damping: 0.995 };
+
+    function clear(app) {
+      app.append(cm.clear, { fill: cm.rgb(255) });
+    }
+
+    function draw(app) {
+      const group = app
+        .append(cm.group, { x: width / 2, y: 0 })
+        .datum(pendulum)
+        .process(cm.each, update);
+
+      group.append(cm.link, { x: 0, y: 0, x1: x, y1: y });
+      group.append(cm.circle, {
+        x,
+        y,
+        r: 20,
+        fill: cm.rgb(175),
+        stroke: cm.rgb(0),
+      });
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm
+      .app({ width, height })
+      .on("update", clear)
+      .on("update", draw)
+      .call(dispose)
+      .call(frame)
+      .start()
+      .node();
+
+    display(node);
+  </script>
+  <script id="46" type="module" pinned="">
+    function update(d) {
+      const aAcceleration = -1 * (0.4 / d.r) * Math.sin(d.angle);
+      d.aVelocity += aAcceleration;
+      d.aVelocity *= d.damping;
+      d.angle += d.aVelocity;
+    }
+  </script>
+  <script id="24" type="module" pinned="">
+    function frame(app) {
+      app.node().style.border = "solid #000 1px";
+    }
+  </script>
+</notebook>

@@ -1,0 +1,249 @@
+<!doctype html>
+<notebook theme="air">
+  <title>API Reference</title>
+  <script id="0" type="text/markdown">
+    # API Reference
+
+    The core modules of Charming, which are included in [core bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.core.umd.min.js):
+
+    - [App](app) - rendering app to DOM and animating it
+    - [Flow](flow) - binding data to shapes
+    - [Process](process) - preparing data to be rendered
+    - [Shape](shape) - appending geometric elements to canvas
+    - [Transform](transform) - deriving shape attribute values
+    - [Scale](scale) - mapping abstract data to visual representation
+    - [Event](event) - handling hooks and events
+    - [Prop](prop) - returning properties of the app
+    - [Attribute](attribute) - defining attributes for shapes
+
+    The other modules are included in [full bundle](https://cdn.jsdelivr.net/npm/@charming-art/charming/dist/cm.umd.min.js). Different renderers:
+
+    - [WebGL](webgl) - the WebGL renderer and related helpers
+    - [Terminal](terminal) - the terminal renderer and related helpers
+
+    Reusable solutions for common tasks:
+
+    - [Array](array) - array generation and manipulation
+    - [Math](math) - processing numbers, randomness, etc.
+    - [Constant](constant) - useful constants
+    - [Vector](vector) - basics for simulating physical laws
+    - [Helper](helper) - useful unities
+
+    ## [App](app)
+
+    Rendering app to DOM and animating it.
+
+    - [cm.app](app#cm-app) - create a new app
+    - [app.data](app#app-data) - append data to flow
+    - [app.datum](app#app-datum) - append a single datum to flow
+    - [app.append](app#app-append) - append shapes to flow
+    - [app.render](app#app-render) - render shapes to canvas
+    - [app.start](app#app-start) - start the animation
+    - [app.stop](app#app-stop) - stop the animation
+    - [app.dispose](app#app-dispose) - dispose the app
+    - [app.node](app#app-node) - get the canvas element
+    - [app.prop](app#app-prop) - get a property value
+    - [app.on](app#app-on) - add an event listener
+    - [app.call](app#app-call) - call a function
+    - [app.textBBox](app#app-textBBox) - compute text bounding box
+    - [cm.canvas](app#cm-canvas) - create a canvas renderer
+
+    ## [Flow](flow)
+
+    Binding data to shapes.
+
+    - [flow.data](flow#flow-data) - append data to flow
+    - [flow.datum](flow#flow-datum) - append a single datum to flow
+    - [flow.process](flow#flow-process) - process data
+    - [flow.append](flow#flow-append) - append shapes to flow
+    - [flow.transform](flow#flow-transform) - transform shape attributes
+    - [flow.call](flow#flow-call) - call a function
+    - [flow.app](flow#flow-app) - get the app
+
+    ## [Process](process)
+
+    Preparing data to be rendered.
+
+    - [cm.each](process#cm-each) - call a function on each datum
+    - [cm.eachRight](process#cm-eachRight) - call a function on each datum (right to left)
+    - [cm.filter](process#cm-filter) - filter data
+    - [cm.map](process#cm-map) - map data
+    - [cm.derive](process#cm-derive) - derive new fields
+    - [cm.push](process#cm-push) - append datum to flow
+
+    ## [Shape](shape)
+
+    Appending geometric elements to canvas.
+
+    - [cm.point](shape#cm-point) - append dots
+    - [cm.link](shape#cm-link) - append lines
+    - [cm.rect](shape#cm-rect) - append rectangles
+    - [cm.circle](shape#cm-circle) - append circles
+    - [cm.triangle](shape#cm-triangle) - append triangles
+    - [cm.polygon](shape#cm-polygon) - append polygons
+    - [cm.line](shape#cm-line) - append lines
+    - [cm.path](shape#cm-path) - append paths
+    - [cm.text](shape#cm-text) - append text
+    - [cm.group](shape#cm-group) - append groups
+    - [cm.clear](shape#cm-clear) - clear the canvas
+    - [function](shape#cm-composite-shape) - defines a composite shape
+    ## [Transform](transform)
+
+    Deriving shape attribute values.
+
+    - [cm.mapAttrs](transform#cm-mapAttrs) - map attributes with scales
+    - [cm.mapPosition](transform#cm-mapPosition) - map position to visual coordinates
+
+    ## [Scale](scale)
+
+    Mapping abstract data to visual representation.
+
+    - [cm.scaleLinear](scale#cm-scaleLinear) - create a linear scale
+    - [cm.scaleSqrt](scale#cm-scaleSqrt) - create a sqrt scale
+    - [cm.scaleLog](scale#cm-scaleLog) - create a log scale
+    - [cm.scaleOrdinal](scale#cm-scaleOrdinal) - create an ordinal scale
+
+    ## [Event](event)
+
+    Handling hooks and events.
+
+    - [event.update](event#event-update) - fired repeatedly during animation
+    - [event.mouseDown](event#event-mouseDown) - fired when a mouse button is pressed
+    - [event.mouseUp](event#event-mouseUp) - fired when a mouse button is released
+    - [event.mouseClick](event#event-mouseClick) - fired when a mouse button is clicked
+    - [event.beforeEach](event#event-beforeEach) - fired before each update event
+    - [event.afterEach](event#event-afterEach) - fired after each update event
+    - [event.beforeAll](event#event-beforeAll) - fired before app starts
+    - [event.afterAll](event#event-afterAll) - fired after app disposes
+
+    ## [Prop](prop)
+
+    Returning properties of the app.
+
+    - [prop.width](prop#prop-width) - the width of the app
+    - [prop.height](prop#prop-height) - the height of the app
+    - [prop.frameCount](prop#prop-frameCount) - the number of frames displayed
+    - [prop.frameRate](prop#prop-frameRate) - the number of frames per second
+    - [prop.mouseX](prop#prop-mouseX) - the x coordinate of the mouse
+    - [prop.mouseY](prop#prop-mouseY) - the y coordinate of the mouse
+    - [prop.mode](prop#prop-mode) - the rendering mode
+    - [prop.pixelWidth](prop#prop-pixelWidth) - the width in pixels
+    - [prop.pixelHeight](prop#prop-pixelHeight) - the height in pixels
+    - [prop.cellWidth](prop#prop-cellWidth) - the width of cells in pixels
+    - [prop.cellHeight](prop#prop-cellHeight) - the height of cells in pixels
+    - [prop.fontSize](prop#prop-fontSize) - the font size
+    - [prop.fontFamily](prop#prop-fontFamily) - the font family
+    - [prop.fontWeight](prop#prop-fontWeight) - the font weight
+
+    ## [Attribute](attribute)
+
+    Defining attributes for shapes.
+
+    - [cm.rgb](attribute#cm-rgb) - create an RGB color
+    - [cm.hsl](attribute#cm-hsl) - create an HSL color
+    - [cm.constant](attribute#cm-constant) - define a constant attribute
+
+    ## [WebGL](webgl)
+
+    The WebGL renderer and related helpers.
+
+    - [cm.webgl](webgl#cm-webgl) - create a WebGL renderer
+    - [cm.glsl](webgl#cm-glsl) - define a GLSL attribute
+
+    ## [Terminal](terminal)
+
+    The terminal renderer and related helpers.
+
+    - [cm.terminal](terminal#cm-terminal) - create a terminal renderer
+    - [cm.cfb](terminal#cm-cfb) - create a terminal color
+    - [cm.wch](terminal#cm-wch) - mark a wide character
+    - [cm.figlet](terminal#cm-figlet) - create figlet text
+    - [cm.fontStandard](terminal#cm-fontStandard) - get the standard font
+    - [cm.fontGhost](terminal#cm-fontGhost) - get the ghost font
+    - [cm.gradientRainBowX](terminal#cm-gradientRainBowX) - create a vertical rainbow gradient
+    - [cm.gradientSineBowX](terminal#cm-gradientSineBowX) - create a vertical sinebow gradient
+
+    ## [Array](array)
+
+    Array generation and manipulation.
+
+    - [cm.range](array#cm-range) - create an array of uniformly-spaced values
+    - [cm.cross](array#cm-cross) - create the cartesian product
+    - [cm.extent](array#cm-extent) - get the extent
+
+    ## [Math](math)
+
+    Processing numbers, randomness, etc..
+
+    - [cm.clamp](math#cm-clamp) - clamp a value
+    - [cm.random](math#cm-random) - generate a random number
+    - [cm.randomInt](math#cm-randomInt) - generate a random integer
+    - [cm.randomNoise](math#cm-randomNoise) - create a Perlin noise function
+    - [cm.randomNormal](math#cm-randomNormal) - create a normal distribution function
+    - [cm.randomChar](math#cm-randomChar) - generate a random character
+
+    ## [Constant](constant)
+
+    Useful constants.
+
+    - [cm.TWO_PI](constant#cm-two-pi) - 2π
+
+    ## [Vector](vector)
+
+    Basics for simulating physical laws.
+
+    - [cm.vec](vector#cm-vec) - create a vector
+    - [cm.vecFromAngle](vector#cm-vecFromAngle) - create a vector from angle
+    - [cm.vecAdd](vector#cm-vecAdd) - add vectors
+    - [cm.vecAngle](vector#cm-vecAngle) - compute the angle
+    - [cm.vecClamp](vector#cm-vecClamp) - constrain the magnitude
+    - [cm.vecClampX](vector#cm-vecClampX) - constrain the x component
+    - [cm.vecClampY](vector#cm-vecClampY) - constrain the y component
+    - [cm.vecCross](vector#cm-vecCross) - compute the cross product
+    - [cm.vecDist](vector#cm-vecDist) - compute the distance
+    - [cm.vecDist2](vector#cm-vecDist2) - compute the square distance
+    - [cm.vecDiv](vector#cm-vecDiv) - divide by value
+    - [cm.vecDot](vector#cm-vecDot) - compute the dot product
+    - [cm.vecInX](vector#cm-vecInX) - check if x is in range
+    - [cm.vecInY](vector#cm-vecInY) - check if y is in range
+    - [cm.vecMag](vector#cm-vecMag) - compute the magnitude
+    - [cm.vecMult](vector#cm-vecMult) - multiply by value
+    - [cm.vecNeg](vector#cm-vecNeg) - negate the vector
+    - [cm.vecNegX](vector#cm-vecNegX) - negate the x component
+    - [cm.vecNegY](vector#cm-vecNegY) - negate the y component
+    - [cm.vecNorm](vector#cm-vecNorm) - normalize the vector
+    - [cm.vecRandom](vector#cm-vecRandom) - create a random unit vector
+    - [cm.vecSub](vector#cm-vecSub) - subtract vectors
+    - [vec.clone](vector#vec-clone) - clone the vector
+    - [vec.add](vector#vec-add) - add to target vector
+    - [vec.angle](vector#vec-angle) - compute the angle
+    - [vec.clamp](vector#vec-clamp) - constrain the magnitude
+    - [vec.clampX](vector#vec-clampX) - constrain the x component
+    - [vec.clampY](vector#vec-clampY) - constrain the y component
+    - [vec.cross](vector#vec-cross) - compute the cross product
+    - [vec.dist](vector#vec-dist) - compute the distance
+    - [vec.dist2](vector#vec-dist2) - compute the square distance
+    - [vec.div](vector#vec-div) - divide by value
+    - [vec.dot](vector#vec-dot) - compute the dot product
+    - [vec.inX](vector#vec-inX) - check if x is in range
+    - [vec.inY](vector#vec-inY) - check if y is in range
+    - [vec.mag](vector#vec-mag) - compute the magnitude
+    - [vec.mult](vector#vec-mult) - multiply by value
+    - [vec.neg](vector#vec-neg) - negate the vector
+    - [vec.negX](vector#vec-negX) - negate the x component
+    - [vec.negY](vector#vec-negY) - negate the y component
+    - [vec.norm](vector#vec-norm) - normalize the vector
+    - [vec.set](vector#vec-set) - set from source vector
+    - [vec.setX](vector#vec-setX) - set the x component
+    - [vec.setY](vector#vec-setY) - set the y component
+    - [vec.sub](vector#vec-sub) - subtract from target vector
+
+    ## [Helper](helper)
+
+    Useful unities.
+
+    - [cm.pathContext](helper#cm-pathContext) - create a path generator
+    - [pathContext.toArray](helper#pathContext-toArray) - get the array of path commands
+
+  </script>
+</notebook>

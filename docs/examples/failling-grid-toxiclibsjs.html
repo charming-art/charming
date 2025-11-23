@@ -1,0 +1,83 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Failling Grid, Toxiclibsjs</title>
+  <script id="0" type="text/markdown">
+    # Failling Grid, Toxiclibsjs
+  </script>
+  <script id="11" type="module">
+    const replay = view(Inputs.button("Replay"));
+  </script>
+  <script id="8" type="module" pinned="">
+    replay;
+
+    const { physics2d, geom } = tox;
+    const { Vec2D } = geom;
+    const { VerletPhysics2D, VerletParticle2D, VerletSpring2D } = physics2d;
+    const { GravityBehavior } = physics2d.behaviors;
+
+    const width = 640;
+    const height = 240;
+    const cols = 65;
+    const rows = 20;
+    const w = width / (cols - 1);
+    const x = (i) => i % cols;
+    const y = (i) => (i / cols) | 0;
+
+    const world = new VerletPhysics2D();
+
+    const gravity = new GravityBehavior(new Vec2D(0, 1));
+    world.addBehavior(gravity);
+
+    const particles = cm.range(cols * rows).map((i) => {
+      const m = x(i);
+      const n = y(i);
+      const particle = new VerletParticle2D(m * w, 0);
+      if (m % 4 === 0 && n === 0) particle.lock();
+      world.addParticle(particle);
+      return particle;
+    });
+
+    const springs = particles.flatMap((d, i, array) => {
+      const S = [];
+      const m = x(i);
+      const n = y(i);
+      if (m !== cols - 1) {
+        const d1 = array[i + 1];
+        const s1 = new VerletSpring2D(d, d1, w, 0.25);
+        S.push(s1);
+        world.addSpring(s1);
+      }
+      if (n !== rows - 1) {
+        const d2 = array[i + cols];
+        const s2 = new VerletSpring2D(d, d2, w, 0.25);
+        S.push(s2);
+        world.addSpring(s2);
+      }
+      return S;
+    });
+
+    function update(app) {
+      world.update();
+      app.append(cm.clear, { fill: "#fff" });
+      app.data(springs).append(cm.link, {
+        x: (d) => d.a.x,
+        y: (d) => d.a.y,
+        x1: (d) => d.b.x,
+        y1: (d) => d.b.y,
+        stroke: cm.rgb(0),
+        strokeWidth: 2,
+      });
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm.app({ width, height }).on("update", update).call(dispose).start().node();
+
+    display(node);
+  </script>
+  <script id="22" type="module" pinned="">
+    tox = require(await FileAttachment("toxiclibsjs.min.js").url());
+  </script>
+</notebook>

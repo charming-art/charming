@@ -33,6 +33,9 @@
     "build": "npm run build:rust && npm run build:js",
     "build:js": "rm -rf dist && rollup -c",
     "build:rust": "rm -rf ./src/backend && wasm-pack build ./rust --out-dir ../src/backend --out-name index --target web",
+    "docs:dist": "mkdir -p docs/dist && cp dist/cm.umd.min.js docs/dist/",
+    "docs:preview": "notebooks preview --root docs --template docs/custom.tmpl",
+    "docs:build": "npm run build && npm run docs:dist && notebooks build --root docs --template docs/custom.tmpl -- docs/*.html docs/**/*.html",
     "preview": "npm run build && vite preview",
     "prepublishOnly": "npm run build"
   },
@@ -58,6 +61,10 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.2.8",
+    "@fontsource/source-serif-4": "^5.2.9",
+    "@fontsource/spline-sans-mono": "^5.2.8",
+    "@observablehq/notebook-kit": "^1.5.0",
     "d3-color": "^3.1.0",
     "d3-path": "^3.1.0",
     "d3-scale-chromatic": "^3.0.0",

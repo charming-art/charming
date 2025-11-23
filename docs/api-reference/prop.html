@@ -1,0 +1,152 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Prop</title>
+  <script id="0" type="text/markdown">
+    # Prop
+    
+    Returning properties of the app.
+    
+    ## _app_.**prop**(_"width"_)
+    
+    If the renderer is not terminal, returns the width of this app in pixel.
+    
+    ```js
+    const app = cm.app();
+    app.prop("width"); // 640;
+    ```
+    
+    If the renderer is [terminal](#cm-terminal), returns the width of this app in cell.
+    
+    ```js
+    const app = cm.app({ renderer: await cm.terminal() });
+    app.prop("width"); // 71
+    ```
+    
+    ## _app_.**prop**(_"height"_)
+    
+    If the renderer is not [terminal](#cm-terminal), returns the height of this app in pixel.
+    
+    ```js
+    const app = cm.app();
+    app.prop("height"); // 480;
+    ```
+    
+    If the renderer is [terminal](#cm-terminal), returns the height of this app in cell.
+    
+    ```js
+    const app = cm.app({ renderer: await cm.terminal() });
+    app.prop("height"); // 26
+    ```
+    
+    ## _app_.**prop**(_"frameCount"_)
+    
+    Returns the number of frames that have been displayed since this app started. For example, to draw a moving rect:
+    
+    ```js
+    app.on("update", () =>
+      app.append(cm.rect, {
+        x: app.frameCount(),
+        y: 0,
+        width: 10,
+        height: 10,
+      }),
+    );
+    ```
+    
+    ## _app_.**prop**(_"frameCount"_)
+    
+    Returns the number of frames to be displayed per second.
+    
+    ```js
+    app.prop("frameRate"); // 60
+    ```
+    
+    ## _app_.**prop**(_"mouseX"_)
+    
+    Returns the x coordinate of the mouse position.
+    
+    ```js
+    app.prop("mouseX"); // 0
+    ```
+    
+    ## _app_.**prop**(_"mouseY"_)
+    
+    Returns the y coordinate of the mouse position.
+    
+    ```js
+    app.prop("mouseY"); // 0
+    ```
+    
+    ## _app_.**prop**(_"mode"_)
+    
+    Returns the rendering mode of this app, which is only for app with a [terminal](#cm-terminal) renderer.
+    
+    ```js
+    const app = cm.app({ renderer: await cm.terminal() });
+    app.prop("mode"); // "single"
+    ```
+    
+    ## _app_.**prop**(_"pixelWidth"_)
+    
+    Returns the computed width of this app in pixel, which is only for app with a [terminal](#cm-terminal) renderer.
+    
+    ```js
+    const app = cm.app({ renderer: await cm.terminal() });
+    app.prop("pixelWidth"); // 639
+    ```
+    
+    ## _app_.**prop**(_"pixelHeight"_)
+    
+    Returns the computed height of this app in pixel, which is only for app with a [terminal](#cm-terminal) renderer.
+    
+    ```js
+    const app = cm.app({ renderer: await cm.terminal() });
+    app.prop("pixelHeight"); // 468;
+    ```
+    
+    ## _app_.**prop**(_"cellWidth"_)
+    
+    Returns the computed width of the cells in pixel, which is only for app with a [terminal](#cm-terminal) renderer.
+    
+    ```js
+    const app = cm.app({ renderer: await cm.terminal() });
+    app.prop("cellWidth"); // 9
+    ```
+    
+    ## _app_.**prop**(_"cellHeight"_)
+    
+    Returns the computed height of the cells in pixel, which is only for app with a [terminal](#cm-terminal) renderer.
+    
+    ```js
+    const app = cm.app({ renderer: await cm.terminal() });
+    app.prop("cellHeight"); // 18
+    ```
+    
+    ## _app_.**prop**(_"fontSize"_)
+    
+    Returns the font size used to render text, which is only for app with a [terminal](#cm-terminal) renderer.
+    
+    ```js
+    const app = cm.app({ renderer: await cm.terminal() });
+    app.prop("fontSize"); // 15
+    ```
+    
+    ## _app_.**prop**(_"fontFamily"_)
+    
+    Returns the font family used to render text, which is only for app with a [terminal](#cm-terminal) renderer.
+    
+    ```js
+    const app = cm.app({ renderer: await cm.terminal() });
+    app.prop("fontFamily"); // "courier-new, courier, monospace"
+    ```
+    
+    ## _app_.**prop**(_"fontWeight"_)
+    
+    Returns the font weight used to render text, which is only for app with a [terminal](#cm-terminal) renderer.
+    
+    ```js
+    const app = cm.app({ renderer: await cm.terminal() });
+    app.prop("fontWeight"); // "normal"
+    ```
+  </script>
+</notebook>

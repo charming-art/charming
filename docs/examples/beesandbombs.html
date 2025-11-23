@@ -1,0 +1,58 @@
+<!doctype html>
+<notebook theme="air">
+  <title>Beesandbombs</title>
+  <script id="0" type="text/markdown">
+    # Beesandbombs
+
+    Ref. https://observablehq.com/d/a741f9a27e8c0e73
+  </script>
+  <script id="7" type="module" pinned>
+    const radius = 12;
+    const data = cm.cross(cm.range(20, -1, 1), cm.range(20, -1, 1));
+    const circle = d3.geoCircle()();
+    const projection = d3.geoOrthographic().translate([0, 0]).scale(radius);
+    const path = d3.geoPath(projection);
+
+    function update(app) {
+      app.append(cm.clear, { fill: cm.rgb(255) });
+
+      app
+        .data(data)
+        .append(cm.circle, {
+          x: (d) => d[0],
+          y: (d) => d[1],
+          r: radius,
+          fill: "white",
+          stroke: "black",
+          strokeWidth: 1.5,
+        })
+        .transform(cm.mapPosition, { padding: 20 });
+
+      app
+        .data(data)
+        .append(cm.path, {
+          x: (d) => d[0],
+          y: (d) => d[1],
+          fill: "black",
+          d: (d) => {
+            const [x, y] = d;
+            const now = app.prop("frameCount") / 100;
+            const l = ((Math.hypot(x, y) + Math.atan2(y, x) / (Math.PI * 2) - now) % 1) * -360;
+            projection.rotate([0, l, -l]);
+            const context = cm.pathContext();
+            path.context(context)(circle);
+            return context.toArray();
+          },
+        })
+        .transform(cm.mapPosition, { padding: 20 });
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm.app({ width: 640, height: 640 }).on("update", update).call(dispose).start().node();
+
+    display(node);
+  </script>
+</notebook>
