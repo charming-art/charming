@@ -287,7 +287,7 @@
   <script id="62" type="text/markdown">
     In addition to simple composite shapes, Charming can also define complex shapes, [for example](https://observablehq.com/@pearmini/bar), to define and use a barY shape to plot a bar chart. This greatly enhances the extensibility of Charming, making it easy to build its ecosystem.
   </script>
-  <script id="68" type="application/vnd.observable.javascript" pinned="">
+  <script id="68" type="application/vnd.observable.javascript" pinned>
     {
       const app = cm.app({ width: 928, height: 500 });
 
@@ -393,13 +393,119 @@
         });
     }
   </script>
-  <script id="64" type="application/vnd.observable.javascript">
-    import { barY } from "@pearmini/bar"
+  <script id="64" type="application/vnd.observable.javascript" pinned="">
+    function barY(
+      flow,
+      {
+        x,
+        y,
+        fill = "steelblue",
+        marginLeft = 40,
+        marginTop = 30,
+        marginRight = 0,
+        marginBottom = 30,
+        ...rest
+      }
+    ) {
+      const app = flow.app();
+      const [data] = flow.data();
+      const width = app.prop("width");
+      const height = app.prop("height");
+
+      const scaleX = d3
+        .scaleBand(Array.from(new Set(x)), [marginLeft, width - marginRight])
+        .padding(0.1);
+
+      const scaleY = d3.scaleLinear(
+        [0, d3.max(y)],
+        [height - marginBottom, marginTop]
+      );
+
+      const I = d3.range(data.length);
+      const X = x.map(scaleX);
+      const Y = y.map(scaleY);
+
+      flow.data(I).append(cm.rect, {
+        x: (i) => X[i],
+        y: (i) => Y[i],
+        width: scaleX.bandwidth(),
+        height: (i) => scaleY(0) - Y[i],
+        fill,
+        ...rest
+      });
+
+      flow
+        .datum(0)
+        .append(cm.group, { x: 0, y: height - marginBottom })
+        .call(axisX, { scale: scaleX });
+
+      flow
+        .datum(0)
+        .append(cm.group, { x: marginLeft, y: 0 })
+        .call(axisY, { scale: scaleY });
+    }
+    
+  </script>
+  <script id="73" type="application/vnd.observable.javascript" pinned="">
+    function axisY(flow, { scale }) {
+      const range = scale.range();
+      const ticks = scale.ticks();
+      const tickY = (d) => scale(d);
+    
+      flow.data(ticks).append(cm.link, {
+        x: 0,
+        y: tickY,
+        x1: -4,
+        y1: tickY,
+        stroke: "#000"
+      });
+    
+      flow.data(ticks).append(cm.text, {
+        text: (d) => d,
+        x: -6,
+        y: tickY,
+        stroke: "#000",
+        textAlign: "end",
+        textBaseline: "middle"
+      });
+    }
+  </script>
+  <script id="74" type="application/vnd.observable.javascript" pinned="">
+    function axisX(flow, { scale }) {
+      const range = scale.range();
+      const ticks = scale.domain();
+      const tickX = (d) => scale(d) + scale.bandwidth() / 2;
+    
+      flow.append(cm.link, {
+        x: range[0],
+        y: 0,
+        x1: range[1],
+        y1: 0,
+        stroke: "#000"
+      });
+    
+      flow.data(ticks).append(cm.link, {
+        x: tickX,
+        y: 0,
+        x1: tickX,
+        y1: 4,
+        stroke: "#000"
+      });
+    
+      flow.data(ticks).append(cm.text, {
+        text: (d) => d,
+        x: tickX,
+        y: 6,
+        stroke: "#000",
+        textAlign: "center",
+        textBaseline: "top"
+      });
+    }
   </script>
   <script id="75" type="application/vnd.observable.javascript">
     import { stats } from "@pearmini/charming-stats"
   </script>
-  <script id="23" type="application/vnd.observable.javascript">
+  <script id="23" type="application/vnd.observable.javascript" hidden>
     function toc(
       selector = "h1,h2,h3",
       heading = "<b>Table of Contents</b>",
@@ -428,8 +534,5 @@
         return () => observer.disconnect();
       });
     }
-  </script>
-  <script id="44" type="application/vnd.observable.javascript">
-    cm = require("@charming-art/charming@0.0.6")
   </script>
 </notebook>
