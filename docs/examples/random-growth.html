@@ -3,43 +3,37 @@
   <title>Random Growth</title>
   <script id="0" type="text/markdown">
     # Random Growth
-
   </script>
-  <script id="15" type="application/vnd.observable.javascript">
-    viewof replay = Inputs.button("Replay")
+  <script id="15" type="module">
+    const replay = view(Inputs.button("Replay"));
   </script>
-  <script id="8" type="application/vnd.observable.javascript" pinned="">
-    {
-      replay;
+  <script id="8" type="module" pinned="">
+    replay;
 
-      const width = 600,
-        height = 200,
-        N = cm.range(15).map(() => 0),
-        step = width / N.length;
+    const width = 600,
+      height = 200,
+      N = cm.range(15).map(() => 0),
+      step = width / N.length;
 
-      function update(app) {
-        const index = cm.random(N.length) | 0;
-        N[index] += 1;
-        app.data(N).append(cm.rect, {
-          x: (_, i) => i * step,
-          y: (d) => app.prop("height") - d,
-          width: step - 2,
-          height: (d) => d,
-          fill: cm.rgb(127),
-          stroke: "black"
-        });
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      return cm
-        .app({ width, height })
-        .on("update", update)
-        .call(dispose)
-        .start()
-        .node();
+    function update(app) {
+      const index = cm.random(N.length) | 0;
+      N[index] += 1;
+      app.data(N).append(cm.rect, {
+        x: (_, i) => i * step,
+        y: (d) => app.prop("height") - d,
+        width: step - 2,
+        height: (d) => d,
+        fill: cm.rgb(127),
+        stroke: "black",
+      });
     }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm.app({ width, height }).on("update", update).call(dispose).start().node();
+
+    display(node);
   </script>
-  </notebook>
+</notebook>

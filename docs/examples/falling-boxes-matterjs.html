@@ -3,49 +3,43 @@
   <title>Falling Boxes, Matter.js</title>
   <script id="0" type="text/markdown">
     # Falling Boxes, Matter.js
-
   </script>
-  <script id="30" type="application/vnd.observable.javascript">
-    viewof replay = Inputs.button("Replay")
+  <script id="30" type="module">
+    const replay = view(Inputs.button("Replay"));
   </script>
-  <script id="10" type="application/vnd.observable.javascript" pinned="">
-    {
-      replay;
+  <script id="10" type="module" pinned="">
+    replay;
 
-      const w = 600,
-        h = 200,
-        engine = matter.Engine.create(),
-        boxes = [],
-        boundaries = [
-          createBoundary(engine.world, w / 4, h - 5, w / 2 - 50, 10),
-          createBoundary(engine.world, (3 * w) / 4, h - 50, w / 2 - 50, 10)
-        ];
+    const w = 600,
+      h = 200,
+      engine = matter.Engine.create(),
+      boxes = [],
+      boundaries = [
+        createBoundary(engine.world, w / 4, h - 5, w / 2 - 50, 10),
+        createBoundary(engine.world, (3 * w) / 4, h - 50, w / 2 - 50, 10),
+      ];
 
-      function update(app) {
-        if (cm.random(1) < 0.1) boxes.push(createBox(engine.world, w / 2, 50));
+    function update(app) {
+      if (cm.random(1) < 0.1) boxes.push(createBox(engine.world, w / 2, 50));
 
-        app.append(cm.clear, { fill: "#fff" });
+      app.append(cm.clear, { fill: "#fff" });
 
-        app.data(boxes).process(cm.eachRight, checkBox).call(appendMatterRect);
+      app.data(boxes).process(cm.eachRight, checkBox).call(appendMatterRect);
 
-        app.data(boundaries).call(appendMatterRect);
+      app.data(boundaries).call(appendMatterRect);
 
-        matter.Engine.update(engine);
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      return cm
-        .app({ width: w, height: h })
-        .on("update", update)
-        .call(dispose)
-        .start()
-        .node();
+      matter.Engine.update(engine);
     }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm.app({ width: w, height: h }).on("update", update).call(dispose).start().node();
+
+    display(node);
   </script>
-  <script id="34" type="application/vnd.observable.javascript" pinned="">
+  <script id="34" type="module" pinned="">
     function appendMatterRect(flow, options) {
       flow.append(cm.rect, {
         x: (d) => d.body.position.x,
@@ -57,18 +51,18 @@
         stroke: cm.rgb(0),
         strokeWeight: 2,
         anchor: "center",
-        ...options
+        ...options,
       });
     }
   </script>
-  <script id="12" type="application/vnd.observable.javascript" pinned="">
+  <script id="12" type="module" pinned="">
     function createBoundary(parent, x, y, width, height) {
       const body = matter.Bodies.rectangle(x, y, width, height, { isStatic: true });
       matter.Composite.add(parent, body);
       return { body, width, height };
     }
   </script>
-  <script id="14" type="application/vnd.observable.javascript" pinned="">
+  <script id="14" type="module" pinned="">
     function createBox(parent, x, y) {
       const width = cm.random(8, 16);
       const height = cm.random(8, 16);
@@ -79,7 +73,7 @@
       return { body, width, height };
     }
   </script>
-  <script id="16" type="application/vnd.observable.javascript" pinned="">
+  <script id="16" type="module" pinned="">
     function checkBox(d, i, array, flow) {
       const { body } = d;
       const app = flow.app();
@@ -89,7 +83,7 @@
       }
     }
   </script>
-  <script id="5" type="application/vnd.observable.javascript" pinned="">
-    matter = require("matter-js")
+  <script id="5" type="module" pinned="">
+    matter = require("matter-js");
   </script>
-  </notebook>
+</notebook>

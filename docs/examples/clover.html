@@ -3,28 +3,27 @@
   <title>Clover 🌟</title>
   <script id="0" type="text/markdown">
     # Clover 🌟
-
   </script>
-  <script id="6" type="application/vnd.observable.javascript" pinned="">
-    {
-      const app = cm.app({
-        mode: "double",
-        renderer: await cm.terminal()
+  <script id="6" type="module" pinned="">
+    const app = cm.app({
+      mode: "double",
+      renderer: await cm.terminal(),
+    });
+
+    app
+      .data(cm.range(240, 0, Math.PI * 2))
+      .append(cm.group, {
+        x: app.prop("width") / 2,
+        y: app.prop("height") / 2,
+      })
+      .append(cm.point, {
+        x: (t) => 10 * Math.cos(t) * Math.cos(t * 3),
+        y: (t) => 10 * Math.sin(t) * Math.cos(t * 3),
+        stroke: cm.cfb(cm.wch("🌟")),
       });
 
-      app
-        .data(cm.range(240, 0, Math.PI * 2))
-        .append(cm.group, {
-          x: app.prop("width") / 2,
-          y: app.prop("height") / 2
-        })
-        .append(cm.point, {
-          x: (t) => 10 * Math.cos(t) * Math.cos(t * 3),
-          y: (t) => 10 * Math.sin(t) * Math.cos(t * 3),
-          stroke: cm.cfb(cm.wch("🌟"))
-        });
+    const node = app.render().node();
 
-      return app.render().node();
-    }
+    display(node);
   </script>
-  </notebook>
+</notebook>

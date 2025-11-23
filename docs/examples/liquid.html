@@ -3,77 +3,70 @@
   <title>Liquid</title>
   <script id="0" type="text/markdown">
     # Liquid
-
   </script>
-  <script id="11" type="application/vnd.observable.javascript">
-    viewof replay = Inputs.button("Replay")
+  <script id="11" type="module">
+    const replay = view(Inputs.button("Replay"));
   </script>
-  <script id="8" type="application/vnd.observable.javascript" pinned="">
-    {
-      replay;
+  <script id="8" type="module" pinned="">
+    replay;
 
-      const width = 600,
-        height = 200,
-        liquid = { x: 0, y: height / 2, width, height: height / 2, c: 0.1 },
-        movers = cm.range(25).map(() =>
-          object({
-            location: cm.vec(cm.random(0, width), 0),
-            velocity: cm.vec(),
-            acceleration: cm.vec(),
-            mass: cm.random(1, 5)
-          })
-        ),
-        applyGravity = force((d) => cm.vec(0, 0.1).mult(d.mass)),
-        applyDrag = force((d) => {
-          const { x, y, height, width, c } = liquid;
-          if (!d.location.inX(x, x + width)) return;
-          if (!d.location.inY(y, y + height)) return;
-          const v = d.velocity.mag();
-          const mag = c * v * v;
-          return cm.vecNeg(d.velocity).mag(mag);
+    const width = 600,
+      height = 200,
+      liquid = { x: 0, y: height / 2, width, height: height / 2, c: 0.1 },
+      movers = cm.range(25).map(() =>
+        object({
+          location: cm.vec(cm.random(0, width), 0),
+          velocity: cm.vec(),
+          acceleration: cm.vec(),
+          mass: cm.random(1, 5),
+        }),
+      ),
+      applyGravity = force((d) => cm.vec(0, 0.1).mult(d.mass)),
+      applyDrag = force((d) => {
+        const { x, y, height, width, c } = liquid;
+        if (!d.location.inX(x, x + width)) return;
+        if (!d.location.inY(y, y + height)) return;
+        const v = d.velocity.mag();
+        const mag = c * v * v;
+        return cm.vecNeg(d.velocity).mag(mag);
+      });
+
+    function update(app) {
+      app.append(cm.clear, { fill: cm.rgb(255) });
+
+      app.append(cm.rect, { ...liquid, fill: cm.rgb(175) });
+
+      app
+        .data(movers)
+        .process(cm.each, applyGravity)
+        .process(cm.each, applyDrag)
+        .process(cm.each, move)
+        .process(cm.each, collision)
+        .append(cm.circle, {
+          x: (d) => d.location.x,
+          y: (d) => d.location.y,
+          fill: "rgba(175, 175, 175, 0.5)",
+          stroke: cm.rgb(0),
+          r: (d) => d.mass,
+        })
+        .transform(cm.mapAttrs, {
+          r: { scale: cm.scaleSqrt, range: [2, 20] },
         });
-
-      function update(app) {
-        app.append(cm.clear, { fill: cm.rgb(255) });
-
-        app.append(cm.rect, { ...liquid, fill: cm.rgb(175) });
-
-        app
-          .data(movers)
-          .process(cm.each, applyGravity)
-          .process(cm.each, applyDrag)
-          .process(cm.each, move)
-          .process(cm.each, collision)
-          .append(cm.circle, {
-            x: (d) => d.location.x,
-            y: (d) => d.location.y,
-            fill: "rgba(175, 175, 175, 0.5)",
-            stroke: cm.rgb(0),
-            r: (d) => d.mass
-          })
-          .transform(cm.mapAttrs, {
-            r: { scale: cm.scaleSqrt, range: [2, 20] }
-          });
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      function frame(app) {
-        app.node().style.border = "solid #000 1px";
-      }
-
-      return cm
-        .app({ width, height })
-        .on("update", update)
-        .call(dispose)
-        .call(frame)
-        .start()
-        .node();
     }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    function frame(app) {
+      app.node().style.border = "solid #000 1px";
+    }
+
+    const node = cm.app({ width, height }).on("update", update).call(dispose).call(frame).start().node();
+
+    display(node);
   </script>
-  <script id="20" type="application/vnd.observable.javascript" pinned="">
+  <script id="20" type="module" pinned="">
     function object(options) {
       return {
         location: cm.vec(),
@@ -83,11 +76,11 @@
         aVelocity: 0,
         aAcceleration: 0,
         rotation: 0,
-        ...options
+        ...options,
       };
     }
   </script>
-  <script id="22" type="application/vnd.observable.javascript" pinned="">
+  <script id="22" type="module" pinned="">
     function force(d) {
       const callback = typeof d === "function" ? d : () => d;
       return (d, ...params) => {
@@ -98,14 +91,14 @@
       };
     }
   </script>
-  <script id="25" type="application/vnd.observable.javascript" pinned="">
+  <script id="25" type="module" pinned="">
     function move(d) {
       d.velocity.add(d.acceleration);
       d.location.add(d.velocity);
       d.acceleration.mult(0);
     }
   </script>
-  <script id="27" type="application/vnd.observable.javascript" pinned="">
+  <script id="27" type="module" pinned="">
     function collision(d, i, _, flow) {
       const app = flow.app();
       if (!d.location.inX(app.prop("width"))) {
@@ -118,4 +111,4 @@
       }
     }
   </script>
-  </notebook>
+</notebook>

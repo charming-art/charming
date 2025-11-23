@@ -8,7 +8,7 @@
     - Twitter: https://twitter.com/subairui/status/1748588843677401190
     - Prompt: https://genuary.art/prompts#jan18
 
-    Fills a grid with random shapes colored by patterns. The layout algorithm is implemented by [Claudio Esperança](https://observablehq.com/@esperanc/random-shapes-in-a-grid). The patterns is from Émile Cheysson’s palettes in *Album de Statistique Graphique*, as [implemented by Tom Shanley](/@tomshanley/cheysson-color-palettes).
+    Fills a grid with random shapes colored by patterns. The layout algorithm is implemented by [Claudio Esperança](https://observablehq.com/@esperanc/random-shapes-in-a-grid). The patterns is from Émile Cheysson’s palettes in _Album de Statistique Graphique_, as [implemented by Tom Shanley](/@tomshanley/cheysson-color-palettes).
   </script>
   <script id="318" type="application/vnd.observable.javascript">
     // From https://observablehq.com/@tomshanley/cheysson-color-palettes
@@ -128,60 +128,60 @@
       }
     }
   </script>
-  <script id="401" type="application/vnd.observable.javascript">
-    viewof background = Inputs.color({ label: "Background Color", value: "#f9ece3" })
+  <script id="401" type="module">
+    const background = view(Inputs.color({ label: "Background Color", value: "#f9ece3" }));
   </script>
-  <script id="82" type="application/vnd.observable.javascript">
-    viewof regenerate = Inputs.button("Regenerate")
+  <script id="82" type="module">
+    const regenerate = view(Inputs.button("Regenerate"));
   </script>
-  <script id="7" type="application/vnd.observable.javascript" pinned="">
-    {
-      regenerate;
+  <script id="7" type="module" pinned="">
+    regenerate;
 
-      const width = 640,
-        height = 640,
-        cols = 8,
-        rows = 8,
-        margin = 5,
-        cellWidth = width / cols,
-        cellHeight = height / rows,
-        squares = fillWithSquares(cols, rows),
-        colors = await patterns(palettes[selectPalette]),
-        shapes = [rect, circle, diamond, x],
-        n = colors.length,
-        m = shapes.length;
+    const width = 640,
+      height = 640,
+      cols = 8,
+      rows = 8,
+      margin = 5,
+      cellWidth = width / cols,
+      cellHeight = height / rows,
+      squares = fillWithSquares(cols, rows),
+      colors = await patterns(palettes[selectPalette]),
+      shapes = [rect, circle, diamond, x],
+      n = colors.length,
+      m = shapes.length;
 
-      function draw(app) {
-        app.append(cm.clear, { fill: background });
+    function draw(app) {
+      app.append(cm.clear, { fill: background });
 
-        app
-          .data(squares)
-          .append(cm.group, {
-            x: (d) => d.col * cellWidth + margin,
-            y: (d) => d.row * cellHeight + margin
-          })
-          .append(cm.path, {
-            d: (d) => {
-              const size = d.size * cellWidth - margin * 2;
-              const path = shapes[cm.randomInt(0, m)];
-              const ctx = cm.pathContext();
-              path(ctx, 0, 0, size, size);
-              return ctx.toArray();
-            },
-            fill: (d) => colors[cm.randomInt(0, n)],
-            stroke: "black",
-            strokeWidth: 2
-          });
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      return cm.app({ width, height }).call(draw).call(dispose).start().node();
+      app
+        .data(squares)
+        .append(cm.group, {
+          x: (d) => d.col * cellWidth + margin,
+          y: (d) => d.row * cellHeight + margin,
+        })
+        .append(cm.path, {
+          d: (d) => {
+            const size = d.size * cellWidth - margin * 2;
+            const path = shapes[cm.randomInt(0, m)];
+            const ctx = cm.pathContext();
+            path(ctx, 0, 0, size, size);
+            return ctx.toArray();
+          },
+          fill: (d) => colors[cm.randomInt(0, n)],
+          stroke: "black",
+          strokeWidth: 2,
+        });
     }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm.app({ width, height }).call(draw).call(dispose).start().node();
+
+    display(node);
   </script>
-  <script id="376" type="application/vnd.observable.javascript" pinned="">
+  <script id="376" type="module" pinned="">
     function rect(ctx, x, y, size) {
       ctx.moveTo(x, y);
       ctx.lineTo(x + size, y);
@@ -190,12 +190,12 @@
       ctx.closePath();
     }
   </script>
-  <script id="384" type="application/vnd.observable.javascript" pinned="">
+  <script id="384" type="module" pinned="">
     function circle(ctx, x, y, size) {
       ctx.arc(x + size / 2, y + size / 2, size / 2, 0, Math.PI * 2);
     }
   </script>
-  <script id="388" type="application/vnd.observable.javascript" pinned="">
+  <script id="388" type="module" pinned="">
     function diamond(ctx, x, y, size) {
       ctx.moveTo(x + size / 2, y);
       ctx.lineTo(x, y + size / 2);
@@ -204,7 +204,7 @@
       ctx.closePath();
     }
   </script>
-  <script id="392" type="application/vnd.observable.javascript" pinned="">
+  <script id="392" type="module" pinned="">
     function x(ctx, x, y, size) {
       const b = size / 2;
       const a = b / 2;
@@ -223,15 +223,13 @@
       ctx.closePath();
     }
   </script>
-  <script id="353" type="application/vnd.observable.javascript" pinned="">
+  <script id="353" type="module" pinned="">
     function patterns(palette) {
-      const patternElements = palette.patterns
-        .replace(/\r?\n(?!<pattern)/g, "")
-        .split(/\n/g);
+      const patternElements = palette.patterns.replace(/\r?\n(?!<pattern)/g, "").split(/\n/g);
       return Promise.all(patternElements.map(pattern));
     }
   </script>
-  <script id="307" type="application/vnd.observable.javascript" pinned="">
+  <script id="307" type="module" pinned="">
     function pattern(patternElement) {
       const id = patternElement.match(/id="([^"]+)"/)[1];
       const width = patternElement.match(/width="([^"]+)"/)[1] ?? 100;
@@ -240,9 +238,7 @@
       const context = canvas.getContext("2d");
       const image = new Image();
       const svgContent = `
-        <svg width="${width * 2}" height="${
-        height * 2
-      }" xmlns="http://www.w3.org/2000/svg" transform="scale(2, 2)">
+        <svg width="${width * 2}" height="${height * 2}" xmlns="http://www.w3.org/2000/svg" transform="scale(2, 2)">
             ${patternElement}
             <rect x="0" fill="url(#${id})" width="100%" height="100%"/>
         </svg>`;
@@ -257,7 +253,7 @@
       });
     }
   </script>
-  <script id="309" type="application/vnd.observable.javascript" pinned="">
+  <script id="309" type="module" pinned="">
     function createMatrix(scale, rotation = 0) {
       const radian = (rotation * Math.PI) / 180;
       const matrix = {
@@ -266,15 +262,15 @@
         c: -Math.sin(radian) * scale,
         d: Math.cos(radian) * scale,
         e: 0,
-        f: 0
+        f: 0,
       };
       return matrix;
     }
   </script>
-  <script id="272" type="application/vnd.observable.javascript" pinned="">
-    import { fillWithSquares } from "@esperanc/random-shapes-in-a-grid"
+  <script id="272" type="module" pinned="">
+    import { fillWithSquares } from "@esperanc/random-shapes-in-a-grid";
   </script>
-  <script id="286" type="application/vnd.observable.javascript" pinned="">
-    import { palettes } from "@tomshanley/cheysson-color-palettes"
+  <script id="286" type="module" pinned="">
+    import { palettes } from "@tomshanley/cheysson-color-palettes";
   </script>
-  </notebook>
+</notebook>

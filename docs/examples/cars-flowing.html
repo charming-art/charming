@@ -3,90 +3,89 @@
   <title>Car Flowing</title>
   <script id="0" type="text/markdown">
     # Car Flowing
-
   </script>
-  <script id="5" type="application/vnd.observable.javascript" pinned="">
-    {
-      const width = 600,
-        height = 200,
-        size = 20,
-        cols = Math.floor(width / size),
-        rows = Math.floor(height / size),
-        fields = cm.cross(cm.range(cols), cm.range(rows)),
-        values = cm.range(cols * rows),
-        auto = createAuto(values, cols, rows, size),
-        cars = cm.range(120).map(() =>
-          object({
-            location: cm.vec(cm.random(width), cm.random(height)),
-            velocity: cm.vec(),
-            r: 4,
-            maxSpeed: cm.random(2, 5),
-            maxForce: cm.random(0.1, 0.5)
-          })
-        );
+  <script id="5" type="module" pinned="">
+    const width = 600,
+      height = 200,
+      size = 20,
+      cols = Math.floor(width / size),
+      rows = Math.floor(height / size),
+      fields = cm.cross(cm.range(cols), cm.range(rows)),
+      values = cm.range(cols * rows),
+      auto = createAuto(values, cols, rows, size),
+      cars = cm.range(120).map(() =>
+        object({
+          location: cm.vec(cm.random(width), cm.random(height)),
+          velocity: cm.vec(),
+          r: 4,
+          maxSpeed: cm.random(2, 5),
+          maxForce: cm.random(0.1, 0.5),
+        }),
+      );
 
-      initFields(fields, values);
+    initFields(fields, values);
 
-      function update(app) {
-        app.append(cm.clear, { fill: "white" });
+    function update(app) {
+      app.append(cm.clear, { fill: "white" });
 
-        app
-          .data(fields)
-          .append(cm.group, {
-            x: (d) => d[0] * size + size / 2,
-            y: (d) => d[1] * size + size / 2,
-            rotate: ([x, y]) => values[x + y * cols]
-          })
-          .append(cm.link, {
-            x: (-size / 2) * 0.5,
-            y: 0,
-            x1: (size / 2) * 0.5,
-            y1: 0
-          });
+      app
+        .data(fields)
+        .append(cm.group, {
+          x: (d) => d[0] * size + size / 2,
+          y: (d) => d[1] * size + size / 2,
+          rotate: ([x, y]) => values[x + y * cols],
+        })
+        .append(cm.link, {
+          x: (-size / 2) * 0.5,
+          y: 0,
+          x1: (size / 2) * 0.5,
+          y1: 0,
+        });
 
-        app
-          .data(cars)
-          .process(cm.each, auto)
-          .process(cm.each, move)
-          .process(cm.each, constrainX)
-          .process(cm.each, constrainY)
-          .append(cm.group, {
-            x: (d) => d.location.x,
-            y: (d) => d.location.y,
-            rotate: (d) => d.velocity.angle()
-          })
-          .append(cm.triangle, {
-            x: (d) => d.r * 2,
-            y: 0,
-            x1: (d) => -d.r * 2,
-            y1: (d) => -d.r,
-            x2: (d) => -d.r * 2,
-            y2: (d) => d.r,
-            fill: cm.rgb(175),
-            stroke: cm.rgb(0),
-            strokeWidth: 2
-          });
-      }
-
-      function mouseClick() {
-        initFields(fields, values);
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      return cm
-        .app({ width, height })
-        .on("update", update)
-        .on("mouseClick", mouseClick)
-        .call(border)
-        .call(dispose)
-        .start()
-        .node();
+      app
+        .data(cars)
+        .process(cm.each, auto)
+        .process(cm.each, move)
+        .process(cm.each, constrainX)
+        .process(cm.each, constrainY)
+        .append(cm.group, {
+          x: (d) => d.location.x,
+          y: (d) => d.location.y,
+          rotate: (d) => d.velocity.angle(),
+        })
+        .append(cm.triangle, {
+          x: (d) => d.r * 2,
+          y: 0,
+          x1: (d) => -d.r * 2,
+          y1: (d) => -d.r,
+          x2: (d) => -d.r * 2,
+          y2: (d) => d.r,
+          fill: cm.rgb(175),
+          stroke: cm.rgb(0),
+          strokeWidth: 2,
+        });
     }
+
+    function mouseClick() {
+      initFields(fields, values);
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm
+      .app({ width, height })
+      .on("update", update)
+      .on("mouseClick", mouseClick)
+      .call(border)
+      .call(dispose)
+      .start()
+      .node();
+
+    display(node);
   </script>
-  <script id="133" type="application/vnd.observable.javascript" pinned="">
+  <script id="133" type="module" pinned="">
     function initFields(fields, values) {
       const noise = cm.randomNoise(0, cm.TWO_PI * 2);
       for (let m = 0; m < fields.length; m++) {
@@ -95,7 +94,7 @@
       }
     }
   </script>
-  <script id="46" type="application/vnd.observable.javascript" pinned="">
+  <script id="46" type="module" pinned="">
     function createAuto(values, cols, rows, size) {
       function lookup(x, y) {
         const i = cm.clamp((x / size) | 0, 0, cols - 1);
@@ -112,7 +111,7 @@
       };
     }
   </script>
-  <script id="94" type="application/vnd.observable.javascript" pinned="">
+  <script id="94" type="module" pinned="">
     function constrainX(d, i, _, flow) {
       const app = flow.app();
       const width = app.prop("width");
@@ -120,7 +119,7 @@
       if (d.location.x > width) d.location.x -= width;
     }
   </script>
-  <script id="97" type="application/vnd.observable.javascript" pinned="">
+  <script id="97" type="module" pinned="">
     function constrainY(d, i, _, flow) {
       const app = flow.app();
       const height = app.prop("height");
@@ -128,33 +127,33 @@
       if (d.location.y > height) d.location.y -= height;
     }
   </script>
-  <script id="34" type="application/vnd.observable.javascript" pinned="">
+  <script id="34" type="module" pinned="">
     function move(d) {
       d.velocity.add(d.acceleration);
       d.location.add(d.velocity);
       d.acceleration.mult(0);
     }
   </script>
-  <script id="53" type="application/vnd.observable.javascript" pinned="">
+  <script id="53" type="module" pinned="">
     function applyForce(d, force) {
       const a = cm.vecDiv(force, d.mass);
       d.acceleration.add(a);
     }
   </script>
-  <script id="11" type="application/vnd.observable.javascript" pinned="">
+  <script id="11" type="module" pinned="">
     function object(options) {
       return {
         location: cm.vec(),
         velocity: cm.vec(),
         acceleration: cm.vec(),
         mass: 1,
-        ...options
+        ...options,
       };
     }
   </script>
-  <script id="38" type="application/vnd.observable.javascript" pinned="">
+  <script id="38" type="module" pinned="">
     function border(app) {
-      app.node().style.border = "solid #000 1px"
+      app.node().style.border = "solid #000 1px";
     }
   </script>
-  </notebook>
+</notebook>

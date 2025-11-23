@@ -10,11 +10,11 @@
 
     For example, let's draw a clover composed of multiple circles, whose positions are produced by a clover algorithm. Charming provides APIs for the entire drawing pipeline: process data, append and transform shapes. A clear relationship between data and shape attributes can be easily seen through Charming's declarative API style.
   </script>
-  <script id="19" type="application/vnd.observable.javascript" pinned="">
+  <script id="19" type="module" pinned="">
     {
       const app = cm.app({
         width: 640,
-        height: 640
+        height: 640,
       });
 
       app
@@ -24,18 +24,20 @@
           x: (t) => Math.cos(t) * Math.cos(t * 3),
           y: (t) => Math.sin(t) * Math.cos(t * 3),
           r: (t) => t,
-          fill: "black"
+          fill: "black",
         })
         .transform(cm.mapPosition, { padding: 30 })
         .transform(cm.mapAttrs, { r: { range: [8, 15] } });
 
-      return app.render().node();
+      const node = app.render().node();
+
+      display(node);
     }
   </script>
   <script id="54" type="text/markdown">
-    This example is too simple to see the true charm of charming. To solve this, we can draw thousands of circles whose positions, radii, strokes and stroke opacities are computed by some trigonometric functions. This example is a reimplementation of Ricky Reusser' [Instanced WebGL Circles](https://observablehq.com/@rreusser/instanced-webgl-circles), but with more readable code. 
+    This example is too simple to see the true charm of charming. To solve this, we can draw thousands of circles whose positions, radii, strokes and stroke opacities are computed by some trigonometric functions. This example is a reimplementation of Ricky Reusser' [Instanced WebGL Circles](https://observablehq.com/@rreusser/instanced-webgl-circles), but with more readable code.
   </script>
-  <script id="23" type="application/vnd.observable.javascript" pinned="">
+  <script id="23" type="module" pinned="">
     {
       const width = 700,
         height = 700,
@@ -44,8 +46,7 @@
 
       function update(app) {
         const time = app.prop("frameCount") / 50;
-        const dist = (d) =>
-          0.6 + 0.2 * Math.cos(d * 6.0 + Math.cos(d * 8.0 + time));
+        const dist = (d) => 0.6 + 0.2 * Math.cos(d * 6.0 + Math.cos(d * 8.0 + time));
 
         app.append(cm.clear, { fill: "black" });
 
@@ -63,7 +64,7 @@
               return cm.rgb(r * 255, g * 255, b * 255);
             },
             fill: "transparent",
-            strokeOpacity: (0.15 * 2000) / count
+            strokeOpacity: (0.15 * 2000) / count,
           })
           .transform(cm.mapPosition, { padding: 100 })
           .transform(cm.mapAttrs, { r: { range: [24, 96] } });
@@ -73,18 +74,15 @@
         invalidation.then(() => app.dispose());
       }
 
-      return cm
-        .app({ width, height })
-        .on("update", update)
-        .call(dispose)
-        .start()
-        .node();
+      const node = cm.app({ width, height }).on("update", update).call(dispose).start().node();
+
+      display(node);
     }
   </script>
   <script id="79" type="text/markdown">
     But imagination does not stop here. With the help of a WebGL renderer, GLSL functions and some math, you can even define some shader art without writing shader directly! Here is an example from [shader toy](https://www.shadertoy.com/view/mtyGWy).
   </script>
-  <script id="77" type="application/vnd.observable.javascript" pinned="">
+  <script id="77" type="module" pinned="">
     {
       const width = 640;
       const height = 360;
@@ -120,22 +118,15 @@
         invalidation.then(() => app.dispose());
       }
 
-      return cm
-        .app({
-          renderer: cm.webgl(),
-          width,
-          height
-        })
-        .on("update", update)
-        .call(dispose)
-        .start()
-        .node();
+      const node = cm.app({ renderer: cm.webgl(), width, height }).on("update", update).call(dispose).start().node();
+
+      display(node);
     }
   </script>
   <script id="71" type="text/markdown">
     The best part is that in addition to the regular computational art, Charming also offers great support for ASCII art. Simply by changing the renderer to a terminal renderer, you can create character-based art in the terminal. For example, to draw fire burning characters:
   </script>
-  <script id="26" type="application/vnd.observable.javascript" pinned="">
+  <script id="26" type="module" pinned="">
     {
       let fire = null;
 
@@ -153,10 +144,12 @@
 
       const app = cm.app({
         renderer: await cm.terminal(),
-        frameRate: 15
+        frameRate: 15,
       });
 
-      return app.on("update", update).call(dispose).start().node();
+      const node = app.on("update", update).call(dispose).start().node();
+
+      display(node);
     }
   </script>
   <script id="68" type="text/markdown">
@@ -165,12 +158,12 @@
   <script id="41" type="text/markdown">
     ## Appendix
   </script>
-  <script id="31" type="application/vnd.observable.javascript" pinned="">
+  <script id="31" type="module" pinned="">
     function createFire(width, height) {
       return cm.range(height).map(() => cm.range(width).map(() => 0));
     }
   </script>
-  <script id="34" type="application/vnd.observable.javascript" pinned="">
+  <script id="34" type="module" pinned="">
     function updateFire(fire) {
       const h = fire.length;
       const w = fire[0].length;
@@ -192,7 +185,7 @@
       }
     }
   </script>
-  <script id="37" type="application/vnd.observable.javascript" pinned="">
+  <script id="37" type="module" pinned="">
     function drawFire(app, fire) {
       const max = fire.length;
 
@@ -206,14 +199,14 @@
           y: 0,
           x: (_, i) => i,
           stroke0: (d) => (d === 0 ? " " : cm.randomChar()),
-          stroke2: (d) => (d === 0 ? null : d)
+          stroke2: (d) => (d === 0 ? null : d),
         })
         .transform(cm.mapAttrs, {
           stroke2: {
             domain: [0, max],
-            interpolate: d3.interpolateCool
-          }
+            interpolate: d3.interpolateCool,
+          },
         });
     }
   </script>
-  </notebook>
+</notebook>

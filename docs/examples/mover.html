@@ -3,56 +3,49 @@
   <title>Mover</title>
   <script id="0" type="text/markdown">
     # Mover
-
   </script>
-  <script id="7" type="application/vnd.observable.javascript" pinned="">
-    {
-      const mover = {
-        location: cm.vec(),
-        velocity: cm.vec(),
-        acceleration: cm.vec(),
-        mass: 1
-      };
+  <script id="7" type="module" pinned="">
+    const mover = {
+      location: cm.vec(),
+      velocity: cm.vec(),
+      acceleration: cm.vec(),
+      mass: 1,
+    };
 
-      function update(app) {
-        app.append(cm.clear, { fill: cm.rgb(255) });
-        app
-          .datum(mover)
-          .process(cm.each, toMouse)
-          .process(cm.each, move)
-          .process(cm.each, checkEdges)
-          .append(cm.rect, {
-            x: (d) => d.location.x,
-            y: (d) => d.location.y,
-            width: 30,
-            height: 10,
-            fill: cm.rgb(175),
-            stroke: cm.rgb(0),
-            rotate: (d) => d.velocity.angle()
-          });
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      return cm
-        .app({ width: 600, height: 200 })
-        .on("update", update)
-        .call(dispose)
-        .call(frame)
-        .start()
-        .node();
+    function update(app) {
+      app.append(cm.clear, { fill: cm.rgb(255) });
+      app
+        .datum(mover)
+        .process(cm.each, toMouse)
+        .process(cm.each, move)
+        .process(cm.each, checkEdges)
+        .append(cm.rect, {
+          x: (d) => d.location.x,
+          y: (d) => d.location.y,
+          width: 30,
+          height: 10,
+          fill: cm.rgb(175),
+          stroke: cm.rgb(0),
+          rotate: (d) => d.velocity.angle(),
+        });
     }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm.app({ width: 600, height: 200 }).on("update", update).call(dispose).call(frame).start().node();
+
+    display(node);
   </script>
-  <script id="13" type="application/vnd.observable.javascript" pinned="">
+  <script id="13" type="module" pinned="">
     function move(d) {
       d.velocity.add(d.acceleration);
       d.location.add(d.velocity);
       d.acceleration.mult(0);
     }
   </script>
-  <script id="19" type="application/vnd.observable.javascript" pinned="">
+  <script id="19" type="module" pinned="">
     function toMouse(d, i, data, flow) {
       const app = flow.app();
       const mouse = cm.vec(app.prop("mouseX"), app.prop("mouseY"));
@@ -60,22 +53,22 @@
       applyForce(d, force);
     }
   </script>
-  <script id="24" type="application/vnd.observable.javascript" pinned="">
+  <script id="24" type="module" pinned="">
     function checkEdges(d, i, data, flow) {
       const app = flow.app();
       d.location.clampX(app.prop("width")).clampY(app.prop("height"));
       d.velocity.clamp(4);
     }
   </script>
-  <script id="16" type="application/vnd.observable.javascript" pinned="">
+  <script id="16" type="module" pinned="">
     function applyForce(d, f) {
       const a = cm.vecDiv(f, d.mass);
       d.acceleration.add(a);
     }
   </script>
-  <script id="30" type="application/vnd.observable.javascript" pinned="">
+  <script id="30" type="module" pinned="">
     function frame(app) {
       app.node().style.border = "solid #000 1px";
     }
   </script>
-  </notebook>
+</notebook>

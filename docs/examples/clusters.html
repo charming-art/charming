@@ -6,51 +6,45 @@
 
     Click to add cluster.
   </script>
-  <script id="36" type="application/vnd.observable.javascript">
-    viewof replay = Inputs.button("Replay")
+  <script id="36" type="module">
+    const replay = view(Inputs.button("Replay"));
   </script>
-  <script id="8" type="application/vnd.observable.javascript" pinned="">
-    {
-      replay;
+  <script id="8" type="module" pinned="">
+    replay;
 
-      const width = 600,
-        height = 200,
-        PS = [];
+    const width = 600,
+      height = 200,
+      PS = [];
 
-      function update(app) {
-        app.append(cm.clear, { fill: cm.rgb(255) });
-        const groups = app.data(PS).append(cm.group, {
-          x: (d) => d.origin.x,
-          y: (d) => d.origin.y
-        });
+    function update(app) {
+      app.append(cm.clear, { fill: cm.rgb(255) });
+      const groups = app.data(PS).append(cm.group, {
+        x: (d) => d.origin.x,
+        y: (d) => d.origin.y,
+      });
 
-        groups
-          .data((d) => d.particles)
-          .call(updateParticles)
-          .call(drawParticles);
-      }
-
-      function mouseDown(app) {
-        PS.push({
-          origin: cm.vec(app.prop("mouseX"), app.prop("mouseY")),
-          particles: []
-        });
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      return cm
-        .app({ width, height })
-        .on("update", update)
-        .on("mouseDown", mouseDown)
-        .call(dispose)
-        .start()
-        .node();
+      groups
+        .data((d) => d.particles)
+        .call(updateParticles)
+        .call(drawParticles);
     }
+
+    function mouseDown(app) {
+      PS.push({
+        origin: cm.vec(app.prop("mouseX"), app.prop("mouseY")),
+        particles: [],
+      });
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm.app({ width, height }).on("update", update).on("mouseDown", mouseDown).call(dispose).start().node();
+
+    display(node);
   </script>
-  <script id="28" type="application/vnd.observable.javascript" pinned="">
+  <script id="28" type="module" pinned="">
     function drawParticles(flow) {
       flow
         .append(cm.circle, {
@@ -60,27 +54,24 @@
           fill: cm.rgb(0),
           stroke: cm.rgb(0),
           fillOpacity: (d) => d.lifespan,
-          strokeOpacity: (d) => d.lifespan
+          strokeOpacity: (d) => d.lifespan,
         })
         .transform(cm.mapAttrs, {
           fillOpacity: { domain: [0, 255], range: [0, 0.6] },
-          strokeOpacity: { domain: [0, 255], range: [0, 1] }
+          strokeOpacity: { domain: [0, 255], range: [0, 1] },
         });
     }
   </script>
-  <script id="30" type="application/vnd.observable.javascript" pinned="">
+  <script id="30" type="module" pinned="">
     function updateParticles(flow) {
       flow
         .process(cm.push, () => ({
           location: cm.vec(0, 0),
           velocity: cm.vec(cm.random(-1, 1), cm.random(-2, 0)),
           acceleration: cm.vec(0, 0.05),
-          lifespan: 255
+          lifespan: 255,
         }))
-        .process(
-          cm.eachRight,
-          (d, i, array) => d.lifespan < 0 && array.splice(i, 1)
-        )
+        .process(cm.eachRight, (d, i, array) => d.lifespan < 0 && array.splice(i, 1))
         .process(cm.each, (d) => (d.lifespan -= 2))
         .process(cm.each, (d) => {
           d.velocity.add(d.acceleration);
@@ -88,4 +79,4 @@
         });
     }
   </script>
-  </notebook>
+</notebook>

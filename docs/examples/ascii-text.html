@@ -3,26 +3,25 @@
   <title>ASCII Text</title>
   <script id="0" type="text/markdown">
     # ASCII Text
-
   </script>
-  <script id="5" type="application/vnd.observable.javascript" pinned="">
-    {
-      const app = cm.app({
-        width,
-        renderer: await cm.terminal()
-      });
+  <script id="5" type="module" pinned="">
+    const app = cm.app({
+      width,
+      renderer: await cm.terminal(),
+    });
 
-      app.append(cm.text, {
-        text: cm.figlet("hello world"),
-        x: app.prop("width") / 2,
-        y: app.prop("height") / 2,
-        fill: cm.gradientSineBowX(),
-        textAlign: "center",
-        textBaseline: "middle",
-        fontFamily: cm.fontGhost()
-      });
+    app.append(cm.text, {
+      text: cm.figlet("hello world"),
+      x: app.prop("width") / 2,
+      y: app.prop("height") / 2,
+      fill: cm.gradientSineBowX(),
+      textAlign: "center",
+      textBaseline: "middle",
+      fontFamily: cm.fontGhost(),
+    });
 
-      return app.render().node();
-    }
+    const node = app.render().node();
+
+    display(node);
   </script>
-  </notebook>
+</notebook>

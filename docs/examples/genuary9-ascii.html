@@ -9,36 +9,36 @@
     - Prompt: https://genuary.art/prompts#jan9
     - Ref. https://openprocessing.org/sketch/494102
   </script>
-  <script id="7" type="application/vnd.observable.javascript" pinned="">
-    {
-      let fire = null;
+  <script id="7" type="module" pinned="">
+    let fire = null;
 
-      function update(app) {
-        const width = app.prop("width");
-        const height = app.prop("height");
-        if (!fire) fire = createFire(width, height);
-        updateFire(fire);
-        drawFire(app, fire);
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      const app = cm.app({
-        renderer: await cm.terminal(),
-        frameRate: 15
-      });
-
-      return app.on("update", update).call(dispose).start().node();
+    function update(app) {
+      const width = app.prop("width");
+      const height = app.prop("height");
+      if (!fire) fire = createFire(width, height);
+      updateFire(fire);
+      drawFire(app, fire);
     }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const app = cm.app({
+      renderer: await cm.terminal(),
+      frameRate: 15,
+    });
+
+    const node = app.on("update", update).call(dispose).start().node();
+
+    display(node);
   </script>
-  <script id="30" type="application/vnd.observable.javascript" pinned="">
+  <script id="30" type="module" pinned="">
     function createFire(width, height) {
       return cm.range(height).map(() => cm.range(width).map(() => 0));
     }
   </script>
-  <script id="32" type="application/vnd.observable.javascript" pinned="">
+  <script id="32" type="module" pinned="">
     function updateFire(fire) {
       const h = fire.length;
       const w = fire[0].length;
@@ -60,7 +60,7 @@
       }
     }
   </script>
-  <script id="47" type="application/vnd.observable.javascript" pinned="">
+  <script id="47" type="module" pinned="">
     function drawFire(app, fire) {
       const max = fire.length;
 
@@ -74,14 +74,14 @@
           y: 0,
           x: (_, i) => i,
           stroke0: (d) => (d === 0 ? " " : cm.randomChar()),
-          stroke2: (d) => (d === 0 ? null : d)
+          stroke2: (d) => (d === 0 ? null : d),
         })
         .transform(cm.mapAttrs, {
           stroke2: {
             domain: [0, max],
-            interpolate: d3.interpolateCool
-          }
+            interpolate: d3.interpolateCool,
+          },
         });
     }
   </script>
-  </notebook>
+</notebook>

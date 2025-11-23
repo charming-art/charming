@@ -3,67 +3,60 @@
   <title>Attractors</title>
   <script id="0" type="text/markdown">
     # Attractors
-
   </script>
-  <script id="11" type="application/vnd.observable.javascript">
-    viewof replay = Inputs.button("Replay")
+  <script id="11" type="module">
+    const replay = view(Inputs.button("Replay"));
   </script>
-  <script id="8" type="application/vnd.observable.javascript" pinned="">
-    {
-      replay;
+  <script id="8" type="module" pinned="">
+    replay;
 
-      const width = 600,
-        height = 200,
-        movers = cm.range(20).map((d) =>
-          object({
-            location: cm.vec(cm.random(width), cm.random(height)),
-            velocity: cm.vec(cm.random(-1, 1), cm.random(-1, 1)),
-            acceleration: cm.vec(),
-            mass: cm.random(2, 5),
-            G: 0.4
-          })
-        );
+    const width = 600,
+      height = 200,
+      movers = cm.range(20).map((d) =>
+        object({
+          location: cm.vec(cm.random(width), cm.random(height)),
+          velocity: cm.vec(cm.random(-1, 1), cm.random(-1, 1)),
+          acceleration: cm.vec(),
+          mass: cm.random(2, 5),
+          G: 0.4,
+        }),
+      );
 
-      function update(app) {
-        app.append(cm.clear, { fill: cm.rgb(255) });
+    function update(app) {
+      app.append(cm.clear, { fill: cm.rgb(255) });
 
-        app
-          .data(movers)
-          .process(cm.each, (i) =>
-            app
-              .data(movers)
-              .process(cm.filter, (j) => i !== j)
-              .process(cm.each, (j) => attraction(j)(i))
-          )
-          .process(cm.each, move)
-          .append(cm.circle, {
-            x: (d) => d.location.x,
-            y: (d) => d.location.y,
-            r: (d) => d.mass * 2,
-            fill: cm.rgb(175),
-            stroke: "#000",
-            strokeWidth: 2
-          });
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      function frame(app) {
-        app.node().style.border = "solid #000 1px";
-      }
-
-      return cm
-        .app({ width, height })
-        .on("update", update)
-        .call(dispose)
-        .call(frame)
-        .start()
-        .node();
+      app
+        .data(movers)
+        .process(cm.each, (i) =>
+          app
+            .data(movers)
+            .process(cm.filter, (j) => i !== j)
+            .process(cm.each, (j) => attraction(j)(i)),
+        )
+        .process(cm.each, move)
+        .append(cm.circle, {
+          x: (d) => d.location.x,
+          y: (d) => d.location.y,
+          r: (d) => d.mass * 2,
+          fill: cm.rgb(175),
+          stroke: "#000",
+          strokeWidth: 2,
+        });
     }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    function frame(app) {
+      app.node().style.border = "solid #000 1px";
+    }
+
+    const node = cm.app({ width, height }).on("update", update).call(dispose).call(frame).start().node();
+
+    display(node);
   </script>
-  <script id="20" type="application/vnd.observable.javascript" pinned="">
+  <script id="20" type="module" pinned="">
     function object(options) {
       return {
         location: cm.vec(),
@@ -73,11 +66,11 @@
         aVelocity: 0,
         aAcceleration: 0,
         rotation: 0,
-        ...options
+        ...options,
       };
     }
   </script>
-  <script id="22" type="application/vnd.observable.javascript" pinned="">
+  <script id="22" type="module" pinned="">
     function force(d) {
       const callback = typeof d === "function" ? d : () => d;
       return (d, ...params) => {
@@ -88,14 +81,14 @@
       };
     }
   </script>
-  <script id="25" type="application/vnd.observable.javascript" pinned="">
+  <script id="25" type="module" pinned="">
     function move(d) {
       d.velocity.add(d.acceleration);
       d.location.add(d.velocity);
       d.acceleration.mult(0);
     }
   </script>
-  <script id="59" type="application/vnd.observable.javascript" pinned="">
+  <script id="59" type="module" pinned="">
     function attraction(attractor) {
       const { mass, G } = attractor;
       return (d) => {
@@ -108,4 +101,4 @@
       };
     }
   </script>
-  </notebook>
+</notebook>

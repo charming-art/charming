@@ -3,31 +3,30 @@
   <title>Clover, RainBow</title>
   <script id="0" type="text/markdown">
     # Clover, RainBow
-
   </script>
-  <script id="8" type="application/vnd.observable.javascript" pinned="">
-    {
-      const app = cm.app({
-        width: 640,
-        height: 640
+  <script id="8" type="module" pinned="">
+    const app = cm.app({
+      width: 640,
+      height: 640,
+    });
+
+    app
+      .data(cm.range(120))
+      .process(cm.map, (_, i, data) => (i * Math.PI) / data.length)
+      .append(cm.circle, {
+        x: (t) => Math.cos(t) * Math.cos(t * 3),
+        y: (t) => Math.sin(t) * Math.cos(t * 3),
+        r: (t) => t,
+        fill: (t) => t,
+      })
+      .transform(cm.mapPosition, { padding: 30 })
+      .transform(cm.mapAttrs, {
+        r: { range: [8, 15] },
+        fill: { interpolate: d3.interpolateRainbow },
       });
 
-      app
-        .data(cm.range(120))
-        .process(cm.map, (_, i, data) => (i * Math.PI) / data.length)
-        .append(cm.circle, {
-          x: (t) => Math.cos(t) * Math.cos(t * 3),
-          y: (t) => Math.sin(t) * Math.cos(t * 3),
-          r: (t) => t,
-          fill: (t) => t
-        })
-        .transform(cm.mapPosition, { padding: 30 })
-        .transform(cm.mapAttrs, {
-          r: { range: [8, 15] },
-          fill: { interpolate: d3.interpolateRainbow }
-        });
+    const node = app.render().node();
 
-      return app.render().node();
-    }
+    display(node);
   </script>
-  </notebook>
+</notebook>

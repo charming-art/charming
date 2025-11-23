@@ -3,51 +3,45 @@
   <title>Snake Wave</title>
   <script id="0" type="text/markdown">
     # Snake Wave
-
   </script>
-  <script id="10" type="application/vnd.observable.javascript" pinned="">
-    {
-      const I = cm.range(50);
-      const X = cm.range(I.length, cm.TWO_PI);
-      const X1 = cm.range(I.length, cm.TWO_PI * 2);
-      const X2 = cm.range(I.length, cm.TWO_PI / 3);
+  <script id="10" type="module" pinned="">
+    const I = cm.range(50);
+    const X = cm.range(I.length, cm.TWO_PI);
+    const X1 = cm.range(I.length, cm.TWO_PI * 2);
+    const X2 = cm.range(I.length, cm.TWO_PI / 3);
 
-      function update(app) {
-        app.append(cm.clear, { fill: cm.rgb(255) });
+    function update(app) {
+      app.append(cm.clear, { fill: cm.rgb(255) });
 
-        app
-          .data(I)
-          .append(cm.circle, {
-            x: (d) => d,
-            y: (d) => {
-              const offset = app.prop("frameCount") / 120;
-              const x = Math.sin(X[d] + offset) * 2;
-              const x1 = Math.sin(X1[d] + offset) * 1;
-              const x2 = Math.sin(X2[d] + offset) * 3;
-              return x * x1 * x2;
-            },
-            r: 20,
-            fill: (d) => d,
-            fillOpacity: 0.6,
-            stroke: "#000",
-            strokeWidth: 1
-          })
-          .transform(cm.mapPosition)
-          .transform(cm.mapAttrs, {
-            fill: { interpolate: d3.interpolateGreys }
-          });
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      return cm
-        .app({ width: 600, height: 200 })
-        .on("update", update)
-        .call(dispose)
-        .start()
-        .node();
+      app
+        .data(I)
+        .append(cm.circle, {
+          x: (d) => d,
+          y: (d) => {
+            const offset = app.prop("frameCount") / 120;
+            const x = Math.sin(X[d] + offset) * 2;
+            const x1 = Math.sin(X1[d] + offset) * 1;
+            const x2 = Math.sin(X2[d] + offset) * 3;
+            return x * x1 * x2;
+          },
+          r: 20,
+          fill: (d) => d,
+          fillOpacity: 0.6,
+          stroke: "#000",
+          strokeWidth: 1,
+        })
+        .transform(cm.mapPosition)
+        .transform(cm.mapAttrs, {
+          fill: { interpolate: d3.interpolateGreys },
+        });
     }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm.app({ width: 600, height: 200 }).on("update", update).call(dispose).start().node();
+
+    display(node);
   </script>
-  </notebook>
+</notebook>

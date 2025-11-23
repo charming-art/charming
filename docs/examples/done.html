@@ -3,47 +3,46 @@
   <title>Done</title>
   <script id="0" type="text/markdown">
     # Done
-
   </script>
-  <script id="8" type="application/vnd.observable.javascript" pinned="">
-    {
-      const width = 600,
-        height = 200,
-        r = 75;
+  <script id="8" type="module" pinned="">
+    const width = 600,
+      height = 200,
+      r = 75;
 
-      function clear(app) {
-        app.append(cm.clear, { fill: cm.rgb(255) });
-      }
-
-      function draw(app) {
-        const theta = app.prop("frameCount") / 50;
-        const x = r * Math.cos(theta);
-        const y = r * Math.sin(theta);
-        const group = app.append(cm.group, {
-          x: width / 2,
-          y: height / 2
-        });
-        group.append(cm.link, { x: 0, y: 0, x1: x, y1: y });
-        group.append(cm.circle, { x, y, r: 10, fill: "#000" });
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      return cm
-        .app({ width, height })
-        .on("update", clear)
-        .on("update", draw)
-        .call(dispose)
-        .call(frame)
-        .start()
-        .node();
+    function clear(app) {
+      app.append(cm.clear, { fill: cm.rgb(255) });
     }
+
+    function draw(app) {
+      const theta = app.prop("frameCount") / 50;
+      const x = r * Math.cos(theta);
+      const y = r * Math.sin(theta);
+      const group = app.append(cm.group, {
+        x: width / 2,
+        y: height / 2,
+      });
+      group.append(cm.link, { x: 0, y: 0, x1: x, y1: y });
+      group.append(cm.circle, { x, y, r: 10, fill: "#000" });
+    }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm
+      .app({ width, height })
+      .on("update", clear)
+      .on("update", draw)
+      .call(dispose)
+      .call(frame)
+      .start()
+      .node();
+
+    display(node);
   </script>
-  <script id="24" type="application/vnd.observable.javascript" pinned="">
+  <script id="24" type="module" pinned="">
     function frame(app) {
       app.node().style.border = "solid #000 1px";
     }
   </script>
-  </notebook>
+</notebook>

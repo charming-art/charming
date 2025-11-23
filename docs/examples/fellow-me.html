@@ -3,71 +3,57 @@
   <title>Follow Me</title>
   <script id="0" type="text/markdown">
     # Follow Me
-
   </script>
-  <script id="20" type="application/vnd.observable.javascript">
-    viewof replay = Inputs.button("Replay")
+  <script id="20" type="module">
+    const replay = view(Inputs.button("Replay"));
   </script>
-  <script id="7" type="application/vnd.observable.javascript" pinned="">
-    {
-      replay;
+  <script id="7" type="module" pinned="">
+    replay;
 
-      const width = 600,
-        height = 200,
-        movers = cm.range(20).map(() => ({
-          location: cm.vec(cm.random(width), cm.random(height)),
-          velocity: cm.vec(),
-          acceleration: cm.vec(),
-          speed: 8
-        }));
+    const width = 600,
+      height = 200,
+      movers = cm.range(20).map(() => ({
+        location: cm.vec(cm.random(width), cm.random(height)),
+        velocity: cm.vec(),
+        acceleration: cm.vec(),
+        speed: 8,
+      }));
 
-      function update(app) {
-        app.append(cm.clear, { fill: cm.rgb(255) });
-        app
-          .data(movers)
-          .process(cm.each, follow)
-          .append(cm.circle, {
-            x: (d) => d.location.x,
-            y: (d) => d.location.y,
-            fill: "rgba(175, 175, 175, 0.5)",
-            stroke: cm.rgb(0),
-            r: 16
-          });
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      function border(app) {
-        app.node().style.border = "solid #000 1px";
-      }
-
-      return cm
-        .app({ width, height })
-        .on("update", update)
-        .call(dispose)
-        .call(border)
-        .start()
-        .node();
+    function update(app) {
+      app.append(cm.clear, { fill: cm.rgb(255) });
+      app
+        .data(movers)
+        .process(cm.each, follow)
+        .append(cm.circle, {
+          x: (d) => d.location.x,
+          y: (d) => d.location.y,
+          fill: "rgba(175, 175, 175, 0.5)",
+          stroke: cm.rgb(0),
+          r: 16,
+        });
     }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    function border(app) {
+      app.node().style.border = "solid #000 1px";
+    }
+
+    const node = cm.app({ width, height }).on("update", update).call(dispose).call(border).start().node();
+
+    display(node);
   </script>
-  <script id="10" type="application/vnd.observable.javascript" pinned="">
+  <script id="10" type="module" pinned="">
     function follow({ location, velocity, acceleration, speed }, i, data, flow) {
       const app = flow.app();
 
-      const dir = cm
-        .vec(app.prop("mouseX"), app.prop("mouseY"))
-        .sub(location)
-        .norm()
-        .mult(0.5);
+      const dir = cm.vec(app.prop("mouseX"), app.prop("mouseY")).sub(location).norm().mult(0.5);
 
       acceleration.set(dir);
 
-      location
-        .add(velocity.add(acceleration).clamp(speed))
-        .clampX(app.prop("width"))
-        .clampY(app.prop("height"));
+      location.add(velocity.add(acceleration).clamp(speed)).clampX(app.prop("width")).clampY(app.prop("height"));
     }
   </script>
-  </notebook>
+</notebook>

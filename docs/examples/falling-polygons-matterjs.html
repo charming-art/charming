@@ -3,49 +3,43 @@
   <title>Falling Polygons, Matter.js</title>
   <script id="0" type="text/markdown">
     # Falling Polygons, Matter.js
-
   </script>
-  <script id="30" type="application/vnd.observable.javascript">
-    viewof replay = Inputs.button("Replay")
+  <script id="30" type="module">
+    const replay = view(Inputs.button("Replay"));
   </script>
-  <script id="10" type="application/vnd.observable.javascript" pinned="">
-    {
-      replay;
+  <script id="10" type="module" pinned="">
+    replay;
 
-      const w = 600,
-        h = 200,
-        engine = matter.Engine.create(),
-        boxes = [],
-        boundaries = [
-          createBoundary(engine.world, w / 4, h - 5, w / 2 - 50, 10),
-          createBoundary(engine.world, (3 * w) / 4, h - 50, w / 2 - 50, 10)
-        ];
+    const w = 600,
+      h = 200,
+      engine = matter.Engine.create(),
+      boxes = [],
+      boundaries = [
+        createBoundary(engine.world, w / 4, h - 5, w / 2 - 50, 10),
+        createBoundary(engine.world, (3 * w) / 4, h - 50, w / 2 - 50, 10),
+      ];
 
-      function update(app) {
-        if (cm.random(1) < 0.1) boxes.push(createPolygon(engine.world, w / 2, 50));
+    function update(app) {
+      if (cm.random(1) < 0.1) boxes.push(createPolygon(engine.world, w / 2, 50));
 
-        app.append(cm.clear, { fill: "#fff" });
+      app.append(cm.clear, { fill: "#fff" });
 
-        app.data(boxes).process(cm.eachRight, checkBox).call(appendMatterPolygon);
+      app.data(boxes).process(cm.eachRight, checkBox).call(appendMatterPolygon);
 
-        app.data(boundaries).call(appendMatterRect);
+      app.data(boundaries).call(appendMatterRect);
 
-        matter.Engine.update(engine);
-      }
-
-      function dispose(app) {
-        invalidation.then(() => app.dispose());
-      }
-
-      return cm
-        .app({ width: w, height: h })
-        .on("update", update)
-        .call(dispose)
-        .start()
-        .node();
+      matter.Engine.update(engine);
     }
+
+    function dispose(app) {
+      invalidation.then(() => app.dispose());
+    }
+
+    const node = cm.app({ width: w, height: h }).on("update", update).call(dispose).start().node();
+
+    display(node);
   </script>
-  <script id="48" type="application/vnd.observable.javascript" pinned="">
+  <script id="48" type="module" pinned="">
     function appendMatterPolygon(flow, options) {
       flow.append(cm.polygon, {
         x: (d) => d.body.vertices.map((d) => d.x),
@@ -53,11 +47,11 @@
         fill: cm.rgb(127),
         stroke: cm.rgb(0),
         strokeWeight: 2,
-        ...options
+        ...options,
       });
     }
   </script>
-  <script id="34" type="application/vnd.observable.javascript" pinned="">
+  <script id="34" type="module" pinned="">
     function appendMatterRect(flow, options) {
       flow.append(cm.rect, {
         x: (d) => d.body.position.x,
@@ -69,25 +63,25 @@
         stroke: cm.rgb(0),
         strokeWeight: 2,
         anchor: "center",
-        ...options
+        ...options,
       });
     }
   </script>
-  <script id="12" type="application/vnd.observable.javascript" pinned="">
+  <script id="12" type="module" pinned="">
     function createBoundary(parent, x, y, width, height) {
       const body = matter.Bodies.rectangle(x, y, width, height, { isStatic: true });
       matter.Composite.add(parent, body);
       return { body, width, height };
     }
   </script>
-  <script id="14" type="application/vnd.observable.javascript" pinned="">
+  <script id="14" type="module" pinned="">
     function createPolygon(parent, x, y) {
       const vertices = [
         matter.Vector.create(-10, -10),
         matter.Vector.create(20, -15),
         matter.Vector.create(15, 0),
         matter.Vector.create(0, 10),
-        matter.Vector.create(-20, 15)
+        matter.Vector.create(-20, 15),
       ];
       const body = matter.Bodies.fromVertices(x, y, vertices, { restitution: 0.2 });
       matter.Body.setVelocity(body, matter.Vector.create(cm.random(-5, 5), 0));
@@ -96,7 +90,7 @@
       return { body };
     }
   </script>
-  <script id="16" type="application/vnd.observable.javascript" pinned="">
+  <script id="16" type="module" pinned="">
     function checkBox(d, i, array, flow) {
       const { body } = d;
       const app = flow.app();
@@ -106,7 +100,7 @@
       }
     }
   </script>
-  <script id="5" type="application/vnd.observable.javascript" pinned="">
-    matter = require("matter-js")
+  <script id="5" type="module" pinned="">
+    matter = require("matter-js");
   </script>
-  </notebook>
+</notebook>
