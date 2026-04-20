@@ -5,15 +5,15 @@ Charming is typically installed via a package manager such as Yarn or NPM.
 ::: code-group
 
 ```sh [npm]
-npm add -S charmingjs
+npm install charmingjs
 ```
 
 ```sh [pnpm]
-pnpm add -S charmingjs
+pnpm add charmingjs
 ```
 
 ```sh [yarn]
-yarn add -S charmingjs
+yarn add charmingjs
 ```
 
 ```sh [bun]
@@ -34,7 +34,7 @@ In vanilla HTML, Charming can be imported as an ES module, say from jsDelivr:
 <script type="module">
   import * as cm from "https://cdn.jsdelivr.net/npm/charmingjs/+esm";
 
-  const svg = cm.svg("svg");
+  const svg = cm.svg`<svg></svg>`;
   document.body.append(svg);
 </script>
 ```
@@ -42,9 +42,9 @@ In vanilla HTML, Charming can be imported as an ES module, say from jsDelivr:
 Charming is also available as a UMD bundle for legacy browsers.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/charmingjs"></script>
+<script src="https://cdn.jsdelivr.net/npm/charmingjs/dist/charming.umd.min.js"></script>
 <script>
-  const svg = cm.svg("svg");
+  const svg = cm.svg`<svg></svg>`;
   document.body.append(svg);
 </script>
 ```
