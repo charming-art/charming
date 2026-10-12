@@ -1,0 +1,10 @@
+scale, 1, 1
+fillStyle, black
+fillRect, 0, 0, 200, 200
+save
+beginPath
+fillStyle, "rgba(255,255,255,1)"
+arc, 100, 100, 50, 0, 6.283185307179586
+fill
+closePath
+restore

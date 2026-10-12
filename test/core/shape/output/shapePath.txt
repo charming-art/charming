@@ -1,0 +1,15 @@
+scale, 1, 1
+save
+translate, 0, 0
+lineWidth, 2
+fillStyle, "rgba(70,130,180,1)"
+strokeStyle, "rgba(0,0,0,1)"
+beginPath
+moveTo, 20, 100
+quadraticCurveTo, 100, 0, 180, 100
+lineTo, 180, 180
+ellipse, 100, 180, 80, 80, 0, 0, 3.141592653589793, false
+closePath
+fill
+stroke
+restore

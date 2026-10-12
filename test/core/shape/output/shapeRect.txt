@@ -1,0 +1,23 @@
+scale, 1, 1
+save
+translate, 40, 30
+beginPath
+strokeStyle, "rgba(0,0,0,1)"
+lineWidth, 2
+fillStyle, "rgba(70,130,180,1)"
+rect, -30, -20, 60, 40
+fill
+stroke
+closePath
+restore
+save
+translate, 130, 90
+beginPath
+strokeStyle, "rgba(0,0,0,1)"
+lineWidth, 2
+fillStyle, "rgba(70,130,180,1)"
+rect, -40, -60, 80, 120
+fill
+stroke
+closePath
+restore

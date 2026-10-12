@@ -1,0 +1,12 @@
+scale, 1, 1
+save
+translate, 0, 0
+lineWidth, 2
+strokeStyle, "rgba(70,130,180,1)"
+beginPath
+moveTo, 20, 150
+lineTo, 70, 50
+lineTo, 120, 120
+lineTo, 180, 30
+stroke
+restore

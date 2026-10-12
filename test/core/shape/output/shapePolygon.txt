@@ -1,0 +1,13 @@
+scale, 1, 1
+save
+beginPath
+strokeStyle, "rgba(0,0,0,1)"
+fillStyle, "rgba(70,130,180,1)"
+moveTo, 100, 20
+lineTo, 180, 100
+lineTo, 100, 180
+lineTo, 20, 100
+closePath
+fill
+stroke
+restore

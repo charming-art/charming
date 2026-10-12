@@ -1,0 +1,22 @@
+scale, 1, 1
+save
+fillStyle, "rgba(0,0,0,1)"
+textAlign, start
+textBaseline, middle
+font, normal 20px sans-serif
+fillText, start, 100, 50
+restore
+save
+fillStyle, "rgba(0,0,0,1)"
+textAlign, center
+textBaseline, middle
+font, normal 20px sans-serif
+fillText, center, 100, 100
+restore
+save
+fillStyle, "rgba(0,0,0,1)"
+textAlign, end
+textBaseline, middle
+font, normal 20px sans-serif
+fillText, end, 100, 150
+restore
