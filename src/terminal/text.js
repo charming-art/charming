@@ -1,7 +1,8 @@
 import {bboxOf, textOf} from "./textBBox.js";
 
+// A function fill is called for each character with its column and row, and the size of the text.
 function normalizeColor(color, width, height) {
-  if (typeof color === "function") return color(width, height);
+  if (typeof color === "function") return (x, y) => color(x, y, width, height);
   return () => color;
 }
 
