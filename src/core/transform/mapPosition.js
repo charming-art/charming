@@ -15,7 +15,9 @@ export function mapPosition(
     keysY = ["y", "y1"],
   } = {},
 ) {
-  const {width, height} = flow.renderer()._props;
+  const renderer = flow.renderer();
+  if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.mapPosition.");
+  const {width, height} = renderer._props;
   const rangeX = [padding, width - padding];
   const rangeY = [padding, height - padding];
 

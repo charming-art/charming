@@ -4,7 +4,7 @@ import {canvas$circle} from "./circle.js";
 import {canvas$point} from "./point.js";
 import {canvas$rect} from "./rect.js";
 import {canvas$line} from "./line.js";
-import {canvas$triangle} from "./triangle";
+import {canvas$triangle} from "./triangle.js";
 import {canvas$translate} from "./translate.js";
 import {canvas$path} from "./path.js";
 import {canvas$polygon} from "./polygon.js";

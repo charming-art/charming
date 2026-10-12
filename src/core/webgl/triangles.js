@@ -1,5 +1,5 @@
 import {color as d3Color} from "d3-color";
-import {getProgram} from "./program";
+import {getProgram} from "./program.js";
 
 function createVertexShaderSource() {
   return `

@@ -1,8 +1,5 @@
 import {prepareWithSegments} from "@chenglou/pretext";
-
-function px(n) {
-  return typeof n === "number" ? `${n}px` : n;
-}
+import {cssFont} from "../canvas/cssFont.js";
 
 /**
  * Builds the CSS `font` string for Pretext measurement (same order as the `font` shorthand).
@@ -19,7 +16,7 @@ export function prepare(
     ...rest
   } = {},
 ) {
-  const font = `${fontStyle} ${fontVariant} ${fontWeight} ${px(fontSize)} ${fontFamily}`.replace(/\s+/g, " ").trim();
+  const font = cssFont({fontSize, fontFamily, fontStyle, fontVariant, fontWeight});
   const prepared = prepareWithSegments(text, font, rest);
   prepared.fontSize = fontSize;
   prepared.fontFamily = fontFamily;

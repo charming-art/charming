@@ -36,6 +36,5 @@ export function flow$render() {
   if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before flow.render().");
   root._children.forEach((d) => renderNode(renderer, d, 0, context));
   root._children = [];
-  if (renderer.render) renderer.render();
   return this;
 }

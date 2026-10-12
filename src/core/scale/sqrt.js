@@ -1,4 +1,4 @@
-import {continuous} from "./continuous";
+import {continuous} from "./continuous.js";
 
 function transform(x) {
   return Math.sign(x) * Math.sqrt(Math.abs(x));
