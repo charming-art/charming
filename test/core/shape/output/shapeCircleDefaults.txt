@@ -1,0 +1,8 @@
+scale, 1, 1
+save
+beginPath
+fillStyle, 
+arc, 0, 0, 0, 0, 6.283185307179586
+fill
+closePath
+restore

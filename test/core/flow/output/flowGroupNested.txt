@@ -1,0 +1,220 @@
+scale, 1, 1
+save
+translate, 20, 20
+save
+beginPath
+fillStyle, "rgba(255,0,0,1)"
+arc, 0, 0, 10, 0, 6.283185307179586
+fill
+closePath
+restore
+save
+beginPath
+fillStyle, "rgba(255,0,0,1)"
+arc, 50, 50, 10, 0, 6.283185307179586
+fill
+closePath
+restore
+save
+beginPath
+fillStyle, "rgba(255,0,0,1)"
+arc, 100, 100, 10, 0, 6.283185307179586
+fill
+closePath
+restore
+save
+translate, 0, 0
+save
+translate, 5, 5
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+rect, -5, -5, 10, 10
+fill
+closePath
+restore
+save
+translate, 0, 0
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 10, 10, 5, 0, 6.283185307179586
+fill
+closePath
+restore
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 20, 20, 5, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+restore
+save
+translate, 50, 50
+save
+translate, 5, 5
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+rect, -5, -5, 10, 10
+fill
+closePath
+restore
+save
+translate, 0, 0
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 10, 10, 5, 0, 6.283185307179586
+fill
+closePath
+restore
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 20, 20, 5, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+restore
+save
+translate, 100, 100
+save
+translate, 5, 5
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+rect, -5, -5, 10, 10
+fill
+closePath
+restore
+save
+translate, 0, 0
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 10, 10, 5, 0, 6.283185307179586
+fill
+closePath
+restore
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 20, 20, 5, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+restore
+restore
+save
+translate, 120, 20
+save
+beginPath
+fillStyle, "rgba(255,0,0,1)"
+arc, 10, 10, 10, 0, 6.283185307179586
+fill
+closePath
+restore
+save
+beginPath
+fillStyle, "rgba(255,0,0,1)"
+arc, 60, 60, 10, 0, 6.283185307179586
+fill
+closePath
+restore
+save
+translate, 10, 10
+save
+translate, 5, 5
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+rect, -5, -5, 10, 10
+fill
+closePath
+restore
+save
+translate, 0, 0
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 10, 10, 5, 0, 6.283185307179586
+fill
+closePath
+restore
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 20, 20, 5, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+restore
+save
+translate, 60, 60
+save
+translate, 5, 5
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+rect, -5, -5, 10, 10
+fill
+closePath
+restore
+save
+translate, 0, 0
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 10, 10, 5, 0, 6.283185307179586
+fill
+closePath
+restore
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 20, 20, 5, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+restore
+restore
+save
+translate, 220, 20
+save
+beginPath
+fillStyle, "rgba(255,0,0,1)"
+arc, 20, 20, 10, 0, 6.283185307179586
+fill
+closePath
+restore
+save
+translate, 20, 20
+save
+translate, 5, 5
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+rect, -5, -5, 10, 10
+fill
+closePath
+restore
+save
+translate, 0, 0
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 10, 10, 5, 0, 6.283185307179586
+fill
+closePath
+restore
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 20, 20, 5, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+restore
+restore

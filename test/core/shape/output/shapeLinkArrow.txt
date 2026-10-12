@@ -1,0 +1,3991 @@
+scale, 1, 1
+save
+translate, 8, 8
+rotate, 3.141592653589793
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 24, 8
+rotate, 4.647752403612087
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 40, 8
+rotate, 5.7851517176712495
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 56, 8
+rotate, 6.27531557549774
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 72, 8
+rotate, 5.9982347696334575
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 88, 8
+rotate, 5.021748344884915
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 104, 8
+rotate, 3.584934234185204
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 120, 8
+rotate, 2.0395746424775676
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 136, 8
+rotate, 0.764027494111982
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 152, 8
+rotate, 0.0705912172703583
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 8, 24
+rotate, 3.141592653589793
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 24, 24
+rotate, 4.463372185630521
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 40, 24
+rotate, 5.461533989554914
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 56, 24
+rotate, 5.8916932436523535
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 72, 24
+rotate, 5.6485319601913275
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 88, 24
+rotate, 4.79158450190933
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 104, 24
+rotate, 3.530661493681241
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 120, 24
+rotate, 2.174480864148593
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 136, 24
+rotate, 1.055082929873963
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 152, 24
+rotate, 0.446535345535569
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 8, 40
+rotate, 3.141592653589793
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 24, 40
+rotate, 3.9553742395326195
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 40, 40
+rotate, 4.569913711611625
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 56, 40
+rotate, 4.834750374248501
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 72, 40
+rotate, 4.685042975928227
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 88, 40
+rotate, 4.157445108987654
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 104, 40
+rotate, 3.3811311318727197
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 120, 40
+rotate, 2.5461697810776367
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 136, 40
+rotate, 1.8569887155721805
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 152, 40
+rotate, 1.4823234962220335
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 8, 56
+rotate, 3.141592653589793
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 24, 56
+rotate, 3.248134179570897
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 40, 56
+rotate, 3.328590624226207
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 56, 56
+rotate, 3.363263443887499
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 72, 56
+rotate, 3.3436635230448273
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 88, 56
+rotate, 3.2745896058916157
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 104, 56
+rotate, 3.1729533963840493
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 120, 56
+rotate, 3.0636389832963067
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 136, 56
+rotate, 2.973410347425707
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 152, 56
+rotate, 2.92435860566706
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 8, 72
+rotate, 3.141592653589793
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 24, 72
+rotate, 2.514809038283381
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 40, 72
+rotate, 2.0414839118467705
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 56, 72
+rotate, 1.8375037730225334
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 72, 72
+rotate, 1.9528100738508871
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 88, 72
+rotate, 2.3591718104412225
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 104, 72
+rotate, 2.9570974573152027
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 120, 72
+rotate, 3.6001939627321193
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 136, 72
+rotate, 4.1310088733911865
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 152, 72
+rotate, 4.419580186345857
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 8, 88
+rotate, 3.141592653589793
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 24, 88
+rotate, 1.9349423858656665
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 40, 88
+rotate, 1.0237221870797073
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 56, 88
+rotate, 0.6310305418101595
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 72, 88
+rotate, 0.8530120604189287
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 88, 88
+rotate, 1.635317925274475
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 104, 88
+rotate, 2.786412376789293
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 120, 88
+rotate, 4.0244673474100825
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 136, 88
+rotate, 5.0463638016522685
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 152, 88
+rotate, 5.6019058476325725
+save
+beginPath
+strokeStyle, #000
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, #000
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 8, 8
+rotate, 3.141592653589793
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 24, 8
+rotate, 4.647752403612087
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 40, 8
+rotate, 5.7851517176712495
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 56, 8
+rotate, 6.27531557549774
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 72, 8
+rotate, 5.9982347696334575
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 88, 8
+rotate, 5.021748344884915
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 104, 8
+rotate, 3.584934234185204
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 120, 8
+rotate, 2.0395746424775676
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 136, 8
+rotate, 0.764027494111982
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 152, 8
+rotate, 0.0705912172703583
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 8, 24
+rotate, 3.141592653589793
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 24, 24
+rotate, 4.463372185630521
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 40, 24
+rotate, 5.461533989554914
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 56, 24
+rotate, 5.8916932436523535
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 72, 24
+rotate, 5.6485319601913275
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 88, 24
+rotate, 4.79158450190933
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 104, 24
+rotate, 3.530661493681241
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 120, 24
+rotate, 2.174480864148593
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 136, 24
+rotate, 1.055082929873963
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 152, 24
+rotate, 0.446535345535569
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 8, 40
+rotate, 3.141592653589793
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 24, 40
+rotate, 3.9553742395326195
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 40, 40
+rotate, 4.569913711611625
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 56, 40
+rotate, 4.834750374248501
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 72, 40
+rotate, 4.685042975928227
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 88, 40
+rotate, 4.157445108987654
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 104, 40
+rotate, 3.3811311318727197
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 120, 40
+rotate, 2.5461697810776367
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 136, 40
+rotate, 1.8569887155721805
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 152, 40
+rotate, 1.4823234962220335
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 8, 56
+rotate, 3.141592653589793
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 24, 56
+rotate, 3.248134179570897
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 40, 56
+rotate, 3.328590624226207
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 56, 56
+rotate, 3.363263443887499
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 72, 56
+rotate, 3.3436635230448273
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 88, 56
+rotate, 3.2745896058916157
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 104, 56
+rotate, 3.1729533963840493
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 120, 56
+rotate, 3.0636389832963067
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 136, 56
+rotate, 2.973410347425707
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 152, 56
+rotate, 2.92435860566706
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 8, 72
+rotate, 3.141592653589793
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 24, 72
+rotate, 2.514809038283381
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 40, 72
+rotate, 2.0414839118467705
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 56, 72
+rotate, 1.8375037730225334
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 72, 72
+rotate, 1.9528100738508871
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 88, 72
+rotate, 2.3591718104412225
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 104, 72
+rotate, 2.9570974573152027
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 120, 72
+rotate, 3.6001939627321193
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 136, 72
+rotate, 4.1310088733911865
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 152, 72
+rotate, 4.419580186345857
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 8, 88
+rotate, 3.141592653589793
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 24, 88
+rotate, 1.9349423858656665
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 40, 88
+rotate, 1.0237221870797073
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 56, 88
+rotate, 0.6310305418101595
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 72, 88
+rotate, 0.8530120604189287
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 88, 88
+rotate, 1.635317925274475
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 104, 88
+rotate, 2.786412376789293
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 120, 88
+rotate, 4.0244673474100825
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 136, 88
+rotate, 5.0463638016522685
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 152, 88
+rotate, 5.6019058476325725
+save
+beginPath
+fillStyle, "rgba(0,0,255,1)"
+arc, 0, 0, 2, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+translate, 24, 8
+rotate, 4.647752403612087
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 40, 8
+rotate, 5.7851517176712495
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 56, 8
+rotate, 6.27531557549774
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 72, 8
+rotate, 5.9982347696334575
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 88, 8
+rotate, 5.021748344884915
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 104, 8
+rotate, 3.584934234185204
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 24, 24
+rotate, 4.463372185630521
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 40, 24
+rotate, 5.461533989554914
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 56, 24
+rotate, 5.8916932436523535
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 72, 24
+rotate, 5.6485319601913275
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 88, 24
+rotate, 4.79158450190933
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 104, 24
+rotate, 3.530661493681241
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 24, 40
+rotate, 3.9553742395326195
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 40, 40
+rotate, 4.569913711611625
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 56, 40
+rotate, 4.834750374248501
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 72, 40
+rotate, 4.685042975928227
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 88, 40
+rotate, 4.157445108987654
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 104, 40
+rotate, 3.3811311318727197
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 24, 56
+rotate, 3.248134179570897
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 40, 56
+rotate, 3.328590624226207
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 56, 56
+rotate, 3.363263443887499
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 72, 56
+rotate, 3.3436635230448273
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 88, 56
+rotate, 3.2745896058916157
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 104, 56
+rotate, 3.1729533963840493
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 120, 72
+rotate, 3.6001939627321193
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 136, 72
+rotate, 4.1310088733911865
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 152, 72
+rotate, 4.419580186345857
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 120, 88
+rotate, 4.0244673474100825
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 136, 88
+rotate, 5.0463638016522685
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore
+save
+translate, 152, 88
+rotate, 5.6019058476325725
+save
+beginPath
+strokeStyle, red
+lineWidth, 1
+moveTo, -6.4, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, -0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+save
+beginPath
+translate, 6.4, 0
+rotate, 0.5235987755982988
+translate, -6.4, 0
+strokeStyle, red
+lineWidth, 1
+moveTo, 0, 0
+lineTo, 6.4, 0
+stroke
+closePath
+restore
+restore

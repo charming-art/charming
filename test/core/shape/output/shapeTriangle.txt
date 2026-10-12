@@ -1,0 +1,19 @@
+scale, 1, 1
+save
+beginPath
+fillStyle, steelblue
+moveTo, 10, 10
+lineTo, 100, 10
+lineTo, 100, 100
+closePath
+fill
+restore
+save
+beginPath
+fillStyle, orange
+moveTo, 210, 10
+lineTo, 300, 10
+lineTo, 300, 100
+closePath
+fill
+restore

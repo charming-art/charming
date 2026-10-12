@@ -47,3 +47,11 @@ export function renderPretext({
     }}/>
   </svg>`;
 }
+
+export function renderFlow(draw, {width = 200, height = 200} = {}) {
+  const renderer = cm.canvas({width, height, dpi: 1});
+  const root = cm.flow().renderer(renderer);
+  draw(root, width, height);
+  root.render();
+  return renderer.node();
+}

@@ -3,8 +3,10 @@
   import * as dom from "./dom/cases/index.js";
   import * as path from "./path/cases/index.js";
   import * as pretext from "./pretext/cases/index.js";
+  import * as coreShape from "./core/shape/cases/index.js";
+  import * as coreFlow from "./core/flow/cases/index.js";
 
-  const cases = {...canvas, ...dom, ...path, ...pretext};
+  const cases = {...canvas, ...dom, ...path, ...pretext, ...coreShape, ...coreFlow};
 
   // Tool
   const tool = document.createElement("div");
