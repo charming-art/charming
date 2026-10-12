@@ -1,6 +1,6 @@
 import "./install-canvas-mock.js";
 import {afterEach, describe, expect, test} from "vitest";
-import {_prepareMemo} from "../src/pretext/index.js";
+import {prepareMemo as _prepareMemo} from "../src/pretext/prepareMemo.js";
 import * as cm from "../src/index.js";
 
 const defaultLayoutFont = {

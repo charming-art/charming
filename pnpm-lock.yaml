@@ -11,6 +11,12 @@ importers:
       '@chenglou/pretext':
         specifier: ^0.0.4
         version: 0.0.4
+      d3-color:
+        specifier: ^3.1.0
+        version: 3.1.0
+      d3-path:
+        specifier: ^3.1.0
+        version: 3.1.0
       hachure-fill:
         specifier: ^0.5.2
         version: 0.5.2
