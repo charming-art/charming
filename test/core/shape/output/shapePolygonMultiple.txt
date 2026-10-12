@@ -1,0 +1,19 @@
+scale, 1, 1
+save
+beginPath
+fillStyle, "rgba(70,130,180,1)"
+moveTo, 20, 20
+lineTo, 90, 20
+lineTo, 20, 90
+closePath
+fill
+restore
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+moveTo, 110, 180
+lineTo, 180, 180
+lineTo, 180, 110
+closePath
+fill
+restore

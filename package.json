@@ -1,7 +1,7 @@
 {
   "name": "charmingjs",
   "version": "0.0.20",
-  "description": "The JavaScript library for generative art based on SVG",
+  "description": "The JavaScript library for generative art, with a data-driven rendering pipeline on Canvas and WebGL",
   "author": {
     "name": "Bairui SU",
     "url": "https://charmingjs.org/"
@@ -54,6 +54,8 @@
   },
   "dependencies": {
     "@chenglou/pretext": "^0.0.4",
+    "d3-color": "^3.1.0",
+    "d3-path": "^3.1.0",
     "hachure-fill": "^0.5.2",
     "points-on-path": "^0.2.1"
   }

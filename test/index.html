@@ -1,5 +1,10 @@
 <script type="module">
-  import * as cases from "./cases/index.js";
+  import * as canvas from "./canvas/cases/index.js";
+  import * as dom from "./dom/cases/index.js";
+  import * as pretext from "./pretext/cases/index.js";
+  import * as coreShape from "./core/shape/cases/index.js";
+
+  const cases = {...canvas, ...dom, ...pretext, ...coreShape};
 
   // Tool
   const tool = document.createElement("div");

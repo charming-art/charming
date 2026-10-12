@@ -1,0 +1,10 @@
+scale, 1, 1
+save
+translate, 100, 100
+rotate, 0.7853981633974483
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+rect, -40, -20, 80, 40
+fill
+closePath
+restore

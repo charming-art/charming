@@ -1,0 +1,31 @@
+scale, 1, 1
+save
+beginPath
+strokeStyle, steelblue
+lineWidth, 16
+lineCap, butt
+moveTo, 40, 50
+lineTo, 160, 50
+stroke
+closePath
+restore
+save
+beginPath
+strokeStyle, steelblue
+lineWidth, 16
+lineCap, round
+moveTo, 40, 100
+lineTo, 160, 100
+stroke
+closePath
+restore
+save
+beginPath
+strokeStyle, steelblue
+lineWidth, 16
+lineCap, square
+moveTo, 40, 150
+lineTo, 160, 150
+stroke
+closePath
+restore
