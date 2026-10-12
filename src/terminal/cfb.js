@@ -7,15 +7,17 @@ function encodeColor(color) {
   return b + (g << 8) + (r << 16);
 }
 
-function encodeChar(ch) {
-  if (Array.isArray(ch)) return ch;
+// A cell holds up to two characters. A wide character, such as an emoji or a CJK
+// character, fills two columns: the high bits of its code point mark it as wide.
+function encodeChar(ch, wide) {
+  if (wide) return [ch.codePointAt(0) + 0xf0000000, NULL_VALUE];
   return Array.from(ch)
     .slice(0, 2)
     .map((ch) => ch.codePointAt(0));
 }
 
 export function cfb(color) {
-  const {ch = " ", fg = "#fff", bg = null} = color;
-  const [n, n1 = NULL_VALUE] = encodeChar(ch);
+  const {ch = " ", fg = "#fff", bg = null, wide = false} = color;
+  const [n, n1 = NULL_VALUE] = encodeChar(ch, wide);
   return [n, n1, encodeColor(fg), encodeColor(bg)];
 }

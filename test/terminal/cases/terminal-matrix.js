@@ -7,12 +7,12 @@ export function terminalMatrix() {
       root
         .data([
           [" +", "-", "+ "],
-          [" |", cm.wch("🚀"), "| "],
+          [" |", {ch: "🚀", wide: true}, "| "],
           [" +", "-", "+ "],
         ])
         .append(cm.group, {y: (_, i) => i})
         .data((d) => d)
-        .append(cm.point, {y: 0, x: (_, i) => i, stroke0: (d) => d});
+        .append(cm.point, {y: 0, x: (_, i) => i, stroke: (d) => (typeof d === "string" ? {ch: d} : d)});
     },
     {cols: 3, rows: 3, mode: "double"},
   );

@@ -10,7 +10,7 @@ export function terminalClover() {
         .append(cm.point, {
           x: (t) => 10 * Math.cos(t) * Math.cos(t * 3),
           y: (t) => 10 * Math.sin(t) * Math.cos(t * 3),
-          stroke: {ch: cm.wch("🌟")},
+          stroke: {ch: "🌟", wide: true},
         });
     },
     {cols: 24, rows: 24, mode: "double"},
