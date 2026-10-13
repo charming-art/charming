@@ -7,3 +7,4 @@ dist
 cache
 docs/.vitepress/lib
 **-actual.svg
+rust/target

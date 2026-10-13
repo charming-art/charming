@@ -57,6 +57,18 @@ export function renderFlow(draw, {width = 200, height = 200} = {}) {
   return renderer.node();
 }
 
+// Renders with a terminal renderer and returns its canvas. The canvas's toString
+// returns the character grid, which the snapshot runner stores instead of draw calls.
+export function renderTerminal(draw, options) {
+  const renderer = cm.terminal(options);
+  const root = cm.flow().renderer(renderer);
+  draw(root, renderer._props.width, renderer._props.height);
+  root.render();
+  const node = renderer.node();
+  node.toString = () => renderer.toString();
+  return node;
+}
+
 // A composite shape that records the evaluated channel values it receives at render time.
 export function probe() {
   const calls = [];
