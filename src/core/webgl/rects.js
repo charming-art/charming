@@ -1,4 +1,4 @@
-import {normalizeColor} from "../color.js";
+import {colorBytes} from "../color.js";
 import {
   getProgram,
   hasGLSLAttribute,
@@ -58,7 +58,7 @@ const attributes = {
     size: 4,
     glType: "UNSIGNED_BYTE",
     normalize: true,
-    map: (value) => new Uint8Array(value.flatMap((d) => normalizeColor(d))),
+    map: (value) => new Uint8Array(value.flatMap(colorBytes)),
     onlyUniform: true,
   },
 };
@@ -96,7 +96,7 @@ export function webgl$rects(I, value, data) {
 
   bindUniform(gl, program, {
     name: "u_resolution",
-    data: [gl.canvas.width / devicePixelRatio, gl.canvas.height / devicePixelRatio],
+    data: [this._props.width, this._props.height],
   });
 
   bindVariables(gl, program, ext, attributes, vertexVariables);

@@ -3,6 +3,7 @@ import {define} from "./define.js";
 export const line = define((renderer, I, value, options) => {
   const {close = false} = options;
   const {x: X, y: Y, stroke: S = [], strokeWidth: SW = []} = value;
+  if (!I.length) return;
   const first = I[0];
   const D = [["M", X[first], Y[first]]];
   const k = I.length;

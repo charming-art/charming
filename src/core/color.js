@@ -21,3 +21,8 @@ export function normalizeColorString(color, opacity) {
   const [r, g, b, a] = normalizeColor(color, opacity);
   return `rgba(${r},${g},${b},${a / 255})`;
 }
+
+// RGBA bytes for WebGL. A nullish color, such as {fill: null}, is transparent: nothing is drawn.
+export function colorBytes(color) {
+  return color == null ? [0, 0, 0, 0] : normalizeColor(color);
+}

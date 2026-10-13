@@ -14,6 +14,7 @@ export const text = define((renderer, I, value) => {
     textAlign: TA = [],
     fontFamily: FF = [],
     fontSize: FS = [],
+    fontWeight: FW = [],
   } = value;
   for (const i of I) {
     renderer.text({
@@ -29,6 +30,7 @@ export const text = define((renderer, I, value) => {
       textAlign: TA[i],
       fontFamily: FF[i],
       fontSize: FS[i],
+      fontWeight: FW[i],
     });
   }
 });

@@ -66,7 +66,7 @@ export function webgl$triangles(I, value) {
 
   // Set the resolution.
   const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
-  gl.uniform2f(resolutionLocation, gl.canvas.width / devicePixelRatio, gl.canvas.height / devicePixelRatio);
+  gl.uniform2f(resolutionLocation, this._props.width, this._props.height);
 
   // Render.
   gl.drawArrays(gl.TRIANGLES, 0, I.length * 3);

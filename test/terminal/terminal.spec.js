@@ -38,3 +38,17 @@ test("terminal() works with mapPosition, which maps to cells", () => {
   assert.deepStrictEqual(calls[0].x, [0, 21]);
   assert.deepStrictEqual(calls[0].y, [0, 11]);
 });
+
+test("terminal({fontWeight}) measures cells in that font weight", () => {
+  // jsdom doesn't lay out text, so make bold glyphs measure wider.
+  const {getBoundingClientRect} = HTMLElement.prototype;
+  HTMLElement.prototype.getBoundingClientRect = function () {
+    return {width: this.style.fontWeight === "bold" ? 10 : 8, height: 16};
+  };
+  try {
+    assert.strictEqual(cm.terminal({cols: 2, rows: 2})._props.cellWidth, 8);
+    assert.strictEqual(cm.terminal({cols: 2, rows: 2, fontWeight: "bold"})._props.cellWidth, 10);
+  } finally {
+    HTMLElement.prototype.getBoundingClientRect = getBoundingClientRect;
+  }
+});
