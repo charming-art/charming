@@ -1,4 +1,4 @@
-import {normalizeColor} from "../color.js";
+import {colorBytes} from "../color.js";
 import {
   getProgram,
   hasGLSLAttribute,
@@ -58,7 +58,7 @@ const attributes = {
     size: 4,
     glType: "UNSIGNED_BYTE",
     normalize: true,
-    map: (value) => new Uint8Array(value.flatMap((d) => normalizeColor(d))),
+    map: (value) => new Uint8Array(value.flatMap(colorBytes)),
     onlyUniform: true,
   },
 };
