@@ -47,3 +47,9 @@ test("flow.append(shape, options) returns a new flow whose appended shapes are d
     [[1], [2]],
   );
 });
+
+test("flow.append(shape, options) accepts null options", () => {
+  const [shape, calls] = probe();
+  render((root) => root.data([1, 2]).append(shape, {fill: null}));
+  assert.deepStrictEqual(calls[0].fill, [null, null]);
+});

@@ -1,0 +1,9 @@
+scale, 1, 1
+save
+translate, 0, 0
+strokeStyle, "rgba(0,0,0,1)"
+beginPath
+moveTo, 50, 100
+ellipse, 100, 100, 50, 50, 0, 3.141592653589793, 6.283185307179586, false
+stroke
+restore

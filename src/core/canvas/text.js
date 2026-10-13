@@ -25,6 +25,7 @@ export function canvas$text({
   if (textAlign) context.textAlign = textAlign;
   if (textBaseline) context.textBaseline = textBaseline;
   context.font = `${fontWeight} ${fontSize}px ${fontFamily}`.trim();
-  context.fillText(text, x, y);
+  if (fill || !stroke) context.fillText(text, x, y);
+  if (stroke) context.strokeText(text, x, y);
   context.restore();
 }

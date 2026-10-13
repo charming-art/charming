@@ -96,7 +96,7 @@ export function webgl$rects(I, value, data) {
 
   bindUniform(gl, program, {
     name: "u_resolution",
-    data: [gl.canvas.width / devicePixelRatio, gl.canvas.height / devicePixelRatio],
+    data: [this._props.width, this._props.height],
   });
 
   bindVariables(gl, program, ext, attributes, vertexVariables);

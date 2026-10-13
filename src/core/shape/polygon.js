@@ -5,6 +5,7 @@ function isFlatArray(value) {
 }
 
 export const polygon = define((renderer, I, value) => {
+  if (!I.length) return;
   const {
     x: X = [],
     y: Y = [],

@@ -1,0 +1,13 @@
+scale, 1, 1
+save
+strokeStyle, "rgba(0,0,0,1)"
+font, bold 32px sans-serif
+strokeText, outline, 20, 100
+restore
+save
+strokeStyle, "rgba(0,0,0,1)"
+fillStyle, "rgba(255,165,0,1)"
+font, normal 32px sans-serif
+fillText, both, 20, 150
+strokeText, both, 20, 150
+restore

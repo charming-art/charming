@@ -1,7 +1,7 @@
 import {define} from "./define.js";
 
-export const rect = define((renderer, I, value) => {
-  if (renderer.rects) return renderer.rects(I, value);
+export const rect = define((renderer, I, value, options, group) => {
+  if (renderer.rects) return renderer.rects(I, value, group);
   const {
     x: X = [],
     y: Y = [],

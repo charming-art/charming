@@ -72,7 +72,8 @@ function drawArc(context, x1, y1, rx, ry, xAxisRotation, largeArcFlag, sweepFlag
 }
 
 function drawPath(context, d) {
-  let px, py;
+  // The current point, the last cubic's second control point, and the previous command.
+  let px, py, cx, cy, previous;
   for (const cmd of d) {
     const [c, ...args] = cmd;
     if (c === "M") {
@@ -83,6 +84,7 @@ function drawPath(context, d) {
       [px, py] = args;
     } else if (c === "C") {
       context.bezierCurveTo(...args);
+      [cx, cy] = args.slice(2, 4);
       [px, py] = args.slice(-2);
     } else if (c === "Q") {
       context.quadraticCurveTo(...args);
@@ -111,10 +113,14 @@ function drawPath(context, d) {
       py += args[1];
     } else if (c === "c") {
       context.bezierCurveTo(px + args[0], py + args[1], px + args[2], py + args[3], px + args[4], py + args[5]);
+      [cx, cy] = [px + args[2], py + args[3]];
       px += args[4];
       py += args[5];
     } else if (c === "s") {
-      context.bezierCurveTo(px + args[0], py + args[1], px + args[2], py + args[3], px + args[4], py + args[5]);
+      // The first control point reflects the previous cubic's second control point.
+      const [x1, y1] = /^[cs]$/i.test(previous) ? [2 * px - cx, 2 * py - cy] : [px, py];
+      [cx, cy] = [px + args[0], py + args[1]];
+      context.bezierCurveTo(x1, y1, cx, cy, px + args[2], py + args[3]);
       px += args[2];
       py += args[3];
     } else if (c === "q") {
@@ -127,7 +133,7 @@ function drawPath(context, d) {
       py += args[1];
     } else if (c === "a") {
       const [rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y] = args;
-      drawArc(context, px, py, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y);
+      drawArc(context, px, py, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, px + x, py + y);
       px += x;
       py += y;
     } else if (c === "z") {
@@ -135,6 +141,7 @@ function drawPath(context, d) {
     } else {
       console.warn(`Unknown command: ${c}`);
     }
+    previous = c;
   }
 }
 
