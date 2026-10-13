@@ -1,6 +1,6 @@
 # Charming Path
 
-**Charming Path** builds SVG [`d`](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d) path strings from numbers—handy for `<path>`, [`getPointAtLength`](https://developer.mozilla.org/en-US/docs/Web/API/SVGGeometryElement/getPointAtLength), or APIs such as `layoutTextInPath` that expect a path description. Shapes are axis-aligned in user space (no rotation in the path itself).
+**Charming Path** builds SVG [`d`](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d) path strings from numbers, handy for `<path>`, [`getPointAtLength`](https://developer.mozilla.org/en-US/docs/Web/API/SVGGeometryElement/getPointAtLength), or APIs such as `layoutTextInPath` that expect a path description. Shapes are axis-aligned in user space (no rotation in the path itself). [_cm_.pathContext](#cm-path-context) records paths as command arrays for [_cm_.path](/shape#cm-path).
 
 ```js eval code=false
 (() => {
@@ -110,4 +110,32 @@ const d = cm.pathPolygon([
   [100, 0],
   [50, 80],
 ]);
+```
+
+## _cm_.pathContext() {#cm-path-context}
+
+Returns a [d3-path](https://d3js.org/d3-path)-compatible context that records path commands as arrays instead of a string. Call the [CanvasPathMethods](https://html.spec.whatwg.org/multipage/canvas.html#canvaspath) on it (_moveTo_, _lineTo_, _quadraticCurveTo_, _bezierCurveTo_, _arc_, _arcTo_, _rect_, _closePath_), then _context_.toArray() to get the commands. Pass them as the **d** of [_cm_.path](/shape#cm-path), so a path from [d3-shape](https://d3js.org/d3-shape) or [d3-geo](https://d3js.org/d3-geo) can be drawn without parsing a string.
+
+```js
+const context = cm.pathContext();
+context.moveTo(0, 0);
+context.lineTo(10, 0);
+context.lineTo(10, 10);
+context.closePath();
+context.toArray(); // [["M", 0, 0], ["L", 10, 0], ["L", 10, 10], ["Z"]]
+```
+
+For example, with d3-geo:
+
+```js
+const path = d3.geoPath(d3.geoOrthographic());
+
+root.append(cm.path, {
+  d: () => {
+    const context = cm.pathContext();
+    path.context(context)(d3.geoCircle()());
+    return context.toArray();
+  },
+  stroke: "black",
+});
 ```

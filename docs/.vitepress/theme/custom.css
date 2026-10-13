@@ -12,3 +12,9 @@
 .language-js {
   margin-top: 0px !important;
 }
+
+/* Fit live examples to the content column, keeping their aspect ratio. */
+.vp-doc canvas {
+  max-width: 100%;
+  height: auto !important;
+}
