@@ -55,13 +55,13 @@ root.render();
 document.body.append(renderer.node());
 ```
 
-This example is too simple to show the true charm of Charming. To fix that, let's draw thousands of circles whose positions, radii and strokes are computed by trigonometric functions, frame by frame. It's a reimplementation of Ricky Reusser's [Instanced WebGL Circles](https://observablehq.com/@rreusser/instanced-webgl-circles), with more readable code.
+This example is too simple to show the true charm of Charming. To fix that, let's draw 2,000 circles whose positions, radii and strokes are computed by trigonometric functions, frame by frame. It's a reimplementation of Ricky Reusser's [Instanced WebGL Circles](https://observablehq.com/@rreusser/instanced-webgl-circles), with more readable code.
 
 ```js eval code=false
 (() => {
   const width = 640;
   const height = 640;
-  const count = 3000;
+  const count = 2000;
   const theta = Array.from({length: count}, (_, i) => (i / count) * Math.PI * 2);
   const renderer = cm.canvas({width, height});
   const root = cm.flow().renderer(renderer);
@@ -104,7 +104,7 @@ This example is too simple to show the true charm of Charming. To fix that, let'
 ```js
 const width = 640;
 const height = 640;
-const count = 3000;
+const count = 2000;
 const theta = Array.from({length: count}, (_, i) => (i / count) * Math.PI * 2);
 const renderer = cm.canvas({width, height});
 const root = cm.flow().renderer(renderer);
