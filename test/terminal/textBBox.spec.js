@@ -38,3 +38,8 @@ test('terminal().textBBox({text, figlet: true, fontFamily}) returns the box of t
     height: 9,
   });
 });
+
+test("terminal().textBBox({text}) counts an astral character, such as an emoji, as one cell", () => {
+  const renderer = cm.terminal({cols: 10, rows: 5});
+  assert.deepStrictEqual(renderer.textBBox({text: "a🚀b"}), {x: 0, y: 0, width: 3, height: 1});
+});

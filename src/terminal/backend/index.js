@@ -99,31 +99,6 @@ export class Backend {
      * @param {number} x
      * @param {number} y
      */
-    point(x, y) {
-        wasm.backend_point(this.__wbg_ptr, x, y);
-    }
-    /**
-     * @param {number} x
-     * @param {number} y
-     * @param {number} x1
-     * @param {number} y1
-     */
-    line(x, y, x1, y1) {
-        wasm.backend_line(this.__wbg_ptr, x, y, x1, y1);
-    }
-    /**
-     * @param {number} x
-     * @param {number} y
-     * @param {number} width
-     * @param {number} height
-     */
-    rect(x, y, width, height) {
-        wasm.backend_rect(this.__wbg_ptr, x, y, width, height);
-    }
-    /**
-     * @param {number} x
-     * @param {number} y
-     */
     translate(x, y) {
         wasm.backend_translate(this.__wbg_ptr, x, y);
     }
@@ -163,6 +138,34 @@ export class Backend {
     static new(cols, rows) {
         const ret = wasm.backend_new(cols, rows);
         return Backend.__wrap(ret);
+    }
+    clear() {
+        wasm.backend_clear(this.__wbg_ptr);
+    }
+    /**
+     * @param {number} x
+     * @param {number} y
+     */
+    point(x, y) {
+        wasm.backend_point(this.__wbg_ptr, x, y);
+    }
+    /**
+     * @param {number} x
+     * @param {number} y
+     * @param {number} x1
+     * @param {number} y1
+     */
+    line(x, y, x1, y1) {
+        wasm.backend_line(this.__wbg_ptr, x, y, x1, y1);
+    }
+    /**
+     * @param {number} x
+     * @param {number} y
+     * @param {number} width
+     * @param {number} height
+     */
+    rect(x, y, width, height) {
+        wasm.backend_rect(this.__wbg_ptr, x, y, width, height);
     }
 }
 if (Symbol.dispose) Backend.prototype[Symbol.dispose] = Backend.prototype.free;

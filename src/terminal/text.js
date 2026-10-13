@@ -10,9 +10,9 @@ function drawText(renderer, matrix, {x, y, fill, textAlign = "start", textBaseli
   const {x: startX, y: startY, width, height, lines} = bboxOf(matrix, {x, y, textAlign, textBaseline});
   const fillOf = normalizeColor(fill, width, height);
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    for (let j = 0; j < line.length; j++) {
-      renderer.point({x: startX + j, y: startY + i, stroke: {ch: line[j], fg: fillOf(j, i)}});
+    const chars = Array.from(lines[i]);
+    for (let j = 0; j < chars.length; j++) {
+      renderer.point({x: startX + j, y: startY + i, stroke: {ch: chars[j], fg: fillOf(j, i)}});
     }
   }
 }

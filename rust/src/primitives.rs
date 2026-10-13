@@ -7,6 +7,10 @@ use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 impl Backend {
+    pub fn clear(&mut self) {
+        self.shapes.clear();
+    }
+
     pub fn point(&mut self, x: f64, y: f64) {
         let v: Vertex = Vertex {
             color: self.stroke_color,
@@ -90,5 +94,16 @@ mod tests {
         backend.point(0.0, 0.0);
         assert_eq!(backend.shapes[0].vertices[0].x, 0.0);
         assert_eq!(backend.shapes[0].vertices[0].y, 0.0);
+    }
+
+    #[test]
+    fn should_clear_shapes_but_keep_transform() {
+        let mut backend: Backend = Backend::new(10, 10);
+        backend.translate(2.0, 3.0);
+        backend.point(0.0, 0.0);
+        backend.clear();
+        assert_eq!(backend.shapes.len(), 0);
+        assert_eq!(backend.mode_view[2], 2.0);
+        assert_eq!(backend.mode_view[5], 3.0);
     }
 }

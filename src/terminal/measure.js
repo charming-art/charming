@@ -13,6 +13,7 @@ export function measureText(text, styles) {
   // Font attributes.
   span.style.fontSize = `${styles.fontSize}px`;
   span.style.fontFamily = styles.fontFamily;
+  span.style.fontWeight = styles.fontWeight;
 
   span.textContent = text;
   document.body.appendChild(span);
