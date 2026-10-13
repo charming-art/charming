@@ -1,0 +1,9 @@
+scale, 1, 1
+save
+translate, 0, 0
+strokeStyle, "rgba(0,0,0,1)"
+beginPath
+moveTo, 10, 10
+bezierCurveTo, 10, 10, 50, 30, 70, 10
+stroke
+restore
