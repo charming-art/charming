@@ -24,14 +24,14 @@ test("terminal().textBBox({text, x, y, textAlign, textBaseline}) aligns the box"
   });
 });
 
-test('terminal().textBBox({text: figlet(text), fontFamily}) uses the named figlet font, "standard" by default', () => {
+test('terminal().textBBox({text, figlet: true, fontFamily}) returns the box of the figlet banner, in "standard" by default', () => {
   const renderer = cm.terminal({cols: 10, rows: 5});
-  assert.deepStrictEqual(renderer.textBBox({text: cm.figlet("Hi")}), {x: 0, y: 0, width: 10, height: 6});
+  assert.deepStrictEqual(renderer.textBBox({text: "Hi", figlet: true}), {x: 0, y: 0, width: 10, height: 6});
   assert.deepStrictEqual(
-    renderer.textBBox({text: cm.figlet("Hi"), fontFamily: "standard"}),
-    renderer.textBBox({text: cm.figlet("Hi")}),
+    renderer.textBBox({text: "Hi", figlet: true, fontFamily: "standard"}),
+    renderer.textBBox({text: "Hi", figlet: true}),
   );
-  assert.deepStrictEqual(renderer.textBBox({text: cm.figlet("Hi"), fontFamily: "ghost"}), {
+  assert.deepStrictEqual(renderer.textBBox({text: "Hi", figlet: true, fontFamily: "ghost"}), {
     x: 0,
     y: 0,
     width: 19,

@@ -5,7 +5,7 @@ import {terminal$node} from "./node.js";
 import {terminal$char} from "./char.js";
 import {terminal$render} from "./render.js";
 import {terminal$point} from "./point.js";
-import {terminal$text} from "./text.js";
+import {terminal$text, terminal$figlet} from "./text.js";
 import {terminal$rect} from "./rect.js";
 import {terminal$line} from "./line.js";
 import {terminal$clear} from "./clear.js";
@@ -36,6 +36,7 @@ Object.defineProperties(Terminal.prototype, {
   rect: {value: terminal$rect},
   line: {value: terminal$line},
   text: {value: terminal$text},
+  figlet: {value: terminal$figlet},
   clear: {value: terminal$clear},
   save: {value: terminal$save},
   restore: {value: terminal$restore},

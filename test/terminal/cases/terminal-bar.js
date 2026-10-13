@@ -97,10 +97,10 @@ export function terminalBar() {
         });
 
       // Annotation.
-      root.append(cm.text, {
+      root.append(cm.figlet, {
         x: marginX + plotWidth,
         y: marginY + plotHeight,
-        text: cm.figlet("2023"),
+        text: "2023",
         textBaseline: "bottom",
         textAlign: "end",
       });

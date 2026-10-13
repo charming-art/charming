@@ -6,30 +6,21 @@ function normalizeColor(color, width, height) {
   return () => color;
 }
 
-export function terminal$text({x, y, text, fill, textAlign = "start", textBaseline = "top", fontFamily = "standard"}) {
-  const matrix = textOf(text, fontFamily);
-  const {
-    x: startX,
-    y: startY,
-    width: textWidth,
-    height: textHeight,
-    lines,
-  } = bboxOf(matrix, {
-    x,
-    y,
-    textAlign,
-    textBaseline,
-  });
-  fill = normalizeColor(fill, textWidth, textHeight);
+function drawText(renderer, matrix, {x, y, fill, textAlign = "start", textBaseline = "top"}) {
+  const {x: startX, y: startY, width, height, lines} = bboxOf(matrix, {x, y, textAlign, textBaseline});
+  const fillOf = normalizeColor(fill, width, height);
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     for (let j = 0; j < line.length; j++) {
-      const ch = line[j];
-      this.point({
-        x: startX + j,
-        y: startY + i,
-        stroke: {ch, fg: fill(j, i)},
-      });
+      renderer.point({x: startX + j, y: startY + i, stroke: {ch: line[j], fg: fillOf(j, i)}});
     }
   }
+}
+
+export function terminal$text({text, ...options}) {
+  drawText(this, textOf(text), options);
+}
+
+export function terminal$figlet({text, fontFamily, ...options}) {
+  drawText(this, textOf(text, {figlet: true, fontFamily}), options);
 }

@@ -1,11 +1,11 @@
 import * as cm from "../../../src/index.js";
 import {renderTerminal} from "../../helpers.js";
 
-export function terminalTextFiglet() {
+export function terminalFiglet() {
   return renderTerminal(
     (root, width, height) => {
-      root.append(cm.text, {
-        text: cm.figlet("hello world"),
+      root.append(cm.figlet, {
+        text: "hello world",
         x: width / 2,
         y: height / 2,
         textAlign: "center",
