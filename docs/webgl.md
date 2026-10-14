@@ -102,11 +102,11 @@ The WebGL renderer draws these shapes:
 - [_cm_.triangle](/shape#cm-triangle) — **x**, **y**, **x1**, **y1**, **x2**, **y2** and **fill**.
 - [_cm_.clear](/shape#cm-clear) — **fill**.
 
-Colors are blended additively, so overlapping shapes add up. That suits glowing, generative pieces.
+Circles and rects are blended additively, so overlapping shapes add up. That suits glowing, generative pieces.
 
 ## _cm_.glsl {#cm-glsl}
 
-Defines an attribute as a [GLSL](<https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)>) function, using a template literal. The function must be named after the attribute. It's called on the GPU for each shape with the datum, which must be a number, and returns the attribute's type: `float` for numbers, `vec2` for **position** and `vec4` for colors.
+Defines an attribute of a [circle](/shape#cm-circle) or a [rect](/shape#cm-rect) as a [GLSL](<https://www.khronos.org/opengl/wiki/Core_Language_(GLSL)>) function, using a template literal. Triangles and clear don't support GLSL attributes. The function must be named after the attribute. It's called on the GPU for each shape with the datum, which must be a number, and returns the attribute's type: `float` for numbers, `vec2` for **position** and `vec4` for colors.
 
 ```js
 const r = cm.glsl`float r(float theta) {

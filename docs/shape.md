@@ -2,7 +2,7 @@
 
 **Charming Shape** provides the shapes that [_flow_.append](/flow#flow-append) draws: one shape instance per datum, with each attribute set from an option. Positions are in pixels, or in cells with the [terminal renderer](/terminal).
 
-Most shapes support these standard attributes:
+These are the standard appearance attributes. Each shape lists which of them it supports:
 
 - **fill** — the fill color.
 - **fillOpacity** — the fill opacity, a number between 0 and 1.
@@ -31,10 +31,11 @@ Most shapes support these standard attributes:
 
 ## _cm_.point {#cm-point}
 
-Appends dots at _x_ and _y_. In addition to the [standard attributes](#charming-shape), it supports:
+Appends dots at _x_ and _y_. It supports:
 
 - **x** — the horizontal position.
 - **y** — the vertical position.
+- **stroke**, **strokeWidth** — the color and size of the dot.
 
 ```js
 root.append(cm.point, {x: 10, y: 10});
@@ -44,9 +45,10 @@ On the terminal renderer, a point is one cell. See [cells](/terminal#cells).
 
 ## _cm_.link {#cm-link}
 
-Appends straight lines from (_x_, _y_) to (_x1_, _y1_). In addition to the [standard attributes](#charming-shape), it supports:
+Appends straight lines from (_x_, _y_) to (_x1_, _y1_). It supports:
 
 - **x**, **y** — the start point.
+- **stroke**, **strokeWidth** — the color and width of the line.
 - **x1**, **y1** — the end point.
 - **rotate** — the rotation angle in radians, clockwise.
 - **transformOrigin** — the point to rotate around: `"start"` (default), `"center"` or `"end"`.
@@ -87,9 +89,10 @@ root.data(["butt", "round", "square"]).append(cm.link, {
 
 ## _cm_.line {#cm-line}
 
-Appends a line through the _x_ and _y_ of every datum of a group. In addition to the [standard attributes](#charming-shape), it supports:
+Appends a line through the _x_ and _y_ of every datum of a group. It supports:
 
 - **x**, **y** — the position of each point.
+- **stroke**, **strokeWidth** — the color and width of the line, taken from the first datum.
 - **close** — whether to close the line (default `false`).
 
 ```js eval code=false
@@ -173,9 +176,10 @@ root.append(cm.circle, {x: 50, y: 50, r: 30, fill: "steelblue"});
 
 ## _cm_.triangle {#cm-triangle}
 
-Appends triangles through (_x_, _y_), (_x1_, _y1_) and (_x2_, _y2_). In addition to the [standard attributes](#charming-shape), it supports:
+Appends triangles through (_x_, _y_), (_x1_, _y1_) and (_x2_, _y2_). It supports:
 
 - **x**, **y**, **x1**, **y1**, **x2**, **y2** — the three corners.
+- **fill**, **stroke**, **strokeWidth** — the colors and stroke width.
 
 ```js
 root.append(cm.triangle, {x: 0, y: 0, x1: 10, y1: 0, x2: 10, y2: 10, fill: "seagreen"});

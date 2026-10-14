@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {test} from "vitest";
+import {test, vi} from "vitest";
 import * as cm from "../../src/index.js";
 
 function sample(noise, n = 500) {
@@ -57,9 +57,18 @@ test("noise(lo, hi, {seed}) truncates the seed to an integer", () => {
   assert.notDeepStrictEqual(sample(cm.noise(0, 1, {seed: 3})), sample(cm.noise(0, 1, {seed: 4})));
 });
 
-test("noise() without a seed returns a different sequence each time", () => {
-  const values = new Set(Array.from({length: 200}, () => cm.noise()(0.5)));
-  assert.strictEqual(values.size, 200);
+test("noise() without a seed uses a random 32-bit seed", () => {
+  const random = vi.spyOn(Math, "random");
+  try {
+    random.mockReturnValue(0.25);
+    const a = sample(cm.noise());
+    random.mockReturnValue(0.75);
+    const b = sample(cm.noise());
+    assert.deepStrictEqual(a, sample(cm.noise(0, 1, {seed: 0.25 * 2 ** 32})));
+    assert.deepStrictEqual(b, sample(cm.noise(0, 1, {seed: 0.75 * 2 ** 32})));
+  } finally {
+    random.mockRestore();
+  }
 });
 
 test("noise(lo, hi, {falloff}) can exceed hi when falloff is greater than 0.5", () => {

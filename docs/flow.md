@@ -48,7 +48,7 @@ A drawing goes through three stages, and a flow has a method for each:
 - **[append](#flow-append)** binds each datum to a shape and computes its attributes.
 - **[transform](#flow-transform)** derives the final attribute values, for example by mapping them to the canvas with scales.
 
-Every method returns a new flow, so calls chain.
+_flow_.data, _flow_.datum, _flow_.append, _flow_.process and _flow_.transform return a new flow, while _flow_.call, _flow_.render and _flow_.renderer(_renderer_) return the same flow, so calls chain.
 
 ## _cm_.flow() {#cm-flow}
 
