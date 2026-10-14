@@ -3,7 +3,7 @@
 **Charming** is a free, open-source JavaScript library for creative coding and data-driven drawing. It has two parts:
 
 - **[Charming Core](/flow)**, a declarative language for drawing shapes from data, with renderers for [Canvas](/flow#cm-canvas), [WebGL](/webgl) and [the terminal](/terminal) (ASCII art).
-- **Helpers** for working with [SVG and HTML](/dom), [Canvas](/canvas), [paths](/path), [text](/pretext) and [vectors](/vector) directly, with little boilerplate.
+- **Helpers** for working with [SVG and HTML](/dom), [Canvas](/canvas), [paths](/path), [text](/pretext), [vectors](/vector) and [noise](/noise) directly, with little boilerplate.
 
 Both are designed to work alongside other libraries such as [D3](https://d3js.org/) and [p5](https://p5js.org/), and can be adopted independently.
 
@@ -55,13 +55,13 @@ root.render();
 document.body.append(renderer.node());
 ```
 
-This example is too simple to show the true charm of Charming. To fix that, let's draw 2,000 circles whose positions, radii and strokes are computed by trigonometric functions, frame by frame. It's a reimplementation of Ricky Reusser's [Instanced WebGL Circles](https://observablehq.com/@rreusser/instanced-webgl-circles), with more readable code.
+This example is too simple to show the true charm of Charming. To fix that, let's draw 2,500 circles whose positions, radii and strokes are computed by trigonometric functions, frame by frame. It's a reimplementation of Ricky Reusser's [Instanced WebGL Circles](https://observablehq.com/@rreusser/instanced-webgl-circles), with more readable code.
 
 ```js eval code=false
 (() => {
   const width = 640;
   const height = 640;
-  const count = 2000;
+  const count = 2500;
   const theta = Array.from({length: count}, (_, i) => (i / count) * Math.PI * 2);
   const renderer = cm.canvas({width, height});
   const root = cm.flow().renderer(renderer);
@@ -104,7 +104,7 @@ This example is too simple to show the true charm of Charming. To fix that, let'
 ```js
 const width = 640;
 const height = 640;
-const count = 2000;
+const count = 2500;
 const theta = Array.from({length: count}, (_, i) => (i / count) * Math.PI * 2);
 const renderer = cm.canvas({width, height});
 const root = cm.flow().renderer(renderer);
