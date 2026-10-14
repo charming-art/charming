@@ -23,7 +23,7 @@ function randomLcg(seed) {
 
 function noiseSeed(seed) {
   const random = randomLcg(seed);
-  const perlin = new Array(PERLIN_SIZE + 1);
+  const perlin = new Float64Array(PERLIN_SIZE + 1);
   for (let i = 0; i < PERLIN_SIZE + 1; i++) {
     perlin[i] = random();
   }
@@ -32,11 +32,12 @@ function noiseSeed(seed) {
 
 // Adapting from P5.js
 // @see https://github.com/processing/p5.js/blob/1e6b0caa1e8a8dff3280917d2fd9a84d2e7126ba/src/math/noise.js#L200
-export function noise(lo = 0, hi = 1, {octaves = 4, seed = Math.random() * 100000, falloff = 0.5} = {}) {
+// An undefined seed is replaced with a random 32-bit seed. Seeds are truncated to 32-bit unsigned integers.
+export function noise(lo = 0, hi = 1, {octaves = 4, seed, falloff = 0.5} = {}) {
   const map = linear([0, 1], [lo, hi]);
   const perlin = noiseSeed(seed);
 
-  const noise = (x, y = 0, z = 0) => {
+  const sample = (x, y, z) => {
     if (x < 0) x = -x;
     if (y < 0) y = -y;
     if (z < 0) z = -z;
@@ -100,5 +101,5 @@ export function noise(lo = 0, hi = 1, {octaves = 4, seed = Math.random() * 10000
     return r;
   };
 
-  return (x0 = 0, y0 = 0, z0 = 0) => map(noise(x0, y0, z0));
+  return (x = 0, y = 0, z = 0) => map(sample(x, y, z));
 }

@@ -51,3 +51,18 @@ test("noise(lo, hi, {octaves, falloff}) changes the detail of the noise", () => 
   assert.notDeepStrictEqual(one, four);
   assert.notDeepStrictEqual(four, steep);
 });
+
+test("noise(lo, hi, {seed}) truncates the seed to an integer", () => {
+  assert.deepStrictEqual(sample(cm.noise(0, 1, {seed: 3.2})), sample(cm.noise(0, 1, {seed: 3.9})));
+  assert.notDeepStrictEqual(sample(cm.noise(0, 1, {seed: 3})), sample(cm.noise(0, 1, {seed: 4})));
+});
+
+test("noise() without a seed returns a different sequence each time", () => {
+  const values = new Set(Array.from({length: 200}, () => cm.noise()(0.5)));
+  assert.strictEqual(values.size, 200);
+});
+
+test("noise(lo, hi, {falloff}) can exceed hi when falloff is greater than 0.5", () => {
+  const values = sample(cm.noise(0, 1, {seed: 3, falloff: 0.9}));
+  assert.ok(Math.max(...values) > 1);
+});
