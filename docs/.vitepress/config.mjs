@@ -4,7 +4,7 @@ import config from "genji-theme-vitepress/config";
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Charming",
-  description: "The JavaScript library for expressive creative coding",
+  description: "The JavaScript library for creative coding and data-driven drawing on Canvas, WebGL and the terminal",
   cleanUrls: true,
   extends: config,
   vite: {
@@ -57,21 +57,24 @@ export default defineConfig({
         text: "Features",
         items: [
           {
-            text: "Charming DOM",
-            link: "/dom",
+            text: "Charming Core",
+            collapsed: false,
+            items: [
+              {text: "Charming Flow", link: "/flow"},
+              {text: "Charming Shape", link: "/shape"},
+              {text: "Charming Process", link: "/process"},
+              {text: "Charming Transform", link: "/transform"},
+              {text: "Charming Scale", link: "/scale"},
+              {text: "Charming WebGL", link: "/webgl"},
+            ],
           },
-          {
-            text: "Charming Canvas",
-            link: "/canvas",
-          },
-          {
-            text: "Charming Path",
-            link: "/path",
-          },
-          {
-            text: "Charming Pretext",
-            link: "/pretext",
-          },
+          {text: "Charming Terminal", link: "/terminal"},
+          {text: "Charming DOM", link: "/dom"},
+          {text: "Charming Canvas", link: "/canvas"},
+          {text: "Charming Path", link: "/path"},
+          {text: "Charming Pretext", link: "/pretext"},
+          {text: "Charming Vector", link: "/vector"},
+          {text: "Charming Noise", link: "/noise"},
         ],
       },
     ],

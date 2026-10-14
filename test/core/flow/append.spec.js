@@ -53,3 +53,9 @@ test("flow.append(shape, options) accepts null options", () => {
   render((root) => root.data([1, 2]).append(shape, {fill: null}));
   assert.deepStrictEqual(calls[0].fill, [null, null]);
 });
+
+test("flow.append(shape) works without options", () => {
+  const [shape, calls] = probe();
+  render((root) => root.data([1, 2]).append(shape));
+  assert.deepStrictEqual(calls, [{}]);
+});

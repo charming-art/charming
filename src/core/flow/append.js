@@ -13,7 +13,7 @@ export function valueOf(data, options) {
   return Object.fromEntries(values);
 }
 
-export function flow$append(render, options) {
+export function flow$append(render, options = {}) {
   const flow = this._data ? this : this.data((d) => [d]);
   const groups = flow._groups;
   const parent = this._parent;
