@@ -40,6 +40,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.3.1",
     "@rollup/plugin-terser": "^0.4.4",
+    "d3": "^7.9.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.2",
     "genji-theme-vitepress": "^0.2.8",

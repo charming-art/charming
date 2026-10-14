@@ -378,10 +378,11 @@ For example, an arrow made of three links, used to draw a flow field:
   }
 
   const size = 16;
+  const noise = cm.noise();
   const fields = Array.from({length: 40 * 15}, (_, i) => {
     const x = i % 40;
     const y = (i / 40) | 0;
-    return {x, y, value: (Math.sin(x * 0.2) + Math.cos(y * 0.3) + 2) / 4};
+    return {x, y, value: noise(y * 0.1, x * 0.1)};
   });
 
   const renderer = cm.canvas({width: 640, height: 240});

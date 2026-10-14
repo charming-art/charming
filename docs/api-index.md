@@ -130,3 +130,9 @@ Text measurement and path-bound layout on top of [Pretext](https://github.com/ch
 - [_cm_.**vecDist**](/vector#cm-vec-dist), [**vecDist2**](/vector#cm-vec-dist2) — distance.
 - [_cm_.**vecDot**](/vector#cm-vec-dot), [**vecCross**](/vector#cm-vec-cross), [**vecAngle**](/vector#cm-vec-angle) — products and angle.
 - [_vec_.**add**](/vector#vec-add), [**mag**](/vector#vec-mag), [**norm**](/vector#vec-norm), … — the same operations as methods, in place.
+
+## [Charming Noise](/noise)
+
+Smooth random values for computational art.
+
+- [_cm_.**noise**](/noise#cm-noise) — smooth, continuous random values (Perlin noise).

@@ -65,15 +65,15 @@ Draw a clover with the canvas renderer:
   const root = cm.flow().renderer(renderer);
 
   root
-    .data(Array.from({length: 240}, (_, i) => (i * Math.PI) / 240))
+    .data(Array.from({length: 120}, (_, i) => (i * Math.PI) / 120))
     .append(cm.circle, {
       x: (t) => Math.cos(t) * Math.cos(t * 3),
       y: (t) => Math.sin(t) * Math.cos(t * 3),
-      r: (_, i) => i,
+      r: (t) => t,
       fill: "black",
     })
-    .transform(cm.mapPosition, {padding: 15})
-    .transform(cm.mapAttrs, {r: {range: [8, 20]}});
+    .transform(cm.mapPosition, {padding: 30})
+    .transform(cm.mapAttrs, {r: {range: [8, 15]}});
 
   root.render();
 
@@ -88,15 +88,15 @@ const renderer = cm.canvas({width: 640, height: 640});
 const root = cm.flow().renderer(renderer);
 
 root
-  .data(Array.from({length: 240}, (_, i) => (i * Math.PI) / 240))
+  .data(Array.from({length: 120}, (_, i) => (i * Math.PI) / 120))
   .append(cm.circle, {
     x: (t) => Math.cos(t) * Math.cos(t * 3),
     y: (t) => Math.sin(t) * Math.cos(t * 3),
-    r: (_, i) => i,
+    r: (t) => t,
     fill: "black",
   })
-  .transform(cm.mapPosition, {padding: 15})
-  .transform(cm.mapAttrs, {r: {range: [8, 20]}});
+  .transform(cm.mapPosition, {padding: 30})
+  .transform(cm.mapAttrs, {r: {range: [8, 15]}});
 
 root.render();
 

@@ -73,55 +73,289 @@ Flows let you organize a sketch in a functional style, as a pipeline from data t
 
 ## Charming is high performance
 
-The data-driven style gives Charming room for **high performance**. The [WebGL renderer](/webgl) uses [batch rendering](https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/drawArraysInstancedANGLE): all the instances of a shape appended together are drawn with one draw call, instead of one call each. Flows group similar shapes together naturally, so this costs nothing extra to write. For the shapes it supports, switching from Canvas to WebGL is a one-line change that lets you draw many more shapes per frame.
+The data-driven API style gives Charming the potential for **high performance**, because it can use WebGL's [batch rendering](https://developer.mozilla.org/en-US/docs/Web/API/ANGLE_instanced_arrays/drawArraysInstancedANGLE): rendering hundreds to thousands of shapes with a single draw call. Flows group similar shapes together naturally, so this costs nothing extra to write. GLSL functions defined with [_cm_.glsl](/webgl#cm-glsl) move expensive calculations to the GPU, which raises the frame rate further. In the future, a [WebGPU](https://www.w3.org/TR/webgpu/) renderer could go further with compute shaders.
 
-Expensive calculations can also move to the GPU. [_cm_.glsl](/webgl#cm-glsl) defines an attribute as a GLSL function, which is compiled into the shader program and evaluated on the GPU for each shape. Interpolated numbers become uniforms, so animating them doesn't recompile anything. GLSL functions also make **shader art** possible: a rect's fill can be a fragment shader. See the [WebGL examples](/webgl).
-
-In the future, a [WebGPU](https://www.w3.org/TR/webgpu/) renderer could go further with compute shaders.
-
-## Charming supports ASCII art
-
-Beyond performance, Charming makes **ASCII art** accessible to artists, designers, educators and beginners. The [terminal renderer](/terminal) draws the same shapes as characters in a grid, positioned in cells and colored with a character, a foreground and a background. It draws into a canvas on the web, using a software rasterizer written in Rust and compiled to WebAssembly.
+For example, to draw 10,000 circles while updating their positions, radii and strokes with trigonometric functions every frame, on the [WebGL renderer](/webgl) with GLSL attributes:
 
 ```js eval code=false
 (() => {
-  const renderer = cm.terminal({cols: 60, rows: 8});
+  const width = 640;
+  const height = 640;
+  const count = 10000;
+  const scale = 240;
+  const theta = Array.from({length: count}, (_, i) => (i / count) * Math.PI * 2);
+  const renderer = cm.webgl({width, height});
   const root = cm.flow().renderer(renderer);
+  const node = renderer.node();
+  let time = 0;
+  let frame = requestAnimationFrame(function tick() {
+    if (!node.isConnected && time > 0) return;
+    time += 0.02;
+    root.append(cm.clear, {fill: "black"});
+    root.data(theta).append(cm.circle, {
+      position: cm.glsl`vec2 position(float theta) {
+        vec2 xy = vec2(cos(theta), sin(theta)) * (0.6 + 0.2 * cos(theta * 6.0 + cos(theta * 8.0 + ${time})));
+        return xy * ${scale} + vec2(${width / 2}, ${height / 2});
+      }`,
+      r: cm.glsl`float r(float theta) {
+        return (0.2 + 0.12 * cos(theta * 9.0 - ${time} * 2.0)) * ${scale};
+      }`,
+      stroke: cm.glsl`vec4 stroke(float theta) {
+        float th = 8.0 * theta + ${time} * 2.0;
+        vec3 rgb = 0.6 + 0.4 * vec3(cos(th), cos(th - ${Math.PI} / 3.0), cos(th - ${Math.PI} * 2.0 / 3.0));
+        return vec4(rgb, 1.0);
+      }`,
+      strokeOpacity: (0.15 * 2000) / count,
+    });
 
-  root.append(cm.figlet, {
-    text: "Charming",
-    x: 30,
-    y: 4,
-    textAlign: "center",
-    textBaseline: "middle",
-    fill: () => (x, y, width) => `hsl(${(x / width) * 300}, 90%, 65%)`,
+    root.render();
+    frame = requestAnimationFrame(tick);
   });
+  unsubscribe(() => cancelAnimationFrame(frame));
 
-  root.render();
-
-  return renderer.node();
+  return node;
 })();
 ```
 
 ```js
-const renderer = cm.terminal({cols: 60, rows: 8});
+const width = 640;
+const height = 640;
+const count = 10000;
+const scale = 240;
+const theta = Array.from({length: count}, (_, i) => (i / count) * Math.PI * 2);
+const renderer = cm.webgl({width, height});
 const root = cm.flow().renderer(renderer);
+let time = 0;
 
-root.append(cm.figlet, {
-  text: "Charming",
-  x: 30,
-  y: 4,
-  textAlign: "center",
-  textBaseline: "middle",
-  fill: () => (x, y, width) => `hsl(${(x / width) * 300}, 90%, 65%)`,
+requestAnimationFrame(function frame() {
+  time += 0.02;
+  root.append(cm.clear, {fill: "black"});
+  root.data(theta).append(cm.circle, {
+    position: cm.glsl`vec2 position(float theta) {
+      vec2 xy = vec2(cos(theta), sin(theta)) * (0.6 + 0.2 * cos(theta * 6.0 + cos(theta * 8.0 + ${time})));
+      return xy * ${scale} + vec2(${width / 2}, ${height / 2});
+    }`,
+    r: cm.glsl`float r(float theta) {
+      return (0.2 + 0.12 * cos(theta * 9.0 - ${time} * 2.0)) * ${scale};
+    }`,
+    stroke: cm.glsl`vec4 stroke(float theta) {
+      float th = 8.0 * theta + ${time} * 2.0;
+      vec3 rgb = 0.6 + 0.4 * vec3(cos(th), cos(th - ${Math.PI} / 3.0), cos(th - ${Math.PI} * 2.0 / 3.0));
+      return vec4(rgb, 1.0);
+    }`,
+    strokeOpacity: (0.15 * 2000) / count,
+  });
+
+  root.render();
+  requestAnimationFrame(frame);
 });
 
-root.render();
+document.body.append(renderer.node());
+```
+
+## Charming supports shader art
+
+GLSL functions are well-suited for **shader art**: the fill of a rect can be the code of a fragment shader. Here is an example from [Shadertoy](https://www.shadertoy.com/view/mtyGWy):
+
+```js eval code=false
+(() => {
+  const width = 640;
+  const height = 360;
+  const dpr = devicePixelRatio;
+  const palette = cm.glsl`vec3 palette(float t) {
+    vec3 a = vec3(0.5, 0.5, 0.5);
+    vec3 b = vec3(0.5, 0.5, 0.5);
+    vec3 c = vec3(1.0, 1.0, 1.0);
+    vec3 d = vec3(0.263, 0.416, 0.557);
+    return a + b * cos(3.1415926 * 2.0 * (c * t + d));
+  }`;
+  const renderer = cm.webgl({width, height});
+  const root = cm.flow().renderer(renderer);
+  const node = renderer.node();
+  let time = 0;
+  let frame = requestAnimationFrame(function tick() {
+    if (!node.isConnected && time > 0) return;
+    time += 0.02;
+    const fill = cm.glsl`vec4 fill(vec2 coord, vec4 color) {
+      vec2 uv = (coord - vec2(${(width * dpr) / 2}, ${(height * dpr) / 2})) / ${(height * dpr) / 2};
+      vec2 uv0 = uv;
+      vec3 rgb = vec3(0.0);
+      for (float i = 0.0; i < 4.0; i++) {
+        uv = fract(uv * 1.5) - 0.5;
+        float d = length(uv) * exp(-length(uv0));
+        vec3 col = ${palette}(length(uv0) + i * 0.4 + ${time} * 0.4);
+        d = sin(d * 8.0 + ${time}) / 8.0;
+        d = abs(d);
+        d = pow(0.01 / d, 1.2);
+        rgb += col * d;
+      }
+      return vec4(rgb, 1.0);
+    }`;
+    root.append(cm.rect, {x: 0, y: 0, width, height, fill});
+
+    root.render();
+    frame = requestAnimationFrame(tick);
+  });
+  unsubscribe(() => cancelAnimationFrame(frame));
+
+  return node;
+})();
+```
+
+```js
+const width = 640;
+const height = 360;
+const dpr = devicePixelRatio; // fill receives coordinates in device pixels
+const palette = cm.glsl`vec3 palette(float t) {
+  vec3 a = vec3(0.5, 0.5, 0.5);
+  vec3 b = vec3(0.5, 0.5, 0.5);
+  vec3 c = vec3(1.0, 1.0, 1.0);
+  vec3 d = vec3(0.263, 0.416, 0.557);
+  return a + b * cos(3.1415926 * 2.0 * (c * t + d));
+}`;
+const renderer = cm.webgl({width, height});
+const root = cm.flow().renderer(renderer);
+let time = 0;
+
+requestAnimationFrame(function frame() {
+  time += 0.02;
+  const fill = cm.glsl`vec4 fill(vec2 coord, vec4 color) {
+    vec2 uv = (coord - vec2(${(width * dpr) / 2}, ${(height * dpr) / 2})) / ${(height * dpr) / 2};
+    vec2 uv0 = uv;
+    vec3 rgb = vec3(0.0);
+    for (float i = 0.0; i < 4.0; i++) {
+      uv = fract(uv * 1.5) - 0.5;
+      float d = length(uv) * exp(-length(uv0));
+      vec3 col = ${palette}(length(uv0) + i * 0.4 + ${time} * 0.4);
+      d = sin(d * 8.0 + ${time}) / 8.0;
+      d = abs(d);
+      d = pow(0.01 / d, 1.2);
+      rgb += col * d;
+    }
+    return vec4(rgb, 1.0);
+  }`;
+  root.append(cm.rect, {x: 0, y: 0, width, height, fill});
+
+  root.render();
+  requestAnimationFrame(frame);
+});
+
+document.body.append(renderer.node());
+```
+
+## Charming supports ASCII art
+
+In addition to high performance, Charming makes **ASCII art** accessible to artists, designers, educators, beginners, and anyone else! It offers one API for both styles: the [terminal renderer](/terminal) draws the same shapes as characters, and uses a software rasterizer written in Rust and compiled to WebAssembly for performance. For example, a fire:
+
+```js eval code=false
+(() => {
+  const cols = 70;
+  const rows = 28;
+  const fire = Array.from({length: rows}, () => new Array(cols).fill(0));
+  const renderer = cm.terminal({cols, rows});
+  const root = cm.flow().renderer(renderer);
+  const node = renderer.node();
+
+  function randomChar() {
+    return String.fromCharCode(32 + Math.floor(Math.random() * 95));
+  }
+
+  // Each cell takes the heat of the cell below it, or of its neighbor, minus a random decay.
+  function update() {
+    const noise = cm.noise(0, rows);
+    for (let y = 0; y < rows - 1; y++) {
+      for (let x = 0; x < cols; x++) {
+        const decay = Math.floor(Math.random() * 3);
+        const spread = Math.floor(Math.random() * 2) - 1;
+        const index = Math.min(Math.max(0, x - spread), cols - 1);
+        fire[y][x] = Math.max(0, fire[y + 1][index] - decay);
+      }
+    }
+    for (let x = 0; x < cols; x++) fire[rows - 1][x] = noise(x / 10) | 0;
+  }
+
+  function draw() {
+    root.append(cm.clear, {fill: "black"});
+    root
+      .data(fire)
+      .append(cm.group, {x: 0, y: (_, i) => i})
+      .data((row) => row)
+      .append(cm.point, {
+        x: (_, i) => i,
+        y: 0,
+        stroke: (heat) => (heat === 0 ? null : {ch: randomChar(), bg: d3.interpolateCool(heat / rows)}),
+      });
+
+    root.render();
+  }
+
+  let last = 0;
+  let frame = requestAnimationFrame(function animate(time) {
+    if (!node.isConnected && last > 0) return;
+    if (time - last >= 1000 / 15) {
+      last = time;
+      update();
+      draw();
+    }
+    frame = requestAnimationFrame(animate);
+  });
+  unsubscribe(() => cancelAnimationFrame(frame));
+
+  return node;
+})();
+```
+
+```js
+const cols = 70;
+const rows = 28;
+const fire = Array.from({length: rows}, () => new Array(cols).fill(0));
+const renderer = cm.terminal({cols, rows});
+const root = cm.flow().renderer(renderer);
+
+function randomChar() {
+  return String.fromCharCode(32 + Math.floor(Math.random() * 95));
+}
+
+// Each cell takes the heat of the cell below it, or of its neighbor, minus a random decay.
+function update() {
+  const noise = cm.noise(0, rows);
+  for (let y = 0; y < rows - 1; y++) {
+    for (let x = 0; x < cols; x++) {
+      const decay = Math.floor(Math.random() * 3);
+      const spread = Math.floor(Math.random() * 2) - 1;
+      const index = Math.min(Math.max(0, x - spread), cols - 1);
+      fire[y][x] = Math.max(0, fire[y + 1][index] - decay);
+    }
+  }
+  for (let x = 0; x < cols; x++) fire[rows - 1][x] = noise(x / 10) | 0;
+}
+
+function draw() {
+  root.append(cm.clear, {fill: "black"});
+  root
+    .data(fire)
+    .append(cm.group, {x: 0, y: (_, i) => i})
+    .data((row) => row)
+    .append(cm.point, {
+      x: (_, i) => i,
+      y: 0,
+      stroke: (heat) => (heat === 0 ? null : {ch: randomChar(), bg: d3.interpolateCool(heat / rows)}),
+    });
+
+  root.render();
+}
+
+setInterval(() => {
+  update();
+  draw();
+}, 1000 / 15);
+
+document.body.append(renderer.node());
 ```
 
 ## Charming is composable
 
-Inspired by the component philosophy of [React](https://react.dev/), a custom shape in Charming is a pure function. A [composite shape](/shape#composite-shapes) receives a flow and its attribute values, and appends built-in shapes. Here is an arrow:
+Inspired by the component philosophy of [React](https://react.dev/), Charming makes it easy to define custom [composite shapes](/shape#composite-shapes) as pure functions, such as this arrow:
 
 ```js
 function arrow(flow, {length, angle, x, y, rotate, ...options}) {
@@ -134,7 +368,192 @@ function arrow(flow, {length, angle, x, y, rotate, ...options}) {
 }
 ```
 
-It's used like any built-in shape, and supports transforms too, for example to [draw a flow field](/shape#composite-shapes). Shapes can be as complex as a bar chart with axes, which makes Charming easy to extend.
+This composite shape can be used like any built-in shape, and supports transforms too. For example, to draw a flow field:
+
+```js eval code=false
+(() => {
+  function arrow(flow, {length, angle, x, y, rotate, stroke}) {
+    const group = flow.append(cm.group, {x, y, rotate});
+    const l1 = length.map((d) => d / 2);
+    const l2 = length.map((d) => -d / 2);
+    group.append(cm.link, {x: l2, y: 0, x1: l1, y1: 0, stroke});
+    group.append(cm.link, {x: 0, y: 0, x1: l1, y1: 0, rotate: angle, transformOrigin: "end", stroke});
+    group.append(cm.link, {x: 0, y: 0, x1: l1, y1: 0, rotate: -angle, transformOrigin: "end", stroke});
+  }
+
+  const size = 16;
+  const noise = cm.noise();
+  const fields = Array.from({length: 40 * 15}, (_, i) => {
+    const x = i % 40;
+    const y = (i / 40) | 0;
+    return {x, y, value: noise(y * 0.1, x * 0.1)};
+  });
+
+  const renderer = cm.canvas({width: 640, height: 240});
+  const root = cm.flow().renderer(renderer);
+
+  root
+    .data(fields)
+    .append(arrow, {
+      x: (d) => d.x * size + size / 2,
+      y: (d) => d.y * size + size / 2,
+      length: size * 0.8,
+      angle: cm.constant(Math.PI / 6),
+      rotate: (d) => d.value,
+      stroke: "black",
+    })
+    .transform(cm.mapAttrs, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
+
+  root.render();
+
+  return renderer.node();
+})();
+```
+
+```js
+const size = 16;
+const noise = cm.noise();
+const fields = Array.from({length: 40 * 15}, (_, i) => {
+  const x = i % 40;
+  const y = (i / 40) | 0;
+  return {x, y, value: noise(y * 0.1, x * 0.1)};
+});
+const renderer = cm.canvas({width: 640, height: 240});
+const root = cm.flow().renderer(renderer);
+
+root
+  .data(fields)
+  .append(arrow, {
+    x: (d) => d.x * size + size / 2,
+    y: (d) => d.y * size + size / 2,
+    length: size * 0.8,
+    angle: cm.constant(Math.PI / 6),
+    rotate: (d) => d.value,
+    stroke: "black",
+  })
+  .transform(cm.mapAttrs, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
+
+root.render();
+```
+
+Beyond simple composite shapes, Charming can define complex ones. For example, a barY shape that plots a bar chart with axes. This makes Charming easy to extend and to build an ecosystem around.
+
+```js eval code=false
+(() => {
+  const alphabet = [
+    {letter: "A", frequency: 0.08167},
+    {letter: "B", frequency: 0.01492},
+    {letter: "C", frequency: 0.02782},
+    {letter: "D", frequency: 0.04253},
+    {letter: "E", frequency: 0.12702},
+    {letter: "F", frequency: 0.02288},
+    {letter: "G", frequency: 0.02015},
+    {letter: "H", frequency: 0.06094},
+    {letter: "I", frequency: 0.06966},
+    {letter: "J", frequency: 0.00153},
+    {letter: "K", frequency: 0.00772},
+    {letter: "L", frequency: 0.04025},
+    {letter: "M", frequency: 0.02406},
+    {letter: "N", frequency: 0.06749},
+    {letter: "O", frequency: 0.07507},
+    {letter: "P", frequency: 0.01929},
+    {letter: "Q", frequency: 0.00095},
+    {letter: "R", frequency: 0.05987},
+    {letter: "S", frequency: 0.06327},
+    {letter: "T", frequency: 0.09056},
+    {letter: "U", frequency: 0.02758},
+    {letter: "V", frequency: 0.00978},
+    {letter: "W", frequency: 0.0236},
+    {letter: "X", frequency: 0.0015},
+    {letter: "Y", frequency: 0.01974},
+    {letter: "Z", frequency: 0.00074},
+  ].sort((a, b) => b.frequency - a.frequency);
+
+  function barY(
+    flow,
+    {x, y, width = 640, height = 400, marginTop = 20, marginRight = 0, marginBottom = 30, marginLeft = 40},
+  ) {
+    // A band scale for x: one band per value, with padding.
+    const step = (width - marginLeft - marginRight) / x.length;
+    const scaleX = (i) => marginLeft + i * step + step * 0.05;
+    const bandwidth = step * 0.9;
+    const scaleY = cm.scaleLinear([0, Math.max(...y)], [height - marginBottom, marginTop]);
+    const I = x.map((_, i) => i);
+
+    flow.data(I).append(cm.rect, {
+      x: (i) => scaleX(i),
+      y: (i) => scaleY(y[i]),
+      width: bandwidth,
+      height: (i) => scaleY(0) - scaleY(y[i]),
+      fill: "steelblue",
+    });
+
+    flow
+      .datum(0)
+      .append(cm.group, {x: 0, y: height - marginBottom})
+      .call(axisX, {x, scaleX, bandwidth, width, marginLeft, marginRight});
+    flow
+      .datum(0)
+      .append(cm.group, {x: marginLeft, y: 0})
+      .call(axisY, {scaleY, max: Math.max(...y)});
+  }
+
+  function axisX(flow, {x, scaleX, bandwidth, width, marginLeft, marginRight}) {
+    const tickX = (_, i) => scaleX(i) + bandwidth / 2;
+    flow.append(cm.link, {x: marginLeft, y: 0, x1: width - marginRight, y1: 0, stroke: "black"});
+    flow.data(x).append(cm.link, {x: tickX, y: 0, x1: tickX, y1: 4, stroke: "black"});
+    flow.data(x).append(cm.text, {
+      text: (d) => d,
+      x: tickX,
+      y: 8,
+      fill: "black",
+      fontSize: 10,
+      fontFamily: "sans-serif",
+      textAlign: "center",
+      textBaseline: "top",
+    });
+  }
+
+  function axisY(flow, {scaleY, max}) {
+    const ticks = Array.from({length: Math.floor(max * 100) + 1}, (_, i) => i / 100);
+    flow.data(ticks).append(cm.link, {x: 0, y: scaleY, x1: -4, y1: scaleY, stroke: "black"});
+    flow.data(ticks).append(cm.text, {
+      text: (d) => String(+d.toFixed(2)),
+      x: -6,
+      y: scaleY,
+      fill: "black",
+      fontSize: 10,
+      fontFamily: "sans-serif",
+      textAlign: "end",
+      textBaseline: "middle",
+    });
+  }
+
+  const renderer = cm.canvas({width: 640, height: 400});
+  const root = cm.flow().renderer(renderer);
+
+  root.data(alphabet).append(barY, {
+    x: (d) => d.letter,
+    y: (d) => d.frequency,
+  });
+
+  root.render();
+
+  return renderer.node();
+})();
+```
+
+```js
+const renderer = cm.canvas({width: 640, height: 400});
+const root = cm.flow().renderer(renderer);
+
+root.data(alphabet).append(barY, {
+  x: (d) => d.letter,
+  y: (d) => d.frequency,
+});
+
+root.render();
+```
 
 ## Charming is beginner-friendly
 
@@ -182,14 +601,6 @@ for (let i = 0; i < 500; i++) {
 
 root.render();
 ```
-
-## Compared to p5.js
-
-Charming tries hard to keep the learning curve low, but p5.js remains more accessible to beginners, especially those with no programming experience. p5.js trades that for some issues in larger projects: global functions and state, a large bundle, and the overhead of its Friendly Error System. Charming has no global state: everything is drawn through a flow and its renderer, and the rest are plain functions. So if you're new to programming or JavaScript, p5.js is still the best starting point. Otherwise, Charming is a promising option, and the two can be used together.
-
-## Compared to D3.js
-
-D3 is great, the greatest of all time. Charming works with most of D3's modules, such as [d3-array](https://d3js.org/d3-array), [d3-scale](https://d3js.org/d3-scale) and [d3-scale-chromatic](https://d3js.org/d3-scale-chromatic), and it's encouraged to use them: Charming deliberately doesn't duplicate them. The exception is [d3-selection](https://d3js.org/d3-selection), D3's "renderer". It's built on SVG, which excels at interactive visualization but is less suited to frame-by-frame computational art because of performance. For most visualizations, D3 is the preferred choice. For computational art and performance-sensitive visualizations, Charming may be the better option.
 
 ## Charming is close to the platform
 
@@ -280,3 +691,11 @@ document.body.append(svg);
 ```
 
 Each part of Charming does one thing and has a small interface, so you can adopt it piece by piece and plug in your own functions: process functions, transforms, shapes, even renderers.
+
+## Compared to p5.js
+
+Charming tries hard to keep the learning curve low, but p5.js remains more accessible to beginners, especially those with no programming experience. p5.js trades that for some issues in larger projects: global functions and state, a large bundle, and the overhead of its Friendly Error System. Charming has no global state: everything is drawn through a flow and its renderer, and the rest are plain functions. So if you're new to programming or JavaScript, p5.js is still the best starting point. Otherwise, Charming is a promising option, and the two can be used together.
+
+## Compared to D3.js
+
+D3 is great, the greatest of all time. Charming works with most of D3's modules, such as [d3-array](https://d3js.org/d3-array), [d3-scale](https://d3js.org/d3-scale) and [d3-scale-chromatic](https://d3js.org/d3-scale-chromatic), and it's encouraged to use them: Charming deliberately doesn't duplicate them. The exception is [d3-selection](https://d3js.org/d3-selection), D3's "renderer". It's built on SVG, which excels at interactive visualization but is less suited to frame-by-frame computational art because of performance. For most visualizations, D3 is the preferred choice. For computational art and performance-sensitive visualizations, Charming may be the better option.

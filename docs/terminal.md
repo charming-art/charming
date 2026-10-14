@@ -155,48 +155,52 @@ Draw frames as with any [renderer](/flow#animating). Here is a fire of character
 ```js eval code=false
 (() => {
   const cols = 70;
-  const rows = 24;
-  const chars = " .:-=+*#%@";
+  const rows = 28;
   const fire = Array.from({length: rows}, () => new Array(cols).fill(0));
   const renderer = cm.terminal({cols, rows});
   const root = cm.flow().renderer(renderer);
   const node = renderer.node();
 
-  function update() {
-    for (let y = 0; y < rows - 1; y++) {
-      for (let x = 0; x < cols; x++) {
-        const spread = Math.round(Math.random() * 2 - 1);
-        const source = fire[y + 1][Math.min(Math.max(0, x - spread), cols - 1)];
-        fire[y][x] = Math.max(0, source - Math.floor(Math.random() * 3));
-      }
-    }
-    for (let x = 0; x < cols; x++) fire[rows - 1][x] = Math.floor(Math.random() * rows);
+  function randomChar() {
+    return String.fromCharCode(32 + Math.floor(Math.random() * 95));
   }
 
-  let tick = 0;
-  let frame = requestAnimationFrame(function animate() {
-    if (!node.isConnected && tick > 0) return;
-    if (tick++ % 4 === 0) {
-      update();
-      root.append(cm.clear, {fill: "black"});
-      root
-        .data(fire)
-        .append(cm.group, {x: 0, y: (_, i) => i})
-        .data((row) => row)
-        .append(cm.point, {
-          x: (_, i) => i,
-          y: 0,
-          stroke: (heat) => {
-            if (heat === 0) return null;
-            const t = heat / rows;
-            return {
-              ch: chars[Math.min(chars.length - 1, Math.floor(t * chars.length))],
-              fg: `hsl(${t * 60}, 100%, ${30 + t * 50}%)`,
-            };
-          },
-        });
+  // Each cell takes the heat of the cell below it, or of its neighbor, minus a random decay.
+  function update() {
+    const noise = cm.noise(0, rows);
+    for (let y = 0; y < rows - 1; y++) {
+      for (let x = 0; x < cols; x++) {
+        const decay = Math.floor(Math.random() * 3);
+        const spread = Math.floor(Math.random() * 2) - 1;
+        const index = Math.min(Math.max(0, x - spread), cols - 1);
+        fire[y][x] = Math.max(0, fire[y + 1][index] - decay);
+      }
+    }
+    for (let x = 0; x < cols; x++) fire[rows - 1][x] = noise(x / 10) | 0;
+  }
 
-      root.render();
+  function draw() {
+    root.append(cm.clear, {fill: "black"});
+    root
+      .data(fire)
+      .append(cm.group, {x: 0, y: (_, i) => i})
+      .data((row) => row)
+      .append(cm.point, {
+        x: (_, i) => i,
+        y: 0,
+        stroke: (heat) => (heat === 0 ? null : {ch: randomChar(), bg: d3.interpolateCool(heat / rows)}),
+      });
+
+    root.render();
+  }
+
+  let last = 0;
+  let frame = requestAnimationFrame(function animate(time) {
+    if (!node.isConnected && last > 0) return;
+    if (time - last >= 1000 / 15) {
+      last = time;
+      update();
+      draw();
     }
     frame = requestAnimationFrame(animate);
   });
@@ -208,22 +212,27 @@ Draw frames as with any [renderer](/flow#animating). Here is a fire of character
 
 ```js
 const cols = 70;
-const rows = 24;
-const chars = " .:-=+*#%@";
+const rows = 28;
 const fire = Array.from({length: rows}, () => new Array(cols).fill(0));
 const renderer = cm.terminal({cols, rows});
 const root = cm.flow().renderer(renderer);
 
-// Each cell takes the heat of a random cell below it, minus a random decay.
+function randomChar() {
+  return String.fromCharCode(32 + Math.floor(Math.random() * 95));
+}
+
+// Each cell takes the heat of the cell below it, or of its neighbor, minus a random decay.
 function update() {
+  const noise = cm.noise(0, rows);
   for (let y = 0; y < rows - 1; y++) {
     for (let x = 0; x < cols; x++) {
-      const spread = Math.round(Math.random() * 2 - 1);
-      const source = fire[y + 1][Math.min(Math.max(0, x - spread), cols - 1)];
-      fire[y][x] = Math.max(0, source - Math.floor(Math.random() * 3));
+      const decay = Math.floor(Math.random() * 3);
+      const spread = Math.floor(Math.random() * 2) - 1;
+      const index = Math.min(Math.max(0, x - spread), cols - 1);
+      fire[y][x] = Math.max(0, fire[y + 1][index] - decay);
     }
   }
-  for (let x = 0; x < cols; x++) fire[rows - 1][x] = Math.floor(Math.random() * rows);
+  for (let x = 0; x < cols; x++) fire[rows - 1][x] = noise(x / 10) | 0;
 }
 
 function draw() {
@@ -235,12 +244,7 @@ function draw() {
     .append(cm.point, {
       x: (_, i) => i,
       y: 0,
-      stroke: (heat) => {
-        if (heat === 0) return null;
-        const t = heat / rows;
-        const ch = chars[Math.min(chars.length - 1, Math.floor(t * chars.length))];
-        return {ch, fg: `hsl(${t * 60}, 100%, ${30 + t * 50}%)`};
-      },
+      stroke: (heat) => (heat === 0 ? null : {ch: randomChar(), bg: d3.interpolateCool(heat / rows)}),
     });
 
   root.render();

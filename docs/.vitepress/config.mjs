@@ -74,6 +74,7 @@ export default defineConfig({
           {text: "Charming Path", link: "/path"},
           {text: "Charming Pretext", link: "/pretext"},
           {text: "Charming Vector", link: "/vector"},
+          {text: "Charming Noise", link: "/noise"},
         ],
       },
     ],
