@@ -7,7 +7,7 @@
 
 Both are designed to work alongside other libraries such as [D3](https://d3js.org/) and [p5](https://p5js.org/), and can be adopted independently.
 
-<a href="https://observablehq.com/d/18b3d6f3affff5bb"><img src="./img/examples.png"  alt="examples"></a>
+<a href="https://observablehq.com/d/18b3d6f3affff5bb"><img src="./img/charming-examples.png"  alt="examples"></a>
 
 ## Demos 🎨
 
