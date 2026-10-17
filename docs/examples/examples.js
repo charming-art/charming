@@ -69,6 +69,8 @@ export const categories = [
       {slug: "recursive-tree", title: "Recursive Tree"},
       {slug: "l-system", title: "L-system"},
       {slug: "sierpinski-triangle", title: "Sierpiński Triangle"},
+      {slug: "mandelbrot-21", title: "#21 Mandelbrot Set"},
+      {slug: "multibrot-table", title: "Multibrot Set Table"},
     ],
   },
   {
