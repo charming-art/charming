@@ -24,19 +24,24 @@ function poem(text) {
 
 export const work = {
   title: "Pixel Poetry",
-  description:
-    "An image turned into a poem. Circles packed with d3-hierarchy take their colors from the image, then each grows a character whose code point comes from its brightness, and the characters are read out as a poem.",
-  background: "white",
+  description: "Turn an image into a poem, with packed circles and code points.",
+  author: "Bairui SU",
+  year: 2025,
+  source: "https://github.com/charming-art/charming/blob/main/docs/gallery/works/pixel-poetry.js",
   controls: {
     count: {type: "range", label: "Circle count", min: 50, max: 1000, step: 1, value: 300},
     offset: {type: "range", label: "Code point offset", min: 0, max: 65536, step: 1, value: 1000},
-    fontColor: {type: "radio", label: "Font color", options: ["black", "white"], value: "black"},
+    theme: {type: "radio", label: "Theme", options: ["Light", "Dark"], value: "Light"},
+    animated: {type: "toggle", label: "Animated", value: true},
     image: {type: "file", label: "Image", accept: "image/*", value: "/gallery/bear.png"},
   },
-  async draw(stage, {width, height, count, offset, fontColor, image}, invalidation) {
-    const color = imageSampler(await loadImage(image), width, height);
+  async draw(stage, {width, height, count, offset, theme, animated, image}, invalidation) {
+    // The circles on the left and the poem on the right, or the poem below on narrow screens.
+    const wide = width >= 768;
+    const size = Math.floor(wide ? Math.min(height, width * 0.45) : Math.min(width, height * 0.6));
+    const color = imageSampler(await loadImage(image), size, size);
     const rotate = cm.noise(0, 360);
-    const pack = d3.pack().size([width, height]).padding(3);
+    const pack = d3.pack().size([size, size]).padding(3);
     const data = {children: Array.from({length: count}, () => ({value: Math.random() * 1000}))};
     const circles = pack(d3.hierarchy(data).sum((d) => d.value))
       .leaves()
@@ -46,39 +51,56 @@ export const work = {
         return {x: d.x, y: d.y, r: d.r, fill: `rgba(${r}, ${g}, ${b}, ${a})`, ch};
       });
 
-    const svg = cm.svg`<svg ${{width, height, viewBox: [0, 0, width, height]}}>
-      <circle ${{data: circles, cx: (d) => d.x, cy: (d) => d.y, r: 0, fill: (d) => d.fill}}/>
+    const dark = theme === "Dark";
+    const svg = cm.svg`<svg ${{
+      width: size,
+      height: size,
+      viewBox: [0, 0, size, size],
+      style_flex: "none",
+      style_background: dark ? "black" : "transparent",
+      // Set the font here rather than inherit it, so downloads look the same.
+      font_family: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+    }}>
+      <circle ${{data: circles, cx: (d) => d.x, cy: (d) => d.y, r: (d) => (animated ? 0 : d.r), fill: (d) => d.fill}}/>
       <text ${{
         data: circles,
-        transform: (d) => `translate(${d.x}, ${d.y}) rotate(${rotate(d.x / width, d.y / height)})`,
+        transform: (d) => `translate(${d.x}, ${d.y}) rotate(${rotate(d.x / size, d.y / size)})`,
         font_size: (d) => d.r * 1.4,
         font_weight: 900,
         text_anchor: "middle",
         dominant_baseline: "central",
-        fill: fontColor,
-        opacity: 0,
+        fill: dark ? "white" : "black",
+        opacity: animated ? 0 : 1,
       }}>${(d) => d.ch}</text>
     </svg>`;
     const article = cm.html`<article ${{
-      style_position: "absolute",
-      style_inset: 0,
-      style_display: "flex",
-      style_flex_direction: "column",
-      style_justify_content: "center",
-      style_align_items: "center",
-      style_pointer_events: "none",
+      style_flex: wide ? "0 1 480px" : "none",
+      style_max_height: wide ? `${size}px` : "none",
+      style_overflow: "auto",
     }}>
       <p ${{
         data: poem(circles.map((d) => d.ch).join("")),
-        style_margin: "4px 0",
-        style_padding: "2px 12px",
-        style_background: "rgba(255, 255, 255, 0.8)",
+        style_margin: "0 0 8px",
         style_font_weight: "bold",
-        style_font_size: "22px",
-        style_opacity: 0,
+        style_font_size: wide ? "18px" : "15px",
+        style_line_height: 1.5,
+        style_opacity: animated ? 0 : 1,
       }}>${(d) => d}</p>
     </article>`;
-    stage.append(svg, article);
+    const layout = cm.html`<div ${{
+      style_display: "flex",
+      style_flex_direction: wide ? "row" : "column",
+      style_align_items: "center",
+      style_gap: wide ? "80px" : "24px",
+      style_width: "100%",
+      style_height: wide ? "100%" : "auto",
+      style_justify_content: "center",
+      style_padding: 0,
+      style_box_sizing: "border-box",
+    }}>${[svg, article]}</div>`;
+    stage.append(layout);
+
+    if (!animated) return;
 
     // Grow the circles, then show the characters, then read the poem line by line.
     d3.select(svg)

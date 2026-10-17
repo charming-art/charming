@@ -16,15 +16,21 @@ function palette(offset) {
 
 export const work = {
   title: "Art Gallery Painter",
-  description:
-    'A painter that recreates an image with brush strokes: each frame, it picks random points, samples their colors, and paints short strokes rotated by brightness, getting finer as it goes. A reimplementation of Jason Labbe\'s <a href="https://openprocessing.org/sketch/520387">Art gallery painter</a>, made for <a href="https://genuary.art/prompts#jan25">Genuary 2024</a>, "Recreate an image with code".',
-  background: "white",
+  description: "Repaint an image with brush strokes, after Jason Labbe's Art Gallery Painter.",
+  author: "Bairui SU",
+  year: 2024,
+  source: "https://github.com/charming-art/charming/blob/main/docs/gallery/works/art-gallery-painter.js",
   controls: {
     brush: {type: "range", label: "Brush size", min: 0.2, max: 2, step: 0.1, value: 1},
     image: {type: "file", label: "Image", accept: "image/*", value: "/gallery/steven.jpeg"},
   },
-  async draw(stage, {width, height, brush, image}, invalidation) {
-    const color = imageSampler(await loadImage(image), width, height);
+  async draw(stage, {width: stageWidth, height: stageHeight, brush, image: src}, invalidation) {
+    // Fit the whole image in the stage, keeping its aspect ratio.
+    const image = await loadImage(src);
+    const k = Math.min(stageWidth / image.width, stageHeight / image.height);
+    const width = Math.floor(image.width * k);
+    const height = Math.floor(image.height * k);
+    const color = imageSampler(image, width, height);
     const {normal, darker, brighter} = palette(Math.random());
     const strokeLength = cm.scaleLinear([0, maxFrame], [80 * brush, 5 * brush]);
     const strokeWeight = cm.scaleLinear([0, maxFrame], [brush, 0.1 * brush]);

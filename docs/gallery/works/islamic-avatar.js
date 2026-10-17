@@ -12,16 +12,20 @@ function hueFilter(offset) {
 
 export const work = {
   title: "Islamic Avatar",
-  description:
-    'A portrait as a mosaic inspired by Islamic art: packed circles become polygons whose number of sides and rotation follow noise, colored from the image and shifted in hue. Made for <a href="https://genuary.art/prompts#jan17">Genuary 2024</a>, "Inspired by Islamic art".',
-  background: ({theme}) => (theme === "Dark" ? "black" : "white"),
+  description: "A mosaic avatar inspired by Islamic art, for Genuary 2024.",
+  author: "Bairui SU",
+  year: 2024,
+  source: "https://github.com/charming-art/charming/blob/main/docs/gallery/works/islamic-avatar.js",
   controls: {
     count: {type: "range", label: "Circle count", min: 500, max: 4000, step: 1, value: 2000},
     filter: {type: "toggle", label: "Hue filter", value: true},
     theme: {type: "radio", label: "Theme", options: ["Dark", "Light"], value: "Dark"},
     image: {type: "file", label: "Image", accept: "image/*", value: "/gallery/bear.png"},
   },
-  async draw(stage, {width, height, count, filter, theme, image}) {
+  async draw(stage, {width: stageWidth, height: stageHeight, count, filter, theme, image}) {
+    // Pack in a square, so the circles show the whole image.
+    const width = Math.floor(Math.min(stageWidth, stageHeight));
+    const height = width;
     const color = imageSampler(await loadImage(image), width, height);
     const sides = cm.noise(3, 8);
     const rotate = cm.noise(0, Math.PI * 2 * width);
@@ -32,7 +36,7 @@ export const work = {
     const renderer = cm.canvas({width, height});
     const root = cm.flow().renderer(renderer);
 
-    root.append(cm.clear, {fill: theme === "Dark" ? "black" : "white"});
+    root.append(cm.clear, {fill: theme === "Dark" ? "black" : "#f7f7f5"});
     root
       .data(circles)
       .process(cm.derive, {
