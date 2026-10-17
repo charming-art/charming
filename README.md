@@ -15,15 +15,16 @@ https://charmingjs.org/
 
 ## Examples 📊
 
-https://charmingjs.org/examples/
-
 Live examples with their code, from generative art and simulations to visualizations, shaders and ASCII art.
+
+https://charmingjs.org/examples/
 
 ## Gallery 🎨
 
+Projects built with Charming, including the [Pretext Gallery](https://pretext.charmingjs.org/).
+
 https://charmingjs.org/gallery/
 
-Projects built with Charming, including the [Pretext Gallery](https://pretext.charmingjs.org/).
 
 ## License 📄
 
