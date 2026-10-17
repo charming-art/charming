@@ -27,7 +27,7 @@ const onkeydown = (event) => {
   if (instrument) trigger(instrument);
 };
 window.addEventListener("keydown", onkeydown);
-node.addEventListener("click", (event) => trigger(instruments[Math.floor(event.offsetX / step)]));
+node.addEventListener("click", (event) => trigger(instruments[Math.floor((event.offsetX / node.clientWidth) * 4)]));
 node.style.cursor = "pointer";
 
 invalidation.then(() => {

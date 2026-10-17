@@ -22,7 +22,11 @@ const root = cm.flow().renderer(renderer);
 const node = renderer.node();
 
 node.style.border = "solid black 1px";
-node.addEventListener("pointermove", (event) => mouse.set(event.offsetX, event.offsetY));
+
+// The pointer in canvas coordinates, also when the canvas is scaled to fit the page.
+const pointer = (event) => [(event.offsetX / node.clientWidth) * width, (event.offsetY / node.clientHeight) * height];
+
+node.addEventListener("pointermove", (event) => mouse.set(...pointer(event)));
 
 function follow({location, velocity, speed}) {
   const acceleration = cm.vecSub(mouse, location).norm().mult(0.5);

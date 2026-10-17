@@ -28,7 +28,7 @@ function tick() {
   for (const body of bodies) if (body !== selected) body.position.add(body.velocity);
 }
 
-const svg = cm.svg`<svg ${{width: size, height: size, style_touch_action: "none"}}>
+const svg = cm.svg`<svg ${{width: size, height: size, viewBox: [0, 0, size, size], style_touch_action: "none"}}>
   <circle ${{
     data: bodies,
     r: 12,
@@ -39,8 +39,13 @@ const svg = cm.svg`<svg ${{width: size, height: size, style_touch_action: "none"
 </svg>`;
 const circles = svg.querySelectorAll("circle");
 
-svg.addEventListener("pointermove", (event) => selected && selected.position.set(event.offsetX, event.offsetY));
-window.addEventListener("pointerup", () => (selected = null));
+// The pointer in SVG coordinates, also when the SVG is scaled to fit the page.
+const pointer = (event) => [(event.offsetX / svg.clientWidth) * size, (event.offsetY / svg.clientHeight) * size];
+const onpointerup = () => (selected = null);
+
+svg.addEventListener("pointermove", (event) => selected && selected.position.set(...pointer(event)));
+window.addEventListener("pointerup", onpointerup);
+invalidation.then(() => window.removeEventListener("pointerup", onpointerup));
 
 requestAnimationFrame(function frame() {
   tick();

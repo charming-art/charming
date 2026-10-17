@@ -27,7 +27,7 @@ function rose(n, d) {
   return d3.line()(points);
 }
 
-const svg = cm.svg`<svg ${{width: size, height: size, stroke_width: 1.2}}>
+const svg = cm.svg`<svg ${{width: size, height: size, viewBox: [0, 0, size, size], stroke_width: 1.2}}>
   <g ${{data: d3.cross(vector, vector), transform: ([x, y]) => `translate(${scale(x) + r}, ${scale(y) + r})`}}>
     <path ${{d: ([x, y]) => rose(x + 1, y + 1), stroke: "black", fill: "none"}}/>
   </g>

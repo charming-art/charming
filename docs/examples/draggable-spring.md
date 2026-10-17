@@ -21,15 +21,22 @@ let dragging = false;
 
 node.style.border = "solid black 1px";
 node.style.touchAction = "none";
+
+// The pointer in canvas coordinates, also when the canvas is scaled to fit the page.
+const pointer = (event) => [(event.offsetX / node.clientWidth) * width, (event.offsetY / node.clientHeight) * height];
+const onpointerup = () => (dragging = false);
+
 node.addEventListener("pointerdown", (event) => {
   dragging = true;
   drag(event);
 });
 node.addEventListener("pointermove", (event) => dragging && drag(event));
-window.addEventListener("pointerup", () => (dragging = false));
+window.addEventListener("pointerup", onpointerup);
+invalidation.then(() => window.removeEventListener("pointerup", onpointerup));
 
 function drag(event) {
-  bob.location.set(event.offsetX - width / 2, event.offsetY);
+  const [x, y] = pointer(event);
+  bob.location.set(x - width / 2, y);
   bob.velocity.mult(0);
 }
 

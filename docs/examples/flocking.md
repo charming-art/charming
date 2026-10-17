@@ -23,14 +23,20 @@ let mouse = cm.vec();
 let frameCount = 0;
 
 node.style.touchAction = "none";
+
+// The pointer in canvas coordinates, also when the canvas is scaled to fit the page.
+const pointer = (event) => [(event.offsetX / node.clientWidth) * width, (event.offsetY / node.clientHeight) * height];
+const onpointerup = () => (pressed = false);
+
 node.addEventListener("pointerdown", (event) => {
   if (init) root.append(cm.clear, {fill: "white"});
   init = false;
   pressed = true;
-  mouse = cm.vec(event.offsetX, event.offsetY);
+  mouse = cm.vec(...pointer(event));
 });
-node.addEventListener("pointermove", (event) => (mouse = cm.vec(event.offsetX, event.offsetY)));
-window.addEventListener("pointerup", () => (pressed = false));
+node.addEventListener("pointermove", (event) => (mouse = cm.vec(...pointer(event))));
+window.addEventListener("pointerup", onpointerup);
+invalidation.then(() => window.removeEventListener("pointerup", onpointerup));
 
 root.append(cm.clear, {fill: "#eee"});
 root.append(cm.text, {

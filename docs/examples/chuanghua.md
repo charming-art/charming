@@ -67,7 +67,7 @@ function zoomTo(end) {
     });
 }
 
-const svg = cm.svg`<svg ${{width, height: width}}>
+const svg = cm.svg`<svg ${{width, height: width, viewBox: [0, 0, width, width]}}>
   <g>
     <g ${{
       data: cells,

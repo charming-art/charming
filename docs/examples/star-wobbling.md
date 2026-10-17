@@ -36,7 +36,7 @@ function arm(x, y, angle, length, fill, time) {
   </g>`;
 }
 
-const svg = cm.svg`<svg ${{width: size, height: size, style_background: "rgb(255, 64, 119)"}}></svg>`;
+const svg = cm.svg`<svg ${{width: size, height: size, viewBox: [0, 0, size, size], style_background: "rgb(255, 64, 119)"}}></svg>`;
 
 requestAnimationFrame(function frame(time) {
   svg.replaceChildren(

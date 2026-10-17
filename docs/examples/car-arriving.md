@@ -21,7 +21,11 @@ const root = cm.flow().renderer(renderer);
 const node = renderer.node();
 
 node.style.border = "solid black 1px";
-node.addEventListener("pointermove", (event) => target.set(event.offsetX, event.offsetY));
+
+// The pointer in canvas coordinates, also when the canvas is scaled to fit the page.
+const pointer = (event) => [(event.offsetX / node.clientWidth) * width, (event.offsetY / node.clientHeight) * height];
+
+node.addEventListener("pointermove", (event) => target.set(...pointer(event)));
 
 function arrive(d) {
   const desired = cm.vecSub(target, d.location);

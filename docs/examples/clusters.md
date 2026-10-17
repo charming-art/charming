@@ -17,8 +17,12 @@ const root = cm.flow().renderer(renderer);
 const node = renderer.node();
 
 node.style.border = "solid black 1px";
+
+// The pointer in canvas coordinates, also when the canvas is scaled to fit the page.
+const pointer = (event) => [(event.offsetX / node.clientWidth) * width, (event.offsetY / node.clientHeight) * height];
+
 node.addEventListener("pointerdown", (event) => {
-  clusters.push({origin: cm.vec(event.offsetX, event.offsetY), particles: []});
+  clusters.push({origin: cm.vec(...pointer(event)), particles: []});
 });
 
 function updateParticles(flow) {

@@ -14,7 +14,9 @@
 }
 
 /* Fit live examples to the content column, keeping their aspect ratio. */
-.vp-doc canvas {
+.vp-doc canvas,
+.vp-doc .genji-cell svg[viewBox] {
+  box-sizing: border-box;
   max-width: 100%;
   height: auto !important;
 }

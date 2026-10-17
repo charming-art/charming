@@ -32,7 +32,7 @@ const line = d3
   .line()
   .x((d, i) => curveX + i)
   .y((d) => d);
-const svg = cm.svg`<svg ${{width, height, style_background: "black"}}></svg>`;
+const svg = cm.svg`<svg ${{width, height, viewBox: [0, 0, width, height], style_background: "black"}}></svg>`;
 let time = -0.1;
 
 requestAnimationFrame(function frame() {

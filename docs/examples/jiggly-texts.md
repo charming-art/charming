@@ -34,7 +34,7 @@ const schemes = [
 const sizes = d3.range(150, 4, -15);
 const color = (scheme) => d3.scaleSequential([150, 0], d3[`interpolate${scheme}`]);
 
-const svg = cm.svg`<svg ${{width: size, height: size}}>
+const svg = cm.svg`<svg ${{width: size, height: size, viewBox: [0, 0, size, size]}}>
   <g ${{data: sizes}}>
     <text ${{
       transform: `translate(${size / 2}, ${size / 2})`,

@@ -30,7 +30,7 @@ function branch(length, angle, depth) {
   </g>`;
 }
 
-const svg = cm.svg`<svg ${{width, height, font_family: "sans-serif", text_anchor: "middle", dominant_baseline: "central"}}>
+const svg = cm.svg`<svg ${{width, height, viewBox: [0, 0, width, height], font_family: "sans-serif", text_anchor: "middle", dominant_baseline: "central"}}>
   <g ${{transform: `translate(${width / 2}, ${height - cell / 2}) rotate(-90)`}}>
     ${branch(6, 0, 0)}
   </g>

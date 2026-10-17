@@ -12,6 +12,16 @@
 // The builtins width, now and dark are left out, so an example with its own
 // width doesn't rerun when the window resizes.
 
+// Libraries used by some examples, loaded only by the blocks that use them, so
+// other pages don't download them.
+export const libraries = {
+  Matter: () => import("matter-js"),
+  toxi: () => import("toxiclibsjs"),
+  flubber: () => import("flubber"),
+  rough: () => import("roughjs"),
+  Tone: () => import("tone"),
+};
+
 const reserved = new Set(
   (
     "break case catch class const continue debugger default delete do else enum export extends false finally for " +
@@ -23,7 +33,9 @@ const reserved = new Set(
 
 export function example(code) {
   const names = [...new Set(code.match(/(?<![\w$.])[A-Za-z_$][\w$]*/g))].filter((d) => !reserved.has(d));
+  const imports = names.filter((d) => d in libraries);
   const inputs = names
+    .filter((d) => !(d in libraries))
     .map((d) => `  if (typeof ${d} !== "undefined" && window.${d} !== ${d}) __names.push("${d}"), __values.push(${d});`)
     .join("\n");
   const body = code.replace(/document\.body\.append\(/g, "__display(") + "\n//# sourceURL=example.js";
@@ -31,20 +43,27 @@ export function example(code) {
   const __names = [];
   const __values = [];
 ${inputs}
+  const __imports = ${JSON.stringify(imports)};
   const __nodes = [];
   const __frames = new Set();
   const __timers = new Set();
   let __disposed = false;
   let __root = null;
+  let __invalidate;
+  const __invalidation = new Promise((resolve) => (__invalidate = resolve));
+  const __dispose = () => {
+    __disposed = true;
+    for (const id of __frames) window.cancelAnimationFrame(id);
+    for (const id of __timers) window.clearTimeout(id), window.clearInterval(id);
+    __invalidate();
+  };
   const __alive = () => {
     if (__disposed) return false;
-    if (__root && __root.__mounted && !__root.isConnected) (__disposed = true), __invalidate();
+    if (__root && __root.__mounted && !__root.isConnected) __dispose();
     if (__root && __root.isConnected) __root.__mounted = true;
     return !__disposed;
   };
   const __display = (...nodes) => __nodes.push(...nodes);
-  let __invalidate;
-  const __invalidation = new Promise((resolve) => (__invalidate = resolve));
   const __requestAnimationFrame = (callback) => {
     const id = window.requestAnimationFrame((time) => {
       __frames.delete(id);
@@ -73,27 +92,44 @@ ${inputs}
     __timers.add(id);
     return id;
   };
-  unsubscribe(() => {
-    __disposed = true;
-    for (const id of __frames) window.cancelAnimationFrame(id);
-    for (const id of __timers) window.clearTimeout(id), window.clearInterval(id);
-    __invalidate();
-  });
-  new Function(
-    "__display",
-    "requestAnimationFrame",
-    "cancelAnimationFrame",
-    "setInterval",
-    "setTimeout",
-    "invalidation",
-    ...__names,
-    ${JSON.stringify(body)}
-  )(__display, __requestAnimationFrame, __cancelAnimationFrame, __setInterval, __setTimeout, __invalidation, ...__values);
-  if (__nodes.length === 1 && __nodes[0] instanceof Node) __root = __nodes[0];
-  else {
-    __root = document.createElement("div");
-    __root.append(...__nodes);
-  }
-  return __root;
+  unsubscribe(__dispose);
+
+  // Show an error instead of throwing it, so genji still disposes the previous run.
+  const __error = (error) => {
+    __dispose();
+    console.error("example.js:", error);
+    const node = document.createElement("span");
+    node.className = "genji-error";
+    node.textContent = "example.js: " + error + " (Open console for more details.)";
+    return node;
+  };
+
+  const __run = (modules) => {
+    try {
+      new Function(
+        "__display",
+        "requestAnimationFrame",
+        "cancelAnimationFrame",
+        "setInterval",
+        "setTimeout",
+        "invalidation",
+        ...__names,
+        ...__imports,
+        ${JSON.stringify(body)}
+      )(__display, __requestAnimationFrame, __cancelAnimationFrame, __setInterval, __setTimeout, __invalidation, ...__values, ...modules);
+    } catch (error) {
+      return __error(error);
+    }
+    if (__nodes.length === 1 && __nodes[0] instanceof Node) __root = __nodes[0];
+    else {
+      __root = document.createElement("div");
+      __root.append(...__nodes);
+    }
+    return __root;
+  };
+
+  if (!__imports.length) return __run([]);
+  const __load = (name) => __libraries[name]().then((module) => module.default || module);
+  return Promise.all(__imports.map(__load)).then(__run, __error);
 })()`;
 }

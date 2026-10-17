@@ -15,7 +15,7 @@ const chs = ["燚", "焱", "炎", "火"];
 const fire = new Array(cols * rows).fill(0);
 const index = (x, y) => x + y * cols;
 
-const svg = cm.svg`<svg ${{width, height, font_family: "sans-serif"}}>
+const svg = cm.svg`<svg ${{width, height, viewBox: [0, 0, width, height], font_family: "sans-serif"}}>
   <text ${{
     data: fire,
     x: (_, i) => (i % cols) * cell,
