@@ -22,11 +22,15 @@ export const work = {
     theme: {type: "radio", label: "Theme", options: ["Dark", "Light"], value: "Dark"},
     image: {type: "file", label: "Image", accept: "image/*", value: "/gallery/bear.png"},
   },
-  async draw(stage, {width: stageWidth, height: stageHeight, count, filter, theme, image}) {
+  async draw(stage, {width: stageWidth, height: stageHeight, count, filter, theme, image}, invalidation) {
     // Pack in a square, so the circles show the whole image.
     const width = Math.floor(Math.min(stageWidth, stageHeight));
     const height = width;
-    const color = imageSampler(await loadImage(image), width, height);
+    let stopped = false;
+    invalidation.then(() => (stopped = true));
+    const loaded = await loadImage(image);
+    if (stopped) return; // Redrawn while the image was loading.
+    const color = imageSampler(loaded, width, height);
     const sides = cm.noise(3, 8);
     const rotate = cm.noise(0, Math.PI * 2 * width);
     const tint = filter ? hueFilter(Math.random()) : ([r, g, b, a]) => `rgba(${r}, ${g}, ${b}, ${a})`;

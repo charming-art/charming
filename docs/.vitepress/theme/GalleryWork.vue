@@ -27,18 +27,25 @@ const values = reactive(
 let invalidate = () => {};
 let timeout;
 let observer;
+let drawId = 0;
+let upload = null; // The object URL of the uploaded image, released when replaced.
 
 function draw() {
   invalidate();
   const invalidation = new Promise((resolve) => (invalidate = resolve));
+  const id = ++drawId;
   const node = stage.value;
-  node.replaceChildren();
+  // Each draw gets its own frame, so a draw that's still loading when the next
+  // one starts appends to a detached frame instead of stacking on the stage.
+  const frame = document.createElement("div");
+  frame.className = "work-frame";
+  node.replaceChildren(frame);
   // Draw in the content box, inside the stage's padding.
   const style = getComputedStyle(node);
   const width = node.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
   const height = node.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom);
-  Promise.resolve(work.draw(node, {...values, width, height}, invalidation))
-    .then(() => (isSVG.value = !!node.querySelector("svg")))
+  Promise.resolve(work.draw(frame, {...values, width, height}, invalidation))
+    .then(() => id === drawId && (isSVG.value = !!frame.querySelector("svg")))
     .catch((error) => console.error(error));
 }
 
@@ -94,9 +101,12 @@ function update(name, value) {
   redraw();
 }
 
-function upload(name, event) {
+function choose(name, event) {
   const [file] = event.target.files;
-  if (file) update(name, URL.createObjectURL(file));
+  if (!file) return;
+  if (upload) URL.revokeObjectURL(upload);
+  upload = URL.createObjectURL(file);
+  update(name, upload);
 }
 
 onMounted(() => {
@@ -110,6 +120,7 @@ onBeforeUnmount(() => {
   clearTimeout(timeout);
   observer?.disconnect();
   invalidate();
+  if (upload) URL.revokeObjectURL(upload);
 });
 </script>
 
@@ -158,7 +169,7 @@ onBeforeUnmount(() => {
           />
           <template v-else-if="control.type === 'file'">
             <span class="work-button">Upload</span>
-            <input type="file" :accept="control.accept" hidden @change="upload(name, $event)" />
+            <input type="file" class="work-file" :accept="control.accept" @change="choose(name, $event)" />
           </template>
         </component>
         <button type="button" class="work-button work-primary" @click="draw">Regenerate</button>
@@ -223,6 +234,7 @@ onBeforeUnmount(() => {
 }
 
 .work-input {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -248,6 +260,20 @@ onBeforeUnmount(() => {
 .work-input input[type="checkbox"] {
   margin: 0;
   accent-color: #222;
+}
+
+/* The file input is invisible but focusable; its label's Upload button shows the focus. */
+.work-file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.work-input-file:focus-within .work-button {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
 }
 
 .work-input output {
@@ -341,6 +367,11 @@ onBeforeUnmount(() => {
   min-height: 0;
   overflow: auto;
   padding: 40px 64px 64px;
+}
+
+/* The frame doesn't affect layout: the artwork is laid out by the stage. */
+.work-stage :deep(.work-frame) {
+  display: contents;
 }
 
 .work-stage :deep(canvas),

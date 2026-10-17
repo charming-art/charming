@@ -39,7 +39,11 @@ export const work = {
     // The circles on the left and the poem on the right, or the poem below on narrow screens.
     const wide = width >= 768;
     const size = Math.floor(wide ? Math.min(height, width * 0.45) : Math.min(width, height * 0.6));
-    const color = imageSampler(await loadImage(image), size, size);
+    let stopped = false;
+    invalidation.then(() => (stopped = true));
+    const loaded = await loadImage(image);
+    if (stopped) return; // Redrawn while the image was loading.
+    const color = imageSampler(loaded, size, size);
     const rotate = cm.noise(0, 360);
     const pack = d3.pack().size([size, size]).padding(3);
     const data = {children: Array.from({length: count}, () => ({value: Math.random() * 1000}))};

@@ -26,7 +26,10 @@ export const work = {
   },
   async draw(stage, {width: stageWidth, height: stageHeight, brush, image: src}, invalidation) {
     // Fit the whole image in the stage, keeping its aspect ratio.
+    let stopped = false;
+    invalidation.then(() => (stopped = true));
     const image = await loadImage(src);
+    if (stopped) return; // Redrawn while the image was loading.
     const k = Math.min(stageWidth / image.width, stageHeight / image.height);
     const width = Math.floor(image.width * k);
     const height = Math.floor(image.height * k);
@@ -50,9 +53,12 @@ export const work = {
     let frameCount = 0;
     let frame;
 
+    invalidation.then(() => cancelAnimationFrame(frame));
+
     stage.append(renderer.node());
 
     frame = requestAnimationFrame(function paint() {
+      if (stopped) return;
       const points = Array.from({length: count}, () => {
         const x = Math.random() * width;
         const y = Math.random() * height;
@@ -73,7 +79,5 @@ export const work = {
       root.render();
       if (++frameCount <= maxFrame) frame = requestAnimationFrame(paint);
     });
-
-    invalidation.then(() => cancelAnimationFrame(frame));
   },
 };
