@@ -281,4 +281,4 @@ cm.svg`<svg ${{width: 640, height: 80}}>
 </svg>`;
 ```
 
-Read [Why Charming?](/why-charming) for the ideas behind it, [Get Started](/get-started) to install it, or browse the [API Index](/api-index). For more, see the [examples on Observable](https://observablehq.com/d/18b3d6f3affff5bb).
+Read [Why Charming?](/why-charming) for the ideas behind it, [Get Started](/get-started) to install it, or browse the [API Index](/api-index). For more, see the [examples](/examples/).
