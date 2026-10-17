@@ -24,16 +24,45 @@ export default defineConfig({
         activeMatch: "^/examples/",
       },
       {
-        text: "Demos",
-        items: [
-          {
-            text: "Pretext",
-            link: "https://pretext.charmingjs.org/",
-          },
-        ],
+        text: "Gallery",
+        link: "/gallery/",
+        activeMatch: "^/gallery/",
       },
     ],
     sidebar: {
+      "/gallery/": [
+        {text: "Gallery", link: "/gallery/"},
+        {
+          text: "Generative Art",
+          items: [
+            {text: "APack", link: "/gallery/#apack"},
+            {text: "Name to Tree", link: "/gallery/#name-to-tree"},
+          ],
+        },
+        {
+          text: "Pretext",
+          items: [
+            {text: "U.S. Map Paper", link: "/gallery/#u-s-map-paper"},
+            {text: "Yin Yang", link: "/gallery/#yin-yang"},
+            {text: "Air Text", link: "/gallery/#air-text"},
+          ],
+        },
+        {
+          text: "Music",
+          items: [
+            {text: "Interactive Composition: Eye", link: "/gallery/#interactive-composition-eye"},
+            {text: "AV Instrument: Streamgraph", link: "/gallery/#av-instrument-streamgraph"},
+          ],
+        },
+        {
+          text: "Image",
+          items: [
+            {text: "Pixel Poetry", link: "/gallery/#pixel-poetry"},
+            {text: "Islamic Avatar", link: "/gallery/#islamic-avatar"},
+            {text: "Art Gallery Painter", link: "/gallery/#art-gallery-painter"},
+          ],
+        },
+      ],
       "/examples/": [
         {text: "Examples", link: "/examples/"},
         ...categories.map((category) => ({
