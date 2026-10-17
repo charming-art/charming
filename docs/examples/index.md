@@ -5,6 +5,6 @@ aside: false
 
 # Examples
 
-Examples of Charming, from generative art and simulations to visualizations, shaders and ASCII art. Each runs live on its page, above its source code. For bigger projects, see the [demos](https://pretext.charmingjs.org/).
+Examples of Charming, from generative art and simulations to visualizations, shaders and ASCII art. Each runs live on its page, above its source code. For bigger projects, see the [gallery](/gallery/).
 
 <ExampleGrid />

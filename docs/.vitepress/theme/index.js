@@ -5,6 +5,7 @@ import * as cm from "../../../src/index.js";
 import * as d3 from "d3";
 import {example, libraries} from "./example.js";
 import ExampleGrid from "./ExampleGrid.vue";
+import GalleryWork from "./GalleryWork.vue";
 import "./custom.css";
 
 // More props: https://genji-md.dev/reference/props
@@ -19,5 +20,6 @@ export default {
   Layout: () => h(Layout, props),
   enhanceApp({app}) {
     app.component("ExampleGrid", ExampleGrid);
+    app.component("GalleryWork", GalleryWork);
   },
 };

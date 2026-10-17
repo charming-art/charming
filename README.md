@@ -7,11 +7,7 @@
 
 Both are designed to work alongside other libraries such as [D3](https://d3js.org/) and [p5](https://p5js.org/), and can be adopted independently.
 
-<a href="https://observablehq.com/d/18b3d6f3affff5bb"><img src="./img/charming-examples.png"  alt="examples"></a>
-
-## Demos 🎨
-
-https://pretext.charmingjs.org/
+<a href="https://charmingjs.org/examples/"><img src="./img/charming-examples.png"  alt="examples"></a>
 
 ## Documentation 📚
 
@@ -19,7 +15,16 @@ https://charmingjs.org/
 
 ## Examples 📊
 
-https://observablehq.com/d/18b3d6f3affff5bb
+Live examples with their code, from generative art and simulations to visualizations, shaders and ASCII art.
+
+https://charmingjs.org/examples/
+
+## Gallery 🎨
+
+Projects built with Charming, including the [Pretext Gallery](https://pretext.charmingjs.org/).
+
+https://charmingjs.org/gallery/
+
 
 ## License 📄
 
