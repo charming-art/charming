@@ -1,6 +1,6 @@
 {
   "name": "charmingjs",
-  "version": "0.0.20",
+  "version": "0.1.0",
   "description": "The JavaScript library for generative art, with a data-driven rendering pipeline on Canvas and WebGL",
   "author": {
     "name": "Bairui SU",
@@ -14,7 +14,7 @@
   "unpkg": "dist/charming.umd.min.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/charming-art/api.git"
+    "url": "git+https://github.com/charming-art/charming.git"
   },
   "files": [
     "dist",
