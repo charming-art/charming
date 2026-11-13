@@ -2,8 +2,8 @@
 
 **Charming** is a free, open-source JavaScript library for creative coding and data-driven drawing. It has two parts:
 
-- **[Charming Core](/flow)**, a declarative language for drawing shapes from data, with renderers for [Canvas](/flow#cm-canvas), [WebGL](/webgl) and [the terminal](/terminal) (ASCII art).
-- **Helpers** for working with [SVG and HTML](/dom), [Canvas](/canvas), [paths](/path), [text](/pretext), [vectors](/vector) and [noise](/noise) directly, with little boilerplate.
+- **[Charming Core](/flow)**, a declarative language for drawing shapes from data, with renderers for [Canvas](/canvas#cm-canvas), [WebGL](/webgl) and [the terminal](/terminal) (ASCII art).
+- **Utilities** for working with [SVG and HTML](/dom), [Canvas](/context2d), [paths](/path), [text](/text), [vectors](/vector) and [noise](/noise) directly, with little boilerplate.
 
 Both are designed to work alongside other libraries such as [D3](https://d3js.org/) and [p5](https://p5js.org/), and can be adopted independently.
 
@@ -250,7 +250,7 @@ The best part is that besides regular computational art, Charming supports **ASC
 
 Why ASCII art? Life is not only about work, you know.
 
-And when you'd rather work with SVG or Canvas directly, the helpers remove the boilerplate without adding a new abstraction. For example, [_cm_.svg](/dom#cm-svg) creates data-driven SVG from a template literal:
+And when you'd rather work with SVG or Canvas directly, the utilities remove the boilerplate without adding a new abstraction. For example, [_cm_.svg](/dom#cm-svg) creates data-driven SVG from a template literal:
 
 ```js eval code=false
 (() => {

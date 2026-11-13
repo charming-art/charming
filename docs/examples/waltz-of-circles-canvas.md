@@ -1,6 +1,6 @@
 # Waltz of Circles, Canvas
 
-Thousands of circles whose positions, radii and colors are computed by trigonometric functions, frame by frame, and drawn one by one with the [Canvas renderer](/flow#cm-canvas). A reimplementation of Ricky Reusser's [Instanced WebGL Circles](https://observablehq.com/@rreusser/instanced-webgl-circles). Compare with the [WebGL](/examples/waltz-of-circles-webgl) and [GLSL](/examples/waltz-of-circles-glsl) versions.
+Thousands of circles whose positions, radii and colors are computed by trigonometric functions, frame by frame, and drawn one by one with the [Canvas renderer](/canvas#cm-canvas). A reimplementation of Ricky Reusser's [Instanced WebGL Circles](https://observablehq.com/@rreusser/instanced-webgl-circles). Compare with the [WebGL](/examples/waltz-of-circles-webgl) and [GLSL](/examples/waltz-of-circles-glsl) versions.
 
 ```js eval code=false
 const count = Inputs.range([1000, 10000], {label: "Circles", step: 1000, value: 2500});

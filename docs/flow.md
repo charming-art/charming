@@ -62,7 +62,7 @@ const root = cm.flow().renderer(cm.canvas({width: 200, height: 100}));
 
 If _renderer_ is specified, sets the renderer of this flow and returns this flow. All flows created from the same root share it. If _renderer_ isn't specified, returns the current renderer, which defaults to `null`.
 
-The renderers are [_cm_.canvas](#cm-canvas), [_cm_.webgl](/webgl#cm-webgl) and [_cm_.terminal](/terminal#cm-terminal). Set the renderer before using transforms that depend on its size, such as [_cm_.mapPosition](/transform#cm-map-position).
+The renderers are [_cm_.canvas](/canvas#cm-canvas), [_cm_.webgl](/webgl#cm-webgl) and [_cm_.terminal](/terminal#cm-terminal). Set the renderer before using transforms that depend on its size, such as [_cm_.mapPosition](/transform#cm-map-position).
 
 ```js
 const renderer = cm.canvas({width: 200, height: 100});
@@ -242,26 +242,6 @@ root
   .append(cm.circle, {x: (d) => d * 40, y: 50, r: (d) => d})
   .call(scaleRadius);
 ```
-
-## _cm_.canvas(_[options]_) {#cm-canvas}
-
-Returns a renderer that draws with the [Canvas 2D API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
-
-Options:
-
-- **width** — CSS width of the canvas (default `640`).
-- **height** — CSS height (default `480`).
-- **dpi** — pixel ratio of the backing store (default `window.devicePixelRatio`).
-
-Use _renderer_.node() to get the canvas element.
-
-```js
-const renderer = cm.canvas({width: 200, height: 100});
-
-document.body.append(renderer.node());
-```
-
-For many shapes, use [_cm_.webgl](/webgl#cm-webgl). For ASCII art, use [_cm_.terminal](/terminal#cm-terminal).
 
 ## Animating
 
