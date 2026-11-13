@@ -15,8 +15,8 @@
       r: (t) => t,
       fill: "black",
     })
-    .transform(cm.mapPosition, {padding: 30})
-    .transform(cm.mapAttrs, {r: {range: [8, 15]}});
+    .transform(cm.fit, {padding: 30})
+    .transform(cm.scale, {r: {range: [8, 15]}});
 
   root.render();
 
@@ -36,8 +36,8 @@ root
     r: (t) => t,
     fill: "black",
   })
-  .transform(cm.mapPosition, {padding: 30})
-  .transform(cm.mapAttrs, {r: {range: [8, 15]}});
+  .transform(cm.fit, {padding: 30})
+  .transform(cm.scale, {r: {range: [8, 15]}});
 
 root.render();
 ```
@@ -62,7 +62,7 @@ const root = cm.flow().renderer(cm.canvas({width: 200, height: 100}));
 
 If _renderer_ is specified, sets the renderer of this flow and returns this flow. All flows created from the same root share it. If _renderer_ isn't specified, returns the current renderer, which defaults to `null`.
 
-The renderers are [_cm_.canvas](/canvas#cm-canvas), [_cm_.webgl](/webgl#cm-webgl) and [_cm_.terminal](/terminal#cm-terminal). Set the renderer before using transforms that depend on its size, such as [_cm_.mapPosition](/transform#cm-map-position).
+The renderers are [_cm_.canvas](/canvas#cm-canvas), [_cm_.webgl](/webgl#cm-webgl) and [_cm_.terminal](/terminal#cm-terminal). Set the renderer before using transforms that depend on its size, such as [_cm_.fit](/transform#cm-fit).
 
 ```js
 const renderer = cm.canvas({width: 200, height: 100});
@@ -205,7 +205,7 @@ Transforms the attribute values of the shapes just appended with the specified [
       fill: "rgba(175, 175, 175, 0.5)",
       stroke: "black",
     })
-    .transform(cm.mapPosition, {padding: 20});
+    .transform(cm.fit, {padding: 20});
 
   root.render();
 
@@ -223,7 +223,7 @@ root
     fill: "rgba(175, 175, 175, 0.5)",
     stroke: "black",
   })
-  .transform(cm.mapPosition, {padding: 20});
+  .transform(cm.fit, {padding: 20});
 ```
 
 See [Charming Transform](/transform) for the built-in transforms.
@@ -234,7 +234,7 @@ Calls the specified _callback_ with this flow and _params_, and returns this flo
 
 ```js
 function scaleRadius(flow) {
-  flow.transform(cm.mapAttrs, {r: {range: [10, 15]}});
+  flow.transform(cm.scale, {r: {range: [10, 15]}});
 }
 
 root

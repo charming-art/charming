@@ -52,8 +52,8 @@ Prepare data before appending shapes.
 
 Derive attribute values after appending shapes.
 
-- [_cm_.**mapAttrs**](/transform#cm-map-attrs) — map attributes with scales.
-- [_cm_.**mapPosition**](/transform#cm-map-position) — map positions to the size of the renderer.
+- [_cm_.**scale**](/transform#cm-scale) — scale attributes.
+- [_cm_.**fit**](/transform#cm-fit) — fit positions to the size of the renderer.
 
 ## Renderers
 

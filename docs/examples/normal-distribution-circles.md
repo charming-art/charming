@@ -25,7 +25,7 @@ requestAnimationFrame(function frame() {
       fill: "black",
       fillOpacity: 0.1,
     })
-    .transform(cm.mapAttrs, {
+    .transform(cm.scale, {
       r: {scale: cm.scaleLog, domain: [0.01, width / 2], range: [60, 10]},
     });
 

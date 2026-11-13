@@ -18,7 +18,7 @@ root
     strokeWidth: 0.33,
     close: true,
   })
-  .transform(cm.mapPosition, {domainX: [-1, 1], domainY: [-1, 1], padding: 10});
+  .transform(cm.fit, {domainX: [-1, 1], domainY: [-1, 1], padding: 10});
 
 root
   .data(angles)
@@ -29,7 +29,7 @@ root
     strokeWidth: 2.5,
     close: true,
   })
-  .transform(cm.mapPosition, {domainX: [-1, 1], domainY: [-1, 1], padding: 10});
+  .transform(cm.fit, {domainX: [-1, 1], domainY: [-1, 1], padding: 10});
 
 root.render();
 

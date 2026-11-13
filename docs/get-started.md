@@ -72,8 +72,8 @@ Draw a clover with the canvas renderer:
       r: (t) => t,
       fill: "black",
     })
-    .transform(cm.mapPosition, {padding: 30})
-    .transform(cm.mapAttrs, {r: {range: [8, 15]}});
+    .transform(cm.fit, {padding: 30})
+    .transform(cm.scale, {r: {range: [8, 15]}});
 
   root.render();
 
@@ -95,8 +95,8 @@ root
     r: (t) => t,
     fill: "black",
   })
-  .transform(cm.mapPosition, {padding: 30})
-  .transform(cm.mapAttrs, {r: {range: [8, 15]}});
+  .transform(cm.fit, {padding: 30})
+  .transform(cm.scale, {r: {range: [8, 15]}});
 
 root.render();
 

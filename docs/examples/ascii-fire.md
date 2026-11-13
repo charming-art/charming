@@ -1,6 +1,6 @@
 # ASCII Fire
 
-_On Fire 🔥_: a classic fire effect on the [terminal renderer](/terminal). Each cell takes the heat of a cell below it minus a random decay, the bottom row is fed by [noise](/noise), and the heat colors the cell's background with [_cm_.mapAttrs](/transform#cm-map-attrs). Made for [Genuary 2024](https://genuary.art/prompts#jan9), "ASCII".
+_On Fire 🔥_: a classic fire effect on the [terminal renderer](/terminal). Each cell takes the heat of a cell below it minus a random decay, the bottom row is fed by [noise](/noise), and the heat colors the cell's background with [_cm_.scale](/transform#cm-scale). Made for [Genuary 2024](https://genuary.art/prompts#jan9), "ASCII".
 
 ```js eval t=example
 const cols = 80;
@@ -35,7 +35,7 @@ function draw() {
       stroke0: (heat) => (heat === 0 ? " " : randomChar()),
       stroke2: (heat) => (heat === 0 ? null : heat),
     })
-    .transform(cm.mapAttrs, {stroke2: {domain: [0, rows], interpolate: d3.interpolateCool}});
+    .transform(cm.scale, {stroke2: {domain: [0, rows], interpolate: d3.interpolateCool}});
 
   root.render();
 }

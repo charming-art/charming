@@ -28,7 +28,7 @@ requestAnimationFrame(function frame() {
       stroke: "black",
       strokeWidth: 2,
     })
-    .transform(cm.mapPosition, {domainY: [0, 1], padding: 5, reverseY: true});
+    .transform(cm.fit, {domainY: [0, 1], padding: 5, reverseY: true});
 
   root.render();
   sigma += step;

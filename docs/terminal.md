@@ -57,7 +57,7 @@ const renderer = cm.terminal({cols: 80, rows: 24});
 document.body.append(renderer.node());
 ```
 
-Positions and sizes are in cells: `x: 1` is the second column. [_cm_.mapPosition](/transform#cm-map-position) maps to the grid.
+Positions and sizes are in cells: `x: 1` is the second column. [_cm_.fit](/transform#cm-fit) maps to the grid.
 
 The terminal renderer draws [point](/shape#cm-point), [link](/shape#cm-link), [rect](/shape#cm-rect), [text](/shape#cm-text), [figlet](#cm-figlet), [clear](/shape#cm-clear) and [group](/shape#cm-group).
 

@@ -67,7 +67,7 @@ requestAnimationFrame(function frame() {
       fill: "rgba(175, 175, 175, 0.5)",
       stroke: "black",
     })
-    .transform(cm.mapAttrs, {r: {scale: cm.scaleSqrt, range: [2, 20]}});
+    .transform(cm.scale, {r: {scale: cm.scaleSqrt, range: [2, 20]}});
 
   root.render();
   requestAnimationFrame(frame);

@@ -21,7 +21,7 @@ requestAnimationFrame(function frame() {
       stroke: "black",
       strokeWidth: 1,
     })
-    .transform(cm.mapPosition, {padding: 20});
+    .transform(cm.fit, {padding: 20});
 
   root.render();
   requestAnimationFrame(frame);

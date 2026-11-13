@@ -1,6 +1,6 @@
 # Clover Rainbow
 
-A clover curve drawn with 120 circles, whose radii and colors come from the same parameter. [_cm_.mapAttrs](/transform#cm-map-attrs) maps it to sizes and to a rainbow.
+A clover curve drawn with 120 circles, whose radii and colors come from the same parameter. [_cm_.scale](/transform#cm-scale) maps it to sizes and to a rainbow.
 
 ```js eval t=example
 const renderer = cm.canvas({width: 640, height: 640});
@@ -14,8 +14,8 @@ root
     r: (t) => t,
     fill: (t) => t,
   })
-  .transform(cm.mapPosition, {padding: 30})
-  .transform(cm.mapAttrs, {
+  .transform(cm.fit, {padding: 30})
+  .transform(cm.scale, {
     r: {range: [8, 15]},
     fill: {interpolate: d3.interpolateRainbow},
   });

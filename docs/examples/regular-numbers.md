@@ -31,7 +31,7 @@ const links = numbers
   .filter(([n]) => Math.min(...n) >= 0);
 
 function applyScale(flow) {
-  flow.transform(cm.mapPosition, {
+  flow.transform(cm.fit, {
     scaleY: cm.scaleLog,
     padding: 15,
     domainX: d3.extent(numbers, x),
