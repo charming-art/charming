@@ -27,23 +27,23 @@ Type your name and it grows into a tree of its own, generated from the character
 
 ## Pretext
 
-Text layout with [Charming Pretext](/pretext).
+Text layout with [Charming Text](/text).
 
 ### U.S. Map Paper
 
-An interactive U.S. map whose states are filled with notes about them, made with Charming Pretext. [Open U.S. Map Paper](https://pretext.charmingjs.org/us-map-paper/)
+An interactive U.S. map whose states are filled with notes about them, made with Charming Text. [Open U.S. Map Paper](https://pretext.charmingjs.org/us-map-paper/)
 
 [![U.S. Map Paper](/gallery/us-map-paper.webp)](https://pretext.charmingjs.org/us-map-paper/)
 
 ### Yin Yang
 
-An animated Yin Yang symbol filled with descriptions of itself, made with Charming Pretext. [Open Yin Yang](https://pretext.charmingjs.org/yin-yang/)
+An animated Yin Yang symbol filled with descriptions of itself, made with Charming Text. [Open Yin Yang](https://pretext.charmingjs.org/yin-yang/)
 
 [![Yin Yang](/gallery/yin-yang.webp)](https://pretext.charmingjs.org/yin-yang/)
 
 ### Air Text
 
-A screen of text that parts around your body, seen through the webcam, made with Charming Pretext. [Open Air Text](https://pretext.charmingjs.org/air-text/)
+A screen of text that parts around your body, seen through the webcam, made with Charming Text. [Open Air Text](https://pretext.charmingjs.org/air-text/)
 
 [![Air Text](/gallery/air-text.webp)](https://pretext.charmingjs.org/air-text/)
 

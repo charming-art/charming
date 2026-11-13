@@ -1,6 +1,6 @@
 # API Index
 
-Charming offers a declarative language for drawing shapes from data on Canvas, WebGL and the terminal, and a set of helpers for working with SVG, Canvas, HTML and text directly. They can be used together or independently.
+Charming offers a declarative language for drawing shapes from data on Canvas, WebGL and the terminal, and a set of utilities for working with SVG, Canvas, HTML and text directly. They can be used together or independently.
 
 ## Charming Core
 
@@ -19,7 +19,6 @@ Bind data to shapes and render them.
 - [_flow_.**process**](/flow#flow-process) — prepare the data.
 - [_flow_.**transform**](/flow#flow-transform) — derive attribute values.
 - [_flow_.**call**](/flow#flow-call) — call a function with the flow.
-- [_cm_.**canvas**](/flow#cm-canvas) — create a Canvas renderer.
 
 ### [Charming Shape](/shape)
 
@@ -56,14 +55,15 @@ Derive attribute values after appending shapes.
 - [_cm_.**mapAttrs**](/transform#cm-map-attrs) — map attributes with scales.
 - [_cm_.**mapPosition**](/transform#cm-map-position) — map positions to the size of the renderer.
 
-### [Charming Scale](/scale)
+## Renderers
 
-Map abstract values to visual values.
+Draw the shapes of a flow.
 
-- [_cm_.**scaleLinear**](/scale#cm-scale-linear) — a linear scale.
-- [_cm_.**scaleSqrt**](/scale#cm-scale-sqrt) — a square-root scale.
-- [_cm_.**scaleLog**](/scale#cm-scale-log) — a logarithmic scale.
-- [_cm_.**scaleOrdinal**](/scale#cm-scale-ordinal) — a scale for discrete values.
+### [Charming Canvas](/canvas)
+
+Draw shapes with the Canvas 2D API.
+
+- [_cm_.**canvas**](/canvas#cm-canvas) — create a Canvas renderer.
 
 ### [Charming WebGL](/webgl)
 
@@ -72,14 +72,18 @@ Draw many shapes with WebGL.
 - [_cm_.**webgl**](/webgl#cm-webgl) — create a WebGL renderer.
 - [_cm_.**glsl**](/webgl#cm-glsl) — define an attribute as a GLSL function.
 
-## [Charming Terminal](/terminal)
+### [Charming Terminal](/terminal)
 
 Draw ASCII art.
 
 - [_cm_.**terminal**](/terminal#cm-terminal) — create a terminal renderer.
 - [_cm_.**figlet**](/terminal#cm-figlet) — draw text as an ASCII-art banner.
 
-## [Charming DOM](/dom)
+## Utilities
+
+Work with SVG, HTML, Canvas, paths, text, vectors and noise directly.
+
+### [Charming DOM](/dom)
 
 Create and manipulate DOM elements.
 
@@ -87,19 +91,19 @@ Create and manipulate DOM elements.
 - [_cm_.**html**](/dom#cm-html) — HTML via tagged template literal.
 - [_cm_.**attr**](/dom#cm-attr) — get, set, or remove attributes (including styles and events) on a node.
 
-## [Charming Canvas](/canvas)
+### [Charming Context2D](/context2d)
 
 Set up a 2D canvas and draw shapes.
 
-- [_cm_.**context2d**](/canvas#cm-context2d) — create a 2D canvas rendering context (size, DPR, optional container).
-- [_cm_.**cssFont**](/canvas#cm-css-font) — build a CSS `font` shorthand string (canvas, DOM, or D3).
-- [_cm_.**strokeLine**](/canvas#cm-stroke-line) — stroke a line between two points.
-- [_cm_.**fillCircle**](/canvas#cm-fill-circle) — fill a circle.
-- [_cm_.**strokeCircle**](/canvas#cm-stroke-circle) — stroke a circle.
-- [_cm_.**strokeEllipse**](/canvas#cm-stroke-ellipse) — stroke an axis-aligned ellipse.
-- [_cm_.**fillEllipse**](/canvas#cm-fill-ellipse) — fill an axis-aligned ellipse.
+- [_cm_.**context2d**](/context2d#cm-context2d) — create a 2D canvas rendering context (size, DPR, optional container).
+- [_cm_.**cssFont**](/context2d#cm-css-font) — build a CSS `font` shorthand string (canvas, DOM, or D3).
+- [_cm_.**strokeLine**](/context2d#cm-stroke-line) — stroke a line between two points.
+- [_cm_.**fillCircle**](/context2d#cm-fill-circle) — fill a circle.
+- [_cm_.**strokeCircle**](/context2d#cm-stroke-circle) — stroke a circle.
+- [_cm_.**strokeEllipse**](/context2d#cm-stroke-ellipse) — stroke an axis-aligned ellipse.
+- [_cm_.**fillEllipse**](/context2d#cm-fill-ellipse) — fill an axis-aligned ellipse.
 
-## [Charming Path](/path)
+### [Charming Path](/path)
 
 Build SVG path strings for common shapes.
 
@@ -110,15 +114,15 @@ Build SVG path strings for common shapes.
 - [_cm_.**pathPolygon**](/path#cm-path-polygon) — closed path through `[x, y]` points.
 - [_cm_.**pathContext**](/path#cm-path-context) — a d3-path context that records path commands as arrays, for _cm_.path.
 
-## [Charming Pretext](/pretext)
+### [Charming Text](/text)
 
 Text measurement and path-bound layout on top of [Pretext](https://github.com/chenglou/pretext).
 
-- [_cm_.**prepare**](/pretext#cm-prepare) — prepare a string with font options for Pretext.
-- [_cm_.**layoutTextInPath**](/pretext#cm-layout-text-in-path) — flow prepared text through a closed SVG path.
-- [_cm_.**clearPrepareCache**](/pretext#cm-clear-prepare-cache) — clear memoized prepare and Pretext caches.
+- [_cm_.**prepare**](/text#cm-prepare) — prepare a string with font options for Pretext.
+- [_cm_.**layoutTextInPath**](/text#cm-layout-text-in-path) — flow prepared text through a closed SVG path.
+- [_cm_.**clearPrepareCache**](/text#cm-clear-prepare-cache) — clear memoized prepare and Pretext caches.
 
-## [Charming Vector](/vector)
+### [Charming Vector](/vector)
 
 2D vectors for simulating physical laws.
 
@@ -131,7 +135,7 @@ Text measurement and path-bound layout on top of [Pretext](https://github.com/ch
 - [_cm_.**vecDot**](/vector#cm-vec-dot), [**vecCross**](/vector#cm-vec-cross), [**vecAngle**](/vector#cm-vec-angle) — products and angle.
 - [_vec_.**add**](/vector#vec-add), [**mag**](/vector#vec-mag), [**norm**](/vector#vec-norm), … — the same operations as methods, in place.
 
-## [Charming Noise](/noise)
+### [Charming Noise](/noise)
 
 Smooth random values for computational art.
 

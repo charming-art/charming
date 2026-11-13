@@ -94,25 +94,29 @@ export default defineConfig({
           ],
         },
         {
-          text: "Features",
+          text: "Core",
           items: [
-            {
-              text: "Charming Core",
-              collapsed: false,
-              items: [
-                {text: "Charming Flow", link: "/flow"},
-                {text: "Charming Shape", link: "/shape"},
-                {text: "Charming Process", link: "/process"},
-                {text: "Charming Transform", link: "/transform"},
-                {text: "Charming Scale", link: "/scale"},
-                {text: "Charming WebGL", link: "/webgl"},
-              ],
-            },
-            {text: "Charming Terminal", link: "/terminal"},
-            {text: "Charming DOM", link: "/dom"},
+            {text: "Charming Flow", link: "/flow"},
+            {text: "Charming Shape", link: "/shape"},
+            {text: "Charming Process", link: "/process"},
+            {text: "Charming Transform", link: "/transform"},
+          ],
+        },
+        {
+          text: "Renderers",
+          items: [
             {text: "Charming Canvas", link: "/canvas"},
+            {text: "Charming WebGL", link: "/webgl"},
+            {text: "Charming Terminal", link: "/terminal"},
+          ],
+        },
+        {
+          text: "Utilities",
+          items: [
+            {text: "Charming DOM", link: "/dom"},
+            {text: "Charming Context2D", link: "/context2d"},
             {text: "Charming Path", link: "/path"},
-            {text: "Charming Pretext", link: "/pretext"},
+            {text: "Charming Text", link: "/text"},
             {text: "Charming Vector", link: "/vector"},
             {text: "Charming Noise", link: "/noise"},
           ],

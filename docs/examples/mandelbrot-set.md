@@ -1,6 +1,6 @@
 # Mandelbrot Set
 
-The [Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set) computed on the CPU, one pixel at a time: each pixel iterates _z_ ↦ *z*² + _c_ until it escapes, and the number of iterations picks its color. The pixels are written into the image data of a canvas from [_cm_.context2d](/canvas#cm-context2d). After the Coding Train's [Mandelbrot Set with p5.js](https://thecodingtrain.com/challenges/21-mandelbrot-set-with-p5js). For a zoomable version on the GPU, see [Zoomable Mandelbrot Set](/examples/zoomable-mandelbrot-set).
+The [Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set) computed on the CPU, one pixel at a time: each pixel iterates _z_ ↦ *z*² + _c_ until it escapes, and the number of iterations picks its color. The pixels are written into the image data of a canvas from [_cm_.context2d](/context2d#cm-context2d). After the Coding Train's [Mandelbrot Set with p5.js](https://thecodingtrain.com/challenges/21-mandelbrot-set-with-p5js). For a zoomable version on the GPU, see [Zoomable Mandelbrot Set](/examples/zoomable-mandelbrot-set).
 
 ```js eval code=false
 const max = Inputs.range([1, 100], {label: "Max iterations", step: 1, value: 80});

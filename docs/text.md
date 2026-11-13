@@ -1,6 +1,6 @@
-# Charming Pretext
+# Charming Text
 
-**Charming Pretext** is a small layer on top of [Pretext](https://github.com/chenglou/pretext) for text-based data visualization and generative art. It exposes an intuitive API for **flowing text inside closed shapes** described by an SVG [`d`](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d) path. Pure-arithmetic measurement and line breaking keep Charming Pretext fast without DOM layout.
+**Charming Text** is a small layer built on top of [Pretext](https://github.com/chenglou/pretext) for text-based data visualization and generative art. It exposes an intuitive API for **flowing text inside closed shapes** described by an SVG [`d`](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d) path. Pure-arithmetic measurement and line breaking keep Charming Text fast without DOM layout.
 
 ![pretext-map](/pretext/map.png)
 

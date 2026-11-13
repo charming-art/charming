@@ -1,6 +1,6 @@
 # Multibrot Set Table
 
-The [Multibrot sets](https://en.wikipedia.org/wiki/Multibrot_set) iterate _z_ ↦ _z_<sup>_d_</sup> + _c_, side by side: positive exponents on the top row grow _d_ − 1 lobes, and negative exponents on the bottom row grow _d_ + 1 spikes. Each set is computed on the CPU, one pixel at a time, into a canvas from [_cm_.context2d](/canvas#cm-context2d). For the exponents animated one after another on the GPU, see [Multibrot Set Transition](/examples/multibrot-transition).
+The [Multibrot sets](https://en.wikipedia.org/wiki/Multibrot_set) iterate _z_ ↦ _z_<sup>_d_</sup> + _c_, side by side: positive exponents on the top row grow _d_ − 1 lobes, and negative exponents on the bottom row grow _d_ + 1 spikes. Each set is computed on the CPU, one pixel at a time, into a canvas from [_cm_.context2d](/context2d#cm-context2d). For the exponents animated one after another on the GPU, see [Multibrot Set Transition](/examples/multibrot-transition).
 
 ```js eval code=false
 const n = Inputs.range([1, 8], {label: "Columns", step: 1, value: 4});
