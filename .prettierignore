@@ -1,2 +1,2 @@
-test/*/output
-src/terminal/backend
+test/**/output
+src/renderer/terminal/backend

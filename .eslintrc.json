@@ -9,7 +9,7 @@
     "sourceType": "module",
     "ecmaVersion": "latest"
   },
-  "ignorePatterns": ["src/terminal/backend/"],
+  "ignorePatterns": ["src/renderer/terminal/backend/"],
   "rules": {
     "no-cond-assign": "off"
   }

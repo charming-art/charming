@@ -1,11 +1,11 @@
 <script type="module">
-  import * as canvas from "./canvas/cases/index.js";
-  import * as dom from "./dom/cases/index.js";
-  import * as pretext from "./pretext/cases/index.js";
+  import * as context2d from "./util/context2d/cases/index.js";
+  import * as dom from "./util/dom/cases/index.js";
+  import * as text from "./util/text/cases/index.js";
   import * as coreShape from "./core/shape/cases/index.js";
-  import * as terminal from "./terminal/cases/index.js";
+  import * as terminal from "./renderer/terminal/cases/index.js";
 
-  const cases = {...canvas, ...dom, ...pretext, ...coreShape, ...terminal};
+  const cases = {...context2d, ...dom, ...text, ...coreShape, ...terminal};
 
   // Tool
   const tool = document.createElement("div");
