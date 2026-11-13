@@ -32,7 +32,7 @@ root
     angle: cm.constant(Math.PI / 6),
     rotate: (d) => d.value,
   })
-  .transform(cm.mapAttrs, {rotate: {range: [0, Math.PI * 2]}});
+  .transform(cm.scale, {rotate: {range: [0, Math.PI * 2]}});
 
 root.render();
 

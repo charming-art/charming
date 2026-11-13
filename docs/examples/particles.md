@@ -44,7 +44,7 @@ requestAnimationFrame(function frame() {
       fill: (d) => d.type,
       fillOpacity: (d) => d.index,
     })
-    .transform(cm.mapAttrs, {
+    .transform(cm.scale, {
       r: {range: [0.5, 1]},
       fillOpacity: {range: [0, 1]},
       fill: {scale: cm.scaleOrdinal, range: ["rgb(69, 33, 124)", "rgb(7, 153, 242)", "white"]},

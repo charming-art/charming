@@ -26,7 +26,7 @@ requestAnimationFrame(function frame() {
       stroke: "black",
       strokeWidth: 1.5,
     })
-    .transform(cm.mapPosition, {padding: 20});
+    .transform(cm.fit, {padding: 20});
   root
     .data(data)
     .append(cm.path, {
@@ -41,7 +41,7 @@ requestAnimationFrame(function frame() {
         return context.toArray();
       },
     })
-    .transform(cm.mapPosition, {padding: 20});
+    .transform(cm.fit, {padding: 20});
 
   root.render();
   requestAnimationFrame(frame);

@@ -25,7 +25,7 @@ Charming's atomic operand is the **flow**: a container that holds data and shape
 - **[data](/flow#flow-data)** puts data into a flow.
 - **[process](/flow#flow-process)** pipes the data through functions that prepare it, such as [_cm_.map](/process#cm-map) and [_cm_.filter](/process#cm-filter).
 - **[append](/flow#flow-append)** adds a shape for each datum, computing its attributes from the data. Appending to the result creates nested structures.
-- **[transform](/flow#flow-transform)** derives the final attribute values before they reach the renderer, such as [_cm_.mapPosition](/transform#cm-map-position).
+- **[transform](/flow#flow-transform)** derives the final attribute values before they reach the renderer, such as [_cm_.fit](/transform#cm-fit).
 
 Each operator returns a new flow, so operators chain. The relationship between the data and the drawn shapes stays visible in the code. For example, a clover made of circles:
 
@@ -42,8 +42,8 @@ Each operator returns a new flow, so operators chain. The relationship between t
       r: (t) => t,
       fill: "black",
     })
-    .transform(cm.mapPosition, {padding: 30})
-    .transform(cm.mapAttrs, {r: {range: [8, 15]}});
+    .transform(cm.fit, {padding: 30})
+    .transform(cm.scale, {r: {range: [8, 15]}});
 
   root.render();
 
@@ -63,8 +63,8 @@ root
     r: (t) => t,
     fill: "black",
   })
-  .transform(cm.mapPosition, {padding: 30})
-  .transform(cm.mapAttrs, {r: {range: [8, 15]}});
+  .transform(cm.fit, {padding: 30})
+  .transform(cm.scale, {r: {range: [8, 15]}});
 
 root.render();
 ```
@@ -402,7 +402,7 @@ This composite shape can be used like any built-in shape, and supports transform
       rotate: (d) => d.value,
       stroke: "black",
     })
-    .transform(cm.mapAttrs, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
+    .transform(cm.scale, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
 
   root.render();
 
@@ -431,7 +431,7 @@ root
     rotate: (d) => d.value,
     stroke: "black",
   })
-  .transform(cm.mapAttrs, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
+  .transform(cm.scale, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
 
 root.render();
 ```

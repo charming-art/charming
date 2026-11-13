@@ -18,7 +18,7 @@ export function shapeTriangle() {
           y2: (d) => d[5],
           fill: (_, i) => i,
         })
-        .transform(cm.mapAttrs, {
+        .transform(cm.scale, {
           fill: {
             scale: cm.scaleOrdinal,
             range: ["steelblue", "orange"],

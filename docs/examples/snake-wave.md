@@ -27,8 +27,8 @@ requestAnimationFrame(function frame() {
       stroke: "black",
       strokeWidth: 1,
     })
-    .transform(cm.mapPosition, {padding: 20})
-    .transform(cm.mapAttrs, {fill: {interpolate: d3.interpolateGreys}});
+    .transform(cm.fit, {padding: 20})
+    .transform(cm.scale, {fill: {interpolate: d3.interpolateGreys}});
 
   root.render();
   requestAnimationFrame(frame);

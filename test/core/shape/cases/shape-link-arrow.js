@@ -37,7 +37,7 @@ export function shapeLinkArrow() {
           angle: Math.PI / 6,
           rotate: (d) => d.value,
         })
-        .transform(cm.mapAttrs, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}})
+        .transform(cm.scale, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}})
         .append(cm.circle, {x: 0, y: 0, fill: "blue", r: 2});
 
       root
@@ -50,7 +50,7 @@ export function shapeLinkArrow() {
           angle: Math.PI / 6,
           rotate: (d) => d.value,
         })
-        .transform(cm.mapAttrs, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
+        .transform(cm.scale, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
     },
     {width: cols * size, height: rows * size},
   );

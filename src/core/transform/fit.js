@@ -1,6 +1,6 @@
-import {mapAttrs} from "./mapAttrs.js";
+import {scale} from "./scale.js";
 
-export function mapPosition(
+export function fit(
   flow,
   data,
   {
@@ -16,7 +16,7 @@ export function mapPosition(
   } = {},
 ) {
   const renderer = flow.renderer();
-  if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.mapPosition.");
+  if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.fit.");
   const {width, height} = renderer._props;
   const rangeX = [padding, width - padding];
   const rangeY = [padding, height - padding];
@@ -42,5 +42,5 @@ export function mapPosition(
     },
   ]);
 
-  return mapAttrs(flow, data, Object.fromEntries([...X, ...Y]));
+  return scale(flow, data, Object.fromEntries([...X, ...Y]));
 }

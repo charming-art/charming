@@ -402,7 +402,7 @@ For example, an arrow made of three links, used to draw a flow field:
       rotate: (d) => d.value,
       stroke: "black",
     })
-    .transform(cm.mapAttrs, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
+    .transform(cm.scale, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
 
   root.render();
 
@@ -430,7 +430,7 @@ root
     rotate: (d) => d.value,
     stroke: "black",
   })
-  .transform(cm.mapAttrs, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
+  .transform(cm.scale, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
 ```
 
 ## _cm_.constant(_value_) {#cm-constant}

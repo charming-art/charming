@@ -42,7 +42,7 @@ export function shapeLinkArrowColor() {
           stroke: (d) => d.value,
           length: (d) => d.value,
         })
-        .transform(cm.mapAttrs, {
+        .transform(cm.scale, {
           rotate: {range: [0, Math.PI * 2]},
           length: {range: [size * 0.3, size * 0.9]},
           stroke: {interpolate: interpolateColor},

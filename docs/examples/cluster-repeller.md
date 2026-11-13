@@ -66,7 +66,7 @@ requestAnimationFrame(function frame() {
       fillOpacity: (d) => d.lifespan,
       strokeOpacity: (d) => d.lifespan,
     })
-    .transform(cm.mapAttrs, {
+    .transform(cm.scale, {
       fillOpacity: {domain: [0, 255], range: [0, 0.6]},
       strokeOpacity: {domain: [0, 255], range: [0, 1]},
     });

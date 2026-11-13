@@ -11,8 +11,8 @@
   root
     .data(data)
     .append(cm.circle, {x: (d) => d.x, y: (d) => d.y, r: (d) => d.r, fill: (d) => d.r, fillOpacity: 0.7})
-    .transform(cm.mapPosition, {padding: 20, reverseY: true})
-    .transform(cm.mapAttrs, {r: {range: [2, 10]}, fill: {interpolate: (t) => `hsl(${200 + t * 120}, 70%, 50%)`}});
+    .transform(cm.fit, {padding: 20, reverseY: true})
+    .transform(cm.scale, {r: {range: [2, 10]}, fill: {interpolate: (t) => `hsl(${200 + t * 120}, 70%, 50%)`}});
 
   root.render();
 
@@ -30,8 +30,8 @@ root
     fill: (d) => d.r,
     fillOpacity: 0.7,
   })
-  .transform(cm.mapPosition, {padding: 20, reverseY: true})
-  .transform(cm.mapAttrs, {
+  .transform(cm.fit, {padding: 20, reverseY: true})
+  .transform(cm.scale, {
     r: {range: [2, 10]},
     fill: {interpolate: (t) => `hsl(${200 + t * 120}, 70%, 50%)`},
   });
@@ -39,7 +39,7 @@ root
 
 A transform is a function called with the flow, the appended values and the parameters passed to _flow_.transform, and returns the new values.
 
-## _cm_.mapAttrs {#cm-map-attrs}
+## _cm_.scale {#cm-scale}
 
 Maps attributes with scales. Each key names an attribute, and its options define the scale:
 
@@ -54,14 +54,14 @@ Attributes without options are left unchanged.
 root
   .data(data)
   .append(cm.circle, {x: (d) => d.x, y: (d) => d.y, r: (d) => d.value})
-  .transform(cm.mapAttrs, {
+  .transform(cm.scale, {
     r: {range: [2, 10]},
   });
 ```
 
-## _cm_.mapPosition {#cm-map-position}
+## _cm_.fit {#cm-fit}
 
-Maps position attributes to the size of the renderer: the x attributes to `[0, width]` and the y attributes to `[0, height]`. It's like [_cm_.mapAttrs](#cm-map-attrs) for positions. Options:
+Maps position attributes to the size of the renderer: the x attributes to `[0, width]` and the y attributes to `[0, height]`. It's like [_cm_.scale](#cm-scale) for positions. Options:
 
 - **scaleX**, **scaleY** — the scales (default [_cm_.scaleLinear](/scale#cm-scale-linear)).
 - **domainX**, **domainY** — the input values, inferred from the data by default.
@@ -75,5 +75,5 @@ It needs the flow's [renderer](/flow#flow-renderer) to be set.
 root
   .data(data)
   .append(cm.circle, {x: (d) => d.x, y: (d) => d.y, r: 4})
-  .transform(cm.mapPosition, {padding: 20, reverseY: true});
+  .transform(cm.fit, {padding: 20, reverseY: true});
 ```
