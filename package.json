@@ -32,7 +32,7 @@
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "prepublishOnly": "rm -rf dist && rollup -c",
-    "build:rust": "node scripts/build-rust.js",
+    "build:rust": "node script/build-rust.js",
     "demo:pretext:dev": "pnpm --filter ./demo/pretext dev",
     "demo:pretext:build": "pnpm --filter ./demo/pretext build",
     "demo:pretext:preview": "pnpm --filter ./demo/pretext preview"

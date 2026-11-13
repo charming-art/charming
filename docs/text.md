@@ -175,7 +175,7 @@ const layout = cm.layoutTextInPath({
 
 ## How it works
 
-First, the path is turned into polylines with [`points-on-path`](https://github.com/subairui/points-on-path). Then [`hachure-fill`](https://github.com/rough-stuff/hachure-fill) generates parallel line segments inside the shape at `lineHeight` spacing, optionally rotated by `angle`. Finally, along each segment, Pretext’s `layoutNextLine` fills the available width with text from the prepared string. If you're interested in the implementation, please read the [source code](https://github.com/charming-art/api/blob/main/src/pretext/index.js) for more information. Suggestions and feedback are welcome!
+First, the path is turned into polylines with [`points-on-path`](https://github.com/subairui/points-on-path). Then [`hachure-fill`](https://github.com/rough-stuff/hachure-fill) generates parallel line segments inside the shape at `lineHeight` spacing, optionally rotated by `angle`. Finally, along each segment, Pretext’s `layoutNextLine` fills the available width with text from the prepared string. If you're interested in the implementation, please read the [source code](https://github.com/charming-art/api/blob/main/src/util/text/index.js) for more information. Suggestions and feedback are welcome!
 
 ## _cm_.prepare(_text_, _options_) {#cm-prepare}
 
