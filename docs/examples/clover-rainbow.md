@@ -14,7 +14,7 @@ root
     r: (t) => t,
     fill: (t) => t,
   })
-  .transform(cm.fit, {padding: 30})
+  .transform(cm.fit, {margin: 30})
   .transform(cm.scale, {
     r: {range: [8, 15]},
     fill: {interpolate: d3.interpolateRainbow},
