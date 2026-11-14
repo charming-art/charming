@@ -76,3 +76,16 @@ test("cm.scale leaves channels without options unchanged", () => {
   assert.deepStrictEqual(r, [0, 5, 10]);
   assert.deepStrictEqual(x, [1, 2, 3]);
 });
+
+test("cm.scale returns plain arrays for typed array channels, so they can be mapped to any value", () => {
+  const [shape, calls] = probe();
+  const root = cm.flow().renderer(cm.canvas({width: 100, height: 100, dpi: 1}));
+  root
+    .data([0, 1, 2])
+    .transform(cm.bind, {fill: (d) => d})
+    .transform((_, data) => data.map((d) => ({...d, value: {fill: new Float64Array([1, 2, 1])}})))
+    .transform(cm.scale, {fill: {scale: "ordinal", range: ["red", "blue"]}})
+    .append(shape);
+  root.render();
+  assert.deepStrictEqual(calls[0].fill, ["red", "blue", "red"]);
+});

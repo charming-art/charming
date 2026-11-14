@@ -46,7 +46,8 @@ function applyScale(value, options, ordinalOf) {
     Object.entries(value).map(([key, V]) => {
       const {[key]: descriptor} = options;
       if (!descriptor) return [key, V];
-      return [key, V.map(scaleOf(descriptor, V, ordinalOf))];
+      // A plain array, so that a typed array can be mapped to values such as colors.
+      return [key, Array.from(V, scaleOf(descriptor, V, ordinalOf))];
     }),
   );
 }
