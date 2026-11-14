@@ -16,16 +16,17 @@ function renderNode(renderer, node, index, context) {
   if (builtin) render(renderer, I, value, options, group);
   if (!children.length) return;
   for (let i = 0; i < I.length; i++) {
+    const k = I[i];
     if (value) {
       const {x: X = [], y: Y = [], rotate: R = []} = value;
-      const x = X[i] ?? 0;
-      const y = Y[i] ?? 0;
-      const r = R[i];
+      const x = X[k] ?? 0;
+      const y = Y[k] ?? 0;
+      const r = R[k];
       renderer.save();
       renderer.translate(x, y);
       if (r !== undefined) renderer.rotate(r);
     }
-    for (const child of children) renderNode(renderer, child, i, context);
+    for (const child of children) renderNode(renderer, child, k, context);
     if (value) renderer.restore();
   }
 }

@@ -34,7 +34,7 @@ export function shapeLinkArrowColor() {
     (root) => {
       root
         .data(fields)
-        .append(arrow, {
+        .transform(cm.bind, {
           x: (d) => d.x * size + size / 2,
           y: (d) => d.y * size + size / 2,
           angle: Math.PI / 6,
@@ -46,7 +46,8 @@ export function shapeLinkArrowColor() {
           rotate: {range: [0, Math.PI * 2]},
           length: {range: [size * 0.3, size * 0.9]},
           stroke: {interpolate: interpolateColor},
-        });
+        })
+        .append(arrow);
     },
     {width: cols * size, height: rows * size},
   );

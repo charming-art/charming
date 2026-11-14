@@ -15,6 +15,7 @@ export function fit(
     keysY = ["y", "y1"],
   } = {},
 ) {
+  if (!data) throw new Error("No channels: call flow.transform(cm.bind, channels) before cm.fit.");
   const renderer = flow.renderer();
   if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.fit.");
   const {width, height} = renderer._props;

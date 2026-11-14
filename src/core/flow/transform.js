@@ -1,9 +1,7 @@
 import {Flow} from "./index.js";
 
 export function flow$transform(transform, ...params) {
-  const flow = new Flow(this._groups, this._data, this._parent, this._context);
-  if (!this._parent) return flow;
-  const data = this._parent._data;
-  this._parent._data = transform(this, data, ...params);
-  return flow;
+  const flow = this._data ? this : this.data((d) => [d]);
+  const values = transform(flow, flow._values, ...params);
+  return new Flow(flow._groups, flow._data, flow._parent, flow._context, values);
 }

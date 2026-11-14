@@ -35,3 +35,19 @@ test("flow.render() clears the tree, so rendering again draws nothing new", () =
   root.render();
   assert.strictEqual(calls.length, 1);
 });
+
+test("flow.render() renders children for each index of the parent in order", () => {
+  const [shape, calls] = probe();
+  const root = cm.flow().renderer(cm.canvas({width: 10, height: 10}));
+  root
+    .data(["a", "b", "c"])
+    .transform(cm.bind, {x: (_, i) => i})
+    .transform((_, data) => data.map((d) => ({...d, I: [2, 0]})))
+    .append(cm.group)
+    .append(shape, {v: (d) => d});
+  root.render();
+  assert.deepStrictEqual(
+    calls.map((d) => d.v),
+    [["c"], ["a"]],
+  );
+});

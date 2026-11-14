@@ -32,8 +32,9 @@ test("terminal() works with fit, which maps to cells", () => {
   const root = cm.flow().renderer(cm.terminal({cols: 21, rows: 11}));
   root
     .data([0, 1])
-    .append(shape, {x: (d) => d, y: (d) => d})
-    .transform(cm.fit);
+    .transform(cm.bind, {x: (d) => d, y: (d) => d})
+    .transform(cm.fit)
+    .append(shape);
   root.render();
   assert.deepStrictEqual(calls[0].x, [0, 21]);
   assert.deepStrictEqual(calls[0].y, [0, 11]);
