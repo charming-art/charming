@@ -70,10 +70,10 @@
     return option;
   }
 
-  function render() {
-    container.innerHTML = "";
+  async function render() {
     const fn = cases[select.value];
-    const node = fn();
+    const node = await fn();
+    container.innerHTML = "";
     container.append(node);
   }
 </script>

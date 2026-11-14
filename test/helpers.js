@@ -61,11 +61,11 @@ export function renderFlow(draw, {width = 200, height = 200} = {}) {
 
 // Returns a case that renders the flow of the given case with an SVG renderer instead.
 export function withSVG(render) {
-  return () => {
+  return async () => {
     const previous = createRenderer;
     createRenderer = cm.svg;
     try {
-      return render();
+      return await render();
     } finally {
       createRenderer = previous;
     }

@@ -46,7 +46,7 @@ export function snapshot(cases) {
   const filtered = hasOnly ? Object.fromEntries(Object.entries(cases).filter(([, fn]) => fn.only)) : cases;
   for (const [name, fn] of Object.entries(filtered)) {
     test(`${name} should match snapshot`, async () => {
-      const [value, ext] = format(fn());
+      const [value, ext] = format(await fn());
       await expect(value).toMatchFileSnapshot(`./output/${name}.${ext}`);
     });
   }
