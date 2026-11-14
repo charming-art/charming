@@ -62,6 +62,18 @@ function positionScale(value, keys, {scale, domain, range}) {
   return {scale, domain, range, type};
 }
 
+// The scale recorded for a position: the band of cm.spreadX if any, so that axes can label its
+// categories, or the scale applied by cm.fit.
+function positionRecord({type, domain}, range, {band}) {
+  if (band) return {scale: "band", ...band, range};
+  return resolve({scale: type, domain, range});
+}
+
+// The label of a channel, such as its field name, for axes and legends.
+function labeled(scale, {label} = {}) {
+  return label === undefined ? scale : {...scale, label};
+}
+
 // The hint of an axis merges the hints of its keys, such as x and x1; the first key wins.
 function axisHint(hints, keys) {
   return Object.assign(
@@ -109,8 +121,10 @@ export function plane(
     const colors = colorScales(value, hints);
     const [colored] = scale(flow, [context], colors);
 
-    const {scale: hintScaleX, domain: hintDomainX} = axisHint(hints, keysX);
-    const {scale: hintScaleY, domain: hintDomainY} = axisHint(hints, keysY);
+    const hintX = axisHint(hints, keysX);
+    const hintY = axisHint(hints, keysY);
+    const {scale: hintScaleX, domain: hintDomainX} = hintX;
+    const {scale: hintScaleY, domain: hintDomainY} = hintY;
     const x = positionScale(value, keysX, {scale: scaleX ?? hintScaleX, domain: domainX ?? hintDomainX, range: rangeX});
     const y = positionScale(value, keysY, {scale: scaleY ?? hintScaleY, domain: domainY ?? hintDomainY, range: rangeY});
 
@@ -130,9 +144,11 @@ export function plane(
     });
 
     const scales = {...context.scales};
-    for (const key in colors) scales[key] = resolve(colors[key]);
-    for (const key of keysX) if (key in value) scales[key] = resolve({scale: x.type, domain: x.domain, range: rangeX});
-    for (const key of keysY) if (key in value) scales[key] = resolve({scale: y.type, domain: y.domain, range: rangeY});
+    for (const key in colors) scales[key] = labeled(resolve(colors[key]), hints[key]);
+    const recordX = labeled(positionRecord(x, rangeX, hintX), hintX);
+    const recordY = labeled(positionRecord(y, rangeY, hintY), hintY);
+    for (const key of keysX) if (key in value) scales[key] = recordX;
+    for (const key of keysY) if (key in value) scales[key] = recordY;
     return {...withoutHints(fitted), scales};
   });
 }

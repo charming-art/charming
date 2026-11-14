@@ -75,5 +75,9 @@ test("cm.spreadX orders the bands by the domain of the x hint", () => {
   const [{value, hints}] = contexts(data, {x: {value: "letter", domain: ["C", "A", "B"]}, y: "frequency"});
   const band = d3.scaleBand(["C", "A", "B"], [0, 1]).padding(0.1);
   assertAllInDelta(value.x, ["C", "A", "B"].map(band));
-  assert.deepStrictEqual(hints.x, {domain: [0, 1]});
+  assert.deepStrictEqual(hints.x, {
+    label: "letter",
+    domain: [0, 1],
+    band: {domain: ["C", "A", "B"], paddingInner: 0.1, paddingOuter: 0.1, align: 0.5},
+  });
 });

@@ -2,13 +2,15 @@ import {Flow} from "./index.js";
 
 function renderNode(renderer, node, index, context) {
   const data = node._data[index];
-  const {render, I, value, options, group} = data;
+  const {render, I, value, options, group, context: bound} = data;
   const {builtin} = render;
   const children = node._children;
   if (!builtin) {
     node._children = [];
     const flow = new Flow([I], I, node, context);
-    render(flow, value);
+    // A composite shape also receives the context of its flow, such as the scales recorded by
+    // transforms, and its options as given.
+    render(flow, value, {...bound, options});
     const children = node._children;
     if (!children.length) return;
     for (const child of children) renderNode(renderer, child, 0, context);

@@ -98,8 +98,17 @@ test("cm.plane records the resolved scales and drops the hints", () => {
   assert.strictEqual(context.hints, undefined);
   assert.deepStrictEqual(Object.keys(context.scales).sort(), ["fill", "x", "x1", "y", "y1"]);
   assert.deepStrictEqual(context.scales.fill.domain, ["Action", "Sports", "Strategy"]);
-  assert.deepStrictEqual(context.scales.x.domain, [0, 1]);
-  assert.deepStrictEqual(context.scales.y, {scale: "linear", domain: [0, 275], range: [370, 20]});
+  assert.deepStrictEqual(context.scales.fill.label, "genre");
+  assert.deepStrictEqual(context.scales.x, {
+    scale: "band",
+    domain: ["Action", "Sports", "Strategy"],
+    paddingInner: 0.1,
+    paddingOuter: 0.1,
+    align: 0.5,
+    range: [40, 620],
+    label: "genre",
+  });
+  assert.deepStrictEqual(context.scales.y, {scale: "linear", domain: [0, 275], range: [370, 20], label: "sold"});
 });
 
 test("cm.plane uses the domain and scale hinted for x and y, and explicit options override them", () => {

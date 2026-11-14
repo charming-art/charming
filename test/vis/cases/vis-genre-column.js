@@ -22,7 +22,9 @@ export const visGenreColumn = withSVG(() => {
         .transform(cm.encode, {x: "genre", y: "sold", fill: "genre"})
         .transform(cm.spreadX)
         .transform(cm.plane)
-        .add(cm.rect);
+        .add(cm.rect)
+        .add(cm.axisX)
+        .add(cm.axisY, {grid: true, tickFormat: (d) => `${d}k`});
     },
     {width: 640, height: 400},
   );

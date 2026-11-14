@@ -12,6 +12,7 @@ export const link = define((renderer, I, value) => {
     x1: X1,
     y1: Y1,
     stroke: S = [],
+    strokeOpacity: SO = [],
     strokeWidth: SW = [],
     strokeCap: SC = [],
     rotate: R = [],
@@ -27,6 +28,7 @@ export const link = define((renderer, I, value) => {
       rotate: R[i],
       transformOrigin: TO[i],
       ...(S[i] && {stroke: S[i]}),
+      ...(SO[i] !== undefined && {strokeOpacity: SO[i]}),
       ...(SW[i] && {strokeWidth: SW[i]}),
       ...(SC[i] && {strokeCap: SC[i]}),
     });
