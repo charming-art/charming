@@ -1,4 +1,5 @@
 import assert from "node:assert";
+import * as d3 from "d3";
 import {test} from "vitest";
 import "../../install-canvas-mock.js";
 import * as cm from "../../../src/index.js";
@@ -34,6 +35,22 @@ test("cm.fit supports reverseX and reverseY", () => {
   const {x, y} = values([0, 1], {x: (d) => d, y: (d) => d}, {reverseX: true, reverseY: true});
   assert.deepStrictEqual(x, [200, 0]);
   assert.deepStrictEqual(y, [100, 0]);
+});
+
+test("cm.fit spreads discrete values evenly across the range", () => {
+  const {x, y} = values(["a", "b", "c", "b"], {x: (d) => d, y: (d) => d}, {padding: 10});
+  assert.deepStrictEqual(x, [10, 100, 190, 100]);
+  assert.deepStrictEqual(y, [10, 50, 90, 50]);
+});
+
+test("cm.fit centers a single discrete value", () => {
+  const {x} = values(["a", "a"], {x: (d) => d});
+  assert.deepStrictEqual(x, [100, 100]);
+});
+
+test("cm.fit supports a d3 scale for x and y", () => {
+  const {x} = values(["a", "b"], {x: (d) => d}, {scaleX: d3.scaleBand()});
+  assert.deepStrictEqual(x, [0, 100]);
 });
 
 test("cm.fit throws an error if the flow has no renderer", () => {

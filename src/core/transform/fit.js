@@ -1,4 +1,4 @@
-import {scale} from "./scale.js";
+import {point, scale} from "./scale.js";
 
 export function fit(
   flow,
@@ -43,5 +43,5 @@ export function fit(
     },
   ]);
 
-  return scale(flow, data, Object.fromEntries([...X, ...Y]));
+  return scale(flow, data, Object.fromEntries([...X, ...Y]), point);
 }

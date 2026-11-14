@@ -62,6 +62,7 @@
   },
   "dependencies": {
     "@chenglou/pretext": "^0.0.4",
+    "d3-array": "^3.2.5",
     "d3-color": "^3.1.0",
     "d3-path": "^3.1.0",
     "figlet": "^1.12.0",

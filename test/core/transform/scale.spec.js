@@ -33,9 +33,10 @@ test("cm.scale supports an explicit linear scale and domain", () => {
   assert.deepStrictEqual(r, [0, 2.5, 5]);
 });
 
-test("cm.scale repeats the range of an ordinal scale", () => {
-  const {fill} = values(["a", "b", "c"], {fill: (d) => d}, {fill: {range: ["red", "blue"]}});
-  assert.deepStrictEqual(fill, ["red", "blue", "red"]);
+test("cm.scale infers a linear scale for dates", () => {
+  const dates = [new Date(2020, 0, 1), new Date(2020, 0, 3), new Date(2020, 0, 2)];
+  const {r} = values(dates, {r: (d) => d}, {r: {range: [0, 10]}});
+  assert.deepStrictEqual(r, [0, 10, 5]);
 });
 
 test("cm.scale passes interpolate to the linear scale", () => {
