@@ -29,10 +29,10 @@ test("cm.stackY sums y per x band in input order, for stacked columns", () => {
 });
 
 test("cm.stackY stacks negative values down from 0, and skips rows without a value", () => {
-  const rows = [2, -1, 3, -2, undefined].map((n) => ({n}));
+  const rows = [2, -1, null, 3, -2, undefined].map((n) => ({n}));
   const {y, y1} = values(rows, {y: "n"}, cm.stackY);
-  assert.deepStrictEqual(y1, [0, 0, 2, -1, NaN]);
-  assert.deepStrictEqual(y, [2, -1, 5, -3, NaN]);
+  assert.deepStrictEqual(y1, [0, 0, NaN, 2, -1, NaN]);
+  assert.deepStrictEqual(y, [2, -1, NaN, 5, -3, NaN]);
 });
 
 test("cm.stackY orders the series by the domain of their hint", () => {

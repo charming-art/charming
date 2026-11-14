@@ -19,6 +19,7 @@ function stackValues(V, stacks, order) {
     let vp = 0;
     for (const i of stack) {
       const v = V[i];
+      if (v == null) continue; // null would otherwise count as 0, as in null >= 0
       if (v < 0) vn = V2[i] = (V1[i] = vn) + v;
       else if (v >= 0) vp = V2[i] = (V1[i] = vp) + v;
     }
