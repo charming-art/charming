@@ -17,8 +17,9 @@ function rowsOf(value, group) {
   const n = group.length;
   const rows = new Array(n);
   for (let i = 0; i < n; i++) {
-    const row = (rows[i] = {datum: group[i]});
+    const row = (rows[i] = {});
     for (const key in value) row[key] = Array.isArray(value[key]) ? value[key][i] : value[key];
+    row.datum = group[i];
   }
   return rows;
 }
@@ -28,10 +29,14 @@ export function flow$append(render, options = {}) {
   const groups = flow._groups;
   const parent = this._parent;
   const data = flow._values;
+  const empty = Object.keys(options).length === 0;
   const values = groups.map((group, j) => {
-    const bound = data?.[j].value;
+    const context = data?.[j];
+    const bound = context?.value;
+    const I = context?.I ?? group.map((_, i) => i);
+    if (empty) return {I, render, options, value: {...bound}, group};
     const value = valueOf(bound ? rowsOf(bound, group) : group, options);
-    return {I: group.map((_, i) => i), render, options, value: {...bound, ...value}, group};
+    return {I, render, options, value: {...bound, ...value}, group};
   });
   const node = new Node(values, [], parent);
   parent._children.push(node);

@@ -103,3 +103,15 @@ test("cm.bind channels are overridden by appended options", () => {
   render((root) => root.data([1, 2]).transform(cm.bind, {fill: "red"}).append(shape, {fill: "blue"}));
   assert.deepStrictEqual(calls[0].fill, ["blue", "blue"]);
 });
+
+test("cm.bind contexts keep the index returned by later transforms", () => {
+  const [shape, calls] = probe();
+  render((root) =>
+    root
+      .data([1, 2, 3])
+      .transform(cm.bind, {x: (d) => d})
+      .transform((_, data) => data.map((d) => ({...d, I: [2, 0]})))
+      .append((flow, value) => shape(flow, {...value, I: flow.data()[0]})),
+  );
+  assert.deepStrictEqual(calls[0].I, [2, 0]);
+});
