@@ -13,6 +13,7 @@ import {svg$clear} from "./clear.js";
 import {svg$rotate} from "./rotate.js";
 import {svg$save} from "./save.js";
 import {svg$restore} from "./restore.js";
+import {svg$resize} from "./resize.js";
 
 function SVG() {
   Object.defineProperties(this, {
@@ -39,8 +40,9 @@ Object.defineProperties(SVG.prototype, {
   rotate: {value: svg$rotate},
   save: {value: svg$save},
   restore: {value: svg$restore},
+  resize: {value: svg$resize},
 });
 
-export function svg({width = 640, height = 480} = {}) {
+export function svg({width, height} = {}) {
   return new SVG().init({width, height});
 }

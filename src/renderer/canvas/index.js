@@ -13,6 +13,7 @@ import {canvas$clear} from "./clear.js";
 import {canvas$rotate} from "./rotate.js";
 import {canvas$save} from "./save.js";
 import {canvas$restore} from "./restore.js";
+import {canvas$resize} from "./resize.js";
 
 function Canvas() {
   Object.defineProperties(this, {
@@ -37,8 +38,9 @@ Object.defineProperties(Canvas.prototype, {
   rotate: {value: canvas$rotate},
   save: {value: canvas$save},
   restore: {value: canvas$restore},
+  resize: {value: canvas$resize},
 });
 
-export function canvas({width = 640, height = 480, dpi = null} = {}) {
+export function canvas({width, height, dpi = null} = {}) {
   return new Canvas().init({width, height, dpi});
 }

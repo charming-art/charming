@@ -52,14 +52,14 @@ function extentOf(range) {
 }
 
 // Draws the x axis of the scales recorded by cm.plane, at the bottom of the chart, like Plot.
-export function axisX(flow, value, {scales = {}, options = {}} = {}) {
+export function axisX(flow, value, {scales = {}, frame, options = {}} = {}) {
   const {x, y} = scales;
   if (!x) return;
   const {tickSize = 6, tickPadding = 3, grid = false} = options;
   const {width, height} = flow.renderer()._props;
   const scale = scaleOf(x);
   const [left, right] = extentOf(x.range);
-  const [top, bottom] = y ? extentOf(y.range) : [0, height];
+  const [top, bottom] = frame ? [frame.top, frame.bottom] : y ? extentOf(y.range) : [0, height];
   const count = countOf(options, [left, right], 80);
   const ticks = ticksOf(scale, options, count);
   const X = positionOf(scale);
@@ -88,13 +88,13 @@ export function axisX(flow, value, {scales = {}, options = {}} = {}) {
 }
 
 // Draws the y axis of the scales recorded by cm.plane, on the left of the chart, like Plot.
-export function axisY(flow, value, {scales = {}, options = {}} = {}) {
+export function axisY(flow, value, {scales = {}, frame, options = {}} = {}) {
   const {x, y} = scales;
   if (!y) return;
   const {tickSize = 6, tickPadding = 3, grid = false} = options;
   const {width} = flow.renderer()._props;
   const scale = scaleOf(y);
-  const [left, right] = x ? extentOf(x.range) : [0, width];
+  const [left, right] = frame ? [frame.left, frame.right] : x ? extentOf(x.range) : [0, width];
   const [top, bottom] = extentOf(y.range);
   const count = countOf(options, [top, bottom], 35);
   const ticks = ticksOf(scale, options, count);
