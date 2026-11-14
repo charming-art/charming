@@ -1,9 +1,5 @@
-import {ascending, group, InternMap, InternSet} from "d3-array";
-
-// Like Plot, the series of a row is its z, else its fill, else its stroke.
-function seriesKey(value) {
-  return ["z", "fill", "stroke"].find((key) => key in value);
-}
+import {group, InternMap, InternSet} from "d3-array";
+import {seriesOf, seriesOrder} from "./series.js";
 
 // Adapted from the stack transform of Observable Plot (ISC license): the rows of each group are
 // stacked in order, with one running sum for negative values and one for the others. Rows
@@ -43,9 +39,7 @@ function stack(data, [key, key1, other], name) {
   if (!data) throw new Error(`No channels: call flow.transform(cm.encode, channels) before cm.${name}.`);
   return data.map((context) => {
     const {value, hints = {}} = context;
-    const zKey = seriesKey(value);
-    const Z = zKey && value[zKey];
-    const domain = Z && hints[zKey]?.domain;
+    const {Z, domain} = seriesOf(context);
     if (hints[key]?.band) {
       if (!Z) return context;
       const [B, B1] = splitBands(value[key], value[key1], Z, domain ?? Array.from(new InternSet(Z)));
@@ -55,8 +49,8 @@ function stack(data, [key, key1, other], name) {
     const O = value[other];
     const I = Array.from(V, (_, i) => i);
     const stacks = O ? Array.from(group(I, (i) => O[i]).values()) : [I];
-    const index = domain && new InternMap(domain.map((d, i) => [d, i]));
-    const order = index && ((i, j) => ascending(index.get(Z[i]), index.get(Z[j])));
+    // Like Plot, the input order is kept unless the series have a domain.
+    const order = domain && seriesOrder(Z, domain);
     const [V2, V1] = stackValues(V, stacks, order);
     return {...context, value: {...value, [key]: V2, [key1]: V1}};
   });

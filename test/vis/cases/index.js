@@ -11,3 +11,4 @@ export {visLetterFrequencyColumn} from "./vis-letter-frequency-column.js";
 export {visScatterAxis} from "./vis-scatter-axis.js";
 export {visStackedBar} from "./vis-stacked-bar.js";
 export {visStackedColumn} from "./vis-stacked-column.js";
+export {visUnitPenguins} from "./vis-unit-penguins.js";

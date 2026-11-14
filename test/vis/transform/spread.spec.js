@@ -130,3 +130,65 @@ test("cm.spreadX ignores repeated categories in the domain of the x hint, like d
   assertAllInDelta(value.x, ["C", "A", "B"].map(band));
   assert.deepStrictEqual(hints.x.band.domain, ["C", "A", "B"]);
 });
+
+const units = [
+  {island: "B", species: "y"},
+  {island: "A", species: "x"},
+  {island: "A", species: "y"},
+  {island: "A", species: "x"},
+  {island: "B", species: "y"},
+];
+
+function spreads(data, channels, ...steps) {
+  let flow = cm.flow().data(data).transform(cm.encode, channels);
+  for (const [transform, options] of steps) flow = flow.transform(transform, options);
+  return flow._values[0];
+}
+
+test("cm.spreadY with chunk groups the rows of each band, chunk at a time, in series order", () => {
+  const {value, hints} = spreads(units, {x: "island", fill: "species"}, [cm.spreadX], [cm.spreadY, {chunk: 2}]);
+  // The series order is y, x (first appearance). A has rows 2 (y), 1 (x), 3 (x) in chunks [2, 1]
+  // and [3]; B has rows 0 and 4 in chunk [0, 4]; 2 chunks in all.
+  const slot = d3.scaleBand([0, 1], [0, 1]).padding(0.1);
+  assertAllInDelta(value.y, [0, 0, 0, 1, 0].map(slot));
+  assertAllInDelta(
+    value.y1,
+    [0, 0, 0, 1, 0].map((s) => slot(s) + slot.bandwidth()),
+  );
+  assert.deepStrictEqual(hints.y, {domain: [0, 1], chunk: 2});
+  assert.ok(hints.x.band);
+});
+
+test("cm.spreadX with chunk groups all rows when no band exists", () => {
+  const {value} = spreads(units, {fill: "species"}, [cm.spreadX, {chunk: 3, padding: 0}]);
+  // Series order y, y, y, x, x by first appearance: chunks [y, y, y], [x, x].
+  assert.deepStrictEqual(value.x, [0, 0.5, 0, 0.5, 0]);
+});
+
+test("cm.spreadX spread again subdivides the band of each row into slots, in series order", () => {
+  const {value, hints} = spreads(
+    units,
+    {x: "island", fill: "species"},
+    [cm.spreadX],
+    [cm.spreadY, {chunk: 2}],
+    [cm.spreadX, {padding: 0}],
+  );
+  const band = d3.scaleBand(["A", "B"], [0, 1]).padding(0.1);
+  const w = band.bandwidth() / 2;
+  // In A, chunk [2 (y), 1 (x)] fills both slots and chunk [3] the first; in B, chunk [0, 4] fills both.
+  assertAllInDelta(value.x, [band("B"), band("A") + w, band("A"), band("A"), band("B") + w]);
+  assertAllInDelta(value.x1, [band("B") + w, band("A") + 2 * w, band("A") + w, band("A") + w, band("B") + 2 * w]);
+  assert.deepStrictEqual(hints.x.band.domain, ["A", "B"]);
+});
+
+test("cm.spreadX chunk rows grow up from the bottom of the chart in cm.plane", () => {
+  const root = cm.flow().renderer(cm.svg({width: 200, height: 100}));
+  const [context] = root
+    .data(units)
+    .transform(cm.encode, {x: "island", fill: "species"})
+    .transform(cm.spreadX)
+    .transform(cm.spreadY, {chunk: 2})
+    .transform(cm.plane, {margin: 0})._values;
+  // Row 1 is in the first chunk of A and row 3 in the second: the first chunk is at the bottom.
+  assert.ok(context.value.y[1] > context.value.y[3]);
+});
