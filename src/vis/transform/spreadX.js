@@ -1,14 +1,5 @@
 import {InternMap, InternSet, sort} from "d3-array";
 
-const fitDefaults = {
-  domainX: [0, 1],
-  reverseY: true,
-  marginTop: 20,
-  marginRight: 20,
-  marginBottom: 30,
-  marginLeft: 40,
-};
-
 function isNumeric(values) {
   return typeof values?.find((d) => d != null) === "number";
 }
@@ -30,6 +21,7 @@ export function spreadX(flow, data, {padding = 0.1, paddingInner = padding, padd
     const [X0, bandwidth] = band(X, {paddingInner, paddingOuter, align});
     const value = {...context.value, x: X0, x1: X0.map((x) => x + bandwidth)};
     if (Y1 === undefined && isNumeric(Y)) value.y1 = Y.map(() => 0);
-    return {...context, value, fit: {...fitDefaults, ...context.fit}};
+    // The bands are in [0, 1], so the outer padding is kept when fitted.
+    return {...context, value, fit: {domainX: [0, 1], ...context.fit}};
   });
 }

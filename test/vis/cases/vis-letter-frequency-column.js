@@ -10,7 +10,7 @@ export const visLetterFrequencyColumn = withSVG(async () => {
         .data(alphabet)
         .transform(cm.encode, {x: "letter", y: "frequency"})
         .transform(cm.spreadX)
-        .transform(cm.fit)
+        .transform(cm.plane)
         .add(cm.rect);
     },
     {width: 640, height: 400},
