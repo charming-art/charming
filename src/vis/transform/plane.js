@@ -64,7 +64,13 @@ function positionScale(value, keys, {scale, domain, range}) {
 
 // The hint of an axis merges the hints of its keys, such as x and x1; the first key wins.
 function axisHint(hints, keys) {
-  return Object.assign({}, ...keys.slice().reverse().map((key) => hints[key]));
+  return Object.assign(
+    {},
+    ...keys
+      .slice()
+      .reverse()
+      .map((key) => hints[key]),
+  );
 }
 
 // Resolves the scales of the channels, and fits positions to the renderer like cm.fit, with y
