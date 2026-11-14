@@ -191,3 +191,65 @@ test("cm.plane uses the hints of x1 and y1, with x and y taking precedence", () 
   assert.deepStrictEqual(context.value.x1, [64, 128]);
   assert.deepStrictEqual(context.scales.x.domain, [0, 10]);
 });
+
+function planed(renderer, data, channels, options) {
+  const root = cm.flow().renderer(renderer);
+  return root.data(data).transform(cm.encode, channels).transform(cm.plane, options)._values[0];
+}
+
+test("cm.plane sizes a renderer without a size like Plot: 640 by 60 without y, with x in the middle", () => {
+  const renderer = cm.svg();
+  const context = planed(renderer, [1, 2, 3], {x: (d) => d});
+  assert.deepStrictEqual([renderer._props.width, renderer._props.height], [640, 60]);
+  assert.deepStrictEqual(context.frame, {top: 0, right: 620, bottom: 30, left: 20});
+  assert.deepStrictEqual(context.value.x, [20, 320, 620]);
+  assert.deepStrictEqual(context.value.y, [15, 15, 15]);
+});
+
+test("cm.plane sizes a renderer without a size like Plot: 640 by 400 with a continuous y", () => {
+  const renderer = cm.canvas({dpi: 1});
+  planed(renderer, [1, 2, 3], {x: (d) => d, y: (d) => d});
+  assert.deepStrictEqual([renderer._props.width, renderer._props.height], [640, 400]);
+});
+
+test("cm.plane sizes a renderer without a size like Plot: 20px per category of y", () => {
+  const renderer = cm.svg();
+  planed(renderer, ["a", "b", "c"], {x: 1, y: (d) => d});
+  assert.strictEqual(renderer._props.height, 3 * 20 + 60);
+});
+
+test("cm.plane keeps the given size of a renderer, and resizes it for its width and height options", () => {
+  const renderer = cm.svg({width: 300, height: 200});
+  planed(renderer, [1, 2], {x: (d) => d});
+  assert.deepStrictEqual([renderer._props.width, renderer._props.height], [300, 200]);
+  planed(renderer, [1, 2], {x: (d) => d}, {width: 500, height: 100});
+  assert.deepStrictEqual([renderer._props.width, renderer._props.height], [500, 100]);
+});
+
+test("cm.plane centers x when only y is encoded, and explicit margins win", () => {
+  const renderer = cm.svg({width: 200, height: 100});
+  const context = planed(renderer, [1, 2], {y: (d) => d}, {margin: 10});
+  assert.deepStrictEqual(context.frame, {top: 10, right: 190, bottom: 90, left: 10});
+  assert.deepStrictEqual(context.value.x, [100, 100]);
+  assert.deepStrictEqual(context.value.y, [90, 10]);
+});
+
+test("cm.plane centers y for a typed array x", () => {
+  const renderer = cm.svg();
+  const root = cm.flow().renderer(renderer);
+  const [context] = root
+    .data([1, 2])
+    .transform(cm.bind, {x: (d) => d})
+    .transform((_, data) => data.map((d) => ({...d, value: {x: new Float64Array([1, 2])}})))
+    .transform(cm.plane)._values;
+  assert.deepStrictEqual(context.value.y, [15, 15]);
+});
+
+test("cm.plane sizes the chart with its scaleY and domainY options", () => {
+  const ordinal = cm.svg();
+  planed(ordinal, [1, 2], {x: (d) => d, y: (d) => d}, {scaleY: "ordinal"});
+  assert.strictEqual(ordinal._props.height, 2 * 20 + 60);
+  const domain = cm.svg();
+  planed(domain, ["a", "b"], {x: 1, y: (d) => d}, {domainY: ["a", "b", "c", "d"]});
+  assert.strictEqual(domain._props.height, 4 * 20 + 60);
+});

@@ -92,3 +92,18 @@ test("svg.text(options) preserves repeated, leading and trailing spaces, like Ca
     '<text x="0" y="0" font-size="14" style="white-space: pre"> A  B</text><text x="0" y="0" font-size="14">A B</text>',
   );
 });
+
+test("cm.svg(options) records which dimensions are auto", () => {
+  assert.deepStrictEqual(cm.svg()._props.auto, {width: true, height: true});
+  assert.deepStrictEqual(cm.svg({height: 100})._props.auto, {width: true, height: false});
+});
+
+test("svg.resize(width, height) resizes the svg and its viewBox", () => {
+  const renderer = cm.svg({width: 100, height: 50});
+  renderer.resize(300, 60);
+  const node = renderer.node();
+  assert.strictEqual(node.getAttribute("width"), "300");
+  assert.strictEqual(node.getAttribute("height"), "60");
+  assert.strictEqual(node.getAttribute("viewBox"), "0 0 300 60");
+  assert.deepStrictEqual([renderer._props.width, renderer._props.height], [300, 60]);
+});
