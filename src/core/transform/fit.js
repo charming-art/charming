@@ -10,7 +10,11 @@ export function fit(
     domainY,
     reverseY = false,
     reverseX = false,
-    padding = 0,
+    margin = 0,
+    marginTop = margin,
+    marginRight = margin,
+    marginBottom = margin,
+    marginLeft = margin,
     keysX = ["x", "x1"],
     keysY = ["y", "y1"],
   } = {},
@@ -19,8 +23,8 @@ export function fit(
   const renderer = flow.renderer();
   if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.fit.");
   const {width, height} = renderer._props;
-  const rangeX = [padding, width - padding];
-  const rangeY = [padding, height - padding];
+  const rangeX = [marginLeft, width - marginRight];
+  const rangeY = [marginTop, height - marginBottom];
 
   if (reverseX) rangeX.reverse();
   if (reverseY) rangeY.reverse();

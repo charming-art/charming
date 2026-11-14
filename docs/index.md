@@ -26,7 +26,7 @@ For example, here is a clover made of circles, whose positions come from a clove
       r: (t) => t,
       fill: "black",
     })
-    .transform(cm.fit, {padding: 30})
+    .transform(cm.fit, {margin: 30})
     .transform(cm.scale, {r: {range: [8, 15]}});
 
   root.render();
@@ -47,7 +47,7 @@ root
     r: (t) => t,
     fill: "black",
   })
-  .transform(cm.fit, {padding: 30})
+  .transform(cm.fit, {margin: 30})
   .transform(cm.scale, {r: {range: [8, 15]}});
 
 root.render();
@@ -89,7 +89,7 @@ This example is too simple to show the true charm of Charming. To fix that, let'
         fill: "transparent",
         strokeOpacity: (0.15 * 2000) / count,
       })
-      .transform(cm.fit, {padding: 100})
+      .transform(cm.fit, {margin: 100})
       .transform(cm.scale, {r: {range: [24, 96]}});
 
     root.render();
@@ -131,7 +131,7 @@ requestAnimationFrame(function frame() {
       fill: "transparent",
       strokeOpacity: (0.15 * 2000) / count,
     })
-    .transform(cm.fit, {padding: 100})
+    .transform(cm.fit, {margin: 100})
     .transform(cm.scale, {r: {range: [24, 96]}});
 
   root.render();

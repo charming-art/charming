@@ -25,8 +25,8 @@ test("cm.fit also maps x1 and y1 with the same ranges", () => {
   assert.deepStrictEqual(y1, [0, 100]);
 });
 
-test("cm.fit supports padding", () => {
-  const {x, y} = values([0, 1], {x: (d) => d, y: (d) => d}, {padding: 10});
+test("cm.fit supports margin", () => {
+  const {x, y} = values([0, 1], {x: (d) => d, y: (d) => d}, {margin: 10});
   assert.deepStrictEqual(x, [10, 190]);
   assert.deepStrictEqual(y, [10, 90]);
 });
@@ -37,8 +37,14 @@ test("cm.fit supports reverseX and reverseY", () => {
   assert.deepStrictEqual(y, [100, 0]);
 });
 
+test("cm.fit supports a margin for each side, which defaults to margin", () => {
+  const {x, y} = values([0, 1], {x: (d) => d, y: (d) => d}, {margin: 10, marginLeft: 40, marginBottom: 30});
+  assert.deepStrictEqual(x, [40, 190]);
+  assert.deepStrictEqual(y, [10, 70]);
+});
+
 test("cm.fit spreads discrete values evenly across the range", () => {
-  const {x, y} = values(["a", "b", "c", "b"], {x: (d) => d, y: (d) => d}, {padding: 10});
+  const {x, y} = values(["a", "b", "c", "b"], {x: (d) => d, y: (d) => d}, {margin: 10});
   assert.deepStrictEqual(x, [10, 100, 190, 100]);
   assert.deepStrictEqual(y, [10, 50, 90, 50]);
 });

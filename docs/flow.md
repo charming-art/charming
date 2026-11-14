@@ -15,7 +15,7 @@
       r: (t) => t,
       fill: "black",
     })
-    .transform(cm.fit, {padding: 30})
+    .transform(cm.fit, {margin: 30})
     .transform(cm.scale, {r: {range: [8, 15]}});
 
   root.render();
@@ -36,7 +36,7 @@ root
     r: (t) => t,
     fill: "black",
   })
-  .transform(cm.fit, {padding: 30})
+  .transform(cm.fit, {margin: 30})
   .transform(cm.scale, {r: {range: [8, 15]}});
 
 root.render();
@@ -205,7 +205,7 @@ Transforms the attribute values of the shapes just appended with the specified [
       fill: "rgba(175, 175, 175, 0.5)",
       stroke: "black",
     })
-    .transform(cm.fit, {padding: 20});
+    .transform(cm.fit, {margin: 20});
 
   root.render();
 
@@ -223,7 +223,7 @@ root
     fill: "rgba(175, 175, 175, 0.5)",
     stroke: "black",
   })
-  .transform(cm.fit, {padding: 20});
+  .transform(cm.fit, {margin: 20});
 ```
 
 See [Charming Transform](/transform) for the built-in transforms.

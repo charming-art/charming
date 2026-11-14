@@ -34,7 +34,7 @@ requestAnimationFrame(function frame() {
       },
       strokeOpacity: (0.15 * 2000) / count,
     })
-    .transform(cm.fit, {padding: 100})
+    .transform(cm.fit, {margin: 100})
     .transform(cm.scale, {r: {range: [24, 96]}});
 
   root.render();

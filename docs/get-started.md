@@ -72,7 +72,7 @@ Draw a clover with the canvas renderer:
       r: (t) => t,
       fill: "black",
     })
-    .transform(cm.fit, {padding: 30})
+    .transform(cm.fit, {margin: 30})
     .transform(cm.scale, {r: {range: [8, 15]}});
 
   root.render();
@@ -95,7 +95,7 @@ root
     r: (t) => t,
     fill: "black",
   })
-  .transform(cm.fit, {padding: 30})
+  .transform(cm.fit, {margin: 30})
   .transform(cm.scale, {r: {range: [8, 15]}});
 
 root.render();

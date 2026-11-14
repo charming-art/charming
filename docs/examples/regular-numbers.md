@@ -33,7 +33,7 @@ const links = numbers
 function applyScale(flow) {
   flow.transform(cm.fit, {
     scaleY: cm.scaleLog,
-    padding: 15,
+    margin: 15,
     domainX: d3.extent(numbers, x),
     domainY: d3.extent(numbers, value),
     reverseY: true,

@@ -11,7 +11,7 @@
   root
     .data(data)
     .append(cm.circle, {x: (d) => d.x, y: (d) => d.y, r: (d) => d.r, fill: (d) => d.r, fillOpacity: 0.7})
-    .transform(cm.fit, {padding: 20, reverseY: true})
+    .transform(cm.fit, {margin: 20, reverseY: true})
     .transform(cm.scale, {r: {range: [2, 10]}, fill: {interpolate: (t) => `hsl(${200 + t * 120}, 70%, 50%)`}});
 
   root.render();
@@ -30,7 +30,7 @@ root
     fill: (d) => d.r,
     fillOpacity: 0.7,
   })
-  .transform(cm.fit, {padding: 20, reverseY: true})
+  .transform(cm.fit, {margin: 20, reverseY: true})
   .transform(cm.scale, {
     r: {range: [2, 10]},
     fill: {interpolate: (t) => `hsl(${200 + t * 120}, 70%, 50%)`},
@@ -65,7 +65,8 @@ Maps position attributes to the size of the renderer: the x attributes to `[0, w
 
 - **scaleX**, **scaleY** — the scales (default [_cm_.scaleLinear](/scale#cm-scale-linear)).
 - **domainX**, **domainY** — the input values, inferred from the data by default.
-- **padding** — space between the shapes and the edges (default `0`).
+- **margin** — space between the shapes and the edges (default `0`).
+- **marginTop**, **marginRight**, **marginBottom**, **marginLeft** — the space on each side (default **margin**).
 - **reverseX**, **reverseY** — whether to reverse the range (default `false`). Use `reverseY: true` to put larger y values at the top.
 - **keysX**, **keysY** — the attributes to map (default `["x", "x1"]` and `["y", "y1"]`).
 
@@ -75,5 +76,5 @@ It needs the flow's [renderer](/flow#flow-renderer) to be set.
 root
   .data(data)
   .append(cm.circle, {x: (d) => d.x, y: (d) => d.y, r: 4})
-  .transform(cm.fit, {padding: 20, reverseY: true});
+  .transform(cm.fit, {margin: 20, reverseY: true});
 ```
