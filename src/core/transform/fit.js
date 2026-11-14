@@ -45,6 +45,5 @@ export function fit(flow, data, options = {}) {
   if (!data) throw new Error("No channels: call flow.transform(cm.bind, channels) before cm.fit.");
   const renderer = flow.renderer();
   if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.fit.");
-  // Hints describe the values before fitting, so the fitted contexts don't keep them.
-  return data.map(({fit: hints, ...context}) => fitContext(flow, context, renderer._props, {...hints, ...options}));
+  return data.map((context) => fitContext(flow, context, renderer._props, options));
 }
