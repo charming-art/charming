@@ -1,12 +1,13 @@
 import {Flow} from "./index.js";
 import {Node} from "../node.js";
 
+// Channels are plain arrays, even for typed array data, so they can hold any value.
 export function valueOf(data, options) {
   const values = Object.entries(options).map(([key, value]) => {
     if (value !== null && typeof value === "object" && value.preserve) return [key, value];
-    if (Array.isArray(value)) return [key, data.map((d, i) => value[+d || i])];
+    if (Array.isArray(value)) return [key, Array.from(data, (d, i) => value[+d || i])];
     const v = typeof value === "function" ? value : () => value;
-    const V = data.map(v);
+    const V = Array.from(data, (d, i) => v(d, i, data));
     return [key, V];
   });
   return Object.fromEntries(values);

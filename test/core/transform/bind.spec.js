@@ -114,3 +114,15 @@ test("cm.bind contexts keep the index returned by later transforms", () => {
   );
   assert.deepStrictEqual(calls[0].I, [2, 0]);
 });
+
+test("cm.bind returns plain arrays for typed array data, so channels can hold any value", () => {
+  const [shape, calls] = probe();
+  render((root) =>
+    root
+      .data(new Float64Array([1, 2]))
+      .transform(cm.bind, {fill: (d) => (d > 1 ? "red" : "blue"), x: (d, i, data) => data.length + i})
+      .append(shape),
+  );
+  assert.deepStrictEqual(calls[0].fill, ["blue", "red"]);
+  assert.deepStrictEqual(calls[0].x, [2, 3]);
+});
