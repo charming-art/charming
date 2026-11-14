@@ -45,6 +45,11 @@ test("cm.fit shares one domain across x and x1, and across y and y1", () => {
   assert.deepStrictEqual(y1, [0, 100]);
 });
 
+test("cm.fit infers the shared domain of typed array channels", () => {
+  const {x} = values(new Float64Array([0, 1]), {x: (d) => d});
+  assert.deepStrictEqual(Array.from(x), [0, 200]);
+});
+
 test("cm.fit supports a margin for each side, which defaults to margin", () => {
   const {x, y} = values([0, 1], {x: (d) => d, y: (d) => d}, {margin: 10, marginLeft: 40, marginBottom: 30});
   assert.deepStrictEqual(x, [40, 190]);

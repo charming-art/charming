@@ -3,7 +3,7 @@ import {domainOf, point, scale} from "./scale.js";
 // The keys share one domain, inferred from all their values unless specified.
 function channels(value, keys, {scale, domain, range}) {
   keys = keys.filter((key) => key in value);
-  const V = keys.flatMap((key) => value[key]);
+  const V = keys.flatMap((key) => Array.from(value[key]));
   if (domain === undefined) domain = domainOf(scale, V);
   return keys.map((key) => [key, {scale, domain, range}]);
 }
