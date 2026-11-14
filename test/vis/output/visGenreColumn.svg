@@ -1,4 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
+  <line x1="40" y1="370" x2="620" y2="370" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40" y1="320" x2="620" y2="320" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40" y1="270" x2="620" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40" y1="220" x2="620" y2="220" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40" y1="170" x2="620" y2="170" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40" y1="120" x2="620" y2="120" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40" y1="70.00000000000001" x2="620" y2="70.00000000000001" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40" y1="20" x2="620" y2="20" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40" y1="370" x2="34" y2="370" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="320" x2="34" y2="320" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="270" x2="34" y2="270" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="220" x2="34" y2="220" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="170" x2="34" y2="170" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="120" x2="34" y2="120" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="70.00000000000001" x2="34" y2="70.00000000000001" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="20" x2="34" y2="20" stroke="currentColor" stroke-width="1"></line>
+  <text x="31" y="370" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0k</text>
+  <text x="31" y="320" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">50k</text>
+  <text x="31" y="270" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">100k</text>
+  <text x="31" y="220" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">150k</text>
+  <text x="31" y="170" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">200k</text>
+  <text x="31" y="120" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">250k</text>
+  <text x="31" y="70.00000000000001" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">300k</text>
+  <text x="31" y="20" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">350k</text>
+  <text x="3" y="3" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-before-edge" fill="currentColor">↑ sold</text>
   <rect x="492.52747252747247" y="95" width="57.362637362637315" height="275" fill="#9a60b4"></rect>
   <rect x="556.2637362637363" y="255.00000000000003" width="57.362637362637315" height="114.99999999999997" fill="#ea7ccc"></rect>
   <rect x="46.37362637362635" y="250" width="57.36263736263736" height="120" fill="#5470c6"></rect>
@@ -27,29 +52,4 @@
   <text x="521.2087912087912" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Sports</text>
   <text x="584.945054945055" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Strategy</text>
   <text x="330" y="397" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="currentColor">genre</text>
-  <line x1="40" y1="370" x2="620" y2="370" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="40" y1="320" x2="620" y2="320" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="40" y1="270" x2="620" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="40" y1="220" x2="620" y2="220" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="40" y1="170" x2="620" y2="170" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="40" y1="120" x2="620" y2="120" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="40" y1="70.00000000000001" x2="620" y2="70.00000000000001" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="40" y1="20" x2="620" y2="20" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="40" y1="370" x2="34" y2="370" stroke="currentColor" stroke-width="1"></line>
-  <line x1="40" y1="320" x2="34" y2="320" stroke="currentColor" stroke-width="1"></line>
-  <line x1="40" y1="270" x2="34" y2="270" stroke="currentColor" stroke-width="1"></line>
-  <line x1="40" y1="220" x2="34" y2="220" stroke="currentColor" stroke-width="1"></line>
-  <line x1="40" y1="170" x2="34" y2="170" stroke="currentColor" stroke-width="1"></line>
-  <line x1="40" y1="120" x2="34" y2="120" stroke="currentColor" stroke-width="1"></line>
-  <line x1="40" y1="70.00000000000001" x2="34" y2="70.00000000000001" stroke="currentColor" stroke-width="1"></line>
-  <line x1="40" y1="20" x2="34" y2="20" stroke="currentColor" stroke-width="1"></line>
-  <text x="31" y="370" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0k</text>
-  <text x="31" y="320" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">50k</text>
-  <text x="31" y="270" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">100k</text>
-  <text x="31" y="220" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">150k</text>
-  <text x="31" y="170" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">200k</text>
-  <text x="31" y="120" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">250k</text>
-  <text x="31" y="70.00000000000001" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">300k</text>
-  <text x="31" y="20" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">350k</text>
-  <text x="3" y="3" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-before-edge" fill="currentColor">↑ sold</text>
 </svg>
