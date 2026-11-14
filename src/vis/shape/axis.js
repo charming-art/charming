@@ -110,10 +110,12 @@ export function axisY(flow, value, {scales = {}, options = {}} = {}) {
   flow.datum(label).append(text, {...font, text: label, x: 3, y: 3, textAlign: "start", textBaseline: "top"});
 }
 
-// Draws both axes.
-export function axis(flow, value, context) {
-  axisX(flow, value, context);
-  axisY(flow, value, context);
+// Draws both axes. The options x and y are the options of each axis, or false to skip it; the
+// other options apply to both.
+export function axis(flow, value, {options = {}, ...context} = {}) {
+  const {x = {}, y = {}, ...shared} = options;
+  if (x !== false) axisX(flow, value, {...context, options: {...shared, ...x}});
+  if (y !== false) axisY(flow, value, {...context, options: {...shared, ...y}});
 }
 
 // Axes receive their options as they are, such as a tickFormat function, not per datum.
