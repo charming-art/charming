@@ -6,6 +6,7 @@ export {shapeCircleOpacity1} from "./shape-circle-opacity1.js";
 export {shapeCircleOpacity2} from "./shape-circle-opacity2.js";
 export {shapeCircleStrokeWidth} from "./shape-circle-stroke-width.js";
 export {shapeClear} from "./shape-clear.js";
+export {shapeColorKeywords} from "./shape-color-keywords.js";
 export {shapeGroupNested} from "./shape-group-nested.js";
 export {shapeLineClose} from "./shape-line-close.js";
 export {shapeLine} from "./shape-line.js";

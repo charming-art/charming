@@ -2,7 +2,7 @@ import {NULL_VALUE} from "./constant.js";
 import {normalizeColor} from "../../core/color.js";
 
 function encodeColor(color) {
-  if (color === NULL_VALUE || color === null) return NULL_VALUE;
+  if (color === NULL_VALUE || color === null || color === "none") return NULL_VALUE;
   const [r, g, b] = normalizeColor(color);
   return b + (g << 8) + (r << 16);
 }

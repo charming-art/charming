@@ -2,16 +2,25 @@ import {color as d3Color} from "d3-color";
 
 const colorByValue = new Map();
 
+// The CSS keyword currentColor is the color of the text, black by default, as on Canvas.
+function isCurrentColor(value) {
+  return /^currentcolor$/i.test(value);
+}
+
+function isNone(value) {
+  return /^none$/i.test(value);
+}
+
 export function rgba(value) {
   if (colorByValue.has(value)) return colorByValue.get(value);
-  const color = d3Color(value).rgb();
+  const color = d3Color(isCurrentColor(value) ? "black" : value).rgb();
   colorByValue.set(value, color);
   return color;
 }
 
 export function normalizeColor(color, opacity) {
   if (color === undefined) return color;
-  if (color === "transparent") return [0, 0, 0, 0];
+  if (color === "transparent" || isNone(color)) return [0, 0, 0, 0];
   const {r, g, b, opacity: a} = rgba(color);
   return [r, g, b, ((opacity ?? a ?? 1) * 255) | 0];
 }
