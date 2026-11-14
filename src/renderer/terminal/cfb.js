@@ -16,8 +16,12 @@ function encodeChar(ch, wide) {
     .map((ch) => ch.codePointAt(0));
 }
 
+const defaultForeground = "#fff";
+
 export function cfb(color) {
-  const {ch = " ", fg = "#fff", bg = null, wide = false} = color;
+  let {ch = " ", fg = defaultForeground, bg = null, wide = false} = color;
+  // The current color of the terminal is its default foreground, not black as on Canvas.
+  if (/^currentcolor$/i.test(fg)) fg = defaultForeground;
   const [n, n1 = NULL_VALUE] = encodeChar(ch, wide);
   return [n, n1, encodeColor(fg), encodeColor(bg)];
 }
