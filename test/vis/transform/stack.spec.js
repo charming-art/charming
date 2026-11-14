@@ -80,3 +80,26 @@ test("cm.stackX and cm.stackY throw an error without channels", () => {
   assert.throws(() => cm.flow().data([1]).transform(cm.stackY), /No channels.*cm.stackY/);
   assert.throws(() => cm.flow().data([1]).transform(cm.stackX), /No channels.*cm.stackX/);
 });
+
+test("cm.stackY with chunk stacks equal values in rows of chunk, in data units", () => {
+  const rows = Array.from({length: 5}, () => ({band: "A", n: 10}));
+  const {y, y1, x, x1} = values(rows, {x: "band", y: "n"}, cm.spreadX, (flow, data) =>
+    cm.stackY(flow, data, {chunk: 2, padding: 0}),
+  );
+  // Rows of 2 × 10 = 20 in data units: [0, 20], [0, 20], [20, 40], [20, 40], [40, 60].
+  assert.deepStrictEqual(y1, [0, 0, 20, 20, 40]);
+  assert.deepStrictEqual(y, [20, 20, 40, 40, 60]);
+  // Columns are the two halves of the band of A.
+  const band = d3.scaleBand(["A"], [0, 1]).padding(0.1);
+  const w = band.bandwidth() / 2;
+  assertAllInDelta(x, [band("A"), band("A") + w, band("A"), band("A") + w, band("A")]);
+  assertAllInDelta(x1, [band("A") + w, band("A") + 2 * w, band("A") + w, band("A") + 2 * w, band("A") + w]);
+});
+
+test("cm.stackY with chunk stacks positive values up and negative values down, with gaps", () => {
+  const rows = [10, -10, 10, -10, -10].map((n) => ({n}));
+  const {y, y1} = values(rows, {y: "n"}, (flow, data) => cm.stackY(flow, data, {chunk: 2, padding: 0.5}));
+  // Each row is 20 tall; padding 0.5 insets it by 5 on each side.
+  assert.deepStrictEqual(y1, [5, -5, 5, -5, -25]);
+  assert.deepStrictEqual(y, [15, -15, 15, -15, -35]);
+});
