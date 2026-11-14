@@ -5,8 +5,8 @@ import "../../install-canvas-mock.js";
 import * as cm from "../../../src/index.js";
 import {assertInDelta, probe} from "../../helpers.js";
 
-function contexts(data, channels, options) {
-  return cm.flow().data(data).transform(cm.encode, channels).transform(cm.spreadX, options)._values;
+function contexts(data, channels, options, spread = cm.spreadX) {
+  return cm.flow().data(data).transform(cm.encode, channels).transform(spread, options)._values;
 }
 
 function assertAllInDelta(actual, expected) {
@@ -80,4 +80,53 @@ test("cm.spreadX orders the bands by the domain of the x hint", () => {
     domain: [0, 1],
     band: {domain: ["C", "A", "B"], paddingInner: 0.1, paddingOuter: 0.1, align: 0.5},
   });
+});
+
+test("cm.spreadY places each y in a band like d3.scaleBand with padding 0.1", () => {
+  const [{value}] = contexts(data, {x: "frequency", y: "letter"}, undefined, cm.spreadY);
+  const band = d3.scaleBand(["A", "B", "C"], [0, 1]).padding(0.1);
+  assertAllInDelta(value.y, ["C", "A", "B"].map(band));
+  assertAllInDelta(
+    value.y1,
+    ["C", "A", "B"].map((d) => band(d) + band.bandwidth()),
+  );
+});
+
+test("cm.spreadY supports the padding, paddingInner, paddingOuter and align options", () => {
+  const options = {paddingInner: 0.2, paddingOuter: 0.4, align: 0.25};
+  const [{value}] = contexts(data, {x: "frequency", y: "letter"}, options, cm.spreadY);
+  const band = d3.scaleBand(["A", "B", "C"], [0, 1]).paddingInner(0.2).paddingOuter(0.4).align(0.25);
+  assertAllInDelta(value.y, ["C", "A", "B"].map(band));
+});
+
+test("cm.spreadY adds a zero baseline for numeric x, and keeps a bound x1", () => {
+  const [{value}] = contexts(data, {x: "frequency", y: "letter"}, undefined, cm.spreadY);
+  assert.deepStrictEqual(value.x1, [0, 0, 0]);
+  const [{value: bound}] = contexts(data, {x: "frequency", x1: 1, y: "letter"}, undefined, cm.spreadY);
+  assert.deepStrictEqual(bound.x1, [1, 1, 1]);
+  const [{value: ordinal}] = contexts(data, {x: "letter", y: "letter"}, undefined, cm.spreadY);
+  assert.strictEqual(ordinal.x1, undefined);
+});
+
+test("cm.spreadY orders the bands by the domain of the y hint, and hints its band", () => {
+  const [{value, hints}] = contexts(
+    data,
+    {x: "frequency", y: {value: "letter", domain: ["C", "A", "B"]}},
+    undefined,
+    cm.spreadY,
+  );
+  const band = d3.scaleBand(["C", "A", "B"], [0, 1]).padding(0.1);
+  assertAllInDelta(value.y, ["C", "A", "B"].map(band));
+  assert.deepStrictEqual(hints.y, {
+    label: "letter",
+    domain: [0, 1],
+    band: {domain: ["C", "A", "B"], paddingInner: 0.1, paddingOuter: 0.1, align: 0.5},
+  });
+});
+
+test("cm.spreadX ignores repeated categories in the domain of the x hint, like d3.scaleBand", () => {
+  const [{value, hints}] = contexts(data, {x: {value: "letter", domain: ["C", "C", "A", "B"]}, y: "frequency"});
+  const band = d3.scaleBand(["C", "A", "B"], [0, 1]).padding(0.1);
+  assertAllInDelta(value.x, ["C", "A", "B"].map(band));
+  assert.deepStrictEqual(hints.x.band.domain, ["C", "A", "B"]);
 });

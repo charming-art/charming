@@ -118,7 +118,7 @@ export function plane(
     domainX,
     domainY,
     reverseX = false,
-    reverseY = true,
+    reverseY,
     width,
     height,
     margin,
@@ -150,6 +150,9 @@ export function plane(
   height ??= auto?.height ? autoHeight(first, keysY, sizeY) : rendererHeight;
   renderer.resize?.(width, height);
   ({width, height} = renderer._props);
+
+  // Values grow upward, but categories in bands go down from the top, like Plot's ordinal y.
+  reverseY ??= !axisHint(firstHints, keysY).band;
 
   const frame = {top: marginTop, right: width - marginRight, bottom: height - marginBottom, left: marginLeft};
   const rangeX = [marginLeft, width - marginRight];
