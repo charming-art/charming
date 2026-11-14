@@ -98,9 +98,10 @@ function autoHeight(value, keys, {scale, domain, band}) {
   return categories ? Math.min(60, categories.length) * 20 + 60 : 400;
 }
 
-// Rows at the middle of the frame, for a position that isn't encoded, such as y in a dot plot of x.
-function middle(value, [start, end]) {
-  const n = Object.values(value).find((V) => Array.isArray(V))?.length ?? 0;
+// Rows at the middle of the frame, for a position that isn't encoded, such as y in a dot plot of
+// x. The rows are counted from the encoded position, which may be a typed array.
+function middle(value, keys, [start, end]) {
+  const n = value[keys.find((key) => key in value)].length;
   return Array.from({length: n}, () => (start + end) / 2);
 }
 
@@ -144,7 +145,9 @@ export function plane(
 
   const {auto, width: rendererWidth, height: rendererHeight} = renderer._props;
   width ??= auto?.width ? 640 : rendererWidth;
-  height ??= auto?.height ? autoHeight(first, keysY, axisHint(firstHints, keysY)) : rendererHeight;
+  // The height uses the same scale and domain of y as fitting: the options, else the hints.
+  const sizeY = {...axisHint(firstHints, keysY), ...(scaleY && {scale: scaleY}), ...(domainY && {domain: domainY})};
+  height ??= auto?.height ? autoHeight(first, keysY, sizeY) : rendererHeight;
   renderer.resize?.(width, height);
   ({width, height} = renderer._props);
 
@@ -190,8 +193,10 @@ export function plane(
     for (const key of keysY) if (key in value) scales[key] = recordY;
 
     const newValue = {...fitted.value};
-    if (hasAny(value, keysX) && !hasAny(value, keysY)) newValue[keysY[0]] = middle(value, [frame.top, frame.bottom]);
-    if (hasAny(value, keysY) && !hasAny(value, keysX)) newValue[keysX[0]] = middle(value, [frame.left, frame.right]);
+    if (hasAny(value, keysX) && !hasAny(value, keysY))
+      newValue[keysY[0]] = middle(value, keysX, [frame.top, frame.bottom]);
+    if (hasAny(value, keysY) && !hasAny(value, keysX))
+      newValue[keysX[0]] = middle(value, keysY, [frame.left, frame.right]);
     return {...withoutHints(fitted), value: newValue, scales, frame};
   });
 }

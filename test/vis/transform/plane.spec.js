@@ -233,3 +233,23 @@ test("cm.plane centers x when only y is encoded, and explicit margins win", () =
   assert.deepStrictEqual(context.value.x, [100, 100]);
   assert.deepStrictEqual(context.value.y, [90, 10]);
 });
+
+test("cm.plane centers y for a typed array x", () => {
+  const renderer = cm.svg();
+  const root = cm.flow().renderer(renderer);
+  const [context] = root
+    .data([1, 2])
+    .transform(cm.bind, {x: (d) => d})
+    .transform((_, data) => data.map((d) => ({...d, value: {x: new Float64Array([1, 2])}})))
+    .transform(cm.plane)._values;
+  assert.deepStrictEqual(context.value.y, [15, 15]);
+});
+
+test("cm.plane sizes the chart with its scaleY and domainY options", () => {
+  const ordinal = cm.svg();
+  planed(ordinal, [1, 2], {x: (d) => d, y: (d) => d}, {scaleY: "ordinal"});
+  assert.strictEqual(ordinal._props.height, 2 * 20 + 60);
+  const domain = cm.svg();
+  planed(domain, ["a", "b"], {x: 1, y: (d) => d}, {domainY: ["a", "b", "c", "d"]});
+  assert.strictEqual(domain._props.height, 4 * 20 + 60);
+});
