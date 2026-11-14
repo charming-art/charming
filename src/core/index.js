@@ -20,6 +20,7 @@ export {filter} from "./process/filter.js";
 export {map} from "./process/map.js";
 export {push} from "./process/push.js";
 export {derive} from "./process/derive.js";
+export {bind} from "./transform/bind.js";
 export {scale} from "./transform/scale.js";
 export {fit} from "./transform/fit.js";
 export {constant} from "./constant.js";

@@ -8,12 +8,13 @@ import {flow$renderer} from "./renderer.js";
 import {flow$render} from "./render.js";
 import {Node} from "../node.js";
 
-export function Flow(groups = null, data = null, parent = null, context = null) {
+export function Flow(groups = null, data = null, parent = null, context = null, values = null) {
   Object.defineProperties(this, {
     _groups: {value: groups},
     _parent: {value: parent},
     _context: {value: context},
     _data: {value: data},
+    _values: {value: values},
   });
 }
 

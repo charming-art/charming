@@ -7,7 +7,7 @@ import {probe} from "../../helpers.js";
 function values(data, channels, options) {
   const [shape, calls] = probe();
   const root = cm.flow().renderer(cm.canvas({width: 200, height: 100, dpi: 1}));
-  root.data(data).append(shape, channels).transform(cm.fit, options);
+  root.data(data).transform(cm.bind, channels).transform(cm.fit, options).append(shape);
   root.render();
   return calls[0];
 }
@@ -42,7 +42,7 @@ test("cm.fit throws an error if the flow has no renderer", () => {
       cm
         .flow()
         .data([1])
-        .append(cm.circle, {x: (d) => d})
+        .transform(cm.bind, {x: (d) => d})
         .transform(cm.fit),
     /No renderer/,
   );

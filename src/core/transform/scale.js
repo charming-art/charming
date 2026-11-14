@@ -26,10 +26,12 @@ function applyScale(value, options) {
 }
 
 export function scale(_, data, options) {
+  if (!data) throw new Error("No channels: call flow.transform(cm.bind, channels) before cm.scale.");
   const m = data.length;
-  for (let i = 0; i < m; i++) {
-    const context = data[i];
-    context.value = applyScale(context.value, options);
+  const newData = new Array(m);
+  for (let j = 0; j < m; j++) {
+    const context = data[j];
+    newData[j] = {...context, value: applyScale(context.value, options)};
   }
-  return data;
+  return newData;
 }

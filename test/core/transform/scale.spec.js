@@ -7,7 +7,7 @@ import {probe} from "../../helpers.js";
 function values(data, channels, options) {
   const [shape, calls] = probe();
   const root = cm.flow().renderer(cm.canvas({width: 100, height: 100, dpi: 1}));
-  root.data(data).append(shape, channels).transform(cm.scale, options);
+  root.data(data).transform(cm.bind, channels).transform(cm.scale, options).append(shape);
   root.render();
   return calls[0];
 }
