@@ -24,9 +24,12 @@ export function encode(flow, data, options = {}) {
     const option = options[key];
     const {value, ...descriptor} = isDescriptor(option) ? option : {value: option};
     const channel = (channels[key] = maybeChannel(key, value));
-    // The scale of a channel is resolved later, by cm.plane. A color is scaled only if it
-    // varies with the data, so a constant color such as "red" stays as it is.
-    if (isDescriptor(option)) hints[key] = descriptor;
+    // The scale of a channel is resolved later, by cm.plane. A field names the channel, which
+    // labels its axis. A color is scaled only if it varies with the data, so a constant color
+    // such as "red" stays as it is.
+    const label = typeof value === "string" && typeof channel === "function" ? {label: value} : null;
+    if (isDescriptor(option)) hints[key] = {...label, ...descriptor};
+    else if (label) hints[key] = label;
     else if (colorKeys.includes(key) && (typeof channel === "function" || Array.isArray(channel))) hints[key] = {};
   }
   // The hints of the channels encoded again are replaced, and the others are kept.

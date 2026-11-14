@@ -13,6 +13,7 @@ export {shapeLine} from "./shape-line.js";
 export {shapeLinkArrowColor} from "./shape-link-arrow-color.js";
 export {shapeLinkArrow} from "./shape-link-arrow.js";
 export {shapeLink} from "./shape-link.js";
+export {shapeLinkStrokeOpacity} from "./shape-link-stroke-opacity.js";
 export {shapePathRelativeArc} from "./shape-path-relative-arc.js";
 export {shapePathSmoothCubicStart} from "./shape-path-smooth-cubic-start.js";
 export {shapePathSmoothCubic} from "./shape-path-smooth-cubic.js";

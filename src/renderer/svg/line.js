@@ -1,6 +1,17 @@
 import {append, degrees} from "./create.js";
 
-export function svg$line({stroke, strokeWidth, strokeCap, x, y, x1, y1, rotate, transformOrigin = "start"}) {
+export function svg$line({
+  stroke,
+  strokeOpacity,
+  strokeWidth,
+  strokeCap,
+  x,
+  y,
+  x1,
+  y1,
+  rotate,
+  transformOrigin = "start",
+}) {
   let transform = null;
   if (rotate) {
     const [mx, my] =
@@ -13,6 +24,7 @@ export function svg$line({stroke, strokeWidth, strokeCap, x, y, x1, y1, rotate, 
     x2: x1,
     y2: y1,
     stroke: stroke,
+    "stroke-opacity": strokeOpacity,
     "stroke-width": strokeWidth,
     "stroke-linecap": strokeCap,
     transform: transform,

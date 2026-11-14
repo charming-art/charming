@@ -53,3 +53,34 @@ test("flow.append(shape) works without options", () => {
   render((root) => root.data([1, 2]).append(shape));
   assert.deepStrictEqual(calls, [{}]);
 });
+
+test("flow.append(shape, options) passes composite shapes the context of the flow and the options", () => {
+  const calls = [];
+  const shape = (flow, value, context) => calls.push(context);
+  render((root) =>
+    root
+      .data([1, 2])
+      .transform(cm.bind, {x: (d) => d})
+      .transform((_, data) => data.map((d) => ({...d, scales: {x: "a scale"}})))
+      .append(shape, {fill: "red"}),
+  );
+  assert.deepStrictEqual(calls[0].scales, {x: "a scale"});
+  assert.deepStrictEqual(calls[0].options, {fill: "red"});
+});
+
+test("flow.append(shape, options) passes the options of a raw shape as they are", () => {
+  const calls = [];
+  const format = (d) => `${d}%`;
+  const shape = (flow, value, {options}) => calls.push([value, options]);
+  shape.raw = true;
+  render((root) =>
+    root
+      .data([1, 2])
+      .transform(cm.bind, {x: (d) => d})
+      .append(shape, {grid: true, tickFormat: format}),
+  );
+  const [[value, options]] = calls;
+  assert.deepStrictEqual(value, {x: [1, 2]});
+  assert.strictEqual(options.grid, true);
+  assert.strictEqual(options.tickFormat, format);
+});

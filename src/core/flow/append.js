@@ -29,14 +29,15 @@ export function flow$append(render, options = {}) {
   const groups = flow._groups;
   const parent = this._parent;
   const data = flow._values;
-  const empty = Object.keys(options).length === 0;
+  // A shape marked raw, such as an axis, receives its options as they are, not per datum.
+  const empty = render.raw || Object.keys(options).length === 0;
   const values = groups.map((group, j) => {
     const context = data?.[j];
     const bound = context?.value;
     const I = context?.I ?? group.map((_, i) => i);
-    if (empty) return {I, render, options, value: {...bound}, group};
+    if (empty) return {I, render, options, value: {...bound}, group, context};
     const value = valueOf(bound ? rowsOf(bound, group) : group, options);
-    return {I, render, options, value: {...bound, ...value}, group};
+    return {I, render, options, value: {...bound, ...value}, group, context};
   });
   const node = new Node(values, [], parent);
   parent._children.push(node);

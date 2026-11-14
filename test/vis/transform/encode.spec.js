@@ -48,14 +48,21 @@ test("cm.encode(options) binds the value of a descriptor and keeps its scale as 
   const {fill} = values(data, {fill: {value: "letter", scale: "ordinal", range: ["red", "blue"]}});
   assert.deepStrictEqual(fill, ["A", "B"]);
   assert.deepStrictEqual(hints(data, {fill: {value: "letter", scale: "ordinal", range: ["red", "blue"]}}), {
-    fill: {scale: "ordinal", range: ["red", "blue"]},
+    fill: {label: "letter", scale: "ordinal", range: ["red", "blue"]},
   });
 });
 
 test("cm.encode(options) hints fill and stroke channels that vary with the data, but not constant colors", () => {
-  assert.deepStrictEqual(hints(data, {fill: "letter", stroke: (d) => d.color}), {fill: {}, stroke: {}});
+  assert.deepStrictEqual(hints(data, {fill: "letter", stroke: (d) => d.color}), {fill: {label: "letter"}, stroke: {}});
   assert.deepStrictEqual(hints(data, {fill: "red", stroke: "none"}), {});
-  assert.deepStrictEqual(hints(data, {x: "letter", y: "frequency"}), {});
+});
+
+test("cm.encode(options) labels the channels encoded from fields", () => {
+  assert.deepStrictEqual(hints(data, {x: "letter", y: "frequency", r: 3}), {
+    x: {label: "letter"},
+    y: {label: "frequency"},
+  });
+  assert.deepStrictEqual(hints(data, {y: {value: "frequency", label: "Frequency"}}), {y: {label: "Frequency"}});
 });
 
 test("cm.encode(options) drops the hints of the channels it encodes again", () => {
@@ -63,6 +70,6 @@ test("cm.encode(options) drops the hints of the channels it encodes again", () =
     .flow()
     .data(data)
     .transform(cm.encode, {x: {value: "letter", domain: ["B", "A"]}, fill: "letter", y: "frequency"})
-    .transform(cm.encode, {x: "letter", fill: "red"})._values;
-  assert.deepStrictEqual(context.hints, {});
+    .transform(cm.encode, {x: (d) => d.letter, fill: "red"})._values;
+  assert.deepStrictEqual(context.hints, {y: {label: "frequency"}});
 });

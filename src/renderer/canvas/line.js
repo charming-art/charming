@@ -1,4 +1,18 @@
-export function canvas$line({stroke, strokeWidth, strokeCap, x, y, x1, y1, rotate, transformOrigin = "start"}) {
+import {normalizeColorString} from "../../core/color.js";
+
+export function canvas$line({
+  stroke,
+  strokeOpacity,
+  strokeWidth,
+  strokeCap,
+  x,
+  y,
+  x1,
+  y1,
+  rotate,
+  transformOrigin = "start",
+}) {
+  if (strokeOpacity !== undefined) stroke = normalizeColorString(stroke, strokeOpacity);
   const context = this._context;
   context.save();
   context.beginPath();
