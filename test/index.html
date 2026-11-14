@@ -2,65 +2,77 @@
   import * as context2d from "./util/context2d/cases/index.js";
   import * as dom from "./util/dom/cases/index.js";
   import * as text from "./util/text/cases/index.js";
-  import * as coreShape from "./core/shape/cases/index.js";
+  import * as shape from "./core/shape/cases/index.js";
   import * as terminal from "./renderer/terminal/cases/index.js";
   import {cases as svg} from "./renderer/svg/cases/index.js";
+  import * as vis from "./vis/cases/index.js";
 
-  const cases = {...context2d, ...dom, ...text, ...coreShape, ...terminal, ...svg};
+  const suites = {context2d, dom, text, shape, terminal, svg, vis};
 
   // Tool
   const tool = document.createElement("div");
   tool.id = "tool";
   tool.style.display = "flex";
+  tool.style.gap = "0.5em";
   tool.style.margin = "1em 0px";
   document.body.append(tool);
 
-  // Select
-  const select = createSelect(() => {
-    const {value} = select;
-    history.pushState({value}, "", `?name=${value}`);
-    render();
+  // Selects: one for the suite, one for the cases of that suite.
+  const typeSelect = createSelect(() => {
+    setOptions(caseSelect, Object.keys(suites[typeSelect.value]));
+    update();
   });
-  const options = Object.keys(cases).map(createOption);
-  tool.append(select);
-  select.append(...options);
+  const caseSelect = createSelect(update);
+  setOptions(typeSelect, Object.keys(suites));
+  tool.append(typeSelect, caseSelect);
 
   const container = document.createElement("div");
   container.id = "container";
   document.body.append(container);
 
-  // Init app name.
-  const initialValue = new URL(location).searchParams.get("name");
-  if (cases[initialValue]) select.value = initialValue;
+  // Init from the URL, such as ?type=vis&name=visLetterFrequencyColumn.
+  const params = new URL(location).searchParams;
+  const initialType = params.get("type");
+  const initialName = params.get("name");
+  typeSelect.value = suites[initialType] ? initialType : (findType(initialName) ?? typeSelect.value);
+  setOptions(caseSelect, Object.keys(suites[typeSelect.value]));
+  if (suites[typeSelect.value][initialName]) caseSelect.value = initialName;
   render();
+
+  // The arrow keys move through the cases of the selected suite.
+  document.onkeydown = (event) => {
+    if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+    switch (event.key) {
+      case "ArrowLeft": {
+        if (caseSelect.selectedIndex > 0) {
+          caseSelect.selectedIndex--;
+          update();
+        } else alert("This is the first test case.");
+        break;
+      }
+      case "ArrowRight": {
+        if (caseSelect.selectedIndex < caseSelect.options.length - 1) {
+          caseSelect.selectedIndex++;
+          update();
+        } else alert("This is the last test case.");
+        break;
+      }
+    }
+  };
+
+  function findType(name) {
+    return Object.keys(suites).find((type) => suites[type][name]);
+  }
 
   function createSelect(onchange) {
     const select = document.createElement("select");
     select.style.height = "20px";
     select.onchange = onchange;
-    document.onkeydown = (event) => {
-      if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) {
-        return;
-      }
-      switch (event.key) {
-        case "ArrowLeft": {
-          if (select.selectedIndex > 0) {
-            select.selectedIndex--;
-            select.onchange();
-          } else alert("This is the first test case.");
-          break;
-        }
-        case "ArrowRight": {
-          if (select.selectedIndex < select.options.length - 1) {
-            select.selectedIndex++;
-            select.onchange();
-          } else alert("This is the last test case.");
-          break;
-        }
-      }
-    };
-
     return select;
+  }
+
+  function setOptions(select, keys) {
+    select.replaceChildren(...keys.map(createOption));
   }
 
   function createOption(key) {
@@ -70,8 +82,15 @@
     return option;
   }
 
+  function update() {
+    const type = typeSelect.value;
+    const name = caseSelect.value;
+    history.pushState({type, name}, "", `?type=${type}&name=${name}`);
+    render();
+  }
+
   async function render() {
-    const fn = cases[select.value];
+    const fn = suites[typeSelect.value][caseSelect.value];
     const node = await fn();
     container.innerHTML = "";
     container.append(node);

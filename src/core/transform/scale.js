@@ -27,9 +27,13 @@ function discrete(scale, V) {
   return typeof v !== "number" && !(v instanceof Date);
 }
 
+export function domainOf(scale, V) {
+  return discrete(scale, V) ? Array.from(new Set(V)) : [min(V), max(V)];
+}
+
 function scaleOf({scale, domain, range}, V, ordinalOf) {
   const o = discrete(scale, V);
-  if (domain === undefined) domain = o ? Array.from(new Set(V)) : [min(V), max(V)];
+  if (domain === undefined) domain = domainOf(scale, V);
   if (typeof scale === "function") {
     const s = scale.copy().domain(domain);
     return range === undefined ? s : s.range(range);
