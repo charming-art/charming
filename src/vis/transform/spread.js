@@ -16,7 +16,7 @@ function band(V, {domain = sort(new InternSet(V)), paddingInner, paddingOuter, a
 // Gives each category of a position, such as x, a band from x to x1, ordered by the domain of
 // its hint. The other position, such as y, gets a baseline of 0 if it's numeric and its y1 isn't
 // bound, so that bars span from 0 to their values.
-export function spread(
+function spread(
   data,
   {padding = 0.1, paddingInner = padding, paddingOuter = padding, align = 0.5} = {},
   [key, key1, other, other1],
@@ -35,4 +35,14 @@ export function spread(
     const hints = {...context.hints, [key]: label === undefined ? hint : {label, ...hint}};
     return {...context, value, hints};
   });
+}
+
+// Bands for the categories of x, such as the columns of a bar chart.
+export function spreadX(flow, data, options) {
+  return spread(data, options, ["x", "x1", "y", "y1"], "spreadX");
+}
+
+// Bands for the categories of y, such as the bars of a horizontal bar chart.
+export function spreadY(flow, data, options) {
+  return spread(data, options, ["y", "y1", "x", "x1"], "spreadY");
 }
