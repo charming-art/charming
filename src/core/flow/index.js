@@ -1,3 +1,4 @@
+import {flow$add} from "./add.js";
 import {flow$append} from "./append.js";
 import {flow$call} from "./call.js";
 import {flow$data} from "./data.js";
@@ -21,6 +22,7 @@ export function Flow(groups = null, data = null, parent = null, context = null, 
 Object.defineProperties(Flow.prototype, {
   call: {value: flow$call},
   append: {value: flow$append},
+  add: {value: flow$add},
   data: {value: flow$data},
   datum: {value: flow$datum},
   process: {value: flow$process},
