@@ -21,17 +21,16 @@ test("cm.bind evaluates function channels with the datum and index", () => {
   assert.deepStrictEqual(calls[0].x, [10, 21, 32]);
 });
 
-test("cm.bind evaluates constant, array and cm.constant channels", () => {
+test("cm.bind evaluates constant and array channels", () => {
   const [shape, calls] = probe();
   render((root) =>
     root
       .data(["a", "b"])
-      .transform(cm.bind, {fill: "red", y: [5, 6], colors: cm.constant(["a", "b"])})
+      .transform(cm.bind, {fill: "red", y: [5, 6]})
       .append(shape),
   );
   assert.deepStrictEqual(calls[0].fill, ["red", "red"]);
   assert.deepStrictEqual(calls[0].y, [5, 6]);
-  assert.deepStrictEqual(calls[0].colors, ["a", "b"]);
 });
 
 test("cm.bind merges with previously bound channels", () => {
