@@ -1,8 +1,8 @@
 import * as d3 from "d3";
 import * as cm from "../../../src/index.js";
-import {renderFlow} from "../../helpers.js";
+import {renderFlow, withSVG} from "../../helpers.js";
 
-export async function visLetterFrequencyColumn() {
+export const visLetterFrequencyColumn = withSVG(async () => {
   const alphabet = await d3.csv("data/alphabet.csv", d3.autoType);
   return renderFlow(
     (root) => {
@@ -15,4 +15,4 @@ export async function visLetterFrequencyColumn() {
     },
     {width: 640, height: 400},
   );
-}
+});
