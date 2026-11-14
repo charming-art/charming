@@ -253,3 +253,20 @@ test("cm.plane sizes the chart with its scaleY and domainY options", () => {
   planed(domain, ["a", "b"], {x: 1, y: (d) => d}, {domainY: ["a", "b", "c", "d"]});
   assert.strictEqual(domain._props.height, 4 * 20 + 60);
 });
+
+test("cm.plane places the bands of cm.spreadY from the top, unless reverseY is set", () => {
+  const data = [
+    {letter: "B", frequency: 2},
+    {letter: "A", frequency: 1},
+  ];
+  const root = cm.flow().renderer(cm.svg({width: 640, height: 400}));
+  const flow = root.data(data).transform(cm.encode, {x: "frequency", y: "letter"}).transform(cm.spreadY);
+  const [context] = flow.transform(cm.plane)._values;
+  const band = d3.scaleBand(["A", "B"], [20, 370]).padding(0.1);
+  ["B", "A"].forEach((d, i) => assertInDelta(context.value.y[i], band(d)));
+  assert.deepStrictEqual(context.scales.y.scale, "band");
+  assert.deepStrictEqual(context.scales.y.domain, ["A", "B"]);
+  assert.deepStrictEqual(context.scales.y.range, [20, 370]);
+  const [reversed] = flow.transform(cm.plane, {reverseY: true})._values;
+  assert.ok(reversed.value.y[1] > reversed.value.y[0]);
+});
