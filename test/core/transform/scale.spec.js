@@ -39,8 +39,8 @@ test("cm.scale infers a linear scale for dates", () => {
   assert.deepStrictEqual(r, [0, 10, 5]);
 });
 
-test("cm.scale passes interpolate to the linear scale", () => {
-  const {fill} = values([0, 5, 10], {fill: (d) => d}, {fill: {interpolate: (t) => `t=${t}`}});
+test("cm.scale sets the inferred domain of a d3 sequential scale", () => {
+  const {fill} = values([0, 5, 10], {fill: (d) => d}, {fill: {scale: d3.scaleSequential((t) => `t=${t}`)}});
   assert.deepStrictEqual(fill, ["t=0", "t=0.5", "t=1"]);
 });
 
