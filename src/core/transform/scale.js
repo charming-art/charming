@@ -19,7 +19,7 @@ export function point(domain, range) {
   return (x) => map(index.get(x));
 }
 
-function discrete(scale, V) {
+export function discrete(scale, V) {
   if (scale === "ordinal") return true;
   if (scale === "linear") return false;
   if (scale) return typeof scale.ticks !== "function";

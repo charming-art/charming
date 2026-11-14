@@ -56,17 +56,24 @@ test("cm.spreadX does not add a baseline for non-numeric or missing y", () => {
   assert.strictEqual(missing.y1, undefined);
 });
 
-test("cm.spreadX hints cm.fit to keep the outer padding of the bands", () => {
+test("cm.spreadX hints cm.plane to keep the outer padding of the bands", () => {
   const [shape, calls] = probe();
   const root = cm.flow().renderer(cm.canvas({width: 640, height: 400, dpi: 1}));
   root
     .data(data)
     .transform(cm.encode, {x: "letter", y: "frequency"})
     .transform(cm.spreadX)
-    .transform(cm.fit)
+    .transform(cm.plane, {margin: 0})
     .add(shape);
   root.render();
   const [{x}] = calls;
   const band = d3.scaleBand(["A", "B", "C"], [0, 640]).padding(0.1);
   assertAllInDelta(x, ["C", "A", "B"].map(band));
+});
+
+test("cm.spreadX orders the bands by the domain of the x hint", () => {
+  const [{value, hints}] = contexts(data, {x: {value: "letter", domain: ["C", "A", "B"]}, y: "frequency"});
+  const band = d3.scaleBand(["C", "A", "B"], [0, 1]).padding(0.1);
+  assertAllInDelta(value.x, ["C", "A", "B"].map(band));
+  assert.deepStrictEqual(hints.x, {domain: [0, 1]});
 });
