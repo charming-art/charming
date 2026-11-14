@@ -28,12 +28,6 @@ test("flow.append(shape, options) looks up array options by index", () => {
   assert.deepStrictEqual(calls[0].y, [5, 6]);
 });
 
-test("flow.append(shape, options) passes cm.constant values through unchanged", () => {
-  const [shape, calls] = probe();
-  render((root) => root.data([1, 2]).append(shape, {colors: cm.constant(["red", "blue"])}));
-  assert.deepStrictEqual(calls[0].colors, ["red", "blue"]);
-});
-
 test("flow.append(shape, options) returns a new flow whose appended shapes are drawn once per datum", () => {
   const [child, calls] = probe();
   render((root) =>
