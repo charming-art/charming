@@ -1,15 +1,27 @@
-import {linear} from "../scale/linear.js";
-
-function extentQ(array) {
-  return [Math.min(...array), Math.max(...array)];
+function linear([d, d1], [r, r1] = [0, 1], interpolate = (t) => r * (1 - t) + t * r1) {
+  return (x) => interpolate(d === d1 ? 0.5 : (x - d) / (d1 - d));
 }
 
-function extentO(array) {
-  return Array.from(new Set(array));
+function ordinal(domain, range) {
+  const index = new Map(domain.map((d, i) => [d, i]));
+  return (x) => range[index.get(x) % range.length];
 }
 
-function extent(scale, array) {
-  return scale.ordinal ? extentO(array) : extentQ(array);
+function discrete(scale, V) {
+  if (scale === "ordinal") return true;
+  if (scale === "linear") return false;
+  if (scale) return typeof scale.ticks !== "function";
+  return typeof V.find((v) => v != null) !== "number";
+}
+
+function scaleOf({scale, domain, range, interpolate}, V) {
+  const o = discrete(scale, V);
+  if (domain === undefined) domain = o ? Array.from(new Set(V)) : [Math.min(...V), Math.max(...V)];
+  if (typeof scale === "function") {
+    const s = scale.copy().domain(domain);
+    return range === undefined ? s : s.range(range);
+  }
+  return o ? ordinal(domain, range) : linear(domain, range, interpolate);
 }
 
 function applyScale(value, options) {
@@ -17,10 +29,7 @@ function applyScale(value, options) {
     Object.entries(value).map(([key, V]) => {
       const {[key]: descriptor} = options;
       if (!descriptor) return [key, V];
-      const {range, scale = linear, domain = extent(scale, V), ...rest} = descriptor;
-      const map = scale(domain, range, rest);
-      const scaled = V.map(map);
-      return [key, scaled];
+      return [key, V.map(scaleOf(descriptor, V))];
     }),
   );
 }

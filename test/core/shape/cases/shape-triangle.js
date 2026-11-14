@@ -20,7 +20,7 @@ export function shapeTriangle() {
         })
         .transform(cm.scale, {
           fill: {
-            scale: cm.scaleOrdinal,
+            scale: "ordinal",
             range: ["steelblue", "orange"],
           },
         })

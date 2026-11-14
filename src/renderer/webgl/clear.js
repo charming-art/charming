@@ -1,10 +1,8 @@
 import {normalizeColor} from "../../core/color.js";
-import {linear as scaleLinear} from "../../core/scale/linear.js";
 
 export function webgl$clear({fill}) {
   const gl = this._gl;
   const [r, g, b, a] = normalizeColor(fill);
-  const scale = scaleLinear([0, 255], [0, 1]);
-  gl.clearColor(scale(r), scale(g), scale(b), scale(a));
+  gl.clearColor(r / 255, g / 255, b / 255, a / 255);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
