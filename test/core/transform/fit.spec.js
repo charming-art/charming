@@ -67,6 +67,20 @@ test("cm.fit uses the fit options hinted by earlier transforms, and explicit opt
   assert.deepStrictEqual(calls[1].x, [0, 200]);
 });
 
+test("cm.fit consumes the hints, so fitting again does not reuse them", () => {
+  const [shape, calls] = probe();
+  const root = cm.flow().renderer(cm.canvas({width: 200, height: 100, dpi: 1}));
+  root
+    .data([0, 1])
+    .transform(cm.bind, {x: (d) => d})
+    .transform((_, data) => data.map((d) => ({...d, fit: {domainX: [0, 2]}})))
+    .transform(cm.fit)
+    .transform(cm.fit)
+    .add(shape);
+  root.render();
+  assert.deepStrictEqual(calls[0].x, [0, 200]);
+});
+
 test("cm.fit spreads discrete values evenly across the range", () => {
   const {x, y} = values(["a", "b", "c", "b"], {x: (d) => d, y: (d) => d}, {margin: 10});
   assert.deepStrictEqual(x, [10, 100, 190, 100]);
