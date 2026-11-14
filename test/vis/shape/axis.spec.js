@@ -40,3 +40,18 @@ test("cm.axis passes the options of x and y to each axis, and the other options 
   assert.ok(T.includes("Letter"));
   assert.ok(!T.some((d) => d.includes("frequency")));
 });
+
+test("cm.axis formats ticks for the count of ticks given", () => {
+  const renderer = cm.svg({width: 640, height: 400});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([0, 1])
+    .transform(cm.encode, {x: (d) => d, y: (d) => d})
+    .transform(cm.plane)
+    .add(cm.axisY, {ticks: 20, label: null});
+  root.render();
+  const T = Array.from(renderer.node().querySelectorAll("text"), (d) => d.textContent);
+  assert.strictEqual(T.length, 21);
+  assert.ok(T.includes("0.05"));
+  assert.strictEqual(new Set(T).size, T.length);
+});

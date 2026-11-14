@@ -13,9 +13,14 @@ function scaleOf({scale, domain, range, paddingInner, paddingOuter, align}) {
   return scaleLinear(domain, range);
 }
 
+// The count of ticks: the ticks option if it's a number, or one tick per spacing pixels, like Plot.
+function countOf({ticks}, [start, end], spacing) {
+  return typeof ticks === "number" ? ticks : (end - start) / spacing;
+}
+
 function ticksOf(scale, {ticks}, count) {
   if (Array.isArray(ticks)) return ticks;
-  return scale.ticks ? scale.ticks(ticks ?? count) : scale.domain();
+  return scale.ticks ? scale.ticks(count) : scale.domain();
 }
 
 function formatOf(scale, {tickFormat}, count) {
@@ -55,7 +60,7 @@ export function axisX(flow, value, {scales = {}, options = {}} = {}) {
   const scale = scaleOf(x);
   const [left, right] = extentOf(x.range);
   const [top, bottom] = y ? extentOf(y.range) : [0, height];
-  const count = (right - left) / 80;
+  const count = countOf(options, [left, right], 80);
   const ticks = ticksOf(scale, options, count);
   const X = positionOf(scale);
   const stroke = "currentColor";
@@ -91,7 +96,7 @@ export function axisY(flow, value, {scales = {}, options = {}} = {}) {
   const scale = scaleOf(y);
   const [left, right] = x ? extentOf(x.range) : [0, width];
   const [top, bottom] = extentOf(y.range);
-  const count = (bottom - top) / 35;
+  const count = countOf(options, [top, bottom], 35);
   const ticks = ticksOf(scale, options, count);
   const Y = positionOf(scale);
   const stroke = "currentColor";
