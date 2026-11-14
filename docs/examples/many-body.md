@@ -1,6 +1,6 @@
 # Many-Body Force
 
-A simple many-body simulation: every pair of circles attracts or repels depending on their distance, so they settle into a wobbly swarm. Drag a circle to disturb it. The circles are SVG made with [_cm_.svg](/dom#cm-svg) and updated with [_cm_.attr](/dom#cm-attr). Inspired by Konstantin Makhmutov's [Wobbly Swarm](https://openprocessing.org/sketch/492096), [d3-force](https://d3js.org/d3-force) and Daniel Shiffman's [Two Body Attraction](https://editor.p5js.org/natureofcode/sketches/cmj37xPCM).
+A simple many-body simulation: every pair of circles attracts or repels depending on their distance, so they settle into a wobbly swarm. Drag a circle to disturb it. The circles are SVG made with [_cm_.SVG](/dom#cm-svg) and updated with [_cm_.attr](/dom#cm-attr). Inspired by Konstantin Makhmutov's [Wobbly Swarm](https://openprocessing.org/sketch/492096), [d3-force](https://d3js.org/d3-force) and Daniel Shiffman's [Two Body Attraction](https://editor.p5js.org/natureofcode/sketches/cmj37xPCM).
 
 ```js eval code=false
 const n = Inputs.range([0, 150], {label: "Circle count", step: 1, value: 100});
@@ -28,7 +28,7 @@ function tick() {
   for (const body of bodies) if (body !== selected) body.position.add(body.velocity);
 }
 
-const svg = cm.svg`<svg ${{width: size, height: size, viewBox: [0, 0, size, size], style_touch_action: "none"}}>
+const svg = cm.SVG`<svg ${{width: size, height: size, viewBox: [0, 0, size, size], style_touch_action: "none"}}>
   <circle ${{
     data: bodies,
     r: 12,

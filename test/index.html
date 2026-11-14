@@ -4,8 +4,9 @@
   import * as text from "./util/text/cases/index.js";
   import * as coreShape from "./core/shape/cases/index.js";
   import * as terminal from "./renderer/terminal/cases/index.js";
+  import {cases as svg} from "./renderer/svg/cases/index.js";
 
-  const cases = {...context2d, ...dom, ...text, ...coreShape, ...terminal};
+  const cases = {...context2d, ...dom, ...text, ...coreShape, ...terminal, ...svg};
 
   // Tool
   const tool = document.createElement("div");

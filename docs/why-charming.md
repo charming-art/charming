@@ -629,7 +629,7 @@ ctx.scale(devicePixelRatio, devicePixelRatio);
 Many tools in the ecosystem simplify these workflows, but they often add abstractions and features that increase complexity and reduce flexibility. Charming's helpers remove the boilerplate and stay out of the way:
 
 ```js
-const svg = cm.svg`<svg ${{
+const svg = cm.SVG`<svg ${{
   width: 300,
   height: 150,
   viewBox: "0 0 200 100",
@@ -652,7 +652,7 @@ They are data-driven too, in the spirit of [D3](https://d3js.org/), [Observable 
     return data;
   }
 
-  return cm.svg`<svg ${{width: 480, height: 480}}>
+  return cm.SVG`<svg ${{width: 480, height: 480}}>
     <circle ${{
       data: circles(240, 240, 200),
       cx: (d) => d.x,
@@ -676,7 +676,7 @@ function circles(x, y, r, data = []) {
   return data;
 }
 
-const svg = cm.svg`<svg ${{width: 480, height: 480}}>
+const svg = cm.SVG`<svg ${{width: 480, height: 480}}>
   <circle ${{
     data: circles(240, 240, 200),
     cx: (d) => d.x,

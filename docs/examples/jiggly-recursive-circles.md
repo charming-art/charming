@@ -30,7 +30,7 @@ const schemes = [
 const circles = d3.range(150, 4, -15).map((r) => ({x: size / 2, y: size / 2, r}));
 const color = (scheme) => d3.scaleSequential([150, 0], d3[`interpolate${scheme}`]);
 
-const svg = cm.svg`<svg ${{
+const svg = cm.SVG`<svg ${{
   width: size, 
   height: size, 
   viewBox: [0, 0, size, size]}

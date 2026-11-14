@@ -250,12 +250,12 @@ The best part is that besides regular computational art, Charming supports **ASC
 
 Why ASCII art? Life is not only about work, you know.
 
-And when you'd rather work with SVG or Canvas directly, the utilities remove the boilerplate without adding a new abstraction. For example, [_cm_.svg](/dom#cm-svg) creates data-driven SVG from a template literal:
+And when you'd rather work with SVG or Canvas directly, the utilities remove the boilerplate without adding a new abstraction. For example, [_cm_.SVG](/dom#cm-svg) creates data-driven SVG from a template literal:
 
 ```js eval code=false
 (() => {
   const data = Array.from({length: 12}, (_, i) => i);
-  return cm.svg`<svg ${{width: 640, height: 80}}>
+  return cm.SVG`<svg ${{width: 640, height: 80}}>
     <circle ${{
       data,
       cx: (d) => 30 + d * 50,
@@ -270,7 +270,7 @@ And when you'd rather work with SVG or Canvas directly, the utilities remove the
 ```js
 const data = Array.from({length: 12}, (_, i) => i);
 
-cm.svg`<svg ${{width: 640, height: 80}}>
+cm.SVG`<svg ${{width: 640, height: 80}}>
   <circle ${{
     data,
     cx: (d) => 30 + d * 50,

@@ -90,7 +90,7 @@ describe("attr", () => {
 describe("event", () => {
   test("svg(tag, options) should set events", () => {
     const click = vi.fn();
-    const root = cm.svg`<svg ${{onclick: click}} />`;
+    const root = cm.SVG`<svg ${{onclick: click}} />`;
     const event = new Event("click");
     root.dispatchEvent(event);
     expect(click).toHaveBeenCalledWith(event, root, undefined, undefined, undefined);
@@ -98,7 +98,7 @@ describe("event", () => {
 
   test("svg(tag, options) should pass datum to event handler", () => {
     const click = vi.fn();
-    const root = cm.svg`<svg ${{data: [1, 2, 3], onclick: click}} />`;
+    const root = cm.SVG`<svg ${{data: [1, 2, 3], onclick: click}} />`;
     const el = root.children[0];
     const event = new Event("click");
     el.dispatchEvent(event);
@@ -108,20 +108,20 @@ describe("event", () => {
 
 describe("tag append (text interpolation)", () => {
   test("non-node values become text nodes (String coercion)", () => {
-    expect(cm.html`<span>${"hello"}</span>`.textContent).toBe("hello");
-    expect(cm.html`<span>${42}</span>`.textContent).toBe("42");
+    expect(cm.HTML`<span>${"hello"}</span>`.textContent).toBe("hello");
+    expect(cm.HTML`<span>${42}</span>`.textContent).toBe("42");
   });
 
   test("without data context, a Node child is inserted by reference", () => {
     const span = document.createElement("span");
     span.id = "appended-by-ref";
-    const root = cm.html`<div>${span}</div>`;
+    const root = cm.HTML`<div>${span}</div>`;
     expect(root.querySelector("#appended-by-ref")).toBe(span);
   });
 
   test("under data context, a Node child is cloned once per datum", () => {
-    const circleTpl = cm.svg`<circle ${{r: 10}}/>`;
-    const root = cm.svg`<svg>
+    const circleTpl = cm.SVG`<circle ${{r: 10}}/>`;
+    const root = cm.SVG`<svg>
       <g ${{data: [1, 2, 3]}}>
         ${circleTpl}
       </g>

@@ -78,7 +78,7 @@ export const categories = [
   {
     name: "SVG & DOM",
     id: "svg-dom",
-    description: "Data-driven SVG with the cm.svg template literal.",
+    description: "Data-driven SVG with the cm.SVG template literal.",
     examples: [
       {slug: "wood", title: "艹木林森 (Wood)"},
       {slug: "maze-pattern", title: "Maze Pattern"},

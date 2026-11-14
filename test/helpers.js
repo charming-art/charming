@@ -13,7 +13,7 @@ export function renderPretext({
   fontWeight = "normal",
   path,
 }) {
-  return cm.svg`<svg ${{
+  return cm.SVG`<svg ${{
     width,
     height,
     viewBox: `0 0 ${width} ${height}`,
@@ -49,12 +49,27 @@ export function renderPretext({
   </svg>`;
 }
 
+let createRenderer = ({width, height}) => cm.canvas({width, height, dpi: 1});
+
 export function renderFlow(draw, {width = 200, height = 200} = {}) {
-  const renderer = cm.canvas({width, height, dpi: 1});
+  const renderer = createRenderer({width, height});
   const root = cm.flow().renderer(renderer);
   draw(root, width, height);
   root.render();
   return renderer.node();
+}
+
+// Returns a case that renders the flow of the given case with an SVG renderer instead.
+export function withSVG(render) {
+  return () => {
+    const previous = createRenderer;
+    createRenderer = cm.svg;
+    try {
+      return render();
+    } finally {
+      createRenderer = previous;
+    }
+  };
 }
 
 // Renders with a terminal renderer and returns its canvas. The canvas's toString

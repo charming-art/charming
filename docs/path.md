@@ -5,7 +5,7 @@
 ```js eval code=false
 (() => {
   const d = cm.pathCircle(100, 100, 80);
-  return cm.svg`<svg ${{width: 200, height: 200}}>
+  return cm.SVG`<svg ${{width: 200, height: 200}}>
     <path ${{fill: "none", stroke: "black", stroke_width: 2, d}} />
   </svg>`;
 })();
@@ -14,7 +14,7 @@
 ```js
 const d = cm.pathCircle(100, 100, 80);
 
-cm.svg`<svg ${{width: 200, height: 200}}>
+cm.SVG`<svg ${{width: 200, height: 200}}>
   <path ${{fill: "none", stroke: "black", stroke_width: 2, d}} />
 </svg>`;
 ```
@@ -26,7 +26,7 @@ Returns an **open** path: `M` to (_x1_, _y1_), `L` to (_x2_, _y2_).
 ```js eval code=false
 (() => {
   const d = cm.pathLine(10, 90, 90, 10);
-  return cm.svg`<svg ${{width: 100, height: 100, viewBox: "0 0 100 100"}}>
+  return cm.SVG`<svg ${{width: 100, height: 100, viewBox: "0 0 100 100"}}>
     <path ${{fill: "none", stroke: "steelblue", stroke_width: 2, d}} />
   </svg>`;
 })();
@@ -43,7 +43,7 @@ Returns a **closed** circle centered at (_cx_, _cy_) with radius _r_, using two 
 ```js eval code=false
 (() => {
   const d = cm.pathCircle(50, 50, 40);
-  return cm.svg`<svg ${{width: 100, height: 100, viewBox: "0 0 100 100"}}>
+  return cm.SVG`<svg ${{width: 100, height: 100, viewBox: "0 0 100 100"}}>
     <path ${{fill: "none", stroke: "teal", stroke_width: 2, d}} />
   </svg>`;
 })();
@@ -60,7 +60,7 @@ Returns a **closed** rectangle with top-left (_x_, _y_) and size _width_ × _hei
 ```js eval code=false
 (() => {
   const d = cm.pathRect(15, 25, 70, 50);
-  return cm.svg`<svg ${{width: 100, height: 100, viewBox: "0 0 100 100"}}>
+  return cm.SVG`<svg ${{width: 100, height: 100, viewBox: "0 0 100 100"}}>
     <path ${{fill: "none", stroke: "purple", stroke_width: 2, d}} />
   </svg>`;
 })();
@@ -77,7 +77,7 @@ Returns a **closed** axis-aligned ellipse centered at (_cx_, _cy_) with radii _r
 ```js eval code=false
 (() => {
   const d = cm.pathEllipse(50, 50, 42, 28);
-  return cm.svg`<svg ${{width: 100, height: 100, viewBox: "0 0 100 100"}}>
+  return cm.SVG`<svg ${{width: 100, height: 100, viewBox: "0 0 100 100"}}>
     <path ${{fill: "none", stroke: "coral", stroke_width: 2, d}} />
   </svg>`;
 })();
@@ -98,7 +98,7 @@ Returns a **closed** path through _points_, an array of `[x, y]` pairs. The firs
     [90, 90],
     [10, 90],
   ]);
-  return cm.svg`<svg ${{width: 100, height: 100, viewBox: "0 0 100 100"}}>
+  return cm.SVG`<svg ${{width: 100, height: 100, viewBox: "0 0 100 100"}}>
     <path ${{fill: "none", stroke: "darkgreen", stroke_width: 2, d}} />
   </svg>`;
 })();
