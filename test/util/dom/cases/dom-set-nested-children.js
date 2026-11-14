@@ -1,7 +1,7 @@
 import * as cm from "../../../../src/index.js";
 
 export function domSetNestedChildren() {
-  return cm.svg`<svg ${{
+  return cm.SVG`<svg ${{
     width: 100,
     height: 100,
   }}>

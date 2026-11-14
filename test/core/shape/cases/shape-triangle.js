@@ -9,7 +9,7 @@ export function shapeTriangle() {
           [10, 10, 100, 10, 100, 100],
           [210, 10, 300, 10, 300, 100],
         ])
-        .append(cm.triangle, {
+        .transform(cm.bind, {
           x: (d) => d[0],
           y: (d) => d[1],
           x1: (d) => d[2],
@@ -20,10 +20,11 @@ export function shapeTriangle() {
         })
         .transform(cm.scale, {
           fill: {
-            scale: cm.scaleOrdinal,
+            scale: "ordinal",
             range: ["steelblue", "orange"],
           },
-        });
+        })
+        .append(cm.triangle);
     },
     {width: 600, height: 200},
   );

@@ -39,7 +39,7 @@ function multibrot(d, range) {
 }
 
 function cell(d, range) {
-  return cm.html`<figure ${{style_margin: 0, style_background: "#21171B"}}>
+  return cm.HTML`<figure ${{style_margin: 0, style_background: "#21171B"}}>
     ${multibrot(d, range)}
     <figcaption ${{style_color: "white", style_text_align: "center", style_padding_bottom: "8px"}}>
       z ↦ z<sup>${d}</sup> + c
@@ -48,7 +48,7 @@ function cell(d, range) {
 }
 
 const exponents = d3.range(n);
-const table = cm.html`<div ${{style_display: "grid", style_grid_template_columns: `repeat(${n}, ${size}px)`}}>
+const table = cm.HTML`<div ${{style_display: "grid", style_grid_template_columns: `repeat(${n}, ${size}px)`}}>
   ${[...exponents.map((d) => cell(d + 2, 2.2)), ...exponents.map((d) => cell(-d - 2, 2.4))]}
 </div>`;
 

@@ -49,14 +49,14 @@ for (const t of layout.texts) {
 
 ## Rendering with SVG
 
-With [_cm_.**svg**](/dom#cm-svg), bind `texts` to `<text>` nodes and use `transform` for position and rotation.
+With [_cm_.**SVG**](/dom#cm-svg), bind `texts` to `<text>` nodes and use `transform` for position and rotation.
 
 ```js eval code=false
 renderPretext(Object.assign({}, layout, {width: 320, height: 320}));
 ```
 
 ```js
-const svg = cm.svg`<svg ${{
+const svg = cm.SVG`<svg ${{
   width: 320,
   height: 320,
   viewBox: "0 0 320 320",
@@ -245,7 +245,7 @@ function renderPretext({
   fontWeight = "normal",
   path,
 }) {
-  return cm.svg`<svg ${{
+  return cm.SVG`<svg ${{
     width,
     height,
     viewBox: `0 0 ${width} ${height}`,

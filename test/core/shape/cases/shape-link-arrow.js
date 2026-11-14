@@ -30,7 +30,7 @@ export function shapeLinkArrow() {
     (root) => {
       root
         .data(fields)
-        .append(arrow, {
+        .transform(cm.bind, {
           x: (d) => d.x * size + size / 2,
           y: (d) => d.y * size + size / 2,
           length: size * 0.8,
@@ -38,19 +38,21 @@ export function shapeLinkArrow() {
           rotate: (d) => d.value,
         })
         .transform(cm.scale, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}})
+        .append(arrow)
         .append(cm.circle, {x: 0, y: 0, fill: "blue", r: 2});
 
       root
         .data(fields)
         .process(cm.filter, (d) => d.value > 0.5)
-        .append(arrowRed, {
+        .transform(cm.bind, {
           x: (d) => d.x * size + size / 2,
           y: (d) => d.y * size + size / 2,
           length: size * 0.8,
           angle: Math.PI / 6,
           rotate: (d) => d.value,
         })
-        .transform(cm.scale, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}});
+        .transform(cm.scale, {rotate: {domain: [0, 1], range: [0, Math.PI * 2]}})
+        .append(arrowRed);
     },
     {width: cols * size, height: rows * size},
   );

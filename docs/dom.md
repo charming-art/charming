@@ -3,7 +3,7 @@
 **Charming DOM** helps you create and manipulate DOM elements. Its focus is data-driven tagged template literals for HTML and SVG, so data, markup and mapping stay clearly connected in one place.
 
 ```js
-const svg = cm.svg`<svg ${{width: 200, height: 100}}>
+const svg = cm.SVG`<svg ${{width: 200, height: 100}}>
   <circle ${{
     data: circles,
     cx: (d) => d.x,
@@ -17,16 +17,16 @@ The style is inspired by [D3.js](https://d3js.org/). D3.js excels at dynamic, da
 
 ## Creating Elements
 
-Charming DOM provides two tagged template literals for creating HTML and SVG elements: `cm.html` and `cm.svg`.
+Charming DOM provides two tagged template literals for creating HTML and SVG elements: `cm.HTML` and `cm.SVG`.
 
 ```js
-cm.html`<h1>Hello, Charming!</h1>`;
+cm.HTML`<h1>Hello, Charming!</h1>`;
 ```
 
 If multiple top-level nodes are given, the nodes are implicitly wrapped in a [document fragment](https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment).
 
 ```js
-cm.html`
+cm.HTML`
   <h1>Hello A</h1>
   <h1>Hello B</h1>
   <h1>Hello C</h1>
@@ -38,25 +38,25 @@ cm.html`
 You can set attributes (or styles, event listeners) by interpolating an object in place of attributes.
 
 ```js
-cm.html`<h1 ${{id: "title", className: "heading1"}}></h1>`;
+cm.HTML`<h1 ${{id: "title", className: "heading1"}}></h1>`;
 ```
 
 Kebab-case attributes are typically specified in snake_case:
 
 ```js
-cm.html`<button ${{aria_label: "Close", aria_expanded: "false"}}></button>`;
+cm.HTML`<button ${{aria_label: "Close", aria_expanded: "false"}}></button>`;
 ```
 
 But you can also specify them in kebab-case if you prefer:
 
 ```js
-cm.html`<button ${{"aria-label": "Close", "aria-expanded": "false"}}></button>`;
+cm.HTML`<button ${{"aria-label": "Close", "aria-expanded": "false"}}></button>`;
 ```
 
 Styles are typically specified with prefix "style\_" or "style\-":
 
 ```js
-cm.html`<div ${{
+cm.HTML`<div ${{
   style_background: "steelblue",
   style_width: "100px",
   style_height: "100px",
@@ -66,7 +66,7 @@ cm.html`<div ${{
 Equivalent to:
 
 ```js
-cm.html`<div ${{
+cm.HTML`<div ${{
   "style-background": "steelblue",
   "style-width": "100px",
   "style-height": "100px",
@@ -76,13 +76,13 @@ cm.html`<div ${{
 If an attribute starts with "on", it is treated as an event listener.
 
 ```js
-cm.html`<button ${{onclick: () => alert("Hello, Charming!")}}>Click me!</button>`;
+cm.HTML`<button ${{onclick: () => alert("Hello, Charming!")}}>Click me!</button>`;
 ```
 
 The event object and the node are passed as the first and second arguments to the listener.
 
 ```js
-cm.html`<span ${{
+cm.HTML`<span ${{
   onmouseover: (event, node) => (node.style.background = "yellow"),
   onmousedown: (event, node) => (node.style.background = "red"),
   onmouseup: (event, node) => (node.style.background = "yellow"),
@@ -97,27 +97,27 @@ cm.html`<span ${{
 If an interpolated data value is a node, it is inserted into the result at the corresponding location.
 
 ```js
-const svg = cm.svg`<svg></svg>`;
+const svg = cm.SVG`<svg></svg>`;
 
-cm.html`<div>${svg}</div>`;
+cm.HTML`<div>${svg}</div>`;
 ```
 
 You can interpolate multiple nodes at once by using an array:
 
 ```js
-cm.html`<ul>${[
-  cm.html`<li>Item 1</li>`, // <li>Item 1</li>
-  cm.html`<li>Item 2</li>`, // <li>Item 2</li>
-  cm.html`<li>Item 3</li>`, // <li>Item 3</li>
+cm.HTML`<ul>${[
+  cm.HTML`<li>Item 1</li>`, // <li>Item 1</li>
+  cm.HTML`<li>Item 2</li>`, // <li>Item 2</li>
+  cm.HTML`<li>Item 3</li>`, // <li>Item 3</li>
 ]}</ul>`;
 ```
 
 Falsy nodes and nested arrays will be filtered out.
 
 ```js
-cm.html`<ul>${[
+cm.HTML`<ul>${[
   [null, 0, false], // Falsy node
-  [cm.html`<li>Item 1</li>`, cm.html`<li>Item 2</li>`],
+  [cm.HTML`<li>Item 1</li>`, cm.HTML`<li>Item 2</li>`],
 ]}</ul>`;
 ```
 
@@ -128,7 +128,7 @@ If a data attribute is specified, the data is mapped to a list of nodes and appe
 ```js
 const items = ["red", "green", "blue"];
 
-cm.svg`<svg>
+cm.SVG`<svg>
   <circle ${{
     data: items,
     r: 10, // constant value
@@ -144,9 +144,9 @@ This is equivalent to the following but with a more concise structure:
 ```js
 const items = ["red", "green", "blue"];
 
-const svg = cm.svg`<svg>${items.map(
+const svg = cm.SVG`<svg>${items.map(
   (d, i) =>
-    cm.svg`<circle ${{
+    cm.SVG`<circle ${{
       r: 10,
       fill: d,
       cx: i * 100,
@@ -160,7 +160,7 @@ The child node can also access its ancestor's data by function attributes.
 ```js
 const items = ["red", "green", "blue"];
 
-cm.svg`<svg>
+cm.SVG`<svg>
   <g ${{
     data: items,
     transform: (d, i) => `translate(0, ${i * 100})`,
@@ -178,12 +178,12 @@ Furthermore, the child node can also be a function, which is evaluated for each 
 ```js
 const items = ["red", "green", "blue"];
 
-cm.svg`<svg>
+cm.SVG`<svg>
   <g ${{
     data: items,
     transform: (d, i) => `translate(0, ${i * 100})`,
   }}>
-    ${(d, i) => cm.svg`<circle ${{r: 10, fill: d}}/>`}
+    ${(d, i) => cm.SVG`<circle ${{r: 10, fill: d}}/>`}
   </g>
 </svg>`;
 ```
@@ -198,7 +198,7 @@ const table = [
   [1013, 990, 940, 6907],
 ];
 
-cm.html`<table>
+cm.HTML`<table>
   <tbody>
     <tr ${{data: table}}>
       <td ${{data: (d) => d}}>
@@ -216,7 +216,7 @@ For all events, the listener receives _(event, node, d, i, array)_. For non-data
 ```js
 const items = ["red", "green", "blue"];
 
-cm.svg`<svg>
+cm.SVG`<svg>
   <circle ${{
     data: items,
     r: 10,
@@ -228,20 +228,20 @@ cm.svg`<svg>
 </svg>`;
 ```
 
-## _cm_.html\`\<markup\>\` {#cm-html}
+## _cm_.HTML\`\<markup\>\` {#cm-html}
 
 Renders the specified markup as an HTML element and returns it. For more details, please refer to [Creating Elements](#creating-elements).
 
 ```js
-const html = cm.html`<h1>Hello, Charming!</h1>`;
+const html = cm.HTML`<h1>Hello, Charming!</h1>`;
 ```
 
-## _cm_.svg\`\<markup\>\` {#cm-svg}
+## _cm_.SVG\`\<markup\>\` {#cm-svg}
 
 Renders the specified markup as an SVG element and returns it. For more details, please refer to [Creating Elements](#creating-elements).
 
 ```js
-const svg = cm.svg`<svg ${{width: 100, height: 100}}></svg>`;
+const svg = cm.SVG`<svg ${{width: 100, height: 100}}></svg>`;
 ```
 
 ## _cm_.attr(_node_, _key_[, _value_]) {#cm-attr}
@@ -249,7 +249,7 @@ const svg = cm.svg`<svg ${{width: 100, height: 100}}></svg>`;
 If _value_ is not specified, gets the current value of the specified key of the specified node attributes.
 
 ```js
-const div = cm.html`<div ${{id: "title", style_background: "red"}}></div>`;
+const div = cm.HTML`<div ${{id: "title", style_background: "red"}}></div>`;
 
 cm.attr(div, "id"); // "title"
 cm.attr(div, "style-background"); // "red"
@@ -258,7 +258,7 @@ cm.attr(div, "style-background"); // "red"
 If _value_ is specified, sets the specified _attribute_ with the specified _value_ to the specified _node_.
 
 ```js
-const svg = cm.svg`<svg></svg>`;
+const svg = cm.SVG`<svg></svg>`;
 
 // Set attributes
 cm.attr(svg, "width", 100);
@@ -288,7 +288,7 @@ cm.attr(span, "textContent", null);
 If an event listener is specified as _null_, removes that event listener. Otherwise, removes the older one if exists and adds the new one.
 
 ```js
-const svg = cm.svg`<svg></svg>`;
+const svg = cm.SVG`<svg></svg>`;
 cm.attr(svg, "onclick", () => alert("hello charming"));
 cm.attr(svg, "onclick", null); // Remove the event listener
 ```

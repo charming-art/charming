@@ -1,7 +1,7 @@
 import * as cm from "../../../../src/index.js";
 
 export function domHtmlAttributes() {
-  return cm.html`<div ${{
+  return cm.HTML`<div ${{
     className: "hello",
     disabled: true,
     checked: true,

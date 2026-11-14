@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="200" viewBox="0 0 640 200">
+  <g transform="translate(20,20)">
+    <circle cx="0" cy="0" r="10" fill="red"></circle>
+    <circle cx="50" cy="50" r="10" fill="red"></circle>
+    <circle cx="100" cy="100" r="10" fill="red"></circle>
+    <g transform="translate(0,0)">
+      <rect x="0" y="0" width="10" height="10" fill="blue"></rect>
+      <g transform="translate(0,0)">
+        <circle cx="10" cy="10" r="5" fill="orange"></circle>
+        <circle cx="20" cy="20" r="5" fill="orange"></circle>
+      </g>
+    </g>
+    <g transform="translate(50,50)">
+      <rect x="0" y="0" width="10" height="10" fill="blue"></rect>
+      <g transform="translate(0,0)">
+        <circle cx="10" cy="10" r="5" fill="orange"></circle>
+        <circle cx="20" cy="20" r="5" fill="orange"></circle>
+      </g>
+    </g>
+    <g transform="translate(100,100)">
+      <rect x="0" y="0" width="10" height="10" fill="blue"></rect>
+      <g transform="translate(0,0)">
+        <circle cx="10" cy="10" r="5" fill="orange"></circle>
+        <circle cx="20" cy="20" r="5" fill="orange"></circle>
+      </g>
+    </g>
+  </g>
+  <g transform="translate(120,20)">
+    <circle cx="10" cy="10" r="10" fill="red"></circle>
+    <circle cx="60" cy="60" r="10" fill="red"></circle>
+    <g transform="translate(10,10)">
+      <rect x="0" y="0" width="10" height="10" fill="blue"></rect>
+      <g transform="translate(0,0)">
+        <circle cx="10" cy="10" r="5" fill="orange"></circle>
+        <circle cx="20" cy="20" r="5" fill="orange"></circle>
+      </g>
+    </g>
+    <g transform="translate(60,60)">
+      <rect x="0" y="0" width="10" height="10" fill="blue"></rect>
+      <g transform="translate(0,0)">
+        <circle cx="10" cy="10" r="5" fill="orange"></circle>
+        <circle cx="20" cy="20" r="5" fill="orange"></circle>
+      </g>
+    </g>
+  </g>
+  <g transform="translate(220,20)">
+    <circle cx="20" cy="20" r="10" fill="red"></circle>
+    <g transform="translate(20,20)">
+      <rect x="0" y="0" width="10" height="10" fill="blue"></rect>
+      <g transform="translate(0,0)">
+        <circle cx="10" cy="10" r="5" fill="orange"></circle>
+        <circle cx="20" cy="20" r="5" fill="orange"></circle>
+      </g>
+    </g>
+  </g>
+</svg>

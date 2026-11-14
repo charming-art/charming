@@ -26,7 +26,7 @@ const points = [
 ];
 const line = (i, j) => d3.line()([points[i], points[j]]);
 
-const svg = cm.svg`<svg ${{width, height, viewBox: [0, 0, width, height]}}>
+const svg = cm.SVG`<svg ${{width, height, viewBox: [0, 0, width, height]}}>
   <g ${{
     data: d3.cross(cols, rows),
     transform: ([x, y]) => `translate(${pos(x)}, ${pos(y)})`,
@@ -35,7 +35,7 @@ const svg = cm.svg`<svg ${{width, height, viewBox: [0, 0, width, height]}}>
   }}>
     ${() => {
       const [p1, p2, q1, q2] = Math.random() > 0.5 ? [0, 3, 1, 2] : [0, 1, 2, 3];
-      return cm.svg`<path ${{d: line(p1, p2)}}/><path ${{d: line(q1, q2)}}/>`;
+      return cm.SVG`<path ${{d: line(p1, p2)}}/><path ${{d: line(q1, q2)}}/>`;
     }}
   </g>
 </svg>`;

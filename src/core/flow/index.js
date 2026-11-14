@@ -1,3 +1,4 @@
+import {flow$add} from "./add.js";
 import {flow$append} from "./append.js";
 import {flow$call} from "./call.js";
 import {flow$data} from "./data.js";
@@ -8,18 +9,20 @@ import {flow$renderer} from "./renderer.js";
 import {flow$render} from "./render.js";
 import {Node} from "../node.js";
 
-export function Flow(groups = null, data = null, parent = null, context = null) {
+export function Flow(groups = null, data = null, parent = null, context = null, values = null) {
   Object.defineProperties(this, {
     _groups: {value: groups},
     _parent: {value: parent},
     _context: {value: context},
     _data: {value: data},
+    _values: {value: values},
   });
 }
 
 Object.defineProperties(Flow.prototype, {
   call: {value: flow$call},
   append: {value: flow$append},
+  add: {value: flow$add},
   data: {value: flow$data},
   datum: {value: flow$datum},
   process: {value: flow$process},

@@ -1,6 +1,6 @@
 # 火炎焱燚 (Fire)
 
-A fire written with the characters 火, 炎, 焱 and 燚: as the heat rises and cools, small 火 grow into big 燚. The heat spreads up as in the [ASCII fire](/terminal#animating). The SVG texts are made once with [_cm_.svg](/dom#cm-svg) and updated with [_cm_.attr](/dom#cm-attr).
+A fire written with the characters 火, 炎, 焱 and 燚: as the heat rises and cools, small 火 grow into big 燚. The heat spreads up as in the [ASCII fire](/terminal#animating). The SVG texts are made once with [_cm_.SVG](/dom#cm-svg) and updated with [_cm_.attr](/dom#cm-attr).
 
 ```js eval t=example
 const cols = 32;
@@ -15,7 +15,7 @@ const chs = ["燚", "焱", "炎", "火"];
 const fire = new Array(cols * rows).fill(0);
 const index = (x, y) => x + y * cols;
 
-const svg = cm.svg`<svg ${{width, height, viewBox: [0, 0, width, height], font_family: "sans-serif"}}>
+const svg = cm.SVG`<svg ${{width, height, viewBox: [0, 0, width, height], font_family: "sans-serif"}}>
   <text ${{
     data: fire,
     x: (_, i) => (i % cols) * cell,

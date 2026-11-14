@@ -1,4 +1,4 @@
-import {scale} from "./scale.js";
+import {point, scale} from "./scale.js";
 
 export function fit(
   flow,
@@ -15,6 +15,7 @@ export function fit(
     keysY = ["y", "y1"],
   } = {},
 ) {
+  if (!data) throw new Error("No channels: call flow.transform(cm.bind, channels) before cm.fit.");
   const renderer = flow.renderer();
   if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.fit.");
   const {width, height} = renderer._props;
@@ -42,5 +43,5 @@ export function fit(
     },
   ]);
 
-  return scale(flow, data, Object.fromEntries([...X, ...Y]));
+  return scale(flow, data, Object.fromEntries([...X, ...Y]), point);
 }

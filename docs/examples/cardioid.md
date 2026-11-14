@@ -1,6 +1,6 @@
 # Cardioid
 
-Points around a circle, each linked to the point at _m_ times its index. With _m_ = 2, the links outline a [cardioid](https://en.wikipedia.org/wiki/Cardioid). Drawn as SVG with [_cm_.svg](/dom#cm-svg).
+Points around a circle, each linked to the point at _m_ times its index. With _m_ = 2, the links outline a [cardioid](https://en.wikipedia.org/wiki/Cardioid). Drawn as SVG with [_cm_.SVG](/dom#cm-svg).
 
 ```js eval code=false
 const n = Inputs.range([1, 200], {label: "Count", step: 1, value: 100});
@@ -17,7 +17,7 @@ const points = d3.range(n).map((i) => (i * Math.PI * 2) / n);
 const x = (t) => radius * Math.cos(t);
 const y = (t) => radius * Math.sin(t);
 
-const svg = cm.svg`<svg ${{width: size, height: size, viewBox: [-size / 2, -size / 2, size, size]}}>
+const svg = cm.SVG`<svg ${{width: size, height: size, viewBox: [-size / 2, -size / 2, size, size]}}>
   <circle ${{cx: 0, cy: 0, r: radius, fill: "none", stroke: "black"}}/>
   <line ${{
     data: points,
