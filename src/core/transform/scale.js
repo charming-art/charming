@@ -1,8 +1,9 @@
 import {max, min} from "d3-array";
 
 function linear([d, d1], [r, r1] = [0, 1]) {
+  const k = d1 - d;
   return (x) => {
-    const t = d === d1 ? 0.5 : (x - d) / (d1 - d);
+    const t = k === 0 ? 0.5 : (x - d) / k;
     return r * (1 - t) + t * r1;
   };
 }

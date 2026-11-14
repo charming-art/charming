@@ -39,6 +39,11 @@ test("cm.scale infers a linear scale for dates", () => {
   assert.deepStrictEqual(r, [0, 10, 5]);
 });
 
+test("cm.scale maps equal dates to the middle of the range", () => {
+  const {r} = values([new Date(0), new Date(0)], {r: (d) => d}, {r: {range: [0, 10]}});
+  assert.deepStrictEqual(r, [5, 5]);
+});
+
 test("cm.scale sets the inferred domain of a d3 sequential scale", () => {
   const {fill} = values([0, 5, 10], {fill: (d) => d}, {fill: {scale: d3.scaleSequential((t) => `t=${t}`)}});
   assert.deepStrictEqual(fill, ["t=0", "t=0.5", "t=1"]);
