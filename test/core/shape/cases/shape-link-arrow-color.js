@@ -1,3 +1,4 @@
+import {scaleSequential} from "d3";
 import * as cm from "../../../../src/index.js";
 import {renderFlow} from "../../../helpers.js";
 
@@ -45,7 +46,7 @@ export function shapeLinkArrowColor() {
         .transform(cm.scale, {
           rotate: {range: [0, Math.PI * 2]},
           length: {range: [size * 0.3, size * 0.9]},
-          stroke: {interpolate: interpolateColor},
+          stroke: {scale: scaleSequential(interpolateColor)},
         })
         .append(arrow);
     },

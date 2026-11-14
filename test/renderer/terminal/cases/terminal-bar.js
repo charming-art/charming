@@ -15,7 +15,7 @@ function barX(
   },
 ) {
   const [data] = flow.data();
-  const scaleX = cm.scaleLinear([0, 2.0], [0, width]);
+  const scaleX = (d) => (d / 2) * width;
 
   // Title.
   flow.datum(0).append(cm.text, {

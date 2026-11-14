@@ -1,5 +1,3 @@
-import {linear} from "../../core/scale/linear.js";
-
 const PERLIN_YWRAPB = 4;
 const PERLIN_YWRAP = 1 << PERLIN_YWRAPB;
 const PERLIN_ZWRAPB = 8;
@@ -34,7 +32,7 @@ function noiseSeed(seed) {
 // @see https://github.com/processing/p5.js/blob/1e6b0caa1e8a8dff3280917d2fd9a84d2e7126ba/src/math/noise.js#L200
 // An undefined seed is replaced with a random 32-bit seed. Seeds are truncated to 32-bit unsigned integers.
 export function noise(lo = 0, hi = 1, {octaves = 4, seed, falloff = 0.5} = {}) {
-  const map = linear([0, 1], [lo, hi]);
+  const map = (t) => lo * (1 - t) + t * hi;
   const perlin = noiseSeed(seed);
 
   const sample = (x, y, z) => {
