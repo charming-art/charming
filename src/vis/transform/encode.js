@@ -29,5 +29,9 @@ export function encode(flow, data, options = {}) {
     if (isDescriptor(option)) hints[key] = descriptor;
     else if (colorKeys.includes(key) && (typeof channel === "function" || Array.isArray(channel))) hints[key] = {};
   }
-  return bind(flow, data, channels).map((context) => ({...context, hints: {...context.hints, ...hints}}));
+  // The hints of the channels encoded again are replaced, and the others are kept.
+  return bind(flow, data, channels).map((context) => {
+    const kept = Object.entries(context.hints ?? {}).filter(([key]) => !(key in options));
+    return {...context, hints: {...Object.fromEntries(kept), ...hints}};
+  });
 }

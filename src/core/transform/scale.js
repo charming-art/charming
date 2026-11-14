@@ -1,4 +1,4 @@
-import {max, min} from "d3-array";
+import {InternMap, InternSet, max, min} from "d3-array";
 
 function linear([d, d1], [r, r1] = [0, 1]) {
   const k = d1 - d;
@@ -8,13 +8,14 @@ function linear([d, d1], [r, r1] = [0, 1]) {
   };
 }
 
+// InternMap and InternSet treat equal dates as one value.
 function ordinal(domain, range) {
-  const index = new Map(domain.map((d, i) => [d, i]));
+  const index = new InternMap(domain.map((d, i) => [d, i]));
   return (x) => range[index.get(x) % range.length];
 }
 
 export function point(domain, range) {
-  const index = new Map(domain.map((d, i) => [d, i]));
+  const index = new InternMap(domain.map((d, i) => [d, i]));
   const map = linear([0, domain.length - 1], range);
   return (x) => map(index.get(x));
 }
@@ -28,7 +29,7 @@ export function discrete(scale, V) {
 }
 
 export function domainOf(scale, V) {
-  return discrete(scale, V) ? Array.from(new Set(V)) : [min(V), max(V)];
+  return discrete(scale, V) ? Array.from(new InternSet(V)) : [min(V), max(V)];
 }
 
 function scaleOf({scale, domain, range}, V, ordinalOf) {

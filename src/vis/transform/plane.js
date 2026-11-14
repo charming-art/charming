@@ -57,7 +57,14 @@ function colorScales(value, hints) {
 function positionScale(value, keys, {scale, domain, range}) {
   const V = keys.filter((key) => key in value).flatMap((key) => Array.from(value[key]));
   if (domain === undefined) domain = domainOf(scale, V);
-  return {scale, domain, range, type: scale ?? (discrete(scale, V) ? "point" : "linear")};
+  // cm.fit maps discrete positions with a point scale, unless a d3 scale is given.
+  const type = typeof scale === "function" ? scale : discrete(scale, V) ? "point" : "linear";
+  return {scale, domain, range, type};
+}
+
+// The hint of an axis merges the hints of its keys, such as x and x1; the first key wins.
+function axisHint(hints, keys) {
+  return Object.assign({}, ...keys.slice().reverse().map((key) => hints[key]));
 }
 
 // Resolves the scales of the channels, and fits positions to the renderer like cm.fit, with y
@@ -96,8 +103,8 @@ export function plane(
     const colors = colorScales(value, hints);
     const [colored] = scale(flow, [context], colors);
 
-    const {scale: hintScaleX, domain: hintDomainX} = hints[keysX[0]] ?? {};
-    const {scale: hintScaleY, domain: hintDomainY} = hints[keysY[0]] ?? {};
+    const {scale: hintScaleX, domain: hintDomainX} = axisHint(hints, keysX);
+    const {scale: hintScaleY, domain: hintDomainY} = axisHint(hints, keysY);
     const x = positionScale(value, keysX, {scale: scaleX ?? hintScaleX, domain: domainX ?? hintDomainX, range: rangeX});
     const y = positionScale(value, keysY, {scale: scaleY ?? hintScaleY, domain: domainY ?? hintDomainY, range: rangeY});
 

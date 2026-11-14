@@ -153,3 +153,32 @@ test("cm.plane keeps colors that are already colors, like an identity scale", ()
     {ch: "#", fg: "orange"},
   ]);
 });
+
+test("cm.plane colors equal dates with the same color", () => {
+  const data = [
+    {x: "a", date: new Date(2020, 0, 1)},
+    {x: "b", date: new Date(2020, 0, 1)},
+  ];
+  const {fill} = encoded(data, {x: "x", y: 1, fill: {value: "date", scale: "ordinal"}});
+  assert.deepStrictEqual(fill, ["#5470c6", "#5470c6"]);
+});
+
+test("cm.plane records categorical positions as a point scale", () => {
+  const root = cm.flow().renderer(cm.canvas({width: 640, height: 400, dpi: 1}));
+  const [context] = root
+    .data(["a", "b", "c"])
+    .transform(cm.bind, {x: (d) => d, y: 0})
+    .transform(cm.plane, {margin: 0, scaleX: "ordinal"})._values;
+  assert.deepStrictEqual(context.value.x, [0, 320, 640]);
+  assert.strictEqual(context.scales.x.scale, "point");
+});
+
+test("cm.plane uses the hints of x1 and y1, with x and y taking precedence", () => {
+  const root = cm.flow().renderer(cm.canvas({width: 640, height: 400, dpi: 1}));
+  const [context] = root
+    .data([1, 2])
+    .transform(cm.encode, {x: 0, x1: {value: (d) => d, domain: [0, 10]}, y: 0})
+    .transform(cm.plane, {margin: 0})._values;
+  assert.deepStrictEqual(context.value.x1, [64, 128]);
+  assert.deepStrictEqual(context.scales.x.domain, [0, 10]);
+});

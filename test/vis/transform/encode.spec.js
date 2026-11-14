@@ -57,3 +57,12 @@ test("cm.encode(options) hints fill and stroke channels that vary with the data,
   assert.deepStrictEqual(hints(data, {fill: "red", stroke: "none"}), {});
   assert.deepStrictEqual(hints(data, {x: "letter", y: "frequency"}), {});
 });
+
+test("cm.encode(options) drops the hints of the channels it encodes again", () => {
+  const [context] = cm
+    .flow()
+    .data(data)
+    .transform(cm.encode, {x: {value: "letter", domain: ["B", "A"]}, fill: "letter", y: "frequency"})
+    .transform(cm.encode, {x: "letter", fill: "red"})._values;
+  assert.deepStrictEqual(context.hints, {});
+});
