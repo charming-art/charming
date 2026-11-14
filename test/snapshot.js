@@ -1,6 +1,10 @@
 import "./install-canvas-mock.js";
+import {readFile} from "node:fs/promises";
 import beautify from "js-beautify";
-import {test, expect} from "vitest";
+import {test, expect, vi} from "vitest";
+
+// Loads data files such as d3.csv("data/alphabet.csv") from this folder.
+vi.stubGlobal("fetch", async (path) => new Response(await readFile(new URL(path, import.meta.url))));
 
 const TYPE_TEXT = 3;
 
