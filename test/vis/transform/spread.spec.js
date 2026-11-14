@@ -123,3 +123,10 @@ test("cm.spreadY orders the bands by the domain of the y hint, and hints its ban
     band: {domain: ["C", "A", "B"], paddingInner: 0.1, paddingOuter: 0.1, align: 0.5},
   });
 });
+
+test("cm.spreadX ignores repeated categories in the domain of the x hint, like d3.scaleBand", () => {
+  const [{value, hints}] = contexts(data, {x: {value: "letter", domain: ["C", "C", "A", "B"]}, y: "frequency"});
+  const band = d3.scaleBand(["C", "A", "B"], [0, 1]).padding(0.1);
+  assertAllInDelta(value.x, ["C", "A", "B"].map(band));
+  assert.deepStrictEqual(hints.x.band.domain, ["C", "A", "B"]);
+});

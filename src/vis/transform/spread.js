@@ -1,16 +1,14 @@
-import {InternMap, InternSet, sort} from "d3-array";
+import {InternSet, sort} from "d3-array";
+import {scaleBand} from "d3-scale";
 
 function isNumeric(values) {
   return typeof values?.find((d) => d != null) === "number";
 }
 
-// Places each distinct value in a band of [0, 1], like a d3 band scale.
+// Places each distinct value in a band of [0, 1] with a d3 band scale.
 function band(V, {domain = sort(new InternSet(V)), paddingInner, paddingOuter, align}) {
-  const n = domain.length;
-  const step = 1 / Math.max(1, n - paddingInner + paddingOuter * 2);
-  const start = (1 - step * (n - paddingInner)) * align;
-  const index = new InternMap(domain.map((d, i) => [d, start + step * i]));
-  return [V.map((v) => index.get(v)), step * (1 - paddingInner), domain];
+  const scale = scaleBand(domain, [0, 1]).paddingInner(paddingInner).paddingOuter(paddingOuter).align(align);
+  return [V.map(scale), scale.bandwidth(), scale.domain()];
 }
 
 // Gives each category of a position, such as x, a band from x to x1, ordered by the domain of
