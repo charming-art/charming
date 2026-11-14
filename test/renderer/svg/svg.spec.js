@@ -63,3 +63,32 @@ test("svg.clear(options) removes what was drawn before", () => {
   renderer.clear({fill: "white"});
   assert.strictEqual(markup(renderer), '<rect width="100" height="50" fill="white"></rect>');
 });
+
+test("svg.circle(options) replaces the alpha of a color with an explicit opacity, like Canvas", () => {
+  const renderer = cm.svg();
+  renderer.circle({
+    x: 0,
+    y: 0,
+    r: 5,
+    fill: "rgba(255, 0, 0, 0.8)",
+    fillOpacity: 0.5,
+    stroke: "none",
+    strokeOpacity: 0.5,
+  });
+  renderer.circle({x: 0, y: 0, r: 5, fill: "rgba(255, 0, 0, 0.8)"});
+  assert.strictEqual(
+    markup(renderer),
+    '<circle cx="0" cy="0" r="5" fill="rgb(255, 0, 0)" fill-opacity="0.5" stroke="none" stroke-opacity="0.5"></circle>' +
+      '<circle cx="0" cy="0" r="5" fill="rgba(255, 0, 0, 0.8)"></circle>',
+  );
+});
+
+test("svg.text(options) preserves repeated, leading and trailing spaces, like Canvas", () => {
+  const renderer = cm.svg();
+  renderer.text({text: " A  B", x: 0, y: 0});
+  renderer.text({text: "A B", x: 0, y: 0});
+  assert.strictEqual(
+    markup(renderer),
+    '<text x="0" y="0" font-size="14" style="white-space: pre"> A  B</text><text x="0" y="0" font-size="14">A B</text>',
+  );
+});

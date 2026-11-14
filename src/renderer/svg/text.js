@@ -32,6 +32,8 @@ export function svg$text({
     "font-weight": fontWeight === "normal" ? null : fontWeight,
     "text-anchor": anchors[textAlign],
     "dominant-baseline": baselines[textBaseline],
+    // Like Canvas, keep repeated, leading and trailing spaces.
+    style: /^\s|\s$|\s\s/.test(text) ? "white-space: pre" : null,
     // Like Canvas, a stroked text is only filled if a fill is given.
     ...paint({fill: fill ?? (stroke ? "none" : undefined), stroke, ...options}),
   });
