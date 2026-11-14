@@ -30,13 +30,13 @@ function arm(x, y, angle, length, fill, time) {
     return 0.7 + 0.3 * Math.sin(10.0 * Math.sin(a));
   };
   const points = Array.from({length}, (_, i) => [i, (width / 2) * scale(i / length / period)]);
-  return cm.svg`<g ${{transform: `rotate(${(angle * 180) / Math.PI})`, fill}}>
+  return cm.SVG`<g ${{transform: `rotate(${(angle * 180) / Math.PI})`, fill}}>
     <path ${{d: area(points)}}/>
     <circle ${{cx: length - 1, r: points[length - 1][1]}}/>
   </g>`;
 }
 
-const svg = cm.svg`<svg ${{width: size, height: size, viewBox: [0, 0, size, size], style_background: "rgb(255, 64, 119)"}}></svg>`;
+const svg = cm.SVG`<svg ${{width: size, height: size, viewBox: [0, 0, size, size], style_background: "rgb(255, 64, 119)"}}></svg>`;
 
 requestAnimationFrame(function frame(time) {
   svg.replaceChildren(
@@ -44,7 +44,7 @@ requestAnimationFrame(function frame(time) {
       const x = pos(m);
       const y = pos(n);
       const arms = [0, 1, 2].flatMap((i) => angles.map((a) => arm(x, y, a, lengths[i], colors[i], time)));
-      return cm.svg`<g ${{transform: `translate(${x}, ${y})`}}>${arms}</g>`;
+      return cm.SVG`<g ${{transform: `translate(${x}, ${y})`}}>${arms}</g>`;
     }),
   );
   requestAnimationFrame(frame);

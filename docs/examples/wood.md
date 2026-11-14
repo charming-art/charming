@@ -1,6 +1,6 @@
 # 艹木林森 (Wood)
 
-A tree written with the characters 森, 林, 木 and 艹, from a forest to grass: each branch is a row of characters, and splits into two smaller branches with the next character. The branches are nested SVG groups made recursively with [_cm_.svg](/dom#cm-svg).
+A tree written with the characters 森, 林, 木 and 艹, from a forest to grass: each branch is a row of characters, and splits into two smaller branches with the next character. The branches are nested SVG groups made recursively with [_cm_.SVG](/dom#cm-svg).
 
 ```js eval t=example
 const cols = 25;
@@ -18,7 +18,7 @@ const degree = (x) => (x * 180) / Math.PI;
 
 function branch(length, angle, depth) {
   if (depth >= maxDepth) return null;
-  return cm.svg`<g ${{transform: `rotate(${degree(angle)})`}}>
+  return cm.SVG`<g ${{transform: `rotate(${degree(angle)})`}}>
     <text ${{
       data: d3.range(Math.round(length)),
       transform: (d) => `translate(${d * cell}, 0) rotate(90)`,
@@ -30,7 +30,7 @@ function branch(length, angle, depth) {
   </g>`;
 }
 
-const svg = cm.svg`<svg ${{width, height, viewBox: [0, 0, width, height], font_family: "sans-serif", text_anchor: "middle", dominant_baseline: "central"}}>
+const svg = cm.SVG`<svg ${{width, height, viewBox: [0, 0, width, height], font_family: "sans-serif", text_anchor: "middle", dominant_baseline: "central"}}>
   <g ${{transform: `translate(${width / 2}, ${height - cell / 2}) rotate(-90)`}}>
     ${branch(6, 0, 0)}
   </g>

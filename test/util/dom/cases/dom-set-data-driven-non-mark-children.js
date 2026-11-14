@@ -1,7 +1,7 @@
 import * as cm from "../../../../src/index.js";
 
 export function domSetDataDrivenNonMarkChildren() {
-  return cm.html`<div>
+  return cm.HTML`<div>
     <span
       ${{
         data: [1, 2, 3],

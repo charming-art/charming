@@ -87,8 +87,8 @@ Work with SVG, HTML, Canvas, paths, text, vectors and noise directly.
 
 Create and manipulate DOM elements.
 
-- [_cm_.**svg**](/dom#cm-svg) — SVG via tagged template literal.
-- [_cm_.**html**](/dom#cm-html) — HTML via tagged template literal.
+- [_cm_.**SVG**](/dom#cm-svg) — SVG via tagged template literal.
+- [_cm_.**HTML**](/dom#cm-html) — HTML via tagged template literal.
 - [_cm_.**attr**](/dom#cm-attr) — get, set, or remove attributes (including styles and events) on a node.
 
 ### [Charming Context2D](/context2d)

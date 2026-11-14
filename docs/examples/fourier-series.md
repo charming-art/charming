@@ -1,6 +1,6 @@
 # Fourier Series
 
-A square wave approximated by a [Fourier series](https://en.wikipedia.org/wiki/Fourier_series): epicycles of odd harmonics, one more every turn, whose tip traces the wave. The SVG is redrawn with [_cm_.svg](/dom#cm-svg) every frame. After the Coding Train's [Fourier Series](https://thecodingtrain.com/challenges/125-fourier-series).
+A square wave approximated by a [Fourier series](https://en.wikipedia.org/wiki/Fourier_series): epicycles of odd harmonics, one more every turn, whose tip traces the wave. The SVG is redrawn with [_cm_.SVG](/dom#cm-svg) every frame. After the Coding Train's [Fourier Series](https://thecodingtrain.com/challenges/125-fourier-series).
 
 ```js eval code=false
 const replay = Inputs.button("Replay");
@@ -32,7 +32,7 @@ const line = d3
   .line()
   .x((d, i) => curveX + i)
   .y((d) => d);
-const svg = cm.svg`<svg ${{width, height, viewBox: [0, 0, width, height], style_background: "black"}}></svg>`;
+const svg = cm.SVG`<svg ${{width, height, viewBox: [0, 0, width, height], style_background: "black"}}></svg>`;
 let time = -0.1;
 
 requestAnimationFrame(function frame() {
@@ -57,7 +57,7 @@ requestAnimationFrame(function frame() {
   }
   for (const Y of paths) if (Y.length > width - curveX) Y.pop();
 
-  svg.replaceChildren(cm.svg`<g ${{fill: "none"}}>
+  svg.replaceChildren(cm.SVG`<g ${{fill: "none"}}>
     <circle ${{data: circles, cx: (d) => d.x, cy: (d) => d.y, r: (d) => d.r, ...shared}}/>
     <line ${{data: links, x1: (d) => d.x1, y1: (d) => d.y1, x2: (d) => d.x2, y2: (d) => d.y2, ...shared}}/>
     <path ${{data: paths, d: line, ...shared}}/>

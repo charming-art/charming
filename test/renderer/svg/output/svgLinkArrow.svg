@@ -1,0 +1,632 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="96" viewBox="0 0 160 96">
+  <g transform="translate(8,8) rotate(180)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(24,8) rotate(266.2965969487566)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(40,8) rotate(331.4647772654214)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(56,8) rotate(359.54909758872986)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(72,8) rotate(343.67353682862273)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(88,8) rotate(287.72498593871217)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(104,8) rotate(205.4016014507761)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(120,8) rotate(116.85901901586841)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(136,8) rotate(43.775550844572926)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(152,8) rotate(4.044578820282538)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(8,24) rotate(180)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(24,24) rotate(255.7323886327107)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(40,24) rotate(312.92284726874317)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(56,24) rotate(337.5691570470221)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(72,24) rotate(323.637041763721)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(88,24) rotate(274.5375691396994)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(104,24) rotate(202.29200247729028)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(120,24) rotate(124.5885761476745)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(136,24) rotate(60.45179891807548)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(152,24) rotate(25.584590702603993)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(8,40) rotate(180)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(24,40) rotate(226.62625031998664)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(40,40) rotate(261.83676841431134)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(56,40) rotate(277.0107914437344)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(72,40) rotate(268.4331893580988)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(88,40) rotate(238.2040583022991)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(104,40) rotate(193.72454383659783)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(120,40) rotate(145.88478237949738)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(136,40) rotate(106.39761600570559)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(152,40) rotate(84.93088020659894)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(8,56) rotate(180)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(24,56) rotate(186.1043797816007)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(40,56) rotate(190.71419449497782)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(56,56) rotate(192.70080072538806)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(72,56) rotate(191.57780798231246)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(88,56) rotate(187.62016405499713)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(104,56) rotate(181.7968382045062)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(120,56) rotate(175.5335836946289)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(136,56) rotate(170.36386366802083)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(152,56) rotate(167.5534058874847)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(8,72) rotate(180)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(24,72) rotate(144.0879441749912)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(40,72) rotate(116.96841209267735)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(56,72) rotate(105.28121103355593)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(72,72) rotate(111.88777542228644)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(88,72) rotate(135.17058788451953)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(104,72) rotate(169.4292039130282)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(120,72) rotate(206.27591949302962)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(136,72) rotate(236.689373576408)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(152,72) rotate(253.2232918972595)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(8,88) rotate(180)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(24,88) rotate(110.86403231107668)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(40,88) rotate(58.654960713569324)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(56,88) rotate(36.15538678957578)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(72,88) rotate(48.873990935763)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(88,88) rotate(93.69681528031755)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(104,88) rotate(159.64966917304298)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(120,88) rotate(230.58499379480736)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(136,88) rotate(289.1353477222683)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(152,88) rotate(320.9655622990024)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="#000" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(8,8) rotate(180)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(24,8) rotate(266.2965969487566)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(40,8) rotate(331.4647772654214)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(56,8) rotate(359.54909758872986)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(72,8) rotate(343.67353682862273)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(88,8) rotate(287.72498593871217)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(104,8) rotate(205.4016014507761)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(120,8) rotate(116.85901901586841)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(136,8) rotate(43.775550844572926)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(152,8) rotate(4.044578820282538)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(8,24) rotate(180)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(24,24) rotate(255.7323886327107)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(40,24) rotate(312.92284726874317)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(56,24) rotate(337.5691570470221)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(72,24) rotate(323.637041763721)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(88,24) rotate(274.5375691396994)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(104,24) rotate(202.29200247729028)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(120,24) rotate(124.5885761476745)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(136,24) rotate(60.45179891807548)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(152,24) rotate(25.584590702603993)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(8,40) rotate(180)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(24,40) rotate(226.62625031998664)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(40,40) rotate(261.83676841431134)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(56,40) rotate(277.0107914437344)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(72,40) rotate(268.4331893580988)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(88,40) rotate(238.2040583022991)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(104,40) rotate(193.72454383659783)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(120,40) rotate(145.88478237949738)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(136,40) rotate(106.39761600570559)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(152,40) rotate(84.93088020659894)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(8,56) rotate(180)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(24,56) rotate(186.1043797816007)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(40,56) rotate(190.71419449497782)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(56,56) rotate(192.70080072538806)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(72,56) rotate(191.57780798231246)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(88,56) rotate(187.62016405499713)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(104,56) rotate(181.7968382045062)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(120,56) rotate(175.5335836946289)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(136,56) rotate(170.36386366802083)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(152,56) rotate(167.5534058874847)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(8,72) rotate(180)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(24,72) rotate(144.0879441749912)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(40,72) rotate(116.96841209267735)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(56,72) rotate(105.28121103355593)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(72,72) rotate(111.88777542228644)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(88,72) rotate(135.17058788451953)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(104,72) rotate(169.4292039130282)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(120,72) rotate(206.27591949302962)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(136,72) rotate(236.689373576408)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(152,72) rotate(253.2232918972595)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(8,88) rotate(180)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(24,88) rotate(110.86403231107668)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(40,88) rotate(58.654960713569324)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(56,88) rotate(36.15538678957578)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(72,88) rotate(48.873990935763)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(88,88) rotate(93.69681528031755)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(104,88) rotate(159.64966917304298)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(120,88) rotate(230.58499379480736)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(136,88) rotate(289.1353477222683)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(152,88) rotate(320.9655622990024)">
+    <circle cx="0" cy="0" r="2" fill="blue"></circle>
+  </g>
+  <g transform="translate(24,8) rotate(266.2965969487566)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(40,8) rotate(331.4647772654214)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(56,8) rotate(359.54909758872986)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(72,8) rotate(343.67353682862273)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(88,8) rotate(287.72498593871217)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(104,8) rotate(205.4016014507761)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(24,24) rotate(255.7323886327107)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(40,24) rotate(312.92284726874317)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(56,24) rotate(337.5691570470221)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(72,24) rotate(323.637041763721)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(88,24) rotate(274.5375691396994)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(104,24) rotate(202.29200247729028)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(24,40) rotate(226.62625031998664)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(40,40) rotate(261.83676841431134)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(56,40) rotate(277.0107914437344)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(72,40) rotate(268.4331893580988)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(88,40) rotate(238.2040583022991)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(104,40) rotate(193.72454383659783)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(24,56) rotate(186.1043797816007)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(40,56) rotate(190.71419449497782)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(56,56) rotate(192.70080072538806)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(72,56) rotate(191.57780798231246)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(88,56) rotate(187.62016405499713)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(104,56) rotate(181.7968382045062)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(120,72) rotate(206.27591949302962)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(136,72) rotate(236.689373576408)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(152,72) rotate(253.2232918972595)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(120,88) rotate(230.58499379480736)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(136,88) rotate(289.1353477222683)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+  <g transform="translate(152,88) rotate(320.9655622990024)">
+    <line x1="-6.4" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(-29.999999999999996,6.4,0)"></line>
+    <line x1="0" y1="0" x2="6.4" y2="0" stroke="red" stroke-width="1" transform="rotate(29.999999999999996,6.4,0)"></line>
+  </g>
+</svg>

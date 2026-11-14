@@ -56,7 +56,7 @@ export const work = {
       });
 
     const dark = theme === "Dark";
-    const svg = cm.svg`<svg ${{
+    const svg = cm.SVG`<svg ${{
       width: size,
       height: size,
       viewBox: [0, 0, size, size],
@@ -77,7 +77,7 @@ export const work = {
         opacity: animated ? 0 : 1,
       }}>${(d) => d.ch}</text>
     </svg>`;
-    const article = cm.html`<article ${{
+    const article = cm.HTML`<article ${{
       style_flex: wide ? "0 1 480px" : "none",
       style_max_height: wide ? `${size}px` : "none",
       style_overflow: "auto",
@@ -91,7 +91,7 @@ export const work = {
         style_opacity: animated ? 0 : 1,
       }}>${(d) => d}</p>
     </article>`;
-    const layout = cm.html`<div ${{
+    const layout = cm.HTML`<div ${{
       style_display: "flex",
       style_flex_direction: wide ? "row" : "column",
       style_align_items: "center",

@@ -7,7 +7,7 @@ export function domSetTable() {
     [8010, 16145, 8090, 8045],
     [1013, 990, 940, 6907],
   ];
-  return cm.html`<table>
+  return cm.HTML`<table>
     <tbody>
       <tr ${{data: table}}>
         <td ${{data: (d) => d, textContent: (d) => d}}/>
