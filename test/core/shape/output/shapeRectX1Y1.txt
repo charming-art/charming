@@ -1,0 +1,17 @@
+scale, 1, 1
+save
+translate, 40, 30
+beginPath
+fillStyle, "rgba(70,130,180,1)"
+rect, -30, -20, 60, 40
+fill
+closePath
+restore
+save
+translate, 130, 125
+beginPath
+fillStyle, "rgba(70,130,180,1)"
+rect, -40, -65, 80, 130
+fill
+closePath
+restore

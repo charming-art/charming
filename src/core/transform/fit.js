@@ -1,8 +1,17 @@
-import {point, scale} from "./scale.js";
+import {domainOf, point, scale} from "./scale.js";
 
-export function fit(
+// The keys share one domain, inferred from all their values unless specified.
+function channels(value, keys, {scale, domain, range}) {
+  keys = keys.filter((key) => key in value);
+  const V = keys.flatMap((key) => value[key]);
+  if (domain === undefined) domain = domainOf(scale, V);
+  return keys.map((key) => [key, {scale, domain, range}]);
+}
+
+function fitContext(
   flow,
-  data,
+  context,
+  {width, height},
   {
     scaleX,
     scaleY,
@@ -11,37 +20,30 @@ export function fit(
     reverseY = false,
     reverseX = false,
     padding = 0,
+    marginTop = padding,
+    marginRight = padding,
+    marginBottom = padding,
+    marginLeft = padding,
     keysX = ["x", "x1"],
     keysY = ["y", "y1"],
-  } = {},
+  },
 ) {
-  if (!data) throw new Error("No channels: call flow.transform(cm.bind, channels) before cm.fit.");
-  const renderer = flow.renderer();
-  if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.fit.");
-  const {width, height} = renderer._props;
-  const rangeX = [padding, width - padding];
-  const rangeY = [padding, height - padding];
+  const {value} = context;
+  const rangeX = [marginLeft, width - marginRight];
+  const rangeY = [marginTop, height - marginBottom];
 
   if (reverseX) rangeX.reverse();
   if (reverseY) rangeY.reverse();
 
-  const X = keysX.map((key) => [
-    key,
-    {
-      domain: domainX,
-      range: rangeX,
-      scale: scaleX,
-    },
-  ]);
+  const X = channels(value, keysX, {scale: scaleX, domain: domainX, range: rangeX});
+  const Y = channels(value, keysY, {scale: scaleY, domain: domainY, range: rangeY});
 
-  const Y = keysY.map((key) => [
-    key,
-    {
-      domain: domainY,
-      range: rangeY,
-      scale: scaleY,
-    },
-  ]);
+  return scale(flow, [context], Object.fromEntries([...X, ...Y]), point)[0];
+}
 
-  return scale(flow, data, Object.fromEntries([...X, ...Y]), point);
+export function fit(flow, data, options = {}) {
+  if (!data) throw new Error("No channels: call flow.transform(cm.bind, channels) before cm.fit.");
+  const renderer = flow.renderer();
+  if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.fit.");
+  return data.map((context) => fitContext(flow, context, renderer._props, {...context.fit, ...options}));
 }
