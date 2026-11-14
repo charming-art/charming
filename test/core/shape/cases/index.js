@@ -24,6 +24,7 @@ export {shapePolygonMultiple} from "./shape-polygon-multiple.js";
 export {shapePolygon} from "./shape-polygon.js";
 export {shapeRectAnchor} from "./shape-rect-anchor.js";
 export {shapeRect} from "./shape-rect.js";
+export {shapeRectX1Y1} from "./shape-rect-x1-y1.js";
 export {shapeTextStroke} from "./shape-text-stroke.js";
 export {shapeText} from "./shape-text.js";
 export {shapeTriangle} from "./shape-triangle.js";
