@@ -1,0 +1,28 @@
+scale, 1, 1
+save
+translate, 55, 55
+beginPath
+strokeStyle, "rgba(0,0,0,0)"
+lineWidth, 4
+fillStyle, "rgba(70,130,180,1)"
+rect, -35, -35, 70, 70
+fill
+stroke
+closePath
+restore
+save
+beginPath
+strokeStyle, "rgba(0,0,0,0)"
+fillStyle, "rgba(0,0,0,1)"
+arc, 145, 55, 35, 0, 6.283185307179586
+fill
+stroke
+closePath
+restore
+save
+strokeStyle, "rgba(0,0,0,0)"
+fillStyle, "rgba(0,0,0,1)"
+font, normal 20px undefined
+fillText, none, 20, 150
+strokeText, none, 20, 150
+restore
