@@ -78,3 +78,26 @@ test("cm.areaRadial draws the areas of cm.polar around the center", () => {
   );
   assert.strictEqual(p.getAttribute("transform"), "translate(100,100)");
 });
+
+test("cm.areaRadial follows the circle between points at the same radius, like an arc", () => {
+  const data = [0, 1].map((x) => ({x, y: 1}));
+  const [p] = render(
+    data,
+    {x: "x", y: "y"},
+    {
+      transforms: [cm.stackY],
+      coordinate: cm.polar,
+      shape: cm.areaRadial,
+      options: {curve: "linear"},
+    },
+  );
+  // Every point of the outer edge is at the outer radius, 100.
+  const points = p
+    .getAttribute("d")
+    .split(/[MLZ]/)
+    .filter(Boolean)
+    .map((d) => d.split(",").map(Number));
+  const outer = points.filter(([x, y]) => Math.hypot(x, y) > 50);
+  assert.ok(outer.length > 10);
+  for (const [x, y] of outer) assert.ok(Math.abs(Math.hypot(x, y) - 100) < 1e-6);
+});

@@ -1,7 +1,6 @@
 import {ascending, InternMap} from "d3-array";
 import {
   area as d3area,
-  areaRadial as d3areaRadial,
   curveBasis,
   curveBumpX,
   curveBumpY,
@@ -15,6 +14,7 @@ import {
   curveStepAfter,
   curveStepBefore,
 } from "d3-shape";
+import {path as d3path} from "d3-path";
 import {define} from "../../core/shape/define.js";
 
 // The curves of Plot, by name.
@@ -110,19 +110,57 @@ export const area = define((renderer, I, value, options = {}) =>
   ),
 );
 
+// A path context that takes points as angle and radius, and draws them around (0, 0): lines are
+// split into steps of at most 0.02 radians, so that they follow the circle, and curves are sampled,
+// so that a curve such as "bump-x" bends along the angle, like a ribbon around a circle.
+function polarContext() {
+  const path = d3path();
+  let a0, r0;
+  const point = (a, r) => [r * Math.sin(a), -r * Math.cos(a)];
+  const to = (a, r) => (path.lineTo(...point(a, r)), (a0 = a), (r0 = r));
+  return {
+    moveTo(a, r) {
+      path.moveTo(...point(a, r));
+      ((a0 = a), (r0 = r));
+    },
+    lineTo(a, r) {
+      const n = Math.max(1, Math.ceil(Math.abs(a - a0) / 0.02));
+      const [sa, sr] = [a0, r0];
+      for (let k = 1; k <= n; k++) to(sa + ((a - sa) * k) / n, sr + ((r - sr) * k) / n);
+    },
+    bezierCurveTo(a1, r1, a2, r2, a, r) {
+      const n = Math.max(8, Math.ceil(Math.abs(a - a0) / 0.02));
+      const [sa, sr] = [a0, r0];
+      for (let k = 1; k <= n; k++) {
+        const t = k / n;
+        const u = 1 - t;
+        const b = (p0, p1, p2, p3) => u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
+        to(b(sa, a1, a2, a), b(sr, r1, r2, r));
+      }
+    },
+    closePath() {
+      path.closePath();
+    },
+    toString() {
+      return path.toString();
+    },
+  };
+}
+
 // Draws the areas of cm.polar around the center cx and cy: x is the angle and y the outer radius,
-// y1 the inner radius, as for cm.arc. The curve applies in angle and radius, so that a "bump-x"
-// ribbon spirals between bars.
-export const areaRadial = define((renderer, I, value, options = {}) =>
-  drawArea(
-    renderer,
-    I,
-    value,
-    options,
-    d3areaRadial()
-      .angle((d) => d[0])
-      .innerRadius((d) => d[2])
-      .outerRadius((d) => d[1]),
-    true,
-  ),
-);
+// y1 the inner radius, as for cm.arc. The curve applies in angle and radius, and edges follow the
+// circle, so that a "bump-x" ribbon spirals between the arcs of its bars.
+export const areaRadial = define((renderer, I, value, options = {}) => {
+  const shape = d3area()
+    .x((d) => d[0])
+    .y0((d) => d[2])
+    .y1((d) => d[1]);
+  const radial = (points) => {
+    const context = polarContext();
+    shape.context(context)(points);
+    return context.toString();
+  };
+  radial.curve = (curve) => (shape.curve(curve), radial);
+  radial.defined = (defined) => (shape.defined(defined), radial);
+  drawArea(renderer, I, value, options, radial, true);
+});
