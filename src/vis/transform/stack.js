@@ -83,14 +83,8 @@ function descendingDefined(a, b) {
 function orderOf(order, V, O, Z, value) {
   if (order == null) return null;
   if (Array.isArray(order)) return orderSeries(ascendingDefined, Z, () => order);
-  // A name of a bound channel orders the rows by it, like a field in Plot, such as {order: "fill"}.
-  const name = `${order}`.replace(/^-/, "");
-  if (Object.hasOwn(value, name)) {
-    const C = value[name];
-    const compare = `${order}`.startsWith("-") ? descendingDefined : ascendingDefined;
-    return (i, j) => compare(C[i], C[j]);
-  }
-  order = `${order}`.toLowerCase();
+  const raw = `${order}`;
+  order = raw.toLowerCase();
   const descend = order.startsWith("-");
   const compare = descend ? descendingDefined : ascendingDefined;
   const I = range(V.length);
@@ -133,6 +127,13 @@ function orderOf(order, V, O, Z, value) {
         return Kn.reverse().concat(Kp);
       });
   }
+  // Like a field in Plot, any other name of a bound channel orders the rows by it, such as
+  // {order: "fill"}; Plot's names, above, come first.
+  const name = raw.replace(/^-/, "");
+  if (Object.hasOwn(value, name)) {
+    const C = value[name];
+    return (i, j) => compare(C[i], C[j]);
+  }
   return null;
 }
 
@@ -171,9 +172,9 @@ function splitBands(B, B1, Z, domain) {
 }
 
 // Stacks along a position. Values, such as y in a column chart, are summed per group of the other
-// position (stacked bars), rescaled to [0, 1] with offset "normalize", or with chunk, wrapped in
-// rows of chunk (waffles). Bands, such as x after cm.spreadX, are split among the series (grouped
-// bars).
+// position (stacked bars), rescaled to [0, 1] with offset "normalize" (or "expand"), or with chunk,
+// wrapped in rows of chunk (waffles). Bands, such as x after cm.spreadX, are split among the series
+// (grouped bars).
 function stack(data, {chunk, padding = 0.1, order, reverse = false, offset} = {}, [key, key1, other, other1], name) {
   if (!data) throw new Error(`No channels: call flow.transform(cm.encode, channels) before cm.${name}.`);
   return data.map((context) => {
@@ -204,7 +205,8 @@ function stack(data, {chunk, padding = 0.1, order, reverse = false, offset} = {}
       return {...context, value: {...value, [key]: V2, [key1]: V1, ...columns}, hints: newHints};
     }
     const [V2, V1] = stackValues(V, stacks, arrange);
-    if (offset === "normalize") normalize(stacks, V2, V1);
+    // Like Plot, normalize has the older name expand, and names are case-insensitive.
+    if (/^(normalize|expand)$/i.test(offset)) normalize(stacks, V2, V1);
     return {...context, value: {...value, [key]: V2, [key1]: V1}};
   });
 }

@@ -236,3 +236,19 @@ test("cm.stackY with offset normalize keeps a stack of zeros at 0, like Plot", (
   assert.deepStrictEqual(y1, [0, 0]);
   assert.deepStrictEqual(y, [0, 0]);
 });
+
+test("cm.stackY takes expand for normalize, in any case, like Plot", () => {
+  const rows = [{n: 1}, {n: 3}];
+  for (const offset of ["expand", "Normalize", "EXPAND"]) {
+    const {y} = values(rows, {y: "n"}, (flow, data) => cm.stackY(flow, data, {offset}));
+    assert.deepStrictEqual(y, [0.25, 1]);
+  }
+});
+
+test("cm.stackY resolves Plot's order names before channel names, like Plot", () => {
+  const byValue = values(series, {x: "x", y: "n", fill: "k"}, (flow, data) => cm.stackY(flow, data, {order: "value"}));
+  const named = values(series, {x: "x", y: "n", fill: "k", value: (d, i) => -i}, (flow, data) =>
+    cm.stackY(flow, data, {order: "value"}),
+  );
+  assert.deepStrictEqual(named.y1, byValue.y1);
+});
