@@ -181,3 +181,9 @@ test("cm.stackY takes an array of series as its order, and reverse", () => {
 test("cm.stackY keeps the input order without order", () => {
   assert.deepStrictEqual(ordered().y1, [0, 1, 4, 0, 6, 8]);
 });
+
+test("cm.stackY with order value sorts the rows around missing values", () => {
+  const rows = [3, null, 1].map((n, i) => ({x: 0, k: `${i}`, n}));
+  const {y1} = values(rows, {x: "x", y: "n", fill: "k"}, (flow, data) => cm.stackY(flow, data, {order: "value"}));
+  assert.deepStrictEqual(y1, [1, NaN, 0]);
+});

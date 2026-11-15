@@ -54,11 +54,11 @@ export function colorScales(value, hints) {
   return scales;
 }
 
-// The scale shared by position channels such as x and x1, with the domain inferred from all of them.
 function isTemporal(values) {
   return values.find((d) => d != null) instanceof Date;
 }
 
+// The scale shared by position channels such as x and x1, with the domain inferred from all of them.
 export function positionScale(value, keys, {scale, domain, range}) {
   const V = keys.filter((key) => key in value).flatMap((key) => Array.from(value[key]));
   if (domain === undefined) domain = domainOf(scale, V);

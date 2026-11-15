@@ -1,4 +1,4 @@
-import {ascending, descending, greatest, group, groupSort, InternMap, InternSet, range, rollup, sum} from "d3-array";
+import {greatest, group, groupSort, InternMap, InternSet, range, rollup, sum} from "d3-array";
 import {scaleBand} from "d3-scale";
 import {seriesOf, seriesOrder} from "./series.js";
 
@@ -64,13 +64,26 @@ function stackChunks(V, stacks, arrange, {chunk, padding}, B, B1) {
   return [V2, V1, C, C1, [lo, hi]];
 }
 
+// Like Plot, missing values, such as null or NaN, are ordered last either way.
+function defined(d) {
+  return d != null && d >= d;
+}
+
+function ascendingDefined(a, b) {
+  return !defined(a) - !defined(b) || (a < b ? -1 : a > b ? 1 : 0);
+}
+
+function descendingDefined(a, b) {
+  return !defined(a) - !defined(b) || (a < b ? 1 : a > b ? -1 : 0);
+}
+
 // The orders of Plot's stack transform (ISC license): by value within each stack, or a series
 // order shared by all stacks, by sum, appearance, inside-out or as given. A "-" prefix descends.
 function orderOf(order, V, O, Z) {
   if (order == null) return null;
-  if (Array.isArray(order)) return orderSeries(ascending, Z, () => order);
+  if (Array.isArray(order)) return orderSeries(ascendingDefined, Z, () => order);
   const descend = order.startsWith("-");
-  const compare = descend ? descending : ascending;
+  const compare = descend ? descendingDefined : ascendingDefined;
   const I = range(V.length);
   const X = O ?? I;
   const appearance = () =>
