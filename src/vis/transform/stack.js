@@ -80,10 +80,11 @@ function descendingDefined(a, b) {
 // The orders of Plot's stack transform (ISC license): by value within each stack, or a series
 // order shared by all stacks, by sum, appearance, inside-out or as given. A "-" prefix descends,
 // and names are case-insensitive, as in Plot.
-function orderOf(order, V, O, Z) {
+function orderOf(order, V, O, Z, value) {
   if (order == null) return null;
   if (Array.isArray(order)) return orderSeries(ascendingDefined, Z, () => order);
-  order = `${order}`.toLowerCase();
+  const raw = `${order}`;
+  order = raw.toLowerCase();
   const descend = order.startsWith("-");
   const compare = descend ? descendingDefined : ascendingDefined;
   const I = range(V.length);
@@ -126,7 +127,32 @@ function orderOf(order, V, O, Z) {
         return Kn.reverse().concat(Kp);
       });
   }
+  // Like a field in Plot, any other name of a bound channel orders the rows by it, such as
+  // {order: "fill"}; Plot's names, above, come first.
+  const name = raw.replace(/^-/, "");
+  if (Object.hasOwn(value, name)) {
+    const C = value[name];
+    return (i, j) => compare(C[i], C[j]);
+  }
   return null;
+}
+
+// Like Plot's normalize offset, rescales each stack to [0, 1]: from its lowest value, or 0, to its
+// highest value, or 0, such as the columns of a Marimekko chart.
+function normalize(stacks, V2, V1) {
+  for (const stack of stacks) {
+    let lo = 0;
+    let hi = 0;
+    for (const i of stack) {
+      if (V2[i] < lo) lo = V2[i];
+      if (V2[i] > hi) hi = V2[i];
+    }
+    const k = 1 / (hi - lo || 1); // a stack of zeros stays at 0
+    for (const i of stack) {
+      V1[i] = k * (V1[i] - lo);
+      V2[i] = k * (V2[i] - lo);
+    }
+  }
 }
 
 // A series order shared by all stacks, from a domain of the series.
@@ -146,9 +172,10 @@ function splitBands(B, B1, Z, domain) {
 }
 
 // Stacks along a position. Values, such as y in a column chart, are summed per group of the other
-// position (stacked bars), or with chunk, wrapped in rows of chunk (waffles). Bands, such as x
-// after cm.spreadX, are split among the series (grouped bars).
-function stack(data, {chunk, padding = 0.1, order, reverse = false} = {}, [key, key1, other, other1], name) {
+// position (stacked bars), rescaled to [0, 1] with offset "normalize" (or "expand"), or with chunk,
+// wrapped in rows of chunk (waffles). Bands, such as x after cm.spreadX, are split among the series
+// (grouped bars).
+function stack(data, {chunk, padding = 0.1, order, reverse = false, offset} = {}, [key, key1, other, other1], name) {
   if (!data) throw new Error(`No channels: call flow.transform(cm.encode, channels) before cm.${name}.`);
   return data.map((context) => {
     const {value, hints = {}} = context;
@@ -163,7 +190,7 @@ function stack(data, {chunk, padding = 0.1, order, reverse = false} = {}, [key, 
     const I = Array.from(V, (_, i) => i);
     const stacks = O ? Array.from(group(I, (i) => O[i]).values()) : [I];
     // Like Plot, the input order is kept unless an order is given, or the series have a domain.
-    const compare = order != null ? orderOf(order, V, O, Z) : domain && seriesOrder(Z, domain);
+    const compare = order != null ? orderOf(order, V, O, Z, value) : domain && seriesOrder(Z, domain);
     const arrange = (stack) => {
       if (compare) stack.sort(compare);
       if (reverse) stack.reverse();
@@ -178,6 +205,8 @@ function stack(data, {chunk, padding = 0.1, order, reverse = false} = {}, [key, 
       return {...context, value: {...value, [key]: V2, [key1]: V1, ...columns}, hints: newHints};
     }
     const [V2, V1] = stackValues(V, stacks, arrange);
+    // Like Plot, normalize has the older name expand, and names are case-insensitive.
+    if (/^(normalize|expand)$/i.test(offset)) normalize(stacks, V2, V1);
     return {...context, value: {...value, [key]: V2, [key1]: V1}};
   });
 }
