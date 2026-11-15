@@ -14,7 +14,7 @@ import {
   curveStepAfter,
   curveStepBefore,
 } from "d3-shape";
-import {path as d3path} from "d3-path";
+import {pathRound} from "d3-path";
 import {define} from "../../core/shape/define.js";
 
 // The curves of Plot, by name.
@@ -134,7 +134,9 @@ export const areaX = define((renderer, I, value, options = {}) =>
 // split into steps of at most 0.02 radians, so that they follow the circle, and curves are sampled,
 // so that a curve such as "bump-x" bends along the angle, like a ribbon around a circle.
 function polarContext() {
-  const path = d3path();
+  // Rounded to 3 decimals, like the paths of d3-shape, so that they don't depend on the last digit
+  // of Math.sin and Math.cos, which varies across versions of Node.
+  const path = pathRound(3);
   let a0, r0;
   const point = (a, r) => [r * Math.sin(a), -r * Math.cos(a)];
   const to = (a, r) => (path.lineTo(...point(a, r)), (a0 = a), (r0 = r));
