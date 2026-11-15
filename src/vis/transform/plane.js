@@ -62,9 +62,12 @@ export function plane(
   if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.plane.");
 
   // The margins leave room for the axes of the encoded positions.
+  // A position counts if it's encoded, or if a channel shares its scale, such as {value: "v2", scale: "y"}.
   const {value: first = {}, hints: firstHints = {}} = data[0] ?? {};
-  const hasX = hasAny(first, keysX);
-  const hasY = hasAny(first, keysY);
+  const firstX = keysOf(first, firstHints, keysX, "x");
+  const firstY = keysOf(first, firstHints, keysY, "y");
+  const hasX = hasAny(first, firstX);
+  const hasY = hasAny(first, firstY);
   marginTop ??= margin ?? (hasY ? 20 : 0);
   marginRight ??= margin ?? 20;
   marginBottom ??= margin ?? (hasX ? 30 : 20);
@@ -74,7 +77,7 @@ export function plane(
   width ??= auto?.width ? 640 : rendererWidth;
   // The height uses the same scale and domain of y as fitting: the options, else the hints.
   const sizeY = {...axisHint(firstHints, keysY), ...(typeY && {type: typeY}), ...(domainY && {domain: domainY})};
-  height ??= auto?.height ? autoHeight(first, keysY, sizeY) : rendererHeight;
+  height ??= auto?.height ? autoHeight(first, firstY, sizeY) : rendererHeight;
   renderer.resize?.(width, height);
   ({width, height} = renderer._props);
 
@@ -121,14 +124,17 @@ export function plane(
     for (const key in colors) scales[key] = labeled(resolve(colors[key]), hints[key]);
     const recordX = callable(labeled(positionRecord(x, rangeX, hintX), hintX));
     const recordY = callable(labeled(positionRecord(y, rangeY, hintY), hintY));
+    // The scale is recorded as x or y, for axes, even if only channels that share it are encoded.
+    if (hasAny(value, allX)) scales[keysX[0]] = recordX;
+    if (hasAny(value, allY)) scales[keysY[0]] = recordY;
     for (const key of allX) if (key in value) scales[key] = recordX;
     for (const key of allY) if (key in value) scales[key] = recordY;
 
     const newValue = {...fitted.value};
-    if (hasAny(value, keysX) && !hasAny(value, keysY))
-      newValue[keysY[0]] = middle(value, keysX, [frame.top, frame.bottom]);
-    if (hasAny(value, keysY) && !hasAny(value, keysX))
-      newValue[keysX[0]] = middle(value, keysY, [frame.left, frame.right]);
+    if (hasAny(value, allX) && !hasAny(value, allY))
+      newValue[keysY[0]] = middle(value, allX, [frame.top, frame.bottom]);
+    if (hasAny(value, allY) && !hasAny(value, allX))
+      newValue[keysX[0]] = middle(value, allY, [frame.left, frame.right]);
     return {...withoutHints(fitted), value: newValue, scales, frame};
   });
 }

@@ -101,6 +101,9 @@ export function polar(
     for (const key in colors) scales[key] = labeled(resolve(colors[key]), hints[key]);
     const recordX = callable(labeled(positionRecord(x, rangeX, hintX), hintX));
     const recordY = callable(labeled(positionRecord(y, rangeY, hintY), hintY));
+    // The scale is recorded as x or y, for axes, even if only channels that share it are encoded.
+    if (hasAny(value, allX)) scales[keysX[0]] = recordX;
+    if (hasAny(value, allY)) scales[keysY[0]] = recordY;
     for (const key of allX) if (key in value) scales[key] = recordX;
     for (const key of allY) if (key in value) scales[key] = recordY;
 
@@ -108,8 +111,8 @@ export function polar(
     // stack, y is the outer radius and y1 the baseline.
     const newValue = {...scaled.value};
     const n = Object.values(value)[0]?.length ?? 0; // all channels have one value per row
-    if (!hasAny(value, keysY)) [newValue[keysY[1]], newValue[keysY[0]]] = span(n, rangeY); // y outer, y1 inner
-    if (!hasAny(value, keysX)) [newValue[keysX[0]], newValue[keysX[1]]] = span(n, rangeX);
+    if (!hasAny(value, allY)) [newValue[keysY[1]], newValue[keysY[0]]] = span(n, rangeY); // y outer, y1 inner
+    if (!hasAny(value, allX)) [newValue[keysX[0]], newValue[keysX[1]]] = span(n, rangeX);
     newValue.cx = Array.from({length: n}, () => cx);
     newValue.cy = Array.from({length: n}, () => cy);
     return {...withoutHints(scaled), value: newValue, scales, frame};

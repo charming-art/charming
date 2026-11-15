@@ -93,12 +93,13 @@ export function scaleOf({type, domain, range, paddingInner, paddingOuter, align}
 }
 
 // Gives a recorded position scale apply and invert, like the scales of Plot: apply maps a value to
-// pixels, or to an angle or radius in polar, at the middle of its band if any. They aren't
+// pixels, or to an angle or radius in polar, at the middle of its band if any; bandwidth is the
+// width of the bands, or 0. They aren't
 // enumerable, so that records stay plain values.
 export function callable(record) {
   const scale = scaleOf(record);
   const offset = scale.bandwidth ? scale.bandwidth() / 2 : 0;
-  const properties = {apply: {value: (v) => scale(v) + offset}};
+  const properties = {apply: {value: (v) => scale(v) + offset}, bandwidth: {value: offset * 2}};
   if (scale.invert) properties.invert = {value: (p) => scale.invert(p)};
   return Object.defineProperties(record, properties);
 }

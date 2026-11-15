@@ -327,3 +327,20 @@ test("cm.plane records scales with apply and invert, at the middle of bands", ()
   // apply and invert aren't enumerable, so that records stay plain.
   assert.deepStrictEqual(Object.keys(context.scales.y), ["type", "domain", "range", "label"]);
 });
+
+test("cm.plane makes a y scale from channels that share it, even without y", () => {
+  const renderer = cm.svg();
+  const root = cm.flow().renderer(renderer);
+  const [context] = root
+    .data([
+      {x: 0, v2: 1},
+      {x: 1, v2: 4},
+    ])
+    .transform(cm.encode, {x: "x", v2: {value: "v2", scale: "y"}})
+    .transform(cm.plane)._values;
+  assert.deepStrictEqual(context.scales.y.domain, [1, 4]);
+  assert.strictEqual(context.scales.v2, context.scales.y);
+  // Sized like a chart with a continuous y, not a dot plot.
+  assert.strictEqual(renderer._props.height, 400);
+  assert.strictEqual(context.frame.top, 20);
+});

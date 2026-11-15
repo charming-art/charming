@@ -19,15 +19,22 @@ function fill(n, v) {
   return Array.from({length: n}, () => v);
 }
 
-// The positions of a cartesian frame, such as cm.plane's: values map through the scales, and a
-// missing position spans the frame for shapes with extents, else sits in its middle.
-function planePositions({x, y}, frame, P, span) {
+// The positions of a cartesian frame, such as cm.plane's: values map through the scales. A rect
+// covers whole bands, from the start of the first to the end of the last, in either order; other
+// shapes sit at the middle of a band. A given position is used at both ends, and a missing one
+// spans the frame for shapes with extents, else sits in its middle.
+function planePositions({x, y}, frame, P, shape) {
   const n = P.x?.length ?? P.y?.length ?? P.x1?.length ?? P.y1?.length ?? 1;
+  const span = spans.has(shape);
   const map = (scale, V) => (scale ? V.map((v) => scale.apply(v)) : V);
   const axis = (scale, V, V1, [start, end]) => {
     if (!V && !V1) return span ? [fill(n, start), fill(n, end)] : [fill(n, (start + end) / 2), null];
-    const P0 = map(scale, V ?? V1);
-    return [P0, V1 ? map(scale, V1) : span ? P0 : null];
+    const S = map(scale, V ?? V1);
+    if (!span) return [S, null];
+    const E = map(scale, V1 ?? V);
+    if (shape !== rect || !scale?.bandwidth) return [S, E];
+    const half = scale.bandwidth / 2;
+    return [S.map((s, i) => Math.min(s, E[i]) - half), E.map((e, i) => Math.max(S[i], e) + half)];
   };
   const [X, X1] = axis(x, P.x, P.x1, [frame.left, frame.right]);
   const [Y, Y1] = axis(y, P.y, P.y1, [frame.top, frame.bottom]);
@@ -35,17 +42,21 @@ function planePositions({x, y}, frame, P, span) {
 }
 
 // The positions of a polar frame, such as cm.polar's: x is an angle and y a radius, turned into
-// screen positions around the center. A missing radius spans the frame for shapes with extents,
-// such as a spoke, else sits in its middle.
-function polarPositions({x, y}, frame, P, span) {
+// screen positions around the center. As in a plane, a given angle or radius is used at both ends,
+// and a missing radius spans the frame for shapes with extents, such as a spoke, else sits in its
+// middle.
+function polarPositions({x, y}, frame, P, shape) {
   const {cx, cy, innerRadius, outerRadius, startAngle, endAngle} = frame;
   const n = P.x?.length ?? P.y?.length ?? P.x1?.length ?? P.y1?.length ?? 1;
+  const span = spans.has(shape);
   const map = (scale, V) => (scale ? V.map((v) => scale.apply(v)) : V);
-  const A = P.x ? map(x, P.x) : fill(n, (startAngle + endAngle) / 2);
-  const A1 = P.x1 ? map(x, P.x1) : A;
+  const hasA = P.x || P.x1;
+  const A = hasA ? map(x, P.x ?? P.x1) : fill(n, (startAngle + endAngle) / 2);
+  const A1 = hasA ? map(x, P.x1 ?? P.x) : A;
+  const hasR = P.y || P.y1;
   const middle = (innerRadius + outerRadius) / 2;
-  const R = P.y ? map(y, P.y) : fill(n, span ? innerRadius : middle);
-  const R1 = P.y1 ? map(y, P.y1) : P.y ? R : fill(n, span ? outerRadius : middle);
+  const R = hasR ? map(y, P.y ?? P.y1) : fill(n, span ? innerRadius : middle);
+  const R1 = hasR ? map(y, P.y1 ?? P.y) : fill(n, span ? outerRadius : middle);
   const sx = (r, a) => cx + r * Math.sin(a);
   const sy = (r, a) => cy - r * Math.cos(a);
   return {
@@ -63,14 +74,13 @@ function polarPositions({x, y}, frame, P, span) {
 // drawn with cm.link or a band drawn with cm.rect, else sits in the middle of the frame. The other
 // options are passed to the shape. Annotations don't change the scales.
 export function annotate(shape) {
-  const span = spans.has(shape);
   function annotation(flow, value, {scales = {}, frame, options = {}} = {}) {
     if (!frame) return;
     const {data = [null], x, x1, y, y1, ...rest} = options;
     const D = Array.from(data);
     const P = {x: valuesOf(x, D), x1: valuesOf(x1, D), y: valuesOf(y, D), y1: valuesOf(y1, D)};
     const positions = frame.type === "polar" ? polarPositions : planePositions;
-    const {X, X1, Y, Y1} = positions(scales, frame, P, span);
+    const {X, X1, Y, Y1} = positions(scales, frame, P, shape);
     const at = (V) => (d, i) => V[i];
     flow.data(D).append(shape, {
       ...rest,

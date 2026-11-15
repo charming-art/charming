@@ -1,12 +1,20 @@
 import {Flow} from "./index.js";
 import {Node} from "../node.js";
+import {isColor} from "../color.js";
+
+// Whether a string option names a bound channel. Like cm.encode, a color for fill or stroke is a
+// constant, even if a channel has its name.
+function isChannel(key, value, channels) {
+  if (typeof value !== "string" || !channels || !Object.hasOwn(channels, value)) return false;
+  return !((key === "fill" || key === "stroke") && isColor(value));
+}
 
 // Channels are plain arrays, even for typed array data, so they can hold any value. A string that
 // names a bound channel takes its values, such as {y: "v2"}; other strings are constants.
 export function valueOf(data, options, channels) {
   const values = Object.entries(options).map(([key, value]) => {
     if (value !== null && typeof value === "object" && value.preserve) return [key, value];
-    if (typeof value === "string" && channels && Object.hasOwn(channels, value)) {
+    if (isChannel(key, value, channels)) {
       return [key, Array.from(data, (d) => d[value])];
     }
     if (Array.isArray(value)) return [key, Array.from(data, (d, i) => value[+d || i])];

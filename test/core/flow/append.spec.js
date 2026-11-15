@@ -109,3 +109,16 @@ test("flow.append(shape, options) returns a literal that names a channel from a 
   );
   assert.deepStrictEqual(calls[0].text, ["x", "x"]);
 });
+
+test("flow.append(shape, options) keeps a color for fill and stroke, even if a channel has its name", () => {
+  const [shape, calls] = probe();
+  render((root) =>
+    root
+      .data([5])
+      .transform(cm.bind, {x: (d) => d, red: (d) => d})
+      .append(shape, {fill: "red", stroke: "red", y: "red"}),
+  );
+  assert.deepStrictEqual(calls[0].fill, ["red"]);
+  assert.deepStrictEqual(calls[0].stroke, ["red"]);
+  assert.deepStrictEqual(calls[0].y, [5]);
+});
