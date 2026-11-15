@@ -146,11 +146,16 @@ export function isNested(flow) {
   return flow._parent !== flow._context.root;
 }
 
-// The channels of the contexts together, for the scales they share.
+// The channels of the contexts together, for the scales they share. The values are appended one
+// by one, as push(...values) would overflow the stack for large data.
 export function merge(data, keys) {
   const value = {};
   for (const {value: V} of data) {
-    for (const key of keys) if (key in V) (value[key] ??= []).push(...Array.from(V[key]));
+    for (const key of keys) {
+      if (!(key in V)) continue;
+      const M = (value[key] ??= []);
+      for (const v of V[key]) M.push(v);
+    }
   }
   return value;
 }
@@ -185,8 +190,8 @@ function parentRows(flow, n) {
 // they're drawn at. Along each axis, a parent row with an extent, such as a band, gives the
 // frame its extent, as a facet's cell; a row at a point gives a frame of the given size around
 // it, as a glyph; and an axis the parent doesn't encode gives the parent's frame. A polar parent
-// places its rows at their screen points, so they're glyphs. Each frame records its parent's
-// frame and the edges of the parent it touches, for axes.
+// places its rows at their screen points, so they're glyphs. In a grid of cells, each frame
+// records the edges it labels, for axes.
 export function nestedFrames(flow, n, {width = 40, height = 40} = {}) {
   const boxes = parentRows(flow, n).map(([{value = {}, context = {}}, k]) => {
     const {x: X = [], x1: X1, y: Y = [], y1: Y1} = value;

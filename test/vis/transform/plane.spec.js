@@ -434,3 +434,13 @@ test("cm.plane draws a nested chart at a point in a width × height box", () => 
   const {left, right, top, bottom} = context.frame;
   assert.deepStrictEqual([left, right, top, bottom], [-20, 20, -10, 10]);
 });
+
+test("cm.plane maps large data", () => {
+  const root = cm.flow().renderer(cm.svg({width: 640, height: 400}));
+  const n = 300000;
+  const [context] = root
+    .data(Array.from({length: n}, (_, i) => i))
+    .transform(cm.encode, {x: (d) => d})
+    .transform(cm.plane)._values;
+  assert.strictEqual(context.value.x.length, n);
+});
