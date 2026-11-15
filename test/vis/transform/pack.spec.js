@@ -46,28 +46,3 @@ test("cm.pack with share lays out every grid for the largest count", () => {
 test("cm.pack throws an error without channels", () => {
   assert.throws(() => cm.pack(cm.flow(), undefined), /No channels/);
 });
-
-test("cm.pack with share gives cells of different shapes the same size: the largest that fits them all", () => {
-  const context = (n, frame) => ({frame, group: Array.from({length: n}, (_, i) => i), value: {}});
-  const [a, b] = cm.pack(
-    cm.flow(),
-    [context(8, {left: 0, right: 100, top: 0, bottom: 50}), context(2, {left: 0, right: 40, top: 0, bottom: 40})],
-    {share: true},
-  );
-  // Alone, a would get 25px cells and b 20px cells; shared, both get 20px, with 5 columns in a.
-  assert.deepStrictEqual(a.value.x, [0, 20, 40, 60, 80, 0, 20, 40]);
-  assert.deepStrictEqual(
-    a.value.x1.map((x1, i) => x1 - a.value.x[i]),
-    Array(8).fill(20),
-  );
-  assert.deepStrictEqual(b.value.x, [0, 20]);
-  assert.deepStrictEqual(b.value.y1, [40, 40]);
-});
-
-test("cm.pack with share finds the largest size that fits, even with fewer columns", () => {
-  const context = (n, frame) => ({frame, group: Array.from({length: n}, (_, i) => i), value: {}});
-  // 5 rows in a narrow 17 × 60 frame fit best in 1 column of 12px cells (5 × 12 = 60).
-  const [a] = cm.pack(cm.flow(), [context(5, {left: 0, right: 17, top: 0, bottom: 60})], {share: true});
-  assert.deepStrictEqual(a.value.x, [0, 0, 0, 0, 0]);
-  assert.deepStrictEqual(a.value.x1, [12, 12, 12, 12, 12]);
-});

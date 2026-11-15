@@ -6,8 +6,8 @@ import {dot, titanic} from "./titanic.js";
 // GoFish's Titanic unit mosaic (https://gofish.graphics/js/examples/titanic-unit-mosaic), the
 // headline chart of Atom: class rows, sex rows within them, and survival columns within those,
 // each level a chart nested in the bands of the one before, proportional to its passengers with
-// flex, so the cells' areas read as the counts. The cells share one dot size with pack's share,
-// so the dots are equal everywhere, like GoFish's.
+// flex; every cell packs its passengers, so the cells' areas read as the counts and the dots have
+// about the same size.
 export const visTitanicMosaic = withSVG(async () => {
   const passengers = await titanic();
   const n = ([, rows]) => rows.length;
@@ -34,7 +34,7 @@ export const visTitanicMosaic = withSVG(async () => {
           fill: {value: "survived", type: "ordinal", domain: [1, 0], range: ["#2b8cbe", "#ff8408"]},
         })
         .transform(cm.plane)
-        .transform(cm.pack, {share: true})
+        .transform(cm.pack)
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
         .add(cm.circle, dot);
     },
