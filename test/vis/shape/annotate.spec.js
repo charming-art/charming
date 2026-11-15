@@ -116,3 +116,20 @@ test("cm.annotate in polar uses a given angle or radius at both ends, like in a 
   const [circle] = renderer.node().querySelectorAll("circle");
   assert.deepStrictEqual(attributes(circle, "cx", "cy"), [100, 0]);
 });
+
+test("cm.annotate(cm.rect) covers a whole flex band, as wide as its category", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {k: "a", n: 1},
+      {k: "b", n: 3},
+    ])
+    .transform(cm.encode, {x: "k", n: "n"})
+    .transform(cm.spreadX, {flex: "n", padding: 0})
+    .transform(cm.plane, {margin: 0})
+    .add(cm.annotate(cm.rect), {x: "b"});
+  root.render();
+  const [rect] = renderer.node().querySelectorAll("rect");
+  assert.deepStrictEqual(attributes(rect, "x", "width"), [50, 150]);
+});

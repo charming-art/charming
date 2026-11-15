@@ -6,7 +6,8 @@ function gridOf(count, width, height) {
   const aspect = height / width;
   let cols = Math.max(1, Math.ceil(Math.sqrt(count / aspect)));
   let size = width / cols;
-  while (Math.ceil(count / cols) * size > height) size = width / ++cols;
+  // A frame without height fits no row, so it's left as is.
+  while (height > 0 && Math.ceil(count / cols) * size > height) size = width / ++cols;
   return {cols, size};
 }
 

@@ -85,7 +85,7 @@ export function positionRecord({resolved, domain}, range, {band}) {
 // Rebuilds a d3 scale from a recorded scale, for the ticks of axes and for apply.
 export function scaleOf({type, domain, range, paddingInner, paddingOuter, align, flex}) {
   if (typeof type === "function") return type;
-  if (type === "band" && flex) return scaleFlex(domain, flex, {paddingInner, paddingOuter}, range);
+  if (type === "band" && flex) return scaleFlex(domain, flex, {paddingInner, paddingOuter, align}, range);
   if (type === "band")
     return scaleBand(domain, range).paddingInner(paddingInner).paddingOuter(paddingOuter).align(align);
   if (type === "point") return scalePoint(domain, range);
@@ -95,13 +95,14 @@ export function scaleOf({type, domain, range, paddingInner, paddingOuter, align,
 
 // Gives a recorded position scale apply and invert, like the scales of Plot: apply maps a value to
 // pixels, or to an angle or radius in polar, at the middle of its band if any; bandwidth is the
-// width of the bands, or 0. They aren't
+// width of the bands, or 0, and width the width of a category's band, which varies with flex. They aren't
 // enumerable, so that records stay plain values.
 export function callable(record) {
   const scale = scaleOf(record);
   const offset = scale.bandwidth ? scale.bandwidth() / 2 : 0;
   const middle = scale.middle ?? ((v) => scale(v) + offset);
-  const properties = {apply: {value: middle}, bandwidth: {value: offset * 2}};
+  const width = scale.width ?? (() => offset * 2);
+  const properties = {apply: {value: middle}, bandwidth: {value: offset * 2}, width: {value: width}};
   if (scale.invert) properties.invert = {value: (p) => scale.invert(p)};
   return Object.defineProperties(record, properties);
 }
@@ -244,15 +245,17 @@ export function nestedFrames(flow, n, {width = 40, height = 40} = {}) {
 // category's step is its weight, and the padding is a fraction of the mean step, so that equal
 // weights give the bands of d3.scaleBand. It maps a category to the start of its band; width and
 // middle give the rest of the band. A band lighter than the padding is empty.
-export function scaleFlex(domain, weights, {paddingInner = 0, paddingOuter = 0} = {}, [r0, r1] = [0, 1]) {
+export function scaleFlex(domain, weights, {paddingInner = 0, paddingOuter = 0, align = 0.5} = {}, [r0, r1] = [0, 1]) {
   const total = weights.reduce((a, b) => a + b, 0);
   const mean = total / weights.length || 1;
   const unit = (r1 - r0) / (total - paddingInner * mean + 2 * paddingOuter * mean || 1);
   const index = new InternMap(domain.map((d, i) => [d, i]));
   const starts = [];
-  let start = r0 + paddingOuter * mean * unit;
+  // Like d3.scaleBand, align shares the outer padding between the two ends.
+  let start = r0 + 2 * paddingOuter * mean * unit * align;
   for (const w of weights) (starts.push(start), (start += w * unit));
-  const width = (v) => Math.max(0, (weights[index.get(v)] - paddingInner * mean) * unit);
+  // Signed, so that a reversed range keeps the bands' middles.
+  const width = (v) => Math.max(0, weights[index.get(v)] - paddingInner * mean) * unit;
   const scale = (v) => starts[index.get(v)];
   scale.width = width;
   scale.middle = (v) => scale(v) + width(v) / 2;

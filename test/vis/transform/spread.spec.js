@@ -263,3 +263,36 @@ test("cm.spreadX with flex never gives a light category a band of negative width
   assert.ok(value.x1[0] >= value.x[0]);
   assert.ok(value.x[1] >= value.x1[0]);
 });
+
+test("cm.plane records flex bands of a reversed range, so that axes label their middles", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [context] = root
+    .data([
+      {k: "a", n: 1},
+      {k: "b", n: 3},
+    ])
+    .transform(cm.encode, {x: "k", n: "n"})
+    .transform(cm.spreadX, {flex: "n", padding: 0})
+    .transform(cm.plane, {margin: 0, reverseX: true})._values;
+  assert.strictEqual(context.scales.x.apply("a"), 87.5);
+  assert.strictEqual(context.scales.x.apply("b"), 37.5);
+});
+
+test("cm.spreadX with equal flex gives the bands of d3.scaleBand for any align", () => {
+  const data = ["a", "b", "c"].map((k) => ({k, n: 1}));
+  for (const align of [0, 0.25, 1]) {
+    const options = {paddingInner: 0.2, paddingOuter: 0.3, align};
+    const flexed = cm
+      .flow()
+      .data(data)
+      .transform(cm.encode, {x: "k", n: "n"})
+      .transform((flow, data) => cm.spreadX(flow, data, {...options, flex: "n"}))._values[0].value;
+    const plain = cm
+      .flow()
+      .data(data)
+      .transform(cm.encode, {x: "k"})
+      .transform((flow, data) => cm.spreadX(flow, data, options))._values[0].value;
+    flexed.x.forEach((x, i) => assertInDelta(x, plain.x[i]));
+    flexed.x1.forEach((x, i) => assertInDelta(x, plain.x1[i]));
+  }
+});

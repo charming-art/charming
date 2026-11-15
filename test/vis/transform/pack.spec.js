@@ -46,3 +46,8 @@ test("cm.pack with share lays out every grid for the largest count", () => {
 test("cm.pack throws an error without channels", () => {
   assert.throws(() => cm.pack(cm.flow(), undefined), /No channels/);
 });
+
+test("cm.pack ends for an empty group in a frame without height", () => {
+  const [context] = cm.pack(cm.flow(), [{frame: {left: 0, right: 10, top: 10, bottom: 0}, group: [], value: {}}]);
+  assert.deepStrictEqual(context.value.x, []);
+});
