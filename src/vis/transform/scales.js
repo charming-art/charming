@@ -1,6 +1,7 @@
 import {InternSet, sort} from "d3-array";
 import {discrete, domainOf} from "../../core/transform/scale.js";
 import {isColor} from "../color.js";
+import {seriesOf} from "./series.js";
 import {schemeCategory} from "../scheme.js";
 
 // The scales shared by cm.plane and cm.polar.
@@ -54,11 +55,16 @@ export function colorScales(value, hints) {
 }
 
 // The scale shared by position channels such as x and x1, with the domain inferred from all of them.
+function isTemporal(values) {
+  return values.find((d) => d != null) instanceof Date;
+}
+
 export function positionScale(value, keys, {scale, domain, range}) {
   const V = keys.filter((key) => key in value).flatMap((key) => Array.from(value[key]));
   if (domain === undefined) domain = domainOf(scale, V);
-  // cm.fit maps discrete positions with a point scale, unless a d3 scale is given.
-  const type = typeof scale === "function" ? scale : discrete(scale, V) ? "point" : "linear";
+  // cm.fit maps discrete positions with a point scale, unless a d3 scale is given. Dates are
+  // mapped linearly, but recorded as a UTC time scale for the ticks of axes.
+  const type = typeof scale === "function" ? scale : discrete(scale, V) ? "point" : isTemporal(V) ? "utc" : "linear";
   return {scale, domain, range, type};
 }
 
@@ -87,4 +93,13 @@ export function axisHint(hints, keys) {
 
 export function hasAny(value, keys) {
   return keys.some((key) => key in value);
+}
+
+// Keeps the series of the rows in z before their colors are scaled, so that shapes drawn per
+// series, such as cm.area, don't merge series that share a color.
+export function withSeries(context) {
+  const {value} = context;
+  if ("z" in value) return context;
+  const {Z} = seriesOf(context);
+  return Z ? {...context, value: {...value, z: Z}} : context;
 }

@@ -31,7 +31,8 @@ export function polarAxisX(flow, frame, x, options) {
   const {tickSize = 6, tickPadding = 3, grid = false, anchor = innerRadius > 0 ? "inner" : "outer"} = options;
   const scale = scaleOf(x);
   const [r, k] = anchor === "inner" ? [innerRadius, -1] : [outerRadius, 1];
-  const count = countOf(options, Math.abs(endAngle - startAngle) * outerRadius, 80);
+  // One tick per 80px along the circle where the ticks are, such as the edge of the hole.
+  const count = countOf(options, Math.abs(endAngle - startAngle) * r, 80);
   const A = positionOf(scale);
   // A full turn ends where it starts, so its last tick is dropped.
   const full = Math.abs(endAngle - startAngle) >= 2 * Math.PI - 1e-6;

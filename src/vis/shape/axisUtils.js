@@ -1,4 +1,4 @@
-import {scaleBand, scaleLinear, scalePoint} from "d3-scale";
+import {scaleBand, scaleLinear, scalePoint, scaleUtc} from "d3-scale";
 
 // The helpers shared by the axes of cm.plane and cm.polar.
 
@@ -10,6 +10,7 @@ export function scaleOf({scale, domain, range, paddingInner, paddingOuter, align
   if (scale === "band")
     return scaleBand(domain, range).paddingInner(paddingInner).paddingOuter(paddingOuter).align(align);
   if (scale === "point") return scalePoint(domain, range);
+  if (scale === "utc") return scaleUtc(domain, range);
   return scaleLinear(domain, range);
 }
 

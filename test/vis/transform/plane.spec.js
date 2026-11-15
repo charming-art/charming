@@ -270,3 +270,24 @@ test("cm.plane places the bands of cm.spreadY from the top, unless reverseY is s
   const [reversed] = flow.transform(cm.plane, {reverseY: true})._values;
   assert.ok(reversed.value.y[1] > reversed.value.y[0]);
 });
+
+test("cm.plane keeps the series of fill in z, before its colors are scaled", () => {
+  const root = cm.flow().renderer(cm.svg({width: 200, height: 200}));
+  const [context] = root
+    .data(["a", "b"])
+    .transform(cm.encode, {x: (d, i) => i, fill: (d) => d})
+    .transform(cm.plane)._values;
+  assert.deepStrictEqual(context.value.z, ["a", "b"]);
+  assert.deepStrictEqual(context.value.fill, ["#5470c6", "#91cc75"]);
+});
+
+test("cm.plane records a UTC time scale for dates", () => {
+  const root = cm.flow().renderer(cm.svg({width: 200, height: 200}));
+  const dates = [new Date("2000-01-01"), new Date("2001-01-01")];
+  const [context] = root
+    .data(dates)
+    .transform(cm.encode, {x: (d) => d})
+    .transform(cm.plane)._values;
+  assert.strictEqual(context.scales.x.scale, "utc");
+  assert.deepStrictEqual(context.value.x, [20, 180]);
+});

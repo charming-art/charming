@@ -10,6 +10,7 @@ import {
   positionScale,
   resolve,
   withoutHints,
+  withSeries,
 } from "./scales.js";
 
 // Like Plot, the height is 400 for a continuous y, 20px per category (up to 60) plus 60 for a
@@ -85,6 +86,7 @@ export function plane(
   if (reverseY) rangeY.reverse();
 
   return data.map((context) => {
+    context = withSeries(context);
     const {value, hints = {}} = context;
     const colors = colorScales(value, hints);
     const [colored] = scale(flow, [context], colors);
