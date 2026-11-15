@@ -5,8 +5,7 @@ import {dot, titanic} from "./titanic.js";
 
 // GoFish's Titanic survival unit grid (https://gofish.graphics/js/examples/titanic-survival-unit-grid):
 // the passengers by class and sex, each cell a chart nested in the bands of the grid, its
-// passengers packed survivors first; the grids share the largest cell's layout, so the dots have
-// the same size everywhere, like GoFish's fixed dots.
+// passengers packed survivors first.
 export const visTitanicSurvivalGrid = withSVG(async () => {
   const passengers = d3.sort(await titanic(), (d) => -d.survived);
   const cells = d3
@@ -34,7 +33,7 @@ export const visTitanicSurvivalGrid = withSVG(async () => {
           fill: {value: "survived", type: "ordinal", domain: [1, 0], range: ["#2b8cbe", "#ff8408"]},
         })
         .transform(cm.plane)
-        .transform(cm.pack, {share: true})
+        .transform(cm.pack)
         .add(cm.circle, dot);
     },
     {width: 640, height: 480},
