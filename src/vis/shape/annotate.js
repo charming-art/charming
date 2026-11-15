@@ -32,9 +32,15 @@ function planePositions({x, y}, frame, P, shape) {
     const S = map(scale, V ?? V1);
     if (!span) return [S, null];
     const E = map(scale, V1 ?? V);
-    if (shape !== rect || !scale?.bandwidth) return [S, E];
-    const half = scale.bandwidth / 2;
-    return [S.map((s, i) => Math.min(s, E[i]) - half), E.map((e, i) => Math.max(S[i], e) + half)];
+    if (shape !== rect || scale?.type !== "band") return [S, E];
+    // Each end covers its category's band, which varies with flex.
+    const half = (v) => Math.abs(scale.width(v)) / 2;
+    const A = V ?? V1;
+    const B = V1 ?? V;
+    return [
+      S.map((s, i) => Math.min(s - half(A[i]), E[i] - half(B[i]))),
+      E.map((e, i) => Math.max(S[i] + half(A[i]), e + half(B[i]))),
+    ];
   };
   const [X, X1] = axis(x, P.x, P.x1, [frame.left, frame.right]);
   const [Y, Y1] = axis(y, P.y, P.y1, [frame.top, frame.bottom]);

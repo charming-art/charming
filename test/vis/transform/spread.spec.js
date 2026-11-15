@@ -192,3 +192,107 @@ test("cm.spreadX chunk rows grow up from the bottom of the chart in cm.plane", (
   // Row 1 is in the first chunk of A and row 3 in the second: the first chunk is at the bottom.
   assert.ok(context.value.y[1] > context.value.y[3]);
 });
+
+test("cm.spreadX with flex makes each band proportional to the sum of a channel", () => {
+  const data = [
+    {k: "a", n: 1},
+    {k: "b", n: 3},
+  ];
+  const [{value, hints}] = cm
+    .flow()
+    .data(data)
+    .transform(cm.encode, {x: "k", n: "n"})
+    .transform((flow, data) => cm.spreadX(flow, data, {flex: "n", padding: 0}))._values;
+  assert.deepStrictEqual(value.x, [0, 0.25]);
+  assert.deepStrictEqual(value.x1, [0.25, 1]);
+  assert.deepStrictEqual(hints.x.band.flex, [1, 3]);
+});
+
+test("cm.spreadX with equal flex gives the bands of d3.scaleBand", () => {
+  const data = ["a", "b", "c"].map((k) => ({k, n: 1}));
+  const flexed = cm
+    .flow()
+    .data(data)
+    .transform(cm.encode, {x: "k", n: "n"})
+    .transform((flow, data) => cm.spreadX(flow, data, {flex: "n"}))._values[0].value;
+  const plain = cm.flow().data(data).transform(cm.encode, {x: "k"}).transform(cm.spreadX)._values[0].value;
+  flexed.x.forEach((x, i) => assertInDelta(x, plain.x[i]));
+  flexed.x1.forEach((x, i) => assertInDelta(x, plain.x1[i]));
+});
+
+test("cm.plane records flex bands, so that axes label them at their middles", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [context] = root
+    .data([
+      {k: "a", n: 1},
+      {k: "b", n: 3},
+    ])
+    .transform(cm.encode, {x: "k", n: "n"})
+    .transform(cm.spreadX, {flex: "n", padding: 0})
+    .transform(cm.plane, {margin: 0})._values;
+  assert.strictEqual(context.scales.x.apply("a"), 12.5);
+  assert.strictEqual(context.scales.x.apply("b"), 62.5);
+});
+
+test("cm.spreadX with flex weighs dates in a given domain as categories", () => {
+  const date = (year) => new Date(Date.UTC(year, 0, 1));
+  const data = [
+    {k: date(2020), n: 1},
+    {k: date(2021), n: 3},
+  ];
+  const [{value}] = cm
+    .flow()
+    .data(data)
+    .transform(cm.encode, {x: {value: "k", domain: [date(2020), date(2021)]}, n: "n"})
+    .transform((flow, data) => cm.spreadX(flow, data, {flex: "n", padding: 0}))._values;
+  assert.deepStrictEqual(value.x, [0, 0.25]);
+  assert.deepStrictEqual(value.x1, [0.25, 1]);
+});
+
+test("cm.spreadX with flex never gives a light category a band of negative width", () => {
+  const data = [
+    {k: "a", n: 1},
+    {k: "b", n: 100},
+  ];
+  const [{value}] = cm
+    .flow()
+    .data(data)
+    .transform(cm.encode, {x: "k", n: "n"})
+    .transform((flow, data) => cm.spreadX(flow, data, {flex: "n"}))._values;
+  // The padding is 0.1 of the mean step, 5.05, wider than a's step of 1.
+  assert.ok(value.x1[0] >= value.x[0]);
+  assert.ok(value.x[1] >= value.x1[0]);
+});
+
+test("cm.plane records flex bands of a reversed range, so that axes label their middles", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [context] = root
+    .data([
+      {k: "a", n: 1},
+      {k: "b", n: 3},
+    ])
+    .transform(cm.encode, {x: "k", n: "n"})
+    .transform(cm.spreadX, {flex: "n", padding: 0})
+    .transform(cm.plane, {margin: 0, reverseX: true})._values;
+  assert.strictEqual(context.scales.x.apply("a"), 87.5);
+  assert.strictEqual(context.scales.x.apply("b"), 37.5);
+});
+
+test("cm.spreadX with equal flex gives the bands of d3.scaleBand for any align", () => {
+  const data = ["a", "b", "c"].map((k) => ({k, n: 1}));
+  for (const align of [0, 0.25, 1]) {
+    const options = {paddingInner: 0.2, paddingOuter: 0.3, align};
+    const flexed = cm
+      .flow()
+      .data(data)
+      .transform(cm.encode, {x: "k", n: "n"})
+      .transform((flow, data) => cm.spreadX(flow, data, {...options, flex: "n"}))._values[0].value;
+    const plain = cm
+      .flow()
+      .data(data)
+      .transform(cm.encode, {x: "k"})
+      .transform((flow, data) => cm.spreadX(flow, data, options))._values[0].value;
+    flexed.x.forEach((x, i) => assertInDelta(x, plain.x[i]));
+    flexed.x1.forEach((x, i) => assertInDelta(x, plain.x1[i]));
+  }
+});

@@ -19,6 +19,7 @@ export function formatOf(scale, {tickFormat}, count) {
 
 // Ticks are at the middle of the bands of a band scale.
 export function positionOf(scale) {
+  if (scale.middle) return scale.middle; // bands of unequal widths, with flex
   const offset = scale.bandwidth ? scale.bandwidth() / 2 : 0;
   return (d) => scale(d) + offset;
 }
