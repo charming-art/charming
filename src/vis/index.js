@@ -1,6 +1,8 @@
+export {arc} from "./shape/arc.js";
 export {axis, axisX, axisY} from "./shape/axis.js";
 export {encode} from "./transform/encode.js";
 export {plane} from "./transform/plane.js";
+export {polar} from "./transform/polar.js";
 export {spreadX, spreadY} from "./transform/spread.js";
 export {stackX, stackY} from "./transform/stack.js";
 export {unitX, unitY} from "./transform/unit.js";

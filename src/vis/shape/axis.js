@@ -1,11 +1,12 @@
 import {scaleBand, scaleLinear, scalePoint} from "d3-scale";
 import {link} from "../../core/shape/link.js";
 import {text} from "../../core/shape/text.js";
+import {polarAxisX, polarAxisY} from "./axisPolar.js";
 
-const font = {fill: "currentColor", fontSize: 10, fontFamily: "system-ui, sans-serif"};
+export const font = {fill: "currentColor", fontSize: 10, fontFamily: "system-ui, sans-serif"};
 
 // Rebuilds a d3 scale from a scale recorded by cm.plane, for its ticks and tick format.
-function scaleOf({scale, domain, range, paddingInner, paddingOuter, align}) {
+export function scaleOf({scale, domain, range, paddingInner, paddingOuter, align}) {
   if (typeof scale === "function") return scale;
   if (scale === "band")
     return scaleBand(domain, range).paddingInner(paddingInner).paddingOuter(paddingOuter).align(align);
@@ -18,19 +19,19 @@ function countOf({ticks}, [start, end], spacing) {
   return typeof ticks === "number" ? ticks : (end - start) / spacing;
 }
 
-function ticksOf(scale, {ticks}, count) {
+export function ticksOf(scale, {ticks}, count) {
   if (Array.isArray(ticks)) return ticks;
   return scale.ticks ? scale.ticks(count) : scale.domain();
 }
 
-function formatOf(scale, {tickFormat}, count) {
+export function formatOf(scale, {tickFormat}, count) {
   if (typeof tickFormat === "function") return tickFormat;
   if (scale.tickFormat) return scale.tickFormat(count, tickFormat);
   return (d) => `${d}`;
 }
 
 // Ticks are at the middle of the bands of a band scale.
-function positionOf(scale) {
+export function positionOf(scale) {
   const offset = scale.bandwidth ? scale.bandwidth() / 2 : 0;
   return (d) => scale(d) + offset;
 }
@@ -51,10 +52,12 @@ function extentOf(range) {
   return [Math.min(...range), Math.max(...range)];
 }
 
-// Draws the x axis of the scales recorded by cm.plane, at the bottom of the chart, like Plot.
+// Draws the x axis of the scales recorded by cm.plane, at the bottom of the chart, like Plot, or
+// the angle axis of cm.polar.
 export function axisX(flow, value, {scales = {}, frame, options = {}} = {}) {
   const {x, y} = scales;
   if (!x) return;
+  if (frame?.type === "polar") return polarAxisX(flow, frame, x, options);
   const {tickSize = 6, tickPadding = 3, grid = false} = options;
   const {width, height} = flow.renderer()._props;
   const scale = scaleOf(x);
@@ -87,10 +90,12 @@ export function axisX(flow, value, {scales = {}, frame, options = {}} = {}) {
   });
 }
 
-// Draws the y axis of the scales recorded by cm.plane, on the left of the chart, like Plot.
+// Draws the y axis of the scales recorded by cm.plane, on the left of the chart, like Plot, or
+// the radius axis of cm.polar.
 export function axisY(flow, value, {scales = {}, frame, options = {}} = {}) {
   const {x, y} = scales;
   if (!y) return;
+  if (frame?.type === "polar") return polarAxisY(flow, frame, y, options);
   const {tickSize = 6, tickPadding = 3, grid = false} = options;
   const {width} = flow.renderer()._props;
   const scale = scaleOf(y);

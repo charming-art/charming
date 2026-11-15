@@ -1,5 +1,6 @@
 export {visAxisOptions} from "./vis-axis-options.js";
 export {visCell} from "./vis-cell.js";
+export {visDonut} from "./vis-donut.js";
 export {visDotX} from "./vis-dot-x.js";
 export {visGenreColumn} from "./vis-genre-column.js";
 export {visGroupedBar} from "./vis-grouped-bar.js";
@@ -8,6 +9,9 @@ export {visLayeredBar} from "./vis-layered-bar.js";
 export {visLayeredColumn} from "./vis-layered-column.js";
 export {visLetterFrequencyBar} from "./vis-letter-frequency-bar.js";
 export {visLetterFrequencyColumn} from "./vis-letter-frequency-column.js";
+export {visPie} from "./vis-pie.js";
+export {visRadialStackedBar} from "./vis-radial-stacked-bar.js";
+export {visRose} from "./vis-rose.js";
 export {visScatterAxis} from "./vis-scatter-axis.js";
 export {visStackedBar} from "./vis-stacked-bar.js";
 export {visStackedColumn} from "./vis-stacked-column.js";
