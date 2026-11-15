@@ -11,6 +11,12 @@ function isNone(value) {
   return /^none$/i.test(value);
 }
 
+// Whether a value is a CSS color, including none and currentColor.
+export function isColor(value) {
+  value = `${value}`.toLowerCase().trim();
+  return value === "none" || value === "currentcolor" || d3Color(value) !== null;
+}
+
 export function rgba(value) {
   if (colorByValue.has(value)) return colorByValue.get(value);
   const color = d3Color(isCurrentColor(value) ? "black" : value).rgb();

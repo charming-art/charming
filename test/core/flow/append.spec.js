@@ -84,3 +84,41 @@ test("flow.append(shape, options) passes the options of a raw shape as they are"
   assert.strictEqual(options.grid, true);
   assert.strictEqual(options.tickFormat, format);
 });
+
+test("flow.append(shape, options) takes the values of a bound channel named by a string", () => {
+  const [shape, calls] = probe();
+  render((root) =>
+    root
+      .data([1, 2])
+      .transform(cm.bind, {x: (d) => d, v2: (d) => d * 10})
+      .append(shape, {y: "v2", fill: "red", text: "toString"}),
+  );
+  assert.deepStrictEqual(calls[0].y, [10, 20]);
+  // Other strings are constants, even the names of inherited properties.
+  assert.deepStrictEqual(calls[0].fill, ["red", "red"]);
+  assert.deepStrictEqual(calls[0].text, ["toString", "toString"]);
+});
+
+test("flow.append(shape, options) returns a literal that names a channel from a function", () => {
+  const [shape, calls] = probe();
+  render((root) =>
+    root
+      .data([1, 2])
+      .transform(cm.bind, {x: (d) => d})
+      .append(shape, {text: () => "x"}),
+  );
+  assert.deepStrictEqual(calls[0].text, ["x", "x"]);
+});
+
+test("flow.append(shape, options) keeps a color for fill and stroke, even if a channel has its name", () => {
+  const [shape, calls] = probe();
+  render((root) =>
+    root
+      .data([5])
+      .transform(cm.bind, {x: (d) => d, red: (d) => d})
+      .append(shape, {fill: "red", stroke: "red", y: "red"}),
+  );
+  assert.deepStrictEqual(calls[0].fill, ["red"]);
+  assert.deepStrictEqual(calls[0].stroke, ["red"]);
+  assert.deepStrictEqual(calls[0].y, [5]);
+});

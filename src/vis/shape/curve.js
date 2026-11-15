@@ -1,11 +1,15 @@
 import {InternMap} from "d3-array";
 import {
   curveBasis,
+  curveBasisClosed,
   curveBumpX,
   curveBumpY,
   curveCardinal,
+  curveCardinalClosed,
   curveCatmullRom,
+  curveCatmullRomClosed,
   curveLinear,
+  curveLinearClosed,
   curveMonotoneX,
   curveMonotoneY,
   curveNatural,
@@ -20,11 +24,15 @@ import {pathRound} from "d3-path";
 // The curves of Plot, by name.
 const curves = new Map([
   ["basis", curveBasis],
+  ["basis-closed", curveBasisClosed],
   ["bump-x", curveBumpX],
   ["bump-y", curveBumpY],
   ["cardinal", curveCardinal],
+  ["cardinal-closed", curveCardinalClosed],
   ["catmull-rom", curveCatmullRom],
+  ["catmull-rom-closed", curveCatmullRomClosed],
   ["linear", curveLinear],
+  ["linear-closed", curveLinearClosed],
   ["monotone-x", curveMonotoneX],
   ["monotone-y", curveMonotoneY],
   ["natural", curveNatural],

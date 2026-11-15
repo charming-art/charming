@@ -1,3 +1,4 @@
+export {annotate} from "./shape/annotate.js";
 export {arc} from "./shape/arc.js";
 export {areaRadial, areaX, areaY} from "./shape/area.js";
 export {axis, axisX, axisY} from "./shape/axis.js";

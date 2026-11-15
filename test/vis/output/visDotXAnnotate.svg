@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="60" viewBox="0 0 640 60">
+  <circle cx="20" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="174.39739413680797" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="175.04885993485297" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="233.68078175895755" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="292.9641693811071" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="305.9934853420203" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="215.43973941368063" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="308.59934853420214" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="412.18241042345306" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="524.2345276872966" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="410.22801302931623" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="620" cy="15" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+  <line x1="74.7231270358308" y1="30" x2="74.7231270358308" y2="36" stroke="currentColor" stroke-width="1"></line>
+  <line x1="139.869706840391" y1="30" x2="139.869706840391" y2="36" stroke="currentColor" stroke-width="1"></line>
+  <line x1="205.01628664495118" y1="30" x2="205.01628664495118" y2="36" stroke="currentColor" stroke-width="1"></line>
+  <line x1="270.1628664495114" y1="30" x2="270.1628664495114" y2="36" stroke="currentColor" stroke-width="1"></line>
+  <line x1="335.30944625407164" y1="30" x2="335.30944625407164" y2="36" stroke="currentColor" stroke-width="1"></line>
+  <line x1="400.45602605863183" y1="30" x2="400.45602605863183" y2="36" stroke="currentColor" stroke-width="1"></line>
+  <line x1="465.602605863192" y1="30" x2="465.602605863192" y2="36" stroke="currentColor" stroke-width="1"></line>
+  <line x1="530.7491856677523" y1="30" x2="530.7491856677523" y2="36" stroke="currentColor" stroke-width="1"></line>
+  <line x1="595.8957654723125" y1="30" x2="595.8957654723125" y2="36" stroke="currentColor" stroke-width="1"></line>
+  <text x="74.7231270358308" y="39" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">171</text>
+  <text x="139.869706840391" y="39" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">172</text>
+  <text x="205.01628664495118" y="39" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">173</text>
+  <text x="270.1628664495114" y="39" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">174</text>
+  <text x="335.30944625407164" y="39" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">175</text>
+  <text x="400.45602605863183" y="39" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">176</text>
+  <text x="465.602605863192" y="39" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">177</text>
+  <text x="530.7491856677523" y="39" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">178</text>
+  <text x="595.8957654723125" y="39" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">179</text>
+  <line x1="270.1628664495114" y1="0" x2="270.1628664495114" y2="30" stroke="red" stroke-width="1"></line>
+</svg>
