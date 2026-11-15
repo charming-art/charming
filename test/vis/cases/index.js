@@ -14,6 +14,7 @@ export {visLayeredBar} from "./vis-layered-bar.js";
 export {visLayeredColumn} from "./vis-layered-column.js";
 export {visLetterFrequencyBar} from "./vis-letter-frequency-bar.js";
 export {visLetterFrequencyColumn} from "./vis-letter-frequency-column.js";
+export {visMarimekko} from "./vis-marimekko.js";
 export {visMultipleLine} from "./vis-multiple-line.js";
 export {visNonFacetedMarks} from "./vis-non-faceted-marks.js";
 export {visNormalizedStack} from "./vis-normalized-stack.js";
