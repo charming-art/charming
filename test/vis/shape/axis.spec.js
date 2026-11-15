@@ -55,3 +55,26 @@ test("cm.axis formats ticks for the count of ticks given", () => {
   assert.ok(T.includes("0.05"));
   assert.strictEqual(new Set(T).size, T.length);
 });
+
+// Renders a rose with cm.polar and returns the text of the radius labels: the halos come first.
+function polarTexts(axisOptions) {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {name: "a", value: 10},
+      {name: "b", value: 4},
+    ])
+    .transform(cm.encode, {x: "name", y: "value"})
+    .transform(cm.spreadX)
+    .transform(cm.polar)
+    .add(cm.axisY, axisOptions);
+  root.render();
+  const T = Array.from(renderer.node().querySelectorAll("text"), (d) => d.textContent);
+  return T.slice(T.length / 2);
+}
+
+test("cm.axisY in polar skips only the tick at the baseline", () => {
+  assert.deepStrictEqual(polarTexts({ticks: [5, 10]}), ["5", "10"]);
+  assert.deepStrictEqual(polarTexts({ticks: [0, 5]}), ["5"]);
+});
