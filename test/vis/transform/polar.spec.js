@@ -52,6 +52,8 @@ test("cm.polar maps y to the radius with a radial scale by default, else with sc
   assertAllInDelta(value.y, [100, 50]);
   assertAllInDelta(value.y1, [0, 0]);
   assert.strictEqual(scales.y.scale(1), 50);
+  const named = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {scaleY: "radial"});
+  assertAllInDelta(named.value.y, [100, 50]);
   const linear = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {scaleY: "linear"});
   assertAllInDelta(linear.value.y, [100, 25]);
 });

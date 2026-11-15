@@ -69,14 +69,14 @@ export function polarAxisX(flow, frame, x, options) {
 }
 
 // The radius axis of cm.polar, as in D3's radial stacked bar chart: a ring per tick, and tick
-// labels with a halo along the line at 12 o'clock. The first tick is the baseline, so it's skipped.
+// labels with a halo along the line at 12 o'clock. A tick at the baseline is skipped, as in D3.
 export function polarAxisY(flow, frame, y, options) {
   const {cx, cy, innerRadius, outerRadius} = frame;
   const {grid = true} = options;
   const scale = scaleOf(y);
   const count = countOf(options, outerRadius - innerRadius, 35);
-  const ticks = ticksOf(scale, options, count).slice(1);
   const R = positionOf(scale);
+  const ticks = ticksOf(scale, options, count).filter((d) => R(d) > innerRadius + 1e-6);
   if (grid) flow.data(ticks).append(path, {x: cx, y: cy, d: (d) => ringOf(R(d)), stroke, strokeOpacity: 0.1});
   const format = formatOf(scale, options, count);
   const label = {...font, text: format, x: cx, y: (d) => cy - R(d), textAlign: "center", textBaseline: "middle"};

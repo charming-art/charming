@@ -16,6 +16,11 @@ function span(n, [start, end]) {
   return [Array.from({length: n}, () => start), Array.from({length: n}, () => end)];
 }
 
+// The radial scale can be named, like the scales of cm.fit.
+function radial(scale) {
+  return scale === "radial" ? scaleRadial() : scale;
+}
+
 // Resolves the scales of the channels, and maps positions to polar coordinates: x to the angle,
 // clockwise from 12 o'clock like d3.arc, and y to the radius, with a radial scale so that areas
 // grow with values. A pie is then a stack along x, and a rose a spread along x. The center is
@@ -73,7 +78,7 @@ export function polar(
       range: rangeX,
     });
     const y = positionScale(value, keysY, {
-      scale: scaleY ?? hintY.scale ?? scaleRadial(),
+      scale: radial(scaleY ?? hintY.scale ?? "radial"),
       domain: domainY ?? hintY.domain,
       range: rangeY,
     });
