@@ -226,3 +226,13 @@ test("cm.stackY orders the series by a channel named by order, like Plot's field
   assert.deepStrictEqual(by("g", true), [1, 2, 0]);
   assert.deepStrictEqual(by("-g"), [1, 2, 0]);
 });
+
+test("cm.stackY with offset normalize keeps a stack of zeros at 0, like Plot", () => {
+  const rows = [
+    {x: 0, n: 0},
+    {x: 0, n: 0},
+  ];
+  const {y, y1} = values(rows, {x: "x", y: "n"}, (flow, data) => cm.stackY(flow, data, {offset: "normalize"}));
+  assert.deepStrictEqual(y1, [0, 0]);
+  assert.deepStrictEqual(y, [0, 0]);
+});

@@ -146,7 +146,7 @@ function normalize(stacks, V2, V1) {
       if (V2[i] < lo) lo = V2[i];
       if (V2[i] > hi) hi = V2[i];
     }
-    const k = 1 / (hi - lo);
+    const k = 1 / (hi - lo || 1); // a stack of zeros stays at 0
     for (const i of stack) {
       V1[i] = k * (V1[i] - lo);
       V2[i] = k * (V2[i] - lo);
