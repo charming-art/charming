@@ -17,7 +17,7 @@ export const visFacetCircle = withSVG(async () => {
         .transform(cm.spreadX)
         .transform(cm.polar, {innerRadius: 0.7})
         .add(cm.axisX)
-        .append(cm.group)
+        .append(cm.g)
         .data(([, rows]) => rows)
         .transform(cm.encode, {x: "name", y: "value", fill: "name"})
         .transform(cm.spreadX)

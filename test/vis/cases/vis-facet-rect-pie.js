@@ -15,7 +15,7 @@ export const visFacetRectPie = withSVG(async () => {
         .transform(cm.spreadY)
         .transform(cm.plane)
         .add(cm.axis)
-        .append(cm.group)
+        .append(cm.g)
         .data((cell) => cell.rows)
         .transform(cm.encode, {x: "value", fill: "activity"})
         .transform(cm.stackX)

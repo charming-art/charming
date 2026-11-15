@@ -26,7 +26,7 @@ export const visUnit2d = withSVG(async () => {
         .transform(cm.spreadY)
         .transform(cm.plane, {marginLeft: 60})
         .add(cm.axis, {label: null})
-        .append(cm.group)
+        .append(cm.g)
         .data(([, , rows]) => rows)
         .transform(cm.encode, {fill: {value: "Survived", domain: ["Yes", "No"]}})
         .transform(cm.plane)

@@ -43,7 +43,7 @@ test("flow.render() renders children for each index of the parent in order", () 
     .data(["a", "b", "c"])
     .transform(cm.bind, {x: (_, i) => i})
     .transform((_, data) => data.map((d) => ({...d, I: [2, 0]})))
-    .append(cm.group)
+    .append(cm.g)
     .append(shape, {v: (d) => d});
   root.render();
   assert.deepStrictEqual(
@@ -58,9 +58,9 @@ test("flow.render() draws each nested group under its own parent row, at any dep
   const classes = [{sexes: [{n: [1]}, {n: [2, 3]}]}, {sexes: [{n: [4, 5, 6]}, {n: [7]}]}];
   root
     .data(classes)
-    .append(cm.group, {x: 0, y: 0})
+    .append(cm.g, {x: 0, y: 0})
     .data((d) => d.sexes)
-    .append(cm.group, {x: 0, y: 0})
+    .append(cm.g, {x: 0, y: 0})
     .data((d) => d.n)
     .append(shape, {v: (d) => d});
   root.render();
@@ -78,9 +78,9 @@ test("flow.render() draws a nested flow of an array under every parent row", () 
       [1, 2],
       [3, 4, 5],
     ])
-    .append(cm.group, {x: 0, y: 0})
+    .append(cm.g, {x: 0, y: 0})
     .data((d) => d)
-    .append(cm.group, {x: 0, y: 0})
+    .append(cm.g, {x: 0, y: 0})
     .data(["a"])
     .append(shape, {v: (d) => d});
   root.render();
@@ -100,7 +100,7 @@ test("flow.render() draws a composite shape once per group, without the children
       [1, 2, 3],
       [4, 5],
     ])
-    .append(cm.group, {x: 0, y: 0})
+    .append(cm.g, {x: 0, y: 0})
     .data((d) => d)
     .transform(cm.bind, {v: (d) => d, x: 0, y: 0})
     .append(composite);

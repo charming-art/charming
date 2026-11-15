@@ -61,7 +61,7 @@ test("cm.bind binds one group per parent instance when nested", () => {
     root
       .data([[1, 2], [3]])
       .transform(cm.bind, {x: 0})
-      .append(cm.group)
+      .append(cm.g)
       .data((d) => d)
       .transform(cm.bind, {v: (d) => d})
       .append(shape),

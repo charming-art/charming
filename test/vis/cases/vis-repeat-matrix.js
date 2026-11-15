@@ -21,7 +21,7 @@ export const visRepeatMatrix = withSVG(async () => {
           x: {label: null, tickSize: 0, tickPadding: 24},
           y: {label: null, tickSize: 0, tickPadding: 36, tickRotate: -90},
         })
-        .append(cm.group)
+        .append(cm.g)
         .data(([fx, fy]) =>
           penguins
             .map((d) => ({x: d[fx], y: d[fy], species: d.species}))

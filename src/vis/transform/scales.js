@@ -143,7 +143,7 @@ export function withSeries(context) {
   return Z ? {...context, value: {...value, z: Z}} : context;
 }
 
-// Whether a flow is nested in a mark, such as flow.append(cm.group).data((d) => d.rows), rather
+// Whether a flow is nested in a mark, such as flow.append(cm.g).data((d) => d.rows), rather
 // than at the root of the chart.
 export function isNested(flow) {
   return flow._parent !== flow._context.root;

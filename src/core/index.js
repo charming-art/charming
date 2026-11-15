@@ -3,7 +3,7 @@ export {circle} from "./shape/circle.js";
 export {link} from "./shape/link.js";
 export {clear} from "./shape/clear.js";
 export {rect} from "./shape/rect.js";
-export {group} from "./shape/group.js";
+export {g} from "./shape/g.js";
 export {triangle} from "./shape/triangle.js";
 export {line} from "./shape/line.js";
 export {polygon} from "./shape/polygon.js";

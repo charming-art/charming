@@ -10,7 +10,7 @@ export function terminalMatrix() {
           [" |", {ch: "🚀", wide: true}, "| "],
           [" +", "-", "+ "],
         ])
-        .append(cm.group, {y: (_, i) => i})
+        .append(cm.g, {y: (_, i) => i})
         .data((d) => d)
         .append(cm.point, {y: 0, x: (_, i) => i, stroke: (d) => (typeof d === "string" ? {ch: d} : d)});
     },

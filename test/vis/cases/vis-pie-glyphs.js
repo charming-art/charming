@@ -15,7 +15,7 @@ export const visPieGlyphs = withSVG(async () => {
         .transform(cm.encode, {x: "x", y: "y"})
         .transform(cm.plane, {margin: 40, marginLeft: 60}) // room for the pies
         .add(cm.axis)
-        .append(cm.group)
+        .append(cm.g)
         .data((lake) => seafood.filter((d) => d.lake === lake.lake))
         .transform(cm.encode, {x: "count", fill: "species"})
         .transform(cm.stackX)

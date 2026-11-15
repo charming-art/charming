@@ -4,7 +4,7 @@ import {renderFlow} from "../../../helpers.js";
 export function shapeGroupNested() {
   return renderFlow(
     (root) => {
-      const groups = root.data([[0, 5, 10], [1, 6], [2]]).append(cm.group, {
+      const groups = root.data([[0, 5, 10], [1, 6], [2]]).append(cm.g, {
         x: (_, i) => i * 100 + 20,
         y: 20,
       });

@@ -33,7 +33,7 @@ test("flow.append(shape, options) returns a new flow whose appended shapes are d
   render((root) =>
     root
       .data([1, 2])
-      .append(cm.group, {})
+      .append(cm.g, {})
       .append(child, {v: (d) => d}),
   );
   assert.deepStrictEqual(

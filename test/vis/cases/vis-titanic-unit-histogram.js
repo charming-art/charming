@@ -18,7 +18,7 @@ export const visTitanicUnitHistogram = withSVG(async () => {
         .transform(cm.spreadX, {padding: 0.1})
         .transform(cm.plane, {marginTop: 20, marginBottom: 50})
         .add(cm.axisX, {label: "pclass", tickSize: 0, tickPadding: 24})
-        .append(cm.group)
+        .append(cm.g)
         .data(([, rows]) => d3.sort(rows, decade, (d) => -d.survived))
         .transform(cm.encode, {
           x: decade,

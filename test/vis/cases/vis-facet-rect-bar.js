@@ -15,7 +15,7 @@ export const visFacetRectBar = withSVG(async () => {
         .transform(cm.spreadY)
         .transform(cm.plane, {marginBottom: 50})
         .add(cm.axis, {x: {tickSize: 0, tickPadding: 24}, y: {tickSize: 0, tickPadding: 24}})
-        .append(cm.group)
+        .append(cm.g)
         .data((cell) => cell.rows)
         .transform(cm.encode, {x: "activity", y: "value", fill: "activity"})
         .transform(cm.spreadX)
