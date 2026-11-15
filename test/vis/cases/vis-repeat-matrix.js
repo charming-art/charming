@@ -4,7 +4,8 @@ import {renderFlow, withSVG} from "../../helpers.js";
 
 // G2's repeat matrix (https://g2.antv.antgroup.com/en/examples/composition/repeat/matrix/): a
 // scatterplot matrix of four penguin measurements. Each cell is a chart nested in a band of the
-// grid, plotting its own pair of fields, so its scales are independent of the other cells.
+// grid, plotting its own pair of fields, so its scales are independent of the other cells. The
+// field names of the rows stand vertically, so that they take little room on the left.
 export const visRepeatMatrix = withSVG(async () => {
   const penguins = await d3.csv("data/penguins.csv", d3.autoType);
   const fields = ["culmen_length_mm", "culmen_depth_mm", "flipper_length_mm", "body_mass_g"];
@@ -15,8 +16,11 @@ export const visRepeatMatrix = withSVG(async () => {
         .transform(cm.encode, {x: {value: ([fx]) => fx, domain: fields}, y: {value: ([, fy]) => fy, domain: fields}})
         .transform(cm.spreadX)
         .transform(cm.spreadY)
-        .transform(cm.plane, {marginLeft: 130, marginBottom: 60})
-        .add(cm.axis, {x: {label: null, tickSize: 0, tickPadding: 24}, y: {label: null, tickSize: 0, tickPadding: 40}})
+        .transform(cm.plane, {marginLeft: 60, marginBottom: 60})
+        .add(cm.axis, {
+          x: {label: null, tickSize: 0, tickPadding: 24},
+          y: {label: null, tickSize: 0, tickPadding: 36, tickRotate: -90},
+        })
         .append(cm.group)
         .data(([fx, fy]) =>
           penguins

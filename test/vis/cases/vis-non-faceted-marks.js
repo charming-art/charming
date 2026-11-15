@@ -5,6 +5,7 @@ import {renderFlow, withSVG} from "../../helpers.js";
 // Plot's non-faceted marks (https://observablehq.com/@observablehq/plot-non-faceted-marks): penguins
 // faceted by sex and species, with all the penguins repeated in each cell as small gray dots. Each
 // cell is a chart nested in a band of the grid; the gray dots are annotations with their own data.
+// The species stand vertically, so that they take little room on the left.
 export const visNonFacetedMarks = withSVG(async () => {
   // Like Plot, penguins without measurements aren't drawn.
   const penguins = (await d3.csv("data/penguins.csv", d3.autoType)).filter((d) => Number.isFinite(d.culmen_length_mm));
@@ -17,8 +18,11 @@ export const visNonFacetedMarks = withSVG(async () => {
         .transform(cm.encode, {x: ([sex]) => `${sex}`, y: ([, species]) => species})
         .transform(cm.spreadX)
         .transform(cm.spreadY)
-        .transform(cm.plane, {marginLeft: 80, marginBottom: 50})
-        .add(cm.axis, {x: {label: null, tickSize: 0, tickPadding: 24}, y: {label: null, tickSize: 0, tickPadding: 36}})
+        .transform(cm.plane, {marginLeft: 50, marginBottom: 50})
+        .add(cm.axis, {
+          x: {label: null, tickSize: 0, tickPadding: 24},
+          y: {label: null, tickSize: 0, tickPadding: 26, tickRotate: -90},
+        })
         .append(cm.group)
         .data(([sex, species]) => penguins.filter((d) => d.sex === sex && d.species === species))
         .transform(cm.encode, {x: "culmen_length_mm", y: "culmen_depth_mm"})
