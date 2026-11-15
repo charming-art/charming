@@ -89,3 +89,8 @@ test("cm.scale returns plain arrays for typed array channels, so they can be map
   root.render();
   assert.deepStrictEqual(calls[0].fill, ["red", "blue", "red"]);
 });
+
+test("cm.scale maps missing values to NaN with a linear scale, like Plot", () => {
+  const {r} = values([1, null, 3, undefined], {r: (d) => d}, {r: {range: [0, 10]}});
+  assert.deepStrictEqual(r, [0, NaN, 10, NaN]);
+});

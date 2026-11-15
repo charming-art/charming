@@ -15,11 +15,13 @@ function pathString(d) {
     .join("");
 }
 
-export function svg$path({x = 0, y = 0, d, fill, stroke, ...options}) {
+export function svg$path({x = 0, y = 0, d, fill, stroke, strokeCap, strokeJoin, ...options}) {
   if (typeof d !== "string" && !Array.isArray(d)) return this;
   append(this, "path", {
     d: typeof d === "string" ? d : pathString(d),
     transform: x || y ? `translate(${x},${y})` : null,
+    "stroke-linecap": strokeCap,
+    "stroke-linejoin": strokeJoin,
     // Like Canvas, a path is only filled or stroked if a fill or stroke is given.
     ...paint({fill: fill || "none", stroke, ...options}),
   });

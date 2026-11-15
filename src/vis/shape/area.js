@@ -13,10 +13,10 @@ function pointsOf(I, P, P1, V, V1) {
     points.push([P[i], V[i], V1[i]]);
     if (P1) points.push([P1[i], V[i], V1[i]]);
   }
-  return points.sort(([a], [b]) => !isFinite(a) - !isFinite(b) || ascending(a, b));
+  return points.sort(([a], [b]) => !Number.isFinite(a) - !Number.isFinite(b) || ascending(a, b));
 }
 
-const defined = ([x, y, y1]) => isFinite(x) && isFinite(y) && isFinite(y1);
+const defined = ([x, y, y1]) => Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(y1);
 
 // Draws one area per series: along the position p, from v1 to v, such as along x from y1 to y.
 function drawArea(renderer, I, value, options, shape, [p, p1, v, v1], center) {

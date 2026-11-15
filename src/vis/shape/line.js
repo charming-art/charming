@@ -7,14 +7,17 @@ import {curveOf, polarContext, seriesOf} from "./curve.js";
 // a band on that position, such as a bar of cm.spreadX, is at the middle of its band, as Plot puts
 // points on band scales. Missing positions go last.
 function pointsOf(I, P, P1, V) {
-  const points = I.map((i) => [P1 ? (P[i] + P1[i]) / 2 : P[i], V[i]]);
-  return points.sort(([a], [b]) => !isFinite(a) - !isFinite(b) || ascending(a, b));
+  const mid = (a, b) => (Number.isFinite(a) && Number.isFinite(b) ? (a + b) / 2 : a);
+  const points = I.map((i) => [P1 ? mid(P[i], P1[i]) : P[i], V[i]]);
+  return points.sort(([a], [b]) => !Number.isFinite(a) - !Number.isFinite(b) || ascending(a, b));
 }
 
-const defined = ([p, v]) => isFinite(p) && isFinite(v);
+// Number.isFinite doesn't coerce, so null isn't taken for 0.
+const defined = ([p, v]) => Number.isFinite(p) && Number.isFinite(v);
 
 // Draws one line per series: along the position p, at the values of v, such as along x at y. Like
-// Plot, a line is stroked with the current color, 1.5px wide, and isn't filled.
+// Plot, a line is stroked with the current color, 1.5px wide, with round caps and joins, so that
+// sharp reversals don't grow miter spikes, and isn't filled.
 function drawLine(renderer, I, value, options, shape, [p, p1, v], center) {
   const {
     [p]: P = [],
@@ -25,6 +28,8 @@ function drawLine(renderer, I, value, options, shape, [p, p1, v], center) {
     stroke: S = [],
     strokeOpacity: SO = [],
     strokeWidth: SW = [],
+    strokeCap: SC = [],
+    strokeJoin: SJ = [],
   } = value;
   const path = shape.curve(curveOf(options.curve)).defined(defined);
   for (const series of seriesOf(I, value)) {
@@ -36,6 +41,8 @@ function drawLine(renderer, I, value, options, shape, [p, p1, v], center) {
       stroke: S[i] ?? "currentColor",
       strokeOpacity: SO[i],
       strokeWidth: SW[i] ?? 1.5,
+      strokeCap: SC[i] ?? "round",
+      strokeJoin: SJ[i] ?? "round",
     });
   }
 }

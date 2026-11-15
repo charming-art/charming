@@ -31,6 +31,9 @@ test("cm.lineY draws one line per series, stroked with the current color and not
   assert.strictEqual(P[0].getAttribute("stroke"), "currentColor");
   assert.strictEqual(P[0].getAttribute("stroke-width"), "1.5");
   assert.strictEqual(P[0].getAttribute("fill"), "none");
+  // Round caps and joins, like Plot, so that sharp reversals don't grow miter spikes.
+  assert.strictEqual(P[0].getAttribute("stroke-linecap"), "round");
+  assert.strictEqual(P[0].getAttribute("stroke-linejoin"), "round");
 });
 
 test("cm.lineY keeps series apart even if they share a color", () => {
@@ -86,4 +89,9 @@ test("cm.lineRadial draws around the center, and follows the circle at one radiu
   const P = pointsOf(p);
   assert.ok(P.length > 10);
   for (const [x, y] of P) assert.ok(Math.abs(Math.hypot(x, y) - 100) < 1e-2);
+});
+
+test("cm.lineY leaves a gap for missing values, such as the null of an empty cell", () => {
+  const data = [0, 1, 2, 3, 4].map((x) => ({x, y: x === 2 ? null : x}));
+  assert.strictEqual(render(data, {x: "x", y: "y"})[0].getAttribute("d").match(/M/g).length, 2);
 });
