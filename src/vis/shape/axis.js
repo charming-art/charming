@@ -20,27 +20,28 @@ function labelOf({label, domain, range}, scale, axis, options) {
   return order < 0 ? `↑ ${label}` : `↓ ${label}`;
 }
 
-// The tick labels of an x axis, rotated by tickRotate degrees like Plot: they end at their tick if
-// turned counterclockwise and start there if turned clockwise, and are centered on it if steep.
+// The tick labels of an x axis, rotated by tickRotate degrees like Plot's bottom axis: below 10°,
+// they turn around their center; from 10° on, they end at their tick if turned counterclockwise and
+// start there if turned clockwise, centered on it, with 4·cos θ more padding so that the centered
+// line clears the axis. Returns the text options and the extra padding.
 function rotatedX(degrees) {
-  if (!degrees) return {textAlign: "center", textBaseline: "top"};
-  return {
-    textAlign: degrees < 0 ? "end" : "start",
-    textBaseline: Math.abs(degrees) > 60 ? "middle" : "top",
-    rotate: (degrees * Math.PI) / 180,
-  };
+  const radians = (degrees * Math.PI) / 180;
+  if (Math.abs(degrees) < 10) {
+    return [{textAlign: "center", textBaseline: "top", ...(degrees && {rotate: radians})}, 0];
+  }
+  return [{textAlign: degrees < 0 ? "end" : "start", textBaseline: "middle", rotate: radians}, 4 * Math.cos(radians)];
 }
 
-// The tick labels of a y axis, rotated by tickRotate degrees like Plot: steep labels are centered
-// on their tick, left of the axis, such as -90 reading bottom to top.
+// The tick labels of a y axis, rotated by tickRotate degrees like Plot's left axis: steeper than
+// 60°, they're centered on their tick, left of the axis, such as -90 reading bottom to top, with
+// 4·cos θ more padding. Returns the text options and the extra padding.
 function rotatedY(degrees) {
-  if (!degrees) return {textAlign: "end", textBaseline: "middle"};
-  const steep = Math.abs(degrees) > 60;
-  return {
-    textAlign: steep ? "center" : "end",
-    textBaseline: steep ? (degrees < 0 ? "bottom" : "top") : "middle",
-    rotate: (degrees * Math.PI) / 180,
-  };
+  const radians = (degrees * Math.PI) / 180;
+  if (Math.abs(degrees) <= 60) {
+    return [{textAlign: "end", textBaseline: "middle", ...(degrees && {rotate: radians})}, 0];
+  }
+  const textBaseline = degrees < 0 ? "bottom" : "top";
+  return [{textAlign: "center", textBaseline, rotate: radians}, 4 * Math.cos(radians)];
 }
 
 function extentOf(range) {
@@ -64,12 +65,13 @@ export function axisX(flow, value, {scales = {}, frame, options = {}} = {}) {
   const stroke = "currentColor";
   if (grid) flow.data(ticks).append(link, {x: X, x1: X, y: top, y1: bottom, stroke, strokeOpacity: 0.1});
   flow.data(ticks).append(link, {x: X, x1: X, y: bottom, y1: bottom + tickSize, stroke});
+  const [rotateX, padX] = rotatedX(tickRotate);
   flow.data(ticks).append(text, {
     ...font,
     text: formatOf(scale, options, count),
     x: X,
-    y: bottom + tickSize + tickPadding,
-    ...rotatedX(tickRotate),
+    y: bottom + tickSize + tickPadding + padX,
+    ...rotateX,
   });
   const label = labelOf(x, scale, "x", options);
   if (label == null) return;
@@ -101,12 +103,13 @@ export function axisY(flow, value, {scales = {}, frame, options = {}} = {}) {
   const stroke = "currentColor";
   if (grid) flow.data(ticks).append(link, {x: left, x1: right, y: Y, y1: Y, stroke, strokeOpacity: 0.1});
   flow.data(ticks).append(link, {x: left, x1: left - tickSize, y: Y, y1: Y, stroke});
+  const [rotateY, padY] = rotatedY(tickRotate);
   flow.data(ticks).append(text, {
     ...font,
     text: formatOf(scale, options, count),
-    x: left - tickSize - tickPadding,
+    x: left - tickSize - tickPadding - padY,
     y: Y,
-    ...rotatedY(tickRotate),
+    ...rotateY,
   });
   const label = labelOf(y, scale, "y", options);
   if (label == null) return;
