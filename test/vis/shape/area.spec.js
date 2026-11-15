@@ -101,3 +101,16 @@ test("cm.areaRadial follows the circle between points at the same radius, like a
   assert.ok(outer.length > 10);
   for (const [x, y] of outer) assert.ok(Math.abs(Math.hypot(x, y) - 100) < 1e-6);
 });
+
+test("cm.areaX mirrors cm.areaY: one area per series along y, from x1 to x", () => {
+  const data = [
+    {y: 1, x: 2, k: "a"},
+    {y: 0, x: 1, k: "a"},
+    {y: 0, x: -3, k: "b"},
+    {y: 1, x: -4, k: "b"},
+  ];
+  const P = render(data, {x: "x", y: "y", fill: "k"}, {transforms: [cm.stackX], shape: cm.areaX});
+  assert.strictEqual(P.length, 2);
+  // Sorted along y: each line goes from y = 1, at the top (y is up), to y = 0, at the bottom.
+  for (const p of P) assert.match(p.getAttribute("d"), /^M[^,]+,0L[^,]+,200L/);
+});

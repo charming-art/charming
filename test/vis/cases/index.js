@@ -12,6 +12,7 @@ export {visLetterFrequencyColumn} from "./vis-letter-frequency-column.js";
 export {visPie} from "./vis-pie.js";
 export {visPolarRibbonSeafood} from "./vis-polar-ribbon-seafood.js";
 export {visPolarWaffle} from "./vis-polar-waffle.js";
+export {visPopulationPyramid} from "./vis-population-pyramid.js";
 export {visRadialStackedArea} from "./vis-radial-stacked-area.js";
 export {visRadialStackedBarD3} from "./vis-radial-stacked-bar-d3.js";
 export {visRadialStackedBar} from "./vis-radial-stacked-bar.js";

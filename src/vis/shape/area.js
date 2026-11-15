@@ -50,25 +50,27 @@ function seriesOf(I, {z, fill, stroke}) {
   return series.values();
 }
 
-// The points of a series, sorted by x. A row with a band, such as a bar of cm.spreadX, has a point
-// at each edge, so that the area is flat across the bar and curved between bars, like a ribbon.
-function pointsOf(I, X, X1, Y, Y1) {
+// The points of a series, sorted along the position it runs on, such as x for cm.areaY. A row with a
+// band on that position, such as a bar of cm.spreadX, has a point at each edge, so that the area is
+// flat across the bar and curved between bars, like a ribbon.
+function pointsOf(I, P, P1, V, V1) {
   const points = [];
-  for (const i of I.slice().sort((i, j) => ascending(X[i], X[j]))) {
-    points.push([X[i], Y[i], Y1[i]]);
-    if (X1) points.push([X1[i], Y[i], Y1[i]]);
+  for (const i of I.slice().sort((i, j) => ascending(P[i], P[j]))) {
+    points.push([P[i], V[i], V1[i]]);
+    if (P1) points.push([P1[i], V[i], V1[i]]);
   }
   return points;
 }
 
 const defined = ([x, y, y1]) => isFinite(x) && isFinite(y) && isFinite(y1);
 
-function drawArea(renderer, I, value, options, shape, center) {
+// Draws one area per series: along the position p, from v1 to v, such as along x from y1 to y.
+function drawArea(renderer, I, value, options, shape, [p, p1, v, v1], center) {
   const {
-    x: X = [],
-    x1: X1,
-    y: Y = [],
-    y1: Y1 = Y,
+    [p]: P = [],
+    [p1]: P1,
+    [v]: V = [],
+    [v1]: V1 = V,
     cx: CX = [],
     cy: CY = [],
     fill: F = [],
@@ -83,7 +85,7 @@ function drawArea(renderer, I, value, options, shape, center) {
     if (i === undefined) continue;
     renderer.path({
       ...(center && {x: CX[i], y: CY[i]}),
-      d: path(pointsOf(series, X, X1, Y, Y1)),
+      d: path(pointsOf(series, P, P1, V, V1)),
       fill: F[i],
       stroke: S[i],
       fillOpacity: FO[i],
@@ -106,7 +108,23 @@ export const areaY = define((renderer, I, value, options = {}) =>
       .x((d) => d[0])
       .y0((d) => d[2])
       .y1((d) => d[1]),
-    false,
+    ["x", "x1", "y", "y1"],
+  ),
+);
+
+// Draws one area per series along y, from x1 to x, such as the halves of a population pyramid.
+// It mirrors cm.areaY: over the bands of cm.spreadY, it's flat across each bar.
+export const areaX = define((renderer, I, value, options = {}) =>
+  drawArea(
+    renderer,
+    I,
+    value,
+    options,
+    d3area()
+      .y((d) => d[0])
+      .x0((d) => d[2])
+      .x1((d) => d[1]),
+    ["y", "y1", "x", "x1"],
   ),
 );
 
@@ -162,5 +180,5 @@ export const areaRadial = define((renderer, I, value, options = {}) => {
   };
   radial.curve = (curve) => (shape.curve(curve), radial);
   radial.defined = (defined) => (shape.defined(defined), radial);
-  drawArea(renderer, I, value, options, radial, true);
+  drawArea(renderer, I, value, options, radial, ["x", "x1", "y", "y1"], true);
 });
