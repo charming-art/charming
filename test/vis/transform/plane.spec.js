@@ -344,3 +344,136 @@ test("cm.plane makes a y scale from channels that share it, even without y", () 
   assert.strictEqual(renderer._props.height, 400);
   assert.strictEqual(context.frame.top, 20);
 });
+
+// A chart of two columns, A and B, each with a nested chart of its own rows.
+function facets(rows, channels, options) {
+  const renderer = cm.svg({width: 200, height: 100});
+  const root = cm.flow().renderer(renderer);
+  const contexts = root
+    .data(rows)
+    .transform(cm.encode, {x: ([key]) => key})
+    .transform(cm.spreadX, {padding: 0})
+    .transform(cm.plane, {margin: 0})
+    .append(cm.group)
+    .data(([, values]) => values)
+    .transform(cm.encode, channels)
+    .transform(cm.plane, options)._values;
+  return [renderer, contexts];
+}
+
+const columns = [
+  [
+    "A",
+    [
+      {v: 1, k: "p"},
+      {v: 2, k: "p"},
+    ],
+  ],
+  [
+    "B",
+    [
+      {v: 3, k: "q"},
+      {v: 4, k: "p"},
+    ],
+  ],
+];
+
+test("cm.plane draws a nested chart in the band of its parent row, without margins or resizing", () => {
+  const [renderer, [a, b]] = facets(columns, {y: "v"});
+  assert.deepStrictEqual([renderer._props.width, renderer._props.height], [200, 100]);
+  assert.deepStrictEqual([a.frame.left, a.frame.right, a.frame.top, a.frame.bottom], [0, 100, -50, 50]);
+  assert.deepStrictEqual([b.frame.left, b.frame.right], [0, 100]);
+});
+
+test("cm.plane shares the scales of nested charts, and their colors", () => {
+  const [, [a, b]] = facets(columns, {y: "v", fill: "k"});
+  assert.deepStrictEqual(a.scales.y.domain, [1, 4]);
+  assert.deepStrictEqual(b.scales.y.domain, [1, 4]);
+  assert.deepStrictEqual(a.scales.fill.domain, ["p", "q"]);
+  assert.deepStrictEqual(b.value.fill, ["#91cc75", "#5470c6"]);
+});
+
+test("cm.plane infers a position per nested chart with resolve independent", () => {
+  const [, [a, b]] = facets(columns, {y: "v"}, {resolve: {y: "independent"}});
+  assert.deepStrictEqual(a.scales.y.domain, [1, 2]);
+  assert.deepStrictEqual(b.scales.y.domain, [3, 4]);
+});
+
+test("cm.plane combines the hinted domains of nested charts", () => {
+  const rows = [
+    ["A", [1, 1, 1]],
+    ["B", [1]],
+  ];
+  const renderer = cm.svg({width: 200, height: 100});
+  const root = cm.flow().renderer(renderer);
+  const [c, d] = root
+    .data(rows)
+    .transform(cm.encode, {x: ([key]) => key})
+    .transform(cm.spreadX)
+    .transform(cm.plane)
+    .append(cm.group)
+    .data(([, values]) => values)
+    .transform(cm.encode, {y: (d) => d})
+    .transform(cm.stackY, {chunk: 1, padding: 0})
+    .transform(cm.plane)._values;
+  assert.deepStrictEqual(c.scales.y.domain, [0, 3]);
+  assert.deepStrictEqual(d.scales.y.domain, [0, 3]);
+});
+
+test("cm.plane draws a nested chart at a point in a width × height box", () => {
+  const renderer = cm.svg({width: 200, height: 100});
+  const root = cm.flow().renderer(renderer);
+  const [context] = root
+    .data([{x: 1, y: 1, rows: [{v: 1}, {v: 2}]}])
+    .transform(cm.encode, {x: "x", y: "y"})
+    .transform(cm.plane)
+    .append(cm.group)
+    .data((d) => d.rows)
+    .transform(cm.encode, {y: "v"})
+    .transform(cm.plane, {width: 40, height: 20})._values;
+  const {left, right, top, bottom} = context.frame;
+  assert.deepStrictEqual([left, right, top, bottom], [-20, 20, -10, 10]);
+});
+
+test("cm.plane maps large data", () => {
+  const root = cm.flow().renderer(cm.svg({width: 640, height: 400}));
+  const n = 300000;
+  const [context] = root
+    .data(Array.from({length: n}, (_, i) => i))
+    .transform(cm.encode, {x: (d) => d})
+    .transform(cm.plane)._values;
+  assert.strictEqual(context.value.x.length, n);
+});
+
+// Two nested charts of y, with a hint for each, such as the extents of a transform per context.
+function hinted(hints) {
+  const root = cm.flow().renderer(cm.svg({width: 200, height: 100}));
+  return root
+    .data([
+      ["A", [{v: 2}]],
+      ["B", [{v: 2}]],
+    ])
+    .transform(cm.encode, {x: ([key]) => key})
+    .transform(cm.spreadX)
+    .transform(cm.plane)
+    .append(cm.group)
+    .data(([, values]) => values)
+    .transform(cm.encode, {y: "v"})
+    .transform((flow, data) => data.map((d, j) => ({...d, hints: {...d.hints, y: {...d.hints.y, ...hints[j]}}})))
+    .transform(cm.plane)._values;
+}
+
+test("cm.plane shares the extent of reversed hinted domains, reversed", () => {
+  const [a, b] = hinted([{domain: [10, 0]}, {domain: [4, 1]}]);
+  assert.deepStrictEqual(a.scales.y.domain, [10, 0]);
+  assert.deepStrictEqual(b.scales.y.domain, [10, 0]);
+});
+
+test("cm.plane shares the union of hinted category domains, even of two numbers", () => {
+  const [a] = hinted([
+    {type: "ordinal", domain: [1, 2]},
+    {type: "ordinal", domain: [2, 3]},
+  ]);
+  assert.deepStrictEqual(a.scales.y.domain, [1, 2, 3]);
+  assert.ok(Number.isFinite(a.value.y[0]));
+});

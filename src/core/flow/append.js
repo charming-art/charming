@@ -51,7 +51,9 @@ export function flow$append(render, options = {}) {
     const value = valueOf(bound ? rowsOf(bound, group) : group, options, bound);
     return {I, render, options, value: {...bound, ...value}, group, context};
   });
-  const node = new Node(values, [], parent);
+  // A flow of an array has one group, drawn under every parent row; a flow of a function, such as
+  // flow.data((d) => d.children), has one group per parent row, across the parent's groups.
+  const node = new Node(values, [], parent, typeof flow._data !== "function");
   parent._children.push(node);
   return new Flow(groups, null, node, this._context);
 }

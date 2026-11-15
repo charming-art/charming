@@ -1,4 +1,5 @@
 import assert from "node:assert";
+import * as d3 from "d3";
 import {test} from "vitest";
 import * as cm from "../../../src/index.js";
 import {assertInDelta} from "../../helpers.js";
@@ -134,4 +135,87 @@ test("cm.axisY pads steep tick labels by 4·cos θ, like Plot", () => {
   assertInDelta(+find("0.08").getAttribute("x"), 40 - 6 - 3 - 4 * Math.cos((70 * Math.PI) / 180));
   const upright = rotated({y: {tickRotate: -90}})("0.08");
   assertInDelta(+upright.getAttribute("x"), 40 - 6 - 3);
+});
+
+test("cm.axis labels facets only along the bottom of each column and the left of each row", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  // A 2 × 2 grid without its top-left cell.
+  root
+    .data([
+      ["b", "1"],
+      ["a", "2"],
+      ["b", "2"],
+    ])
+    .transform(cm.encode, {x: ([x]) => x, y: ([, y]) => y})
+    .transform(cm.spreadX)
+    .transform(cm.spreadY)
+    .transform(cm.plane)
+    .append(cm.group)
+    .data(() => [{v: 1}, {v: 2}])
+    .transform(cm.encode, {x: "v", y: "v"})
+    .transform(cm.plane)
+    .add(cm.axis);
+  root.render();
+  // Tick labels are centered for x and end-aligned for y; each cell is a group at its band.
+  const cellsOf = (anchor) =>
+    new Set(
+      Array.from(renderer.node().querySelectorAll(`text[text-anchor="${anchor}"]`), (t) =>
+        t.parentNode
+          .getAttribute("transform")
+          .match(/[\d.]+/g)
+          .map((d) => Math.round(d))
+          .join(","),
+      ),
+    );
+  const band = d3.scaleBand(["a", "b"], [40, 180]).padding(0.1);
+  const rows = d3.scaleBand(["1", "2"], [20, 170]).padding(0.1);
+  const at = (x, y) => `${Math.round(band(x))},${Math.round(rows(y))}`;
+  // x: the bottom cell of each column, (a, 2) and (b, 2); y: the left cell of each row, (b, 1) and (a, 2).
+  assert.deepStrictEqual(cellsOf("middle"), new Set([at("a", "2"), at("b", "2")]));
+  assert.deepStrictEqual(cellsOf("end"), new Set([at("b", "1"), at("a", "2")]));
+  // No cell titles its axes.
+  const texts = Array.from(renderer.node().querySelectorAll("text"), (d) => d.textContent);
+  assert.ok(!texts.some((d) => /v/.test(d)));
+});
+
+// The texts of axes in charts nested at the points of a parent chart, in a plane or polar.
+function glyphTexts(coordinate) {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {
+        k: "a",
+        rows: [
+          {u: 1, w: 1},
+          {u: 2, w: 2},
+        ],
+      },
+      {
+        k: "b",
+        rows: [
+          {u: 1, w: 1},
+          {u: 2, w: 2},
+        ],
+      },
+    ])
+    .transform(cm.encode, {x: "k"})
+    .transform(cm.spreadX)
+    .transform(coordinate)
+    .append(cm.group)
+    .data((d) => d.rows)
+    .transform(cm.encode, {x: "u", y: "w"})
+    .transform(cm.plane, {width: 60, height: 60})
+    .add(cm.axis);
+  root.render();
+  return Array.from(renderer.node().querySelectorAll("text"), (d) => d.textContent);
+}
+
+test("cm.axis draws no titles in charts nested in a polar chart, and labels each one's ticks", () => {
+  const texts = glyphTexts(cm.polar);
+  assert.ok(!texts.some((d) => /[uw]/.test(d)));
+  // Each of the two glyphs labels its x ticks (1, 2) and its y ticks (1.0, 1.5, 2.0).
+  assert.strictEqual(texts.filter((d) => d === "2").length, 2);
+  assert.strictEqual(texts.filter((d) => d === "2.0").length, 2);
 });

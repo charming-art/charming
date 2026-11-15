@@ -64,6 +64,8 @@ export function axisX(flow, value, {scales = {}, frame, options = {}} = {}) {
   const X = positionOf(scale);
   const stroke = "currentColor";
   if (grid) flow.data(ticks).append(link, {x: X, x1: X, y: top, y1: bottom, stroke, strokeOpacity: 0.1});
+  // In facets, only the cells along the bottom label x; nested charts leave titles to the outer chart.
+  if (frame?.edges && !frame.edges.bottom) return;
   flow.data(ticks).append(link, {x: X, x1: X, y: bottom, y1: bottom + tickSize, stroke});
   const [rotateX, padX] = rotatedX(tickRotate);
   flow.data(ticks).append(text, {
@@ -74,7 +76,7 @@ export function axisX(flow, value, {scales = {}, frame, options = {}} = {}) {
     ...rotateX,
   });
   const label = labelOf(x, scale, "x", options);
-  if (label == null) return;
+  if (label == null || frame?.nested) return;
   const center = !scale.ticks;
   flow.datum(label).append(text, {
     ...font,
@@ -102,6 +104,8 @@ export function axisY(flow, value, {scales = {}, frame, options = {}} = {}) {
   const Y = positionOf(scale);
   const stroke = "currentColor";
   if (grid) flow.data(ticks).append(link, {x: left, x1: right, y: Y, y1: Y, stroke, strokeOpacity: 0.1});
+  // In facets, only the cells along the left label y; nested charts leave titles to the outer chart.
+  if (frame?.edges && !frame.edges.left) return;
   flow.data(ticks).append(link, {x: left, x1: left - tickSize, y: Y, y1: Y, stroke});
   const [rotateY, padY] = rotatedY(tickRotate);
   flow.data(ticks).append(text, {
@@ -112,7 +116,7 @@ export function axisY(flow, value, {scales = {}, frame, options = {}} = {}) {
     ...rotateY,
   });
   const label = labelOf(y, scale, "y", options);
-  if (label == null) return;
+  if (label == null || frame?.nested) return;
   flow.datum(label).append(text, {...font, text: label, x: 3, y: 3, textAlign: "start", textBaseline: "top"});
 }
 
