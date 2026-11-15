@@ -145,13 +145,26 @@ function drawPath(context, d) {
   }
 }
 
-export function canvas$path({x = 0, y = 0, d, stroke, strokeOpacity, fill, fillOpacity, strokeWidth}) {
+export function canvas$path({
+  x = 0,
+  y = 0,
+  d,
+  stroke,
+  strokeOpacity,
+  fill,
+  fillOpacity,
+  strokeWidth,
+  strokeCap,
+  strokeJoin,
+}) {
   stroke = normalizeColorString(stroke, strokeOpacity);
   fill = normalizeColorString(fill, fillOpacity);
   const context = this._context;
   context.save();
   context.translate(x, y);
   if (strokeWidth) context.lineWidth = strokeWidth;
+  if (strokeCap) context.lineCap = strokeCap;
+  if (strokeJoin) context.lineJoin = strokeJoin;
   if (fill) context.fillStyle = fill;
   if (stroke) context.strokeStyle = stroke;
   context.beginPath();

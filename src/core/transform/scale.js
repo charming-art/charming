@@ -1,8 +1,10 @@
 import {InternMap, InternSet, max, min} from "d3-array";
 
+// Missing values, null or undefined, map to NaN, like Plot, rather than to the position of 0.
 function linear([d, d1], [r, r1] = [0, 1]) {
   const k = d1 - d;
   return (x) => {
+    if (x == null) return NaN;
     const t = k === 0 ? 0.5 : (x - d) / k;
     return r * (1 - t) + t * r1;
   };

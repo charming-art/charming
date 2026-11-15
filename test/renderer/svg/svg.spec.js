@@ -107,3 +107,11 @@ test("svg.resize(width, height) resizes the svg and its viewBox", () => {
   assert.strictEqual(node.getAttribute("viewBox"), "0 0 300 60");
   assert.deepStrictEqual([renderer._props.width, renderer._props.height], [300, 60]);
 });
+
+test("svg.path(options) sets the cap and join of its stroke", () => {
+  const renderer = cm.svg({width: 10, height: 10});
+  renderer.path({d: "M0,0L5,5L10,0", stroke: "red", strokeCap: "round", strokeJoin: "bevel"});
+  const path = renderer.node().querySelector("path");
+  assert.strictEqual(path.getAttribute("stroke-linecap"), "round");
+  assert.strictEqual(path.getAttribute("stroke-linejoin"), "bevel");
+});

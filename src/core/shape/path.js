@@ -9,6 +9,8 @@ export const path = define((renderer, I, value) => {
     fillOpacity: FO = [],
     strokeOpacity: SO = [],
     strokeWidth: SW = [],
+    strokeCap: SC = [],
+    strokeJoin: SJ = [],
     d: D = [],
   } = value;
   for (const i of I) {
@@ -21,6 +23,8 @@ export const path = define((renderer, I, value) => {
       fillOpacity: FO[i],
       strokeOpacity: SO[i],
       strokeWidth: SW[i],
+      strokeCap: SC[i],
+      strokeJoin: SJ[i],
     });
   }
 });
