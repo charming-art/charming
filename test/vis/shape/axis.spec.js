@@ -78,3 +78,22 @@ test("cm.axisY in polar skips only the tick at the baseline", () => {
   assert.deepStrictEqual(polarTexts({ticks: [5, 10]}), ["5", "10"]);
   assert.deepStrictEqual(polarTexts({ticks: [0, 5]}), ["5"]);
 });
+
+test("cm.axis rotates tick labels by tickRotate degrees, aligned to their ticks", () => {
+  const renderer = cm.svg({width: 640, height: 400});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(data)
+    .transform(cm.encode, {x: "letter", y: "frequency"})
+    .transform(cm.spreadX)
+    .transform(cm.plane)
+    .add(cm.axis, {x: {tickRotate: -45}, y: {tickRotate: -90}});
+  root.render();
+  const [a] = Array.from(renderer.node().querySelectorAll("text")).filter((t) => t.textContent === "A");
+  assert.match(a.getAttribute("transform"), /^rotate\(-45,/);
+  assert.strictEqual(a.getAttribute("text-anchor"), "end");
+  const tick = Array.from(renderer.node().querySelectorAll("text")).find((t) => t.textContent === "0.08");
+  assert.match(tick.getAttribute("transform"), /^rotate\(-90,/);
+  assert.strictEqual(tick.getAttribute("text-anchor"), "middle");
+  assert.strictEqual(tick.getAttribute("dominant-baseline"), "text-after-edge");
+});

@@ -115,3 +115,12 @@ test("svg.path(options) sets the cap and join of its stroke", () => {
   assert.strictEqual(path.getAttribute("stroke-linecap"), "round");
   assert.strictEqual(path.getAttribute("stroke-linejoin"), "bevel");
 });
+
+test("svg.text(options) rotates text around its position, in radians", () => {
+  const renderer = cm.svg({width: 10, height: 10});
+  renderer.text({text: "a", x: 5, y: 6, rotate: -Math.PI / 2});
+  renderer.text({text: "b", x: 5, y: 6});
+  const [a, b] = renderer.node().querySelectorAll("text");
+  assert.strictEqual(a.getAttribute("transform"), "rotate(-90,5,6)");
+  assert.strictEqual(b.getAttribute("transform"), null);
+});

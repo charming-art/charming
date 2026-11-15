@@ -14,6 +14,7 @@ export function canvas$text({
   textBaseline,
   fontSize = 14,
   fontWeight = "normal",
+  rotate,
 }) {
   stroke = normalizeColorString(stroke, strokeOpacity);
   fill = normalizeColorString(fill, fillOpacity);
@@ -25,6 +26,8 @@ export function canvas$text({
   if (textAlign) context.textAlign = textAlign;
   if (textBaseline) context.textBaseline = textBaseline;
   context.font = `${fontWeight} ${fontSize}px ${fontFamily}`.trim();
+  // A rotated text turns around its position, in radians.
+  if (rotate) (context.translate(x, y), context.rotate(rotate), (x = 0), (y = 0));
   if (fill || !stroke) context.fillText(text, x, y);
   if (stroke) context.strokeText(text, x, y);
   context.restore();

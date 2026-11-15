@@ -15,6 +15,7 @@ export const text = define((renderer, I, value) => {
     fontFamily: FF = [],
     fontSize: FS = [],
     fontWeight: FW = [],
+    rotate: R = [],
   } = value;
   for (const i of I) {
     renderer.text({
@@ -31,6 +32,7 @@ export const text = define((renderer, I, value) => {
       fontFamily: FF[i],
       fontSize: FS[i],
       fontWeight: FW[i],
+      ...(R[i] && {rotate: R[i]}),
     });
   }
 });
