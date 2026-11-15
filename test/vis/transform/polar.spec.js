@@ -122,3 +122,29 @@ test("cm.polar maps channels that share the radius, and records scales with appl
   assertAllInDelta(value.top, [100, 75]);
   assert.strictEqual(scales.y.apply(2), 50);
 });
+
+test("cm.polar takes the type of the radius from its hint", () => {
+  const {scales} = polared(letters, {x: "letter", y: {value: "n", type: "linear"}}, [cm.spreadX]);
+  assert.strictEqual(scales.y.apply(2), 50);
+});
+
+test("cm.polar draws a nested chart in a width × height box around its parent point", () => {
+  const renderer = cm.svg({width: 200, height: 100});
+  const root = cm.flow().renderer(renderer);
+  const [a, b] = root
+    .data([
+      {x: 0, y: 0, rows: [{n: 1}, {n: 3}]},
+      {x: 1, y: 1, rows: [{n: 2}]},
+    ])
+    .transform(cm.encode, {x: "x", y: "y"})
+    .transform(cm.plane)
+    .append(cm.group)
+    .data((d) => d.rows)
+    .transform(cm.encode, {x: "n"})
+    .transform(cm.stackX)
+    .transform(cm.polar, {width: 40, height: 40, resolve: {x: "independent"}})._values;
+  assert.deepStrictEqual([a.frame.cx, a.frame.cy, a.frame.outerRadius], [0, 0, 20]);
+  // Each pie is a full turn.
+  assertInDelta(Math.max(...a.value.x), 2 * Math.PI);
+  assertInDelta(Math.max(...b.value.x), 2 * Math.PI);
+});

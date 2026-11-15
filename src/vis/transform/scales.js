@@ -1,4 +1,4 @@
-import {InternSet, sort} from "d3-array";
+import {InternSet, max, min, sort} from "d3-array";
 import {scaleBand, scaleLinear, scalePoint, scaleUtc} from "d3-scale";
 import {discrete, domainOf} from "../../core/transform/scale.js";
 import {isColor} from "../color.js";
@@ -138,4 +138,94 @@ export function withSeries(context) {
   if ("z" in value) return context;
   const {Z} = seriesOf(context);
   return Z ? {...context, value: {...value, z: Z}} : context;
+}
+
+// Whether a flow is nested in a mark, such as flow.append(cm.group).data((d) => d.rows), rather
+// than at the root of the chart.
+export function isNested(flow) {
+  return flow._parent !== flow._context.root;
+}
+
+// The channels of the contexts together, for the scales they share.
+export function merge(data, keys) {
+  const value = {};
+  for (const {value: V} of data) {
+    for (const key of keys) if (key in V) (value[key] ??= []).push(...Array.from(V[key]));
+  }
+  return value;
+}
+
+// The domain hinted by every context: the extent of continuous domains, such as the extents of
+// cm.stackY with chunk, or the union of categories. Undefined if a context hints none.
+export function sharedDomain(domains) {
+  if (!domains.length || domains.some((d) => d === undefined)) return undefined;
+  if (domains.every((d) => d.length === 2 && d.every((v) => typeof v === "number" || v instanceof Date))) {
+    return [min(domains, (d) => d[0]), max(domains, (d) => d[1])];
+  }
+  return Array.from(new InternSet(domains.flat()));
+}
+
+// The point at the radius r and the angle a of a polar frame, clockwise from 12 o'clock.
+export function polarPoint({cx, cy}, r, a) {
+  return [cx + r * Math.sin(a), cy - r * Math.cos(a)];
+}
+
+// The parent row of each context of a nested flow: the groups of flow.data((d) => d.rows) are
+// numbered across the rows of all the parent's groups, as when they're rendered.
+function parentRows(flow, n) {
+  const node = flow._parent;
+  const rows = [];
+  for (const entry of node._data) {
+    for (let k = 0; k < entry.group.length && rows.length < n; k++) rows.push([entry, k]);
+  }
+  return rows;
+}
+
+// The frames of the contexts of a nested flow, in the coordinates of their parent rows, which
+// they're drawn at. Along each axis, a parent row with an extent, such as a band, gives the
+// frame its extent, as a facet's cell; a row at a point gives a frame of the given size around
+// it, as a glyph; and an axis the parent doesn't encode gives the parent's frame. A polar parent
+// places its rows at their screen points, so they're glyphs. Each frame records its parent's
+// frame and the edges of the parent it touches, for axes.
+export function nestedFrames(flow, n, {width = 40, height = 40} = {}) {
+  const boxes = parentRows(flow, n).map(([{value = {}, context = {}}, k]) => {
+    const {x: X = [], x1: X1, y: Y = [], y1: Y1} = value;
+    const {frame: parent, scales = {}} = context;
+    const tx = X[k] ?? 0;
+    const ty = Y[k] ?? 0;
+    if (parent?.type === "polar") {
+      const a = X1 ? (X[k] + X1[k]) / 2 : X[k];
+      const r = Y1 ? (Y[k] + Y1[k]) / 2 : Y[k];
+      const [px, py] = polarPoint(parent, r, a);
+      return {box: [px - width / 2, px + width / 2, py - height / 2, py + height / 2], tx, ty, parent: null};
+    }
+    const extent = (V, V1, key, size, [start, end]) => {
+      if (V1) return [Math.min(V[k], V1[k]), Math.max(V[k], V1[k])];
+      if (scales[key]) return [V[k] - size / 2, V[k] + size / 2];
+      return parent ? [start, end] : [V[k] - size / 2, V[k] + size / 2];
+    };
+    const [left, right] = extent(X, X1, "x", width, [parent?.left, parent?.right]);
+    const [top, bottom] = extent(Y, Y1, "y", height, [parent?.top, parent?.bottom]);
+    return {box: [left, right, top, bottom], tx, ty, parent};
+  });
+  // Facets in a grid: the bottom cell of each column labels x, and the left cell of each row labels
+  // y, even if the grid has empty cells, such as the days before the first of a month.
+  const same = (a, b) => Math.abs(a - b) < 1e-6;
+  const isBottom = ({box: [l, , , b]}) => boxes.every(({box}) => !same(box[0], l) || box[3] <= b + 1e-6);
+  const isLeft = ({box: [l, , t]}) => boxes.every(({box}) => !same(box[2], t) || box[0] >= l - 1e-6);
+  return boxes.map((cell) => {
+    const {
+      box: [l, r, t, b],
+      tx,
+      ty,
+      parent,
+    } = cell;
+    return {
+      left: l - tx,
+      right: r - tx,
+      top: t - ty,
+      bottom: b - ty,
+      ...(parent && {edges: {bottom: isBottom(cell), left: isLeft(cell)}}),
+    };
+  });
 }

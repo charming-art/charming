@@ -5,12 +5,16 @@ import {
   callable,
   colorScales,
   hasAny,
+  isNested,
   keysOf,
   labeled,
+  merge,
+  nestedFrames,
   positionRecord,
   positionScale,
   resolve,
   scaleDescriptors,
+  sharedDomain,
   withoutHints,
   withSeries,
 } from "./scales.js";
@@ -28,8 +32,11 @@ function radial(type) {
 // Resolves the scales of the channels, and maps positions to polar coordinates: x to the angle,
 // clockwise from 12 o'clock like d3.arc, and y to the radius, with a radial scale so that areas
 // grow with values. A pie is then a stack along x, and a rose a spread along x. The center is
-// kept in cx and cy for cm.arc. A renderer without a given size is resized to 640 × 640. The
-// resolved scales are kept in context.scales, and the polar frame in context.frame.
+// kept in cx and cy for cm.arc. A renderer without a given size is resized to 640 × 640. As in
+// cm.plane, the scales are resolved once for all the contexts, unless resolve makes a position
+// independent, and a nested context is drawn in the frame of its parent row, such as a pie glyph
+// in a width × height box. The resolved scales are kept in context.scales, and the polar frame in
+// context.frame.
 export function polar(
   flow,
   data,
@@ -43,11 +50,12 @@ export function polar(
     endAngle = 2 * Math.PI,
     width,
     height,
-    margin = 40,
-    marginTop = margin,
-    marginRight = margin,
-    marginBottom = margin,
-    marginLeft = margin,
+    margin,
+    marginTop,
+    marginRight,
+    marginBottom,
+    marginLeft,
+    resolve: {x: resolveX = "shared", y: resolveY = "shared"} = {},
     keysX = ["x", "x1"],
     keysY = ["y", "y1"],
   } = {},
@@ -55,41 +63,58 @@ export function polar(
   if (!data) throw new Error("No channels: call flow.transform(cm.encode, channels) before cm.polar.");
   const renderer = flow.renderer();
   if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.polar.");
+  const nested = isNested(flow);
+  data = data.map(withSeries);
 
-  const {auto, width: rendererWidth, height: rendererHeight} = renderer._props;
-  width ??= auto?.width ? 640 : rendererWidth;
-  height ??= auto?.height ? 640 : rendererHeight;
-  renderer.resize?.(width, height);
-  ({width, height} = renderer._props);
+  // A nested chart has no margins by default: its parent leaves the room.
+  margin ??= nested ? 0 : 40;
+  marginTop ??= margin;
+  marginRight ??= margin;
+  marginBottom ??= margin;
+  marginLeft ??= margin;
 
-  const cx = (marginLeft + width - marginRight) / 2;
-  const cy = (marginTop + height - marginBottom) / 2;
-  const outerRadius = Math.max(0, Math.min(width - marginLeft - marginRight, height - marginTop - marginBottom) / 2);
-  const r0 = innerRadius * outerRadius;
+  let boxes;
+  if (nested) {
+    boxes = nestedFrames(flow, data.length, {width, height});
+  } else {
+    const {auto, width: rendererWidth, height: rendererHeight} = renderer._props;
+    width ??= auto?.width ? 640 : rendererWidth;
+    height ??= auto?.height ? 640 : rendererHeight;
+    renderer.resize?.(width, height);
+    ({width, height} = renderer._props);
+    boxes = data.map(() => ({left: 0, right: width, top: 0, bottom: height}));
+  }
+  const frames = boxes.map(({left, right, top, bottom}) => {
+    const l = left + marginLeft;
+    const r = right - marginRight;
+    const t = top + marginTop;
+    const b = bottom - marginBottom;
+    const outerRadius = Math.max(0, Math.min(r - l, b - t) / 2);
+    const r0 = innerRadius * outerRadius;
+    return {type: "polar", cx: (l + r) / 2, cy: (t + b) / 2, innerRadius: r0, outerRadius, startAngle, endAngle};
+  });
   const rangeX = [startAngle, endAngle];
-  const rangeY = [r0, outerRadius];
-  const frame = {type: "polar", cx, cy, innerRadius: r0, outerRadius, startAngle, endAngle};
 
-  return data.map((context) => {
-    context = withSeries(context);
+  // The scales shared by all the contexts: colors, and positions unless they're independent.
+  const {hints: firstHints = {}} = data[0] ?? {};
+  const allX = Array.from(new Set(data.flatMap(({value, hints = {}}) => keysOf(value, hints, keysX, "x"))));
+  const allY = Array.from(new Set(data.flatMap(({value, hints = {}}) => keysOf(value, hints, keysY, "y"))));
+  const colors = colorScales(merge(data, ["fill", "stroke"]), firstHints);
+  // The radius is radial by default, so that areas grow with values.
+  const radialY = (hints) => radial(typeY ?? axisHint(hints, keysY).type ?? "radial");
+  const sharedX = resolveX !== "independent" && sharedScale(data, allX, keysX, typeX, domainX);
+  const sharedY = resolveY !== "independent" && sharedScale(data, allY, keysY, radialY(firstHints), domainY);
+
+  return data.map((context, j) => {
     const {value, hints = {}} = context;
-    const colors = colorScales(value, hints);
+    const frame = frames[j];
+    const {cx, cy, innerRadius: r0, outerRadius} = frame;
+    const rangeY = [r0, outerRadius];
 
-    // The scales of x and y also map the channels that share them, such as {value: "v2", scale: "y"}.
-    const allX = keysOf(value, hints, keysX, "x");
-    const allY = keysOf(value, hints, keysY, "y");
     const hintX = axisHint(hints, keysX);
     const hintY = axisHint(hints, keysY);
-    const x = positionScale(value, allX, {
-      type: typeX ?? hintX.type,
-      domain: domainX ?? hintX.domain,
-      range: rangeX,
-    });
-    const y = positionScale(value, allY, {
-      type: radial(typeY ?? hintY.type ?? "radial"),
-      domain: domainY ?? hintY.domain,
-      range: rangeY,
-    });
+    const x = sharedX || positionScale(value, allX, {type: typeX ?? hintX.type, domain: domainX ?? hintX.domain});
+    const y = sharedY || positionScale(value, allY, {type: radialY(hints), domain: domainY ?? hintY.domain});
 
     const [colored] = scale(flow, [context], scaleDescriptors(colors));
     const descriptors = {};
@@ -117,4 +142,12 @@ export function polar(
     newValue.cy = Array.from({length: n}, () => cy);
     return {...withoutHints(scaled), value: newValue, scales, frame};
   });
+}
+
+// The scale of a position shared by the contexts: its type and domain from the options, else from
+// the hints of the contexts, else inferred from the values of all of them.
+function sharedScale(data, all, keys, type, domain) {
+  const hints = data.map(({hints = {}}) => axisHint(hints, keys));
+  domain ??= sharedDomain(hints.map((hint) => hint.domain));
+  return positionScale(merge(data, all), all, {type: type ?? hints[0]?.type, domain});
 }
