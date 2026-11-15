@@ -102,3 +102,10 @@ test("cm.polar throws an error without channels or a renderer", () => {
   assert.throws(() => cm.polar(cm.flow(), undefined), /No channels/);
   assert.throws(() => cm.polar(cm.flow(), []), /No renderer/);
 });
+
+test("cm.polar keeps the series of fill in z, and records a UTC time scale for dates", () => {
+  const data = [new Date("2000-01-01"), new Date("2001-01-01")].map((date, i) => ({date, k: `${i}`}));
+  const {value, scales} = polared(data, {x: "date", fill: "k"});
+  assert.deepStrictEqual(value.z, ["0", "1"]);
+  assert.strictEqual(scales.x.scale, "utc");
+});

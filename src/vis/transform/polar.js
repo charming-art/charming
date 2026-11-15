@@ -9,6 +9,7 @@ import {
   positionScale,
   resolve,
   withoutHints,
+  withSeries,
 } from "./scales.js";
 
 // Rows from start to end, for a position that isn't encoded, such as the radius of a pie.
@@ -67,6 +68,7 @@ export function polar(
   const frame = {type: "polar", cx, cy, innerRadius: r0, outerRadius, startAngle, endAngle};
 
   return data.map((context) => {
+    context = withSeries(context);
     const {value, hints = {}} = context;
     const colors = colorScales(value, hints);
 

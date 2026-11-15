@@ -132,3 +132,62 @@ test("cm.stackY with chunk hints a domain from 0 that spans the rows with their 
   assert.deepStrictEqual(stacked([10, 10, 10, 10, 10].map((n) => ({n}))).domain, [0, 50]);
   assert.deepStrictEqual(stacked([-10, -10, 10].map((n) => ({n}))).domain, [-50, 50]);
 });
+
+// Two x, three series: a = [1, 6], b = [3, 2], c = [2, 4].
+const series = [
+  {x: 0, k: "a", n: 1},
+  {x: 0, k: "b", n: 3},
+  {x: 0, k: "c", n: 2},
+  {x: 1, k: "a", n: 6},
+  {x: 1, k: "b", n: 2},
+  {x: 1, k: "c", n: 4},
+];
+
+function ordered(options) {
+  const {y, y1} = values(series, {x: "x", y: "n", fill: "k"}, (flow, data) => cm.stackY(flow, data, options));
+  return {y, y1};
+}
+
+test("cm.stackY with order value sorts each stack by value, for ribbons", () => {
+  // At x = 0: a, c, b; at x = 1: b, c, a.
+  const {y1} = ordered({order: "value"});
+  assert.deepStrictEqual(y1, [0, 3, 1, 6, 0, 2]);
+});
+
+test("cm.stackY with order sum orders the series by their totals", () => {
+  // Totals: b = 5, c = 6, a = 7.
+  const {y1} = ordered({order: "sum"});
+  assert.deepStrictEqual(y1, [5, 0, 3, 6, 0, 2]);
+});
+
+test("cm.stackY with order appearance orders the series by the x of their maximum", () => {
+  // Maxima: b at x = 0, a and c at x = 1, in order of appearance.
+  const {y1} = ordered({order: "appearance"});
+  assert.deepStrictEqual(y1, [3, 0, 4, 2, 0, 8]);
+});
+
+test("cm.stackY with order inside-out puts the earliest series in the middle", () => {
+  const {y1} = ordered({order: "inside-out"});
+  // Plot's order for this data: c, b, a.
+  assert.deepStrictEqual(y1, [5, 2, 0, 6, 4, 0]);
+});
+
+test("cm.stackY takes an array of series as its order, and reverse", () => {
+  assert.deepStrictEqual(ordered({order: ["c", "a", "b"]}).y1, [2, 3, 0, 4, 10, 0]);
+  assert.deepStrictEqual(ordered({order: ["c", "a", "b"], reverse: true}).y1, [3, 0, 4, 2, 0, 8]);
+  assert.deepStrictEqual(ordered({order: "-value"}).y1, ordered({order: "value", reverse: true}).y1);
+});
+
+test("cm.stackY keeps the input order without order", () => {
+  assert.deepStrictEqual(ordered().y1, [0, 1, 4, 0, 6, 8]);
+});
+
+test("cm.stackY with order value sorts the rows around missing values", () => {
+  const rows = [3, null, 1].map((n, i) => ({x: 0, k: `${i}`, n}));
+  const {y1} = values(rows, {x: "x", y: "n", fill: "k"}, (flow, data) => cm.stackY(flow, data, {order: "value"}));
+  assert.deepStrictEqual(y1, [1, NaN, 0]);
+});
+
+test("cm.stackY takes order names in any case, like Plot", () => {
+  assert.deepStrictEqual(ordered({order: "Value"}).y1, ordered({order: "value"}).y1);
+});
