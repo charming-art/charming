@@ -4,27 +4,22 @@ import {renderFlow, withSVG} from "../../helpers.js";
 
 // Plot's Marimekko chart (https://observablehq.com/@observablehq/plot-marimekko), without its labels:
 // sales by market and segment. Each market's column is as wide as its total sales, with flex; within
-// it, the segments stack to 100%, as each value is divided by its market's total.
+// it, the segments stack to 100%, with offset "normalize".
 export const visMarimekko = withSVG(async () => {
   const sales = await d3.csv("data/sales.csv", d3.autoType);
   const markets = Array.from(new Set(sales.map((d) => d.market)));
-  const totals = d3.rollup(
-    sales,
-    (D) => d3.sum(D, (d) => d.value),
-    (d) => d.market,
-  );
   return renderFlow(
     (root) => {
       root
         .data(sales)
         .transform(cm.encode, {
           x: {value: "market", domain: markets},
-          y: (d) => d.value / totals.get(d.market),
+          y: "value",
           fill: "segment",
           n: "value",
         })
         .transform(cm.spreadX, {flex: "n", padding: 0})
-        .transform(cm.stackY)
+        .transform(cm.stackY, {offset: "normalize"})
         .transform(cm.plane, {marginTop: 10})
         .add(cm.rect, {fillOpacity: 0.5, stroke: "white"})
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
