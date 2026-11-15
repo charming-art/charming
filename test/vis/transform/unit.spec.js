@@ -60,3 +60,14 @@ test("cm.unitX and cm.unitY throw an error without channels", () => {
   assert.throws(() => cm.flow().data([1]).transform(cm.unitY), /No channels.*cm.unitY/);
   assert.throws(() => cm.flow().data([1]).transform(cm.unitX), /No channels.*cm.unitX/);
 });
+
+test("cm.unitY groups by position and series, even if their values contain commas", () => {
+  // As strings, "W,X" with "a" and "W" with "X,a" would both be "W,X,a".
+  const rows = [
+    {place: "W,X", kind: "a"},
+    {place: "W", kind: "X,a"},
+  ];
+  const {value} = units(rows, {x: "place", fill: "kind"}, cm.unitY);
+  assert.deepStrictEqual(value.x, ["W,X", "W"]);
+  assert.deepStrictEqual(value.fill, ["a", "X,a"]);
+});

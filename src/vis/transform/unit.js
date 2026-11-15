@@ -1,4 +1,4 @@
-import {InternMap, range, sum} from "d3-array";
+import {group, InternMap, range, sum} from "d3-array";
 import {seriesOf, seriesOrder} from "./series.js";
 
 // Turns the rows into one row per unit, such as the squares of a waffle. The rows are grouped by
@@ -18,18 +18,21 @@ function unit(data, {unit = 1} = {}, [key, key1, other], name) {
     const position = O && new InternMap(Array.from(new Set(O), (o, i) => [o, i]));
     const bySeries = Z && seriesOrder(Z, domain);
     I.sort((i, j) => (position ? position.get(O[i]) - position.get(O[j]) : 0) || (bySeries ? bySeries(i, j) : 0));
-    const groups = new Map();
-    for (const i of I) {
-      const k = `${O?.[i]},${Z?.[i]}`;
-      if (groups.has(k)) groups.get(k).push(i);
-      else groups.set(k, [i]);
-    }
+    // Grouped with one map per level, so that values are compared as values, not as strings.
+    const groups = Array.from(
+      group(
+        I,
+        (i) => O?.[i],
+        (i) => Z?.[i],
+      ).values(),
+      (byZ) => [...byZ.values()],
+    ).flat();
     const keys = Object.keys(value).filter((k) => k !== key && k !== key1);
     const newGroup = [];
     const newValue = Object.fromEntries(
       [...keys, key].map((k) => [k, Array.isArray(value[k]) || k === key ? [] : value[k]]),
     );
-    for (const g of groups.values()) {
+    for (const g of groups) {
       const amount = V ? sum(g, (i) => V[i]) : g.length;
       const n = Math.round(Math.abs(amount) / unit);
       const v = (amount < 0 ? -1 : 1) * unit;

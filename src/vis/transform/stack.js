@@ -88,7 +88,9 @@ function stack(data, {chunk, padding = 0.1} = {}, [key, key1, other, other1], na
     // Like Plot, the input order is kept unless the series have a domain.
     const order = domain && seriesOrder(Z, domain);
     if (chunk !== undefined) {
-      const [V2, V1, C, C1] = stackChunks(V, stacks, order, {chunk, padding}, O, value[other1]);
+      // Columns split the band of the other position, if it has one, such as [x, x1] after a spread.
+      const B1 = value[other1];
+      const [V2, V1, C, C1] = stackChunks(V, stacks, order, {chunk, padding}, B1 && O, B1);
       const columns = C ? {[other]: C, [other1]: C1} : {};
       return {...context, value: {...value, [key]: V2, [key1]: V1, ...columns}};
     }

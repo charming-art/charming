@@ -103,3 +103,14 @@ test("cm.stackY with chunk stacks positive values up and negative values down, w
   assert.deepStrictEqual(y1, [5, -5, 5, -5, -25]);
   assert.deepStrictEqual(y, [15, -15, 15, -15, -35]);
 });
+
+test("cm.stackY with chunk keeps the other position if it has no band", () => {
+  const rows = [
+    {band: "A", n: 10},
+    {band: "A", n: 10},
+  ];
+  const {x, x1, y} = values(rows, {x: "band", y: "n"}, (flow, data) => cm.stackY(flow, data, {chunk: 2, padding: 0}));
+  assert.deepStrictEqual(x, ["A", "A"]);
+  assert.strictEqual(x1, undefined);
+  assert.deepStrictEqual(y, [20, 20]);
+});
