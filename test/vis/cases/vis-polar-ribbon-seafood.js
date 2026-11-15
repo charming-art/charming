@@ -17,7 +17,8 @@ export const visPolarRibbonSeafood = withSVG(async () => {
         .transform(cm.stackY, {order: "value"})
         .transform(cm.polar, {innerRadius: 0.2, scaleY: "linear"})
         .add(cm.arc)
-        .add(cm.areaRadial, {curve: "bump-x", fillOpacity: 0.8});
+        .add(cm.areaRadial, {curve: "bump-x", fillOpacity: 0.8})
+        .add(cm.axis, {x: {anchor: "outer"}});
     },
     {width: 640, height: 640},
   );
