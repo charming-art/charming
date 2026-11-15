@@ -42,8 +42,7 @@ export function shapeLinkArrow() {
         .append(cm.circle, {x: 0, y: 0, fill: "blue", r: 2});
 
       root
-        .data(fields)
-        .process(cm.filter, (d) => d.value > 0.5)
+        .data(fields.filter((d) => d.value > 0.5))
         .transform(cm.bind, {
           x: (d) => d.x * size + size / 2,
           y: (d) => d.y * size + size / 2,
