@@ -16,6 +16,7 @@ export {visLetterFrequencyBar} from "./vis-letter-frequency-bar.js";
 export {visLetterFrequencyColumn} from "./vis-letter-frequency-column.js";
 export {visMultipleLine} from "./vis-multiple-line.js";
 export {visNonFacetedMarks} from "./vis-non-faceted-marks.js";
+export {visNormalizedStack} from "./vis-normalized-stack.js";
 export {visPieGlyphs} from "./vis-pie-glyphs.js";
 export {visPie} from "./vis-pie.js";
 export {visPolarMultiLine} from "./vis-polar-multi-line.js";

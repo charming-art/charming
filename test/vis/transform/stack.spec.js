@@ -191,3 +191,38 @@ test("cm.stackY with order value sorts the rows around missing values", () => {
 test("cm.stackY takes order names in any case, like Plot", () => {
   assert.deepStrictEqual(ordered({order: "Value"}).y1, ordered({order: "value"}).y1);
 });
+
+test("cm.stackY with offset normalize rescales each stack to [0, 1], like Plot", () => {
+  const rows = [
+    {x: 0, n: 1},
+    {x: 0, n: 3},
+    {x: 1, n: 2},
+    {x: 1, n: 2},
+  ];
+  const {y, y1} = values(rows, {x: "x", y: "n"}, (flow, data) => cm.stackY(flow, data, {offset: "normalize"}));
+  assert.deepStrictEqual(y1, [0, 0.25, 0, 0.5]);
+  assert.deepStrictEqual(y, [0.25, 1, 0.5, 1]);
+});
+
+test("cm.stackY with offset normalize maps stacks with negative values to [0, 1] too", () => {
+  const rows = [
+    {x: 0, n: -1},
+    {x: 0, n: 3},
+  ];
+  const {y, y1} = values(rows, {x: "x", y: "n"}, (flow, data) => cm.stackY(flow, data, {offset: "normalize"}));
+  assert.deepStrictEqual(y1, [0.25, 0.25]);
+  assert.deepStrictEqual(y, [0, 1]);
+});
+
+test("cm.stackY orders the series by a channel named by order, like Plot's field", () => {
+  const rows = [
+    {x: 0, k: "a", g: 2, n: 1},
+    {x: 0, k: "b", g: 1, n: 1},
+    {x: 0, k: "c", g: 3, n: 1},
+  ];
+  const by = (order, reverse) =>
+    values(rows, {x: "x", y: "n", z: "k", g: "g"}, (flow, data) => cm.stackY(flow, data, {order, reverse})).y1;
+  assert.deepStrictEqual(by("g"), [1, 0, 2]);
+  assert.deepStrictEqual(by("g", true), [1, 2, 0]);
+  assert.deepStrictEqual(by("-g"), [1, 2, 0]);
+});
