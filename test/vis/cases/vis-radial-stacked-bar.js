@@ -15,8 +15,8 @@ export const visRadialStackedBar = withSVG(async () => {
         .transform(cm.spreadX)
         .transform(cm.stackY)
         .transform(cm.polar, {innerRadius: 0.4})
-        .add(cm.arc)
-        .add(cm.axis, {y: {tickFormat: "s"}});
+        .add(cm.axis, {y: {tickFormat: "s"}})
+        .add(cm.arc);
     },
     {width: 640, height: 640},
   );

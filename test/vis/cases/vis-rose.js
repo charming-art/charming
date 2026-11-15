@@ -12,8 +12,8 @@ export const visRose = withSVG(async () => {
         .transform(cm.encode, {x: "name", y: "value", fill: "name"})
         .transform(cm.spreadX)
         .transform(cm.polar)
-        .add(cm.arc)
-        .add(cm.axis);
+        .add(cm.axis)
+        .add(cm.arc);
     },
     {width: 640, height: 640},
   );

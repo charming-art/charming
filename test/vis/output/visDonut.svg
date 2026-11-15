@@ -1,9 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640">
-  <path d="M242.766,139.516A280,280,0,0,0,0,-280L0,-140A140,140,0,0,1,121.383,69.758Z" transform="translate(320,320)" fill="#fac858" stroke="white"></path>
-  <path d="M-113.733,255.861A280,280,0,0,0,242.766,139.516L121.383,69.758A140,140,0,0,1,-56.867,127.93Z" transform="translate(320,320)" fill="#5470c6" stroke="white"></path>
-  <path d="M-279.996,-1.537A280,280,0,0,0,-113.733,255.861L-56.867,127.93A140,140,0,0,1,-139.998,-0.769Z" transform="translate(320,320)" fill="#91cc75" stroke="white"></path>
-  <path d="M-157.862,-231.257A280,280,0,0,0,-279.996,-1.537L-139.998,-0.769A140,140,0,0,1,-78.931,-115.628Z" transform="translate(320,320)" fill="#ee6666" stroke="white"></path>
-  <path d="M0,-280A280,280,0,0,0,-157.862,-231.257L-78.931,-115.628A140,140,0,0,1,0,-140Z" transform="translate(320,320)" fill="#73c0de" stroke="white"></path>
   <line x1="320" y1="40" x2="320" y2="34" stroke="currentColor" stroke-width="1"></line>
   <line x1="428.8598569969846" y1="62.028041185488405" x2="431.1925682183486" y2="56.50007063946316" stroke="currentColor" stroke-width="1"></line>
   <line x1="520.5913610412838" y1="124.64620332431386" x2="524.8897473493114" y2="120.4600505384063" stroke="currentColor" stroke-width="1"></line>
@@ -36,4 +31,9 @@
   <text x="63.4820116299739" y="186.8853064361595" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-after-edge" fill="currentColor">2,600</text>
   <text x="135.41570919494086" y="97.62725079724055" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-after-edge" fill="currentColor">2,800</text>
   <text x="236.3924807602504" y="43.35802428666955" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">3,000</text>
+  <path d="M242.766,139.516A280,280,0,0,0,0,-280L0,-140A140,140,0,0,1,121.383,69.758Z" transform="translate(320,320)" fill="#fac858" stroke="white"></path>
+  <path d="M-113.733,255.861A280,280,0,0,0,242.766,139.516L121.383,69.758A140,140,0,0,1,-56.867,127.93Z" transform="translate(320,320)" fill="#5470c6" stroke="white"></path>
+  <path d="M-279.996,-1.537A280,280,0,0,0,-113.733,255.861L-56.867,127.93A140,140,0,0,1,-139.998,-0.769Z" transform="translate(320,320)" fill="#91cc75" stroke="white"></path>
+  <path d="M-157.862,-231.257A280,280,0,0,0,-279.996,-1.537L-139.998,-0.769A140,140,0,0,1,-78.931,-115.628Z" transform="translate(320,320)" fill="#ee6666" stroke="white"></path>
+  <path d="M0,-280A280,280,0,0,0,-157.862,-231.257L-78.931,-115.628A140,140,0,0,1,0,-140Z" transform="translate(320,320)" fill="#73c0de" stroke="white"></path>
 </svg>

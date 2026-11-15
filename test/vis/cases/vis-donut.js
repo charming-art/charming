@@ -12,8 +12,8 @@ export const visDonut = withSVG(async () => {
         .transform(cm.encode, {x: "value", fill: "name"})
         .transform(cm.stackX)
         .transform(cm.polar, {innerRadius: 0.5})
-        .add(cm.arc, {stroke: "white"})
-        .add(cm.axisX, {anchor: "outer"});
+        .add(cm.axisX, {anchor: "outer"})
+        .add(cm.arc, {stroke: "white"});
     },
     {width: 640, height: 640},
   );
