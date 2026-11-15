@@ -35,6 +35,7 @@ export const visTitanicMosaic = withSVG(async () => {
         })
         .transform(cm.plane)
         .transform(cm.pack)
+        .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
         .add(cm.circle, dot);
     },
     {width: 640, height: 480},

@@ -23,5 +23,6 @@ export function unitByClass(root, passengers, {flex, share} = {}) {
     .transform(cm.encode, {fill: {value: (d) => (d.survived ? "Yes" : "No"), domain: ["Yes", "No"]}})
     .transform(cm.plane)
     .transform(cm.pack, {share})
+    .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
     .add(cm.circle, dot);
 }

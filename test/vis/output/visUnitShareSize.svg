@@ -7,6 +7,7 @@
   <text x="453.0737573621824" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">3</text>
   <text x="320" y="397" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" fill="currentColor">pclass</text>
   <g transform="translate(39.35483870967742,185)">
+    <rect x="0" y="-185" width="123.92124005027229" height="370" fill="none" stroke="currentColor"></rect>
     <circle cx="5.63278363864874" cy="179.36721636135127" r="4.787866092851429" fill="#91cc75"></circle>
     <circle cx="16.89835091594622" cy="179.36721636135127" r="4.787866092851429" fill="#91cc75"></circle>
     <circle cx="28.163918193243703" cy="179.36721636135127" r="4.78786609285143" fill="#91cc75"></circle>
@@ -332,6 +333,7 @@
     <circle cx="39.42948547054118" cy="-147.33423468027564" r="4.787866092851428" fill="#5470c6"></circle>
   </g>
   <g transform="translate(182.63091746962715,185)">
+    <rect x="0" y="-185" width="103.51659725473769" height="370" fill="none" stroke="currentColor"></rect>
     <circle cx="5.7509220697076495" cy="179.24907793029234" r="4.888283759251502" fill="#91cc75"></circle>
     <circle cx="17.25276620912295" cy="179.24907793029234" r="4.888283759251502" fill="#91cc75"></circle>
     <circle cx="28.75461034853825" cy="179.24907793029234" r="4.888283759251503" fill="#91cc75"></circle>
@@ -611,6 +613,7 @@
     <circle cx="74.76198690619944" cy="-165.8062462521666" r="4.888283759251501" fill="#5470c6"></circle>
   </g>
   <g transform="translate(305.5023534340423,185)">
+    <rect x="0" y="-185" width="295.1428078562803" height="370" fill="none" stroke="currentColor"></rect>
     <circle cx="6.148808497005839" cy="178.85119150299414" r="5.2264872224549626" fill="#91cc75"></circle>
     <circle cx="18.446425491017518" cy="178.85119150299414" r="5.2264872224549626" fill="#91cc75"></circle>
     <circle cx="30.744042485029198" cy="178.85119150299414" r="5.226487222454963" fill="#91cc75"></circle>

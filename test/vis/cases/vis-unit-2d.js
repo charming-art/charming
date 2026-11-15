@@ -32,6 +32,7 @@ export const visUnit2d = withSVG(async () => {
         .transform(cm.encode, {fill: {value: "Survived", domain: ["Yes", "No"]}})
         .transform(cm.plane)
         .transform(cm.pack)
+        .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
         .add(cm.circle, dot);
     },
     {width: 640, height: 400},
