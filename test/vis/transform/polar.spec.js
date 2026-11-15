@@ -67,8 +67,8 @@ test("cm.polar starts the radius at innerRadius, a fraction of the radius", () =
 
 test("cm.polar spans the whole radius without y, so that a pie needs no y", () => {
   const {value} = polared(letters, {x: "n"}, [cm.stackX], {innerRadius: 0.25});
-  assert.deepStrictEqual(value.y, [25, 25]);
-  assert.deepStrictEqual(value.y1, [100, 100]);
+  assert.deepStrictEqual(value.y, [100, 100]);
+  assert.deepStrictEqual(value.y1, [25, 25]);
 });
 
 test("cm.polar records the center in cx and cy, and its frame and scales", () => {

@@ -1,7 +1,7 @@
 import {link} from "../../core/shape/link.js";
 import {path} from "../../core/shape/path.js";
 import {text} from "../../core/shape/text.js";
-import {font, formatOf, positionOf, scaleOf, ticksOf} from "./axis.js";
+import {font, formatOf, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
 
 const stroke = "currentColor";
 
@@ -58,13 +58,14 @@ export function polarAxisX(flow, frame, x, options) {
     stroke,
   });
   const format = formatOf(scale, options, count);
+  const align = ticks.map((d) => alignOf(k * Math.sin(A(d)), -k * Math.cos(A(d))));
   flow.data(ticks).append(text, {
     ...font,
     text: format,
     x: (d, i) => at(r2, i)[0],
     y: (d, i) => at(r2, i)[1],
-    textAlign: (d) => alignOf(k * Math.sin(A(d)), -k * Math.cos(A(d))).textAlign,
-    textBaseline: (d) => alignOf(k * Math.sin(A(d)), -k * Math.cos(A(d))).textBaseline,
+    textAlign: (d, i) => align[i].textAlign,
+    textBaseline: (d, i) => align[i].textBaseline,
   });
 }
 

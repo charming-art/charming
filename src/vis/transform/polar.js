@@ -96,10 +96,11 @@ export function polar(
     for (const key of keysX) if (key in value) scales[key] = recordX;
     for (const key of keysY) if (key in value) scales[key] = recordY;
 
-    // A missing position fills its span: a pie has no y, so its wedges span the whole radius.
+    // A missing position fills its span: a pie has no y, so its wedges span the whole radius. Like a
+    // stack, y is the outer radius and y1 the baseline.
     const newValue = {...scaled.value};
     const n = Object.values(value)[0]?.length ?? 0; // all channels have one value per row
-    if (!hasAny(value, keysY)) [newValue[keysY[0]], newValue[keysY[1]]] = span(n, rangeY);
+    if (!hasAny(value, keysY)) [newValue[keysY[1]], newValue[keysY[0]]] = span(n, rangeY); // y outer, y1 inner
     if (!hasAny(value, keysX)) [newValue[keysX[0]], newValue[keysX[1]]] = span(n, rangeX);
     newValue.cx = Array.from({length: n}, () => cx);
     newValue.cy = Array.from({length: n}, () => cy);

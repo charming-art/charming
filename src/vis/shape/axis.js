@@ -1,39 +1,11 @@
-import {scaleBand, scaleLinear, scalePoint} from "d3-scale";
 import {link} from "../../core/shape/link.js";
 import {text} from "../../core/shape/text.js";
 import {polarAxisX, polarAxisY} from "./axisPolar.js";
-
-export const font = {fill: "currentColor", fontSize: 10, fontFamily: "system-ui, sans-serif"};
-
-// Rebuilds a d3 scale from a scale recorded by cm.plane, for its ticks and tick format.
-export function scaleOf({scale, domain, range, paddingInner, paddingOuter, align}) {
-  if (typeof scale === "function") return scale;
-  if (scale === "band")
-    return scaleBand(domain, range).paddingInner(paddingInner).paddingOuter(paddingOuter).align(align);
-  if (scale === "point") return scalePoint(domain, range);
-  return scaleLinear(domain, range);
-}
+import {font, formatOf, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
 
 // The count of ticks: the ticks option if it's a number, or one tick per spacing pixels, like Plot.
 function countOf({ticks}, [start, end], spacing) {
   return typeof ticks === "number" ? ticks : (end - start) / spacing;
-}
-
-export function ticksOf(scale, {ticks}, count) {
-  if (Array.isArray(ticks)) return ticks;
-  return scale.ticks ? scale.ticks(count) : scale.domain();
-}
-
-export function formatOf(scale, {tickFormat}, count) {
-  if (typeof tickFormat === "function") return tickFormat;
-  if (scale.tickFormat) return scale.tickFormat(count, tickFormat);
-  return (d) => `${d}`;
-}
-
-// Ticks are at the middle of the bands of a band scale.
-export function positionOf(scale) {
-  const offset = scale.bandwidth ? scale.bandwidth() / 2 : 0;
-  return (d) => scale(d) + offset;
 }
 
 // Like Plot, the label of a continuous scale has an arrow for the direction of increasing values,
