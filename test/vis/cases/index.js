@@ -10,6 +10,7 @@ export {visLayeredColumn} from "./vis-layered-column.js";
 export {visLetterFrequencyBar} from "./vis-letter-frequency-bar.js";
 export {visLetterFrequencyColumn} from "./vis-letter-frequency-column.js";
 export {visPie} from "./vis-pie.js";
+export {visRadialStackedBarD3} from "./vis-radial-stacked-bar-d3.js";
 export {visRadialStackedBar} from "./vis-radial-stacked-bar.js";
 export {visRose} from "./vis-rose.js";
 export {visScatterAxis} from "./vis-scatter-axis.js";
