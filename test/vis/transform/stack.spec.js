@@ -187,3 +187,7 @@ test("cm.stackY with order value sorts the rows around missing values", () => {
   const {y1} = values(rows, {x: "x", y: "n", fill: "k"}, (flow, data) => cm.stackY(flow, data, {order: "value"}));
   assert.deepStrictEqual(y1, [1, NaN, 0]);
 });
+
+test("cm.stackY takes order names in any case, like Plot", () => {
+  assert.deepStrictEqual(ordered({order: "Value"}).y1, ordered({order: "value"}).y1);
+});

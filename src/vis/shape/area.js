@@ -52,14 +52,15 @@ function seriesOf(I, {z, fill, stroke}) {
 
 // The points of a series, sorted along the position it runs on, such as x for cm.areaY. A row with a
 // band on that position, such as a bar of cm.spreadX, has a point at each edge, so that the area is
-// flat across the bar and curved between bars, like a ribbon.
+// flat across the bar and curved between bars, like a ribbon. The points are sorted, not the rows,
+// so that the edges stay in order if the scale is reversed. Missing positions go last.
 function pointsOf(I, P, P1, V, V1) {
   const points = [];
-  for (const i of I.slice().sort((i, j) => ascending(P[i], P[j]))) {
+  for (const i of I) {
     points.push([P[i], V[i], V1[i]]);
     if (P1) points.push([P1[i], V[i], V1[i]]);
   }
-  return points;
+  return points.sort(([a], [b]) => !isFinite(a) - !isFinite(b) || ascending(a, b));
 }
 
 const defined = ([x, y, y1]) => isFinite(x) && isFinite(y) && isFinite(y1);
@@ -70,6 +71,7 @@ function drawArea(renderer, I, value, options, shape, [p, p1, v, v1], center) {
     [p]: P = [],
     [p1]: P1,
     [v]: V = [],
+    // The baseline, such as y1, comes from cm.stackY or cm.spreadX; without it, the area is empty.
     [v1]: V1 = V,
     cx: CX = [],
     cy: CY = [],
@@ -147,7 +149,13 @@ function polarContext() {
       for (let k = 1; k <= n; k++) to(sa + ((a - sa) * k) / n, sr + ((r - sr) * k) / n);
     },
     bezierCurveTo(a1, r1, a2, r2, a, r) {
-      const n = Math.max(8, Math.ceil(Math.abs(a - a0) / 0.02));
+      // Control points can go past the ends, as for "natural" or "cardinal", so the steps cover the
+      // whole span of the curve, in angle and in radius (a step per 2px).
+      const A = [a0, a1, a2, a];
+      const R = [r0, r1, r2, r];
+      const da = Math.max(...A) - Math.min(...A);
+      const dr = Math.max(...R) - Math.min(...R);
+      const n = Math.max(8, Math.ceil(da / 0.02), Math.ceil(dr / 2));
       const [sa, sr] = [a0, r0];
       for (let k = 1; k <= n; k++) {
         const t = k / n;
@@ -156,6 +164,7 @@ function polarContext() {
         to(b(sa, a1, a2, a), b(sr, r1, r2, r));
       }
     },
+    // d3.area closes an area at a single angle, so the closing edge is radial: a straight line.
     closePath() {
       path.closePath();
     },

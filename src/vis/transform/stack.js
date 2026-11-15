@@ -78,10 +78,12 @@ function descendingDefined(a, b) {
 }
 
 // The orders of Plot's stack transform (ISC license): by value within each stack, or a series
-// order shared by all stacks, by sum, appearance, inside-out or as given. A "-" prefix descends.
+// order shared by all stacks, by sum, appearance, inside-out or as given. A "-" prefix descends,
+// and names are case-insensitive, as in Plot.
 function orderOf(order, V, O, Z) {
   if (order == null) return null;
   if (Array.isArray(order)) return orderSeries(ascendingDefined, Z, () => order);
+  order = `${order}`.toLowerCase();
   const descend = order.startsWith("-");
   const compare = descend ? descendingDefined : ascendingDefined;
   const I = range(V.length);

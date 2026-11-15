@@ -114,3 +114,57 @@ test("cm.areaX mirrors cm.areaY: one area per series along y, from x1 to x", () 
   // Sorted along y: each line goes from y = 1, at the top (y is up), to y = 0, at the bottom.
   for (const p of P) assert.match(p.getAttribute("d"), /^M[^,]+,0L[^,]+,200L/);
 });
+
+// The points of a path, as [x, y], for paths of lines.
+function pointsOfPath(p) {
+  return p
+    .getAttribute("d")
+    .split(/[MLZ]/)
+    .filter(Boolean)
+    .map((d) => d.split(",").map(Number));
+}
+
+test("cm.areaY goes through the edges of bands in order, even if the scale is reversed", () => {
+  const data = ["A", "B", "C"].map((x, i) => ({x, y: i + 1}));
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(data)
+    .transform(cm.encode, {x: "x", y: "y"})
+    .transform(cm.spreadX)
+    .transform(cm.stackY)
+    .transform(cm.plane, {margin: 0, reverseX: true})
+    .add(cm.areaY);
+  root.render();
+  const [p] = renderer.node().querySelectorAll("path");
+  // The top line goes through 6 points in one direction, then the baseline comes back.
+  const X = pointsOfPath(p)
+    .slice(0, 6)
+    .map(([x]) => x);
+  assert.deepStrictEqual(
+    X,
+    X.slice().sort((a, b) => a - b),
+  );
+});
+
+test("cm.areaRadial samples curves whose control points go past their ends", () => {
+  const data = [0, 1, 2, 3].map((x) => ({x, y: [1, 4, 1, 4][x]}));
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(data)
+    .transform(cm.encode, {x: "x", y: "y"})
+    .transform(cm.stackY)
+    .transform(cm.polar, {margin: 0, startAngle: 0, endAngle: 0.3, scaleY: "linear"})
+    .add(cm.areaRadial, {curve: "natural"});
+  root.render();
+  const [p] = renderer.node().querySelectorAll("path");
+  const P = pointsOfPath(p);
+  // Consecutive points of the curves are close, so that the polyline follows them. Radial edges, at
+  // a single angle, are straight lines, so they're skipped.
+  for (let i = 1; i < P.length; i++) {
+    const [[x0, y0], [x1, y1]] = [P[i - 1], P[i]];
+    if (Math.abs(x0 * y1 - x1 * y0) < 1e-6) continue;
+    assert.ok(Math.hypot(x1 - x0, y1 - y0) < 10);
+  }
+});
