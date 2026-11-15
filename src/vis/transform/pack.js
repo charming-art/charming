@@ -13,7 +13,7 @@ function gridOf(count, width, height) {
 // Packs the rows of each context into a grid of square cells filling its frame, such as the dots
 // of a unit chart in each facet: row by row from the bottom left, in input order. Each row gets its
 // cell as x, x1, y and y1. With share, every grid is laid out for the largest count, like G2's
-// shareData, so that the cells have the same size in every context.
+// shareData, so that frames of the same size get the same cells.
 export function pack(flow, data, {share = false} = {}) {
   if (!data) throw new Error("No channels: call flow.transform(cm.encode, channels) before cm.pack.");
   const indexOf = ({I, group}) => I ?? range(group.length);

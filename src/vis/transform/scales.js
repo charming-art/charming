@@ -243,7 +243,7 @@ export function nestedFrames(flow, n, {width = 40, height = 40} = {}) {
 // A band scale whose bands are proportional to weights, like G2's flex for shareSize: each
 // category's step is its weight, and the padding is a fraction of the mean step, so that equal
 // weights give the bands of d3.scaleBand. It maps a category to the start of its band; width and
-// middle give the rest of the band.
+// middle give the rest of the band. A band lighter than the padding is empty.
 export function scaleFlex(domain, weights, {paddingInner = 0, paddingOuter = 0} = {}, [r0, r1] = [0, 1]) {
   const total = weights.reduce((a, b) => a + b, 0);
   const mean = total / weights.length || 1;
@@ -252,7 +252,7 @@ export function scaleFlex(domain, weights, {paddingInner = 0, paddingOuter = 0} 
   const starts = [];
   let start = r0 + paddingOuter * mean * unit;
   for (const w of weights) (starts.push(start), (start += w * unit));
-  const width = (v) => weights[index.get(v)] * unit - paddingInner * mean * unit;
+  const width = (v) => Math.max(0, (weights[index.get(v)] - paddingInner * mean) * unit);
   const scale = (v) => starts[index.get(v)];
   scale.width = width;
   scale.middle = (v) => scale(v) + width(v) / 2;

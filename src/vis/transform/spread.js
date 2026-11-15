@@ -1,4 +1,4 @@
-import {InternSet, range, sort} from "d3-array";
+import {InternMap, InternSet, range, sort} from "d3-array";
 import {scaleBand} from "d3-scale";
 import {scaleFlex} from "./scales.js";
 import {seriesOf, seriesOrder} from "./series.js";
@@ -39,7 +39,7 @@ function spreadCategories(context, padding, flex, [key, key1, other, other1]) {
 
 // The weight of each category: the sum of its rows' values of the flex channel.
 function weightsOf(domain, V, F) {
-  const index = new Map(domain.map((d, i) => [d, i]));
+  const index = new InternMap(domain.map((d, i) => [d, i]));
   const weights = domain.map(() => 0);
   V.forEach((v, i) => index.has(v) && (weights[index.get(v)] += +F[i] || 0));
   return weights;

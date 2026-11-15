@@ -233,3 +233,33 @@ test("cm.plane records flex bands, so that axes label them at their middles", ()
   assert.strictEqual(context.scales.x.apply("a"), 12.5);
   assert.strictEqual(context.scales.x.apply("b"), 62.5);
 });
+
+test("cm.spreadX with flex weighs dates in a given domain as categories", () => {
+  const date = (year) => new Date(Date.UTC(year, 0, 1));
+  const data = [
+    {k: date(2020), n: 1},
+    {k: date(2021), n: 3},
+  ];
+  const [{value}] = cm
+    .flow()
+    .data(data)
+    .transform(cm.encode, {x: {value: "k", domain: [date(2020), date(2021)]}, n: "n"})
+    .transform((flow, data) => cm.spreadX(flow, data, {flex: "n", padding: 0}))._values;
+  assert.deepStrictEqual(value.x, [0, 0.25]);
+  assert.deepStrictEqual(value.x1, [0.25, 1]);
+});
+
+test("cm.spreadX with flex never gives a light category a band of negative width", () => {
+  const data = [
+    {k: "a", n: 1},
+    {k: "b", n: 100},
+  ];
+  const [{value}] = cm
+    .flow()
+    .data(data)
+    .transform(cm.encode, {x: "k", n: "n"})
+    .transform((flow, data) => cm.spreadX(flow, data, {flex: "n"}))._values;
+  // The padding is 0.1 of the mean step, 5.05, wider than a's step of 1.
+  assert.ok(value.x1[0] >= value.x[0]);
+  assert.ok(value.x[1] >= value.x1[0]);
+});
