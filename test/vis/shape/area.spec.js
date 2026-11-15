@@ -99,7 +99,8 @@ test("cm.areaRadial follows the circle between points at the same radius, like a
     .map((d) => d.split(",").map(Number));
   const outer = points.filter(([x, y]) => Math.hypot(x, y) > 50);
   assert.ok(outer.length > 10);
-  for (const [x, y] of outer) assert.ok(Math.abs(Math.hypot(x, y) - 100) < 1e-6);
+  // The path is rounded to 3 decimals.
+  for (const [x, y] of outer) assert.ok(Math.abs(Math.hypot(x, y) - 100) < 1e-2);
 });
 
 test("cm.areaX mirrors cm.areaY: one area per series along y, from x1 to x", () => {
