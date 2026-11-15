@@ -3,22 +3,25 @@ import {fit} from "../../core/transform/fit.js";
 import {discrete, scale} from "../../core/transform/scale.js";
 import {
   axisHint,
+  callable,
   colorScales,
   hasAny,
+  keysOf,
   labeled,
   positionRecord,
   positionScale,
   resolve,
+  scaleDescriptors,
   withoutHints,
   withSeries,
 } from "./scales.js";
 
 // Like Plot, the height is 400 for a continuous y, 20px per category (up to 60) plus 60 for a
 // categorical y, and 60 without y.
-function autoHeight(value, keys, {scale, domain, band}) {
+function autoHeight(value, keys, {type, domain, band}) {
   if (!hasAny(value, keys)) return 60;
   const V = keys.filter((key) => key in value).flatMap((key) => Array.from(value[key]));
-  const categories = band?.domain ?? (discrete(scale, V) ? (domain ?? Array.from(new InternSet(V))) : null);
+  const categories = band?.domain ?? (discrete(type, V) ? (domain ?? Array.from(new InternSet(V))) : null);
   return categories ? Math.min(60, categories.length) * 20 + 60 : 400;
 }
 
@@ -37,8 +40,8 @@ export function plane(
   flow,
   data,
   {
-    scaleX,
-    scaleY,
+    typeX,
+    typeY,
     domainX,
     domainY,
     reverseX = false,
@@ -70,7 +73,7 @@ export function plane(
   const {auto, width: rendererWidth, height: rendererHeight} = renderer._props;
   width ??= auto?.width ? 640 : rendererWidth;
   // The height uses the same scale and domain of y as fitting: the options, else the hints.
-  const sizeY = {...axisHint(firstHints, keysY), ...(scaleY && {scale: scaleY}), ...(domainY && {domain: domainY})};
+  const sizeY = {...axisHint(firstHints, keysY), ...(typeY && {type: typeY}), ...(domainY && {domain: domainY})};
   height ??= auto?.height ? autoHeight(first, keysY, sizeY) : rendererHeight;
   renderer.resize?.(width, height);
   ({width, height} = renderer._props);
@@ -89,18 +92,19 @@ export function plane(
     context = withSeries(context);
     const {value, hints = {}} = context;
     const colors = colorScales(value, hints);
-    const [colored] = scale(flow, [context], colors);
+    const [colored] = scale(flow, [context], scaleDescriptors(colors));
 
+    // The scales of x and y also map the channels that share them, such as {value: "v2", scale: "y"}.
+    const allX = keysOf(value, hints, keysX, "x");
+    const allY = keysOf(value, hints, keysY, "y");
     const hintX = axisHint(hints, keysX);
     const hintY = axisHint(hints, keysY);
-    const {scale: hintScaleX, domain: hintDomainX} = hintX;
-    const {scale: hintScaleY, domain: hintDomainY} = hintY;
-    const x = positionScale(value, keysX, {scale: scaleX ?? hintScaleX, domain: domainX ?? hintDomainX, range: rangeX});
-    const y = positionScale(value, keysY, {scale: scaleY ?? hintScaleY, domain: domainY ?? hintDomainY, range: rangeY});
+    const x = positionScale(value, allX, {type: typeX ?? hintX.type, domain: domainX ?? hintX.domain, range: rangeX});
+    const y = positionScale(value, allY, {type: typeY ?? hintY.type, domain: domainY ?? hintY.domain, range: rangeY});
 
     const [fitted] = fit(flow, [colored], {
-      scaleX: x.scale,
-      scaleY: y.scale,
+      scaleX: x.type,
+      scaleY: y.type,
       domainX: x.domain,
       domainY: y.domain,
       reverseX,
@@ -109,16 +113,16 @@ export function plane(
       marginRight,
       marginBottom,
       marginLeft,
-      keysX,
-      keysY,
+      keysX: allX,
+      keysY: allY,
     });
 
     const scales = {...context.scales};
     for (const key in colors) scales[key] = labeled(resolve(colors[key]), hints[key]);
-    const recordX = labeled(positionRecord(x, rangeX, hintX), hintX);
-    const recordY = labeled(positionRecord(y, rangeY, hintY), hintY);
-    for (const key of keysX) if (key in value) scales[key] = recordX;
-    for (const key of keysY) if (key in value) scales[key] = recordY;
+    const recordX = callable(labeled(positionRecord(x, rangeX, hintX), hintX));
+    const recordY = callable(labeled(positionRecord(y, rangeY, hintY), hintY));
+    for (const key of allX) if (key in value) scales[key] = recordX;
+    for (const key of allY) if (key in value) scales[key] = recordY;
 
     const newValue = {...fitted.value};
     if (hasAny(value, keysX) && !hasAny(value, keysY))

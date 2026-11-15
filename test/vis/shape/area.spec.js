@@ -156,7 +156,7 @@ test("cm.areaRadial samples curves whose control points go past their ends", () 
     .data(data)
     .transform(cm.encode, {x: "x", y: "y"})
     .transform(cm.stackY)
-    .transform(cm.polar, {margin: 0, startAngle: 0, endAngle: 0.3, scaleY: "linear"})
+    .transform(cm.polar, {margin: 0, startAngle: 0, endAngle: 0.3, typeY: "linear"})
     .add(cm.areaRadial, {curve: "natural"});
   root.render();
   const [p] = renderer.node().querySelectorAll("path");
@@ -168,4 +168,10 @@ test("cm.areaRadial samples curves whose control points go past their ends", () 
     if (Math.abs(x0 * y1 - x1 * y0) < 1e-6) continue;
     assert.ok(Math.hypot(x1 - x0, y1 - y0) < 10);
   }
+});
+
+test("cm.areaY takes closed curves, which close their lines", () => {
+  const data = [0, 1, 2].map((x) => ({x, y: x + 1}));
+  const [p] = render(data, {x: "x", y: "y"}, {transforms: [cm.stackY], options: {curve: "linear-closed"}});
+  assert.strictEqual(p.getAttribute("d").match(/Z/g).length, 2);
 });

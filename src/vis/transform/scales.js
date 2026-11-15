@@ -1,4 +1,5 @@
 import {InternSet, sort} from "d3-array";
+import {scaleBand, scaleLinear, scalePoint, scaleUtc} from "d3-scale";
 import {discrete, domainOf} from "../../core/transform/scale.js";
 import {isColor} from "../color.js";
 import {seriesOf} from "./series.js";
@@ -26,12 +27,12 @@ export function withoutHints(context) {
   return newContext;
 }
 
-// A resolved scale, such as {scale: "linear", domain: [0, 10], range: [0, 100]}, for axes and legends.
-export function resolve({scale, domain, range}) {
-  if (typeof scale !== "function") return {scale, domain, range};
-  const s = scale.copy().domain(domain);
+// A resolved scale, such as {type: "linear", domain: [0, 10], range: [0, 100]}, for axes and legends.
+export function resolve({type, domain, range}) {
+  if (typeof type !== "function") return {type, domain, range};
+  const s = type.copy().domain(domain);
   if (range !== undefined) s.range(range);
-  return {scale: s, domain, range: s.range()};
+  return {type: s, domain, range: s.range()};
 }
 
 // The scales of the hinted color channels, categorical by default.
@@ -39,19 +40,24 @@ export function colorScales(value, hints) {
   const scales = {};
   for (const key of colorKeys) {
     if (!(key in hints) || !(key in value)) continue;
-    const {scale, domain, range} = hints[key];
+    const {type, domain, range} = hints[key];
     const V = value[key];
-    if (scale === undefined && domain === undefined && range === undefined && (isNumeric(V) || isIdentity(V))) {
+    if (type === undefined && domain === undefined && range === undefined && (isNumeric(V) || isIdentity(V))) {
       continue;
     }
-    const ordinal = scale === undefined || scale === "ordinal";
+    const ordinal = type === undefined || type === "ordinal";
     scales[key] = {
-      scale: scale ?? "ordinal",
-      domain: domain ?? (ordinal ? sort(new InternSet(V)) : domainOf(scale, V)),
+      type: type ?? "ordinal",
+      domain: domain ?? (ordinal ? sort(new InternSet(V)) : domainOf(type, V)),
       range: range ?? (ordinal ? schemeCategory : undefined),
     };
   }
   return scales;
+}
+
+// The color scales as descriptors of core cm.scale, which names the type of a scale "scale".
+export function scaleDescriptors(scales) {
+  return Object.fromEntries(Object.entries(scales).map(([key, {type, ...scale}]) => [key, {scale: type, ...scale}]));
 }
 
 function isTemporal(values) {
@@ -59,20 +65,49 @@ function isTemporal(values) {
 }
 
 // The scale shared by position channels such as x and x1, with the domain inferred from all of them.
-export function positionScale(value, keys, {scale, domain, range}) {
+// The type is the one given, if any; resolved is the type applied, for the record of the scale.
+export function positionScale(value, keys, {type, domain, range}) {
   const V = keys.filter((key) => key in value).flatMap((key) => Array.from(value[key]));
-  if (domain === undefined) domain = domainOf(scale, V);
+  if (domain === undefined) domain = domainOf(type, V);
   // cm.fit maps discrete positions with a point scale, unless a d3 scale is given. Dates are
   // mapped linearly, but recorded as a UTC time scale for the ticks of axes.
-  const type = typeof scale === "function" ? scale : discrete(scale, V) ? "point" : isTemporal(V) ? "utc" : "linear";
-  return {scale, domain, range, type};
+  const resolved = typeof type === "function" ? type : discrete(type, V) ? "point" : isTemporal(V) ? "utc" : "linear";
+  return {type, domain, range, resolved};
 }
 
 // The scale recorded for a position: the band of cm.spreadX if any, so that axes can label its
 // categories, or the scale applied by cm.fit.
-export function positionRecord({type, domain}, range, {band}) {
-  if (band) return {scale: "band", ...band, range};
-  return resolve({scale: type, domain, range});
+export function positionRecord({resolved, domain}, range, {band}) {
+  if (band) return {type: "band", ...band, range};
+  return resolve({type: resolved, domain, range});
+}
+
+// Rebuilds a d3 scale from a recorded scale, for the ticks of axes and for apply.
+export function scaleOf({type, domain, range, paddingInner, paddingOuter, align}) {
+  if (typeof type === "function") return type;
+  if (type === "band")
+    return scaleBand(domain, range).paddingInner(paddingInner).paddingOuter(paddingOuter).align(align);
+  if (type === "point") return scalePoint(domain, range);
+  if (type === "utc") return scaleUtc(domain, range);
+  return scaleLinear(domain, range);
+}
+
+// Gives a recorded position scale apply and invert, like the scales of Plot: apply maps a value to
+// pixels, or to an angle or radius in polar, at the middle of its band if any. They aren't
+// enumerable, so that records stay plain values.
+export function callable(record) {
+  const scale = scaleOf(record);
+  const offset = scale.bandwidth ? scale.bandwidth() / 2 : 0;
+  const properties = {apply: {value: (v) => scale(v) + offset}};
+  if (scale.invert) properties.invert = {value: (p) => scale.invert(p)};
+  return Object.defineProperties(record, properties);
+}
+
+// The keys of a position scale: its own, such as x and x1, and the channels that share it, such as
+// {value: "v2", scale: "y"}.
+export function keysOf(value, hints, keys, name) {
+  const shared = Object.keys(value).filter((key) => !keys.includes(key) && hints[key]?.scale === name);
+  return [...keys, ...shared];
 }
 
 // The label of a channel, such as its field name, for axes and legends.

@@ -30,7 +30,7 @@ test("cm.polar turns the bands of cm.spreadX into angles, clockwise from 12 o'cl
     .align(0.5);
   assertAllInDelta(value.x, [band("A"), band("B")]);
   assertAllInDelta(value.x1, [band("A") + band.bandwidth(), band("B") + band.bandwidth()]);
-  assert.strictEqual(scales.x.scale, "band");
+  assert.strictEqual(scales.x.type, "band");
   assert.deepStrictEqual(scales.x.domain, ["A", "B"]);
   assert.deepStrictEqual(scales.x.range, [0, 2 * Math.PI]);
 });
@@ -46,20 +46,20 @@ test("cm.polar maps x to [startAngle, endAngle]", () => {
   assertAllInDelta(value.x1, [-Math.PI / 2, (4 / 5) * Math.PI - Math.PI / 2]);
 });
 
-test("cm.polar maps y to the radius with a radial scale by default, else with scaleY", () => {
+test("cm.polar maps y to the radius with a radial scale by default, else with typeY", () => {
   const {value, scales} = polared(letters, {x: "letter", y: "n"}, [cm.spreadX]);
   // A radial scale: radius 100 for 4 and sqrt(1 / 4) × 100 for 1, from 0 at the center.
   assertAllInDelta(value.y, [100, 50]);
   assertAllInDelta(value.y1, [0, 0]);
-  assert.strictEqual(scales.y.scale(1), 50);
-  const named = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {scaleY: "radial"});
+  assert.strictEqual(scales.y.type(1), 50);
+  const named = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {typeY: "radial"});
   assertAllInDelta(named.value.y, [100, 50]);
-  const linear = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {scaleY: "linear"});
+  const linear = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {typeY: "linear"});
   assertAllInDelta(linear.value.y, [100, 25]);
 });
 
 test("cm.polar starts the radius at innerRadius, a fraction of the radius", () => {
-  const {value, frame} = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {innerRadius: 0.5, scaleY: "linear"});
+  const {value, frame} = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {innerRadius: 0.5, typeY: "linear"});
   assertAllInDelta(value.y1, [50, 50]);
   assertAllInDelta(value.y, [100, 62.5]);
   assert.strictEqual(frame.innerRadius, 50);
@@ -107,5 +107,18 @@ test("cm.polar keeps the series of fill in z, and records a UTC time scale for d
   const data = [new Date("2000-01-01"), new Date("2001-01-01")].map((date, i) => ({date, k: `${i}`}));
   const {value, scales} = polared(data, {x: "date", fill: "k"});
   assert.deepStrictEqual(value.z, ["0", "1"]);
-  assert.strictEqual(scales.x.scale, "utc");
+  assert.strictEqual(scales.x.type, "utc");
+});
+
+test("cm.polar maps channels that share the radius, and records scales with apply", () => {
+  const data = [
+    {x: "A", y: 1, top: 4},
+    {x: "B", y: 2, top: 3},
+  ];
+  const {value, scales} = polared(data, {x: "x", y: "y", top: {value: "top", scale: "y"}}, [cm.spreadX], {
+    typeY: "linear",
+  });
+  assert.deepStrictEqual(scales.y.domain, [0, 4]);
+  assertAllInDelta(value.top, [100, 75]);
+  assert.strictEqual(scales.y.apply(2), 50);
 });

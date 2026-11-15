@@ -2,12 +2,15 @@ import {scaleRadial} from "d3-scale";
 import {point, scale} from "../../core/transform/scale.js";
 import {
   axisHint,
+  callable,
   colorScales,
   hasAny,
+  keysOf,
   labeled,
   positionRecord,
   positionScale,
   resolve,
+  scaleDescriptors,
   withoutHints,
   withSeries,
 } from "./scales.js";
@@ -17,9 +20,9 @@ function span(n, [start, end]) {
   return [Array.from({length: n}, () => start), Array.from({length: n}, () => end)];
 }
 
-// The radial scale can be named, like the scales of cm.fit.
-function radial(scale) {
-  return scale === "radial" ? scaleRadial() : scale;
+// The radial scale can be named, like the other types of scales.
+function radial(type) {
+  return type === "radial" ? scaleRadial() : type;
 }
 
 // Resolves the scales of the channels, and maps positions to polar coordinates: x to the angle,
@@ -31,8 +34,8 @@ export function polar(
   flow,
   data,
   {
-    scaleX,
-    scaleY,
+    typeX,
+    typeY,
     domainX,
     domainY,
     innerRadius = 0,
@@ -72,31 +75,34 @@ export function polar(
     const {value, hints = {}} = context;
     const colors = colorScales(value, hints);
 
+    // The scales of x and y also map the channels that share them, such as {value: "v2", scale: "y"}.
+    const allX = keysOf(value, hints, keysX, "x");
+    const allY = keysOf(value, hints, keysY, "y");
     const hintX = axisHint(hints, keysX);
     const hintY = axisHint(hints, keysY);
-    const x = positionScale(value, keysX, {
-      scale: scaleX ?? hintX.scale,
+    const x = positionScale(value, allX, {
+      type: typeX ?? hintX.type,
       domain: domainX ?? hintX.domain,
       range: rangeX,
     });
-    const y = positionScale(value, keysY, {
-      scale: radial(scaleY ?? hintY.scale ?? "radial"),
+    const y = positionScale(value, allY, {
+      type: radial(typeY ?? hintY.type ?? "radial"),
       domain: domainY ?? hintY.domain,
       range: rangeY,
     });
 
-    const [colored] = scale(flow, [context], colors);
+    const [colored] = scale(flow, [context], scaleDescriptors(colors));
     const descriptors = {};
-    for (const key of keysX) if (key in value) descriptors[key] = {scale: x.scale, domain: x.domain, range: rangeX};
-    for (const key of keysY) if (key in value) descriptors[key] = {scale: y.scale, domain: y.domain, range: rangeY};
+    for (const key of allX) if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX};
+    for (const key of allY) if (key in value) descriptors[key] = {scale: y.type, domain: y.domain, range: rangeY};
     const [scaled] = scale(flow, [colored], descriptors, point);
 
     const scales = {...context.scales};
     for (const key in colors) scales[key] = labeled(resolve(colors[key]), hints[key]);
-    const recordX = labeled(positionRecord(x, rangeX, hintX), hintX);
-    const recordY = labeled(positionRecord(y, rangeY, hintY), hintY);
-    for (const key of keysX) if (key in value) scales[key] = recordX;
-    for (const key of keysY) if (key in value) scales[key] = recordY;
+    const recordX = callable(labeled(positionRecord(x, rangeX, hintX), hintX));
+    const recordY = callable(labeled(positionRecord(y, rangeY, hintY), hintY));
+    for (const key of allX) if (key in value) scales[key] = recordX;
+    for (const key of allY) if (key in value) scales[key] = recordY;
 
     // A missing position fills its span: a pie has no y, so its wedges span the whole radius. Like a
     // stack, y is the outer radius and y1 the baseline.

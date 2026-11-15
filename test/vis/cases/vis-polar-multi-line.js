@@ -11,7 +11,7 @@ export const visPolarMultiLine = withSVG(async () => {
       root
         .data(data)
         .transform(cm.encode, {x: "Date", y: "Close", stroke: "Symbol"})
-        .transform(cm.polar, {innerRadius: 0.2, scaleY: "linear"})
+        .transform(cm.polar, {innerRadius: 0.2, typeY: "linear"})
         .add(cm.axis, {x: {anchor: "outer"}})
         .add(cm.lineRadial);
     },

@@ -45,10 +45,10 @@ function hints(data, options) {
 }
 
 test("cm.encode(options) binds the value of a descriptor and keeps its scale as a hint", () => {
-  const {fill} = values(data, {fill: {value: "letter", scale: "ordinal", range: ["red", "blue"]}});
+  const {fill} = values(data, {fill: {value: "letter", type: "ordinal", range: ["red", "blue"]}});
   assert.deepStrictEqual(fill, ["A", "B"]);
-  assert.deepStrictEqual(hints(data, {fill: {value: "letter", scale: "ordinal", range: ["red", "blue"]}}), {
-    fill: {label: "letter", scale: "ordinal", range: ["red", "blue"]},
+  assert.deepStrictEqual(hints(data, {fill: {value: "letter", type: "ordinal", range: ["red", "blue"]}}), {
+    fill: {label: "letter", type: "ordinal", range: ["red", "blue"]},
   });
 });
 

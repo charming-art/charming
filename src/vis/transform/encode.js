@@ -5,7 +5,8 @@ const field = (name) => (d) => d[name];
 
 const colorKeys = ["fill", "stroke"];
 
-// A channel can be a descriptor such as {value: "genre", scale: "ordinal"}.
+// A channel can be a descriptor such as {value: "genre", type: "ordinal"}: the type, domain and
+// range of its scale, and with scale, the name of a scale it shares, such as {value: "v2", scale: "y"}.
 function isDescriptor(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value) && "value" in value;
 }
