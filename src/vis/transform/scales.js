@@ -96,7 +96,7 @@ export function hasAny(value, keys) {
 }
 
 // Keeps the series of the rows in z before their colors are scaled, so that shapes drawn per
-// series, such as cm.area, don't merge series that share a color.
+// series, such as cm.areaY, don't merge series that share a color.
 export function withSeries(context) {
   const {value} = context;
   if ("z" in value) return context;

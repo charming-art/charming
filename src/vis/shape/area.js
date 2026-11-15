@@ -93,10 +93,10 @@ function drawArea(renderer, I, value, options, shape, center) {
   }
 }
 
-// Draws one area per series, such as the bands of a stacked area chart, from y1 to y along x. Over
+// Draws one area per series along x, from y1 to y, such as the bands of a stacked area chart. Over
 // the bands of cm.spreadX, it's flat across each bar, so that with curve "bump-x" it's a ribbon
 // between bars. The curve option names a curve of Plot, such as "step" or "bump-x".
-export const area = define((renderer, I, value, options = {}) =>
+export const areaY = define((renderer, I, value, options = {}) =>
   drawArea(
     renderer,
     I,

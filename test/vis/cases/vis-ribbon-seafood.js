@@ -16,7 +16,7 @@ export const visRibbonSeafood = withSVG(async () => {
         .transform(cm.stackY, {order: "value"})
         .transform(cm.plane)
         .add(cm.rect)
-        .add(cm.area, {curve: "bump-x", fillOpacity: 0.8})
+        .add(cm.areaY, {curve: "bump-x", fillOpacity: 0.8})
         .add(cm.axisX);
     },
     {width: 640, height: 400},

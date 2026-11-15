@@ -8,7 +8,7 @@ function render(data, channels, options) {
   const root = cm.flow().renderer(renderer);
   let flow = root.data(data).transform(cm.encode, channels);
   for (const transform of options?.transforms ?? []) flow = flow.transform(transform);
-  flow.transform(options?.coordinate ?? cm.plane, {margin: 0}).add(options?.shape ?? cm.area, options?.options);
+  flow.transform(options?.coordinate ?? cm.plane, {margin: 0}).add(options?.shape ?? cm.areaY, options?.options);
   root.render();
   return Array.from(renderer.node().querySelectorAll("path"));
 }
@@ -20,19 +20,19 @@ const rows = [
   {x: 1, y: 4, k: "b"},
 ];
 
-test("cm.area draws one area per series, from y1 to y", () => {
+test("cm.areaY draws one area per series, from y1 to y", () => {
   const P = render(rows, {x: "x", y: "y", fill: "k"}, {transforms: [cm.stackY]});
   assert.strictEqual(P.length, 2);
   assert.notStrictEqual(P[0].getAttribute("fill"), P[1].getAttribute("fill"));
 });
 
-test("cm.area keeps series apart even if they share a color", () => {
+test("cm.areaY keeps series apart even if they share a color", () => {
   const data = Array.from({length: 12}, (_, k) => [0, 1].map((x) => ({x, y: 1, k}))).flat();
   const P = render(data, {x: "x", y: "y", fill: (d) => `${d.k}`}, {transforms: [cm.stackY]});
   assert.strictEqual(P.length, 12);
 });
 
-test("cm.area sorts the rows of each series by x", () => {
+test("cm.areaY sorts the rows of each series by x", () => {
   const data = [
     {x: 1, y: 2},
     {x: 0, y: 1},
@@ -42,7 +42,7 @@ test("cm.area sorts the rows of each series by x", () => {
   assert.match(p.getAttribute("d"), /^M0,/);
 });
 
-test("cm.area goes through both edges of a band, so that it's flat across a bar", () => {
+test("cm.areaY goes through both edges of a band, so that it's flat across a bar", () => {
   const data = [
     {x: "A", y: 1},
     {x: "B", y: 2},
@@ -52,13 +52,13 @@ test("cm.area goes through both edges of a band, so that it's flat across a bar"
   assert.strictEqual(p.getAttribute("d").match(/[ML]/g).length, 8);
 });
 
-test("cm.area leaves a gap for rows without a value", () => {
+test("cm.areaY leaves a gap for rows without a value", () => {
   const data = [0, 1, 2, 3, 4].map((x) => ({x, y: x === 2 ? NaN : 1}));
   const [p] = render(data, {x: "x", y: "y"}, {transforms: [cm.stackY]});
   assert.strictEqual(p.getAttribute("d").match(/M/g).length, 2);
 });
 
-test("cm.area takes the curves of Plot by name", () => {
+test("cm.areaY takes the curves of Plot by name", () => {
   const data = [0, 1, 2].map((x) => ({x, y: x + 1}));
   const [linear] = render(data, {x: "x", y: "y"}, {transforms: [cm.stackY]});
   const [bump] = render(data, {x: "x", y: "y"}, {transforms: [cm.stackY], options: {curve: "bump-x"}});
