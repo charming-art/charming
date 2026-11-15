@@ -444,3 +444,36 @@ test("cm.plane maps large data", () => {
     .transform(cm.plane)._values;
   assert.strictEqual(context.value.x.length, n);
 });
+
+// Two nested charts of y, with a hint for each, such as the extents of a transform per context.
+function hinted(hints) {
+  const root = cm.flow().renderer(cm.svg({width: 200, height: 100}));
+  return root
+    .data([
+      ["A", [{v: 2}]],
+      ["B", [{v: 2}]],
+    ])
+    .transform(cm.encode, {x: ([key]) => key})
+    .transform(cm.spreadX)
+    .transform(cm.plane)
+    .append(cm.group)
+    .data(([, values]) => values)
+    .transform(cm.encode, {y: "v"})
+    .transform((flow, data) => data.map((d, j) => ({...d, hints: {...d.hints, y: {...d.hints.y, ...hints[j]}}})))
+    .transform(cm.plane)._values;
+}
+
+test("cm.plane shares the extent of reversed hinted domains, reversed", () => {
+  const [a, b] = hinted([{domain: [10, 0]}, {domain: [4, 1]}]);
+  assert.deepStrictEqual(a.scales.y.domain, [10, 0]);
+  assert.deepStrictEqual(b.scales.y.domain, [10, 0]);
+});
+
+test("cm.plane shares the union of hinted category domains, even of two numbers", () => {
+  const [a] = hinted([
+    {type: "ordinal", domain: [1, 2]},
+    {type: "ordinal", domain: [2, 3]},
+  ]);
+  assert.deepStrictEqual(a.scales.y.domain, [1, 2, 3]);
+  assert.ok(Number.isFinite(a.value.y[0]));
+});

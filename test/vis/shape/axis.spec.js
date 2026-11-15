@@ -178,3 +178,44 @@ test("cm.axis labels facets only along the bottom of each column and the left of
   const texts = Array.from(renderer.node().querySelectorAll("text"), (d) => d.textContent);
   assert.ok(!texts.some((d) => /v/.test(d)));
 });
+
+// The texts of axes in charts nested at the points of a parent chart, in a plane or polar.
+function glyphTexts(coordinate) {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {
+        k: "a",
+        rows: [
+          {u: 1, w: 1},
+          {u: 2, w: 2},
+        ],
+      },
+      {
+        k: "b",
+        rows: [
+          {u: 1, w: 1},
+          {u: 2, w: 2},
+        ],
+      },
+    ])
+    .transform(cm.encode, {x: "k"})
+    .transform(cm.spreadX)
+    .transform(coordinate)
+    .append(cm.group)
+    .data((d) => d.rows)
+    .transform(cm.encode, {x: "u", y: "w"})
+    .transform(cm.plane, {width: 60, height: 60})
+    .add(cm.axis);
+  root.render();
+  return Array.from(renderer.node().querySelectorAll("text"), (d) => d.textContent);
+}
+
+test("cm.axis draws no titles in charts nested in a polar chart, and labels each one's ticks", () => {
+  const texts = glyphTexts(cm.polar);
+  assert.ok(!texts.some((d) => /[uw]/.test(d)));
+  // Each of the two glyphs labels its x ticks (1, 2) and its y ticks (1.0, 1.5, 2.0).
+  assert.strictEqual(texts.filter((d) => d === "2").length, 2);
+  assert.strictEqual(texts.filter((d) => d === "2.0").length, 2);
+});
