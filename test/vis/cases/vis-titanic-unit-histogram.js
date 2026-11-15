@@ -28,7 +28,7 @@ export const visTitanicUnitHistogram = withSVG(async () => {
         .transform(cm.spreadX)
         .transform(cm.stackY, {chunk: 3})
         .transform(cm.plane)
-        .add(cm.circle, {x: (d) => (d.x + d.x1) / 2, y: (d) => (d.y + d.y1) / 2, r: 2.5})
+        .add(cm.circle, {r: 2.5}) // centered in its cell
         .add(cm.axisX);
     },
     {width: 800, height: 600},
