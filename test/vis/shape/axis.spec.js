@@ -219,3 +219,65 @@ test("cm.axis draws no titles in charts nested in a polar chart, and labels each
   assert.strictEqual(texts.filter((d) => d === "2").length, 2);
   assert.strictEqual(texts.filter((d) => d === "2.0").length, 2);
 });
+
+test("cm.axisX with anchor top labels the ticks above the chart, and titles it at the top", () => {
+  const a = rotated({x: {anchor: "top"}, y: false})("A");
+  // The top of the chart is at 20; the tick is 6px and the padding 3px.
+  assert.strictEqual(+a.getAttribute("y"), 20 - 6 - 3);
+  assert.strictEqual(a.getAttribute("dominant-baseline"), "text-after-edge");
+  const title = rotated({x: {anchor: "top"}, y: false})("letter");
+  assert.strictEqual(+title.getAttribute("y"), 0);
+});
+
+test("cm.axisY with anchor right labels the ticks right of the chart, aligned to their start", () => {
+  const find = rotated({x: false, y: {anchor: "right"}});
+  const tick = find("0.08");
+  // The right of the chart is at 620.
+  assert.strictEqual(+tick.getAttribute("x"), 620 + 6 + 3);
+  assert.strictEqual(tick.getAttribute("text-anchor"), "start");
+  assert.strictEqual(find("↑ frequency").getAttribute("text-anchor"), "end");
+});
+
+// The positions of the cells of a 2 × 2 grid whose tick labels have the given anchor, with options
+// for its axes, and with rows only in the cells given.
+function labeledCells(options, anchor, filled = () => true) {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(d3.cross(["a", "b"], ["1", "2"]))
+    .transform(cm.encode, {x: ([x]) => x, y: ([, y]) => y})
+    .transform(cm.spreadX)
+    .transform(cm.spreadY)
+    .transform(cm.plane)
+    .append(cm.g)
+    .data((d) => (filled(d) ? [{v: 1}, {v: 2}] : []))
+    .transform(cm.encode, {x: "v", y: "v"})
+    .transform(cm.plane)
+    .add(cm.axis, options);
+  root.render();
+  const columns = d3.scaleBand(["a", "b"], [40, 180]).padding(0.1);
+  const rows = d3.scaleBand(["1", "2"], [20, 170]).padding(0.1);
+  const name = ([x, y]) => [columns.domain().find((d) => Math.round(columns(d)) === x), y];
+  return new Set(
+    Array.from(renderer.node().querySelectorAll(`text[text-anchor="${anchor}"]`), (t) => {
+      const [x, y] = t.parentNode
+        .getAttribute("transform")
+        .match(/[\d.]+/g)
+        .map((d) => Math.round(d));
+      const [column] = name([x]);
+      return `${column}${rows.domain().find((d) => Math.round(rows(d)) === y)}`;
+    }),
+  );
+}
+
+test("cm.axis in facets labels the top row with anchor top, and the right column with anchor right", () => {
+  assert.deepStrictEqual(labeledCells({x: {anchor: "top"}, y: false}, "middle"), new Set(["a1", "b1"]));
+  assert.deepStrictEqual(labeledCells({x: false, y: {anchor: "right"}}, "start"), new Set(["b1", "b2"]));
+});
+
+test("cm.axis draws no axes in facets without rows, and labels the nearest facets with rows, like Plot", () => {
+  // Without the bottom-left cell, the cell above it labels x, and the cell right of it labels y.
+  const filled = ([x, y]) => !(x === "a" && y === "2");
+  assert.deepStrictEqual(labeledCells({y: false}, "middle", filled), new Set(["a1", "b2"]));
+  assert.deepStrictEqual(labeledCells({x: false}, "end", filled), new Set(["a1", "b2"]));
+});

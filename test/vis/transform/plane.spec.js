@@ -82,10 +82,25 @@ test("cm.plane uses the scale, domain and range of a color descriptor", () => {
   assert.deepStrictEqual(ordinal, ["#fac858", "#5470c6", "#91cc75"]);
 });
 
-test("cm.plane leaves constant colors and numeric colors without a scale unchanged", () => {
+test("cm.plane leaves constant colors unchanged, and maps numeric colors with turbo, like Plot", () => {
   const {fill, stroke} = encoded(genres, {x: "genre", y: "sold", fill: "red", stroke: "sold"});
   assert.deepStrictEqual(fill, ["red", "red", "red"]);
-  assert.deepStrictEqual(stroke, [275, 115, 120]);
+  assert.deepStrictEqual(stroke, [d3.interpolateTurbo(1), d3.interpolateTurbo(0), d3.interpolateTurbo(5 / 160)]);
+});
+
+test("cm.plane maps linear colors with the interpolator of a scheme, case-insensitive", () => {
+  const {fill} = encoded(genres, {x: "genre", y: "sold", fill: {value: "sold", type: "linear", scheme: "piyg"}});
+  assert.deepStrictEqual(fill, [d3.interpolatePiYG(1), d3.interpolatePiYG(0), d3.interpolatePiYG(5 / 160)]);
+});
+
+test("cm.plane gives missing numeric colors no color", () => {
+  const data = [
+    {k: "a", v: 1},
+    {k: "b", v: null},
+    {k: "c", v: 3},
+  ];
+  const {fill} = encoded(data, {x: "k", fill: "v"});
+  assert.deepStrictEqual(fill, [d3.interpolateTurbo(0), undefined, d3.interpolateTurbo(1)]);
 });
 
 test("cm.plane records the resolved scales and drops the hints", () => {

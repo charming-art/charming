@@ -2839,12 +2839,6 @@
     <circle cx="32.49501466275658" cy="44.03225806451614" r="2" fill="none" stroke="currentColor"></circle>
   </g>
   <g transform="translate(436.12903225806457,193.8709677419355)">
-    <line x1="47.5390029325513" y1="0" x2="47.5390029325513" y2="142.25806451612908" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-    <line x1="107.71495601173018" y1="0" x2="107.71495601173018" y2="142.25806451612908" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-    <line x1="0" y1="127.0161290322581" x2="165.4838709677419" y2="127.0161290322581" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-    <line x1="0" y1="93.1451612903226" x2="165.4838709677419" y2="93.1451612903226" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-    <line x1="0" y1="59.27419354838711" x2="165.4838709677419" y2="59.27419354838711" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-    <line x1="0" y1="25.403225806451626" x2="165.4838709677419" y2="25.403225806451626" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <rect x="0" y="0" width="165.4838709677419" height="142.25806451612908" fill="none" stroke="currentColor"></rect>
     <circle cx="42.12316715542521" cy="47.4193548387097" r="1" fill="#aaa"></circle>
     <circle cx="44.530205278592355" cy="69.43548387096779" r="1" fill="#aaa"></circle>

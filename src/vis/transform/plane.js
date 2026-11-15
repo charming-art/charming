@@ -88,7 +88,7 @@ export function plane(
 
   let frames;
   if (nested) {
-    frames = nestedFrames(flow, data.length, {width, height}).map((frame) => ({
+    frames = nestedFrames(flow, data, {width, height}).map((frame) => ({
       ...frame,
       top: frame.top + marginTop,
       right: frame.right - marginRight,
