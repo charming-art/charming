@@ -31,5 +31,7 @@ export {visStackedArea} from "./vis-stacked-area.js";
 export {visStackedBar} from "./vis-stacked-bar.js";
 export {visStackedColumn} from "./vis-stacked-column.js";
 export {visStackedWaffles} from "./vis-stacked-waffles.js";
+export {visTickRotateX} from "./vis-tick-rotate-x.js";
+export {visTickRotateY} from "./vis-tick-rotate-y.js";
 export {visUnitPenguins} from "./vis-unit-penguins.js";
 export {visWaffleSeafood} from "./vis-waffle-seafood.js";

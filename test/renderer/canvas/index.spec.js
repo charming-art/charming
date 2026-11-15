@@ -34,3 +34,14 @@ test("canvas.resize(width, height) resizes the canvas for its device pixel ratio
   assert.strictEqual(renderer._props.width, 300);
   assert.strictEqual(renderer._props.height, 60);
 });
+
+test("canvas.text(options) rotates text around its position, in radians", () => {
+  const renderer = cm.canvas({width: 10, height: 10, dpi: 1});
+  renderer.text({text: "a", x: 5, y: 6, rotate: -Math.PI / 2});
+  const lines = `${renderer.node()}`.split("\n");
+  const at = (prefix) => lines.findIndex((d) => d.startsWith(prefix));
+  assert.ok(lines.includes("translate, 5, 6"));
+  assert.ok(lines.includes(`rotate, ${-Math.PI / 2}`));
+  assert.ok(lines.includes("fillText, a, 0, 0"));
+  assert.ok(at("translate, 5, 6") < at("rotate") && at("rotate") < at("fillText"));
+});

@@ -20,6 +20,30 @@ function labelOf({label, domain, range}, scale, axis, options) {
   return order < 0 ? `↑ ${label}` : `↓ ${label}`;
 }
 
+// The tick labels of an x axis, rotated by tickRotate degrees like Plot's bottom axis: below 10°,
+// they turn around their center; from 10° on, they end at their tick if turned counterclockwise and
+// start there if turned clockwise, centered on it, with 4·cos θ more padding so that the centered
+// line clears the axis. Returns the text options and the extra padding.
+function rotatedX(degrees) {
+  const radians = (degrees * Math.PI) / 180;
+  if (Math.abs(degrees) < 10) {
+    return [{textAlign: "center", textBaseline: "top", ...(degrees && {rotate: radians})}, 0];
+  }
+  return [{textAlign: degrees < 0 ? "end" : "start", textBaseline: "middle", rotate: radians}, 4 * Math.cos(radians)];
+}
+
+// The tick labels of a y axis, rotated by tickRotate degrees like Plot's left axis: steeper than
+// 60°, they're centered on their tick, left of the axis, such as -90 reading bottom to top, with
+// 4·cos θ more padding. Returns the text options and the extra padding.
+function rotatedY(degrees) {
+  const radians = (degrees * Math.PI) / 180;
+  if (Math.abs(degrees) <= 60) {
+    return [{textAlign: "end", textBaseline: "middle", ...(degrees && {rotate: radians})}, 0];
+  }
+  const textBaseline = degrees < 0 ? "bottom" : "top";
+  return [{textAlign: "center", textBaseline, rotate: radians}, 4 * Math.cos(radians)];
+}
+
 function extentOf(range) {
   return [Math.min(...range), Math.max(...range)];
 }
@@ -30,7 +54,7 @@ export function axisX(flow, value, {scales = {}, frame, options = {}} = {}) {
   const {x, y} = scales;
   if (!x) return;
   if (frame?.type === "polar") return polarAxisX(flow, frame, x, options);
-  const {tickSize = 6, tickPadding = 3, grid = false} = options;
+  const {tickSize = 6, tickPadding = 3, tickRotate = 0, grid = false} = options;
   const {width, height} = flow.renderer()._props;
   const scale = scaleOf(x);
   const [left, right] = extentOf(x.range);
@@ -41,13 +65,13 @@ export function axisX(flow, value, {scales = {}, frame, options = {}} = {}) {
   const stroke = "currentColor";
   if (grid) flow.data(ticks).append(link, {x: X, x1: X, y: top, y1: bottom, stroke, strokeOpacity: 0.1});
   flow.data(ticks).append(link, {x: X, x1: X, y: bottom, y1: bottom + tickSize, stroke});
+  const [rotateX, padX] = rotatedX(tickRotate);
   flow.data(ticks).append(text, {
     ...font,
     text: formatOf(scale, options, count),
     x: X,
-    y: bottom + tickSize + tickPadding,
-    textAlign: "center",
-    textBaseline: "top",
+    y: bottom + tickSize + tickPadding + padX,
+    ...rotateX,
   });
   const label = labelOf(x, scale, "x", options);
   if (label == null) return;
@@ -68,7 +92,7 @@ export function axisY(flow, value, {scales = {}, frame, options = {}} = {}) {
   const {x, y} = scales;
   if (!y) return;
   if (frame?.type === "polar") return polarAxisY(flow, frame, y, options);
-  const {tickSize = 6, tickPadding = 3, grid = false} = options;
+  const {tickSize = 6, tickPadding = 3, tickRotate = 0, grid = false} = options;
   const {width} = flow.renderer()._props;
   const scale = scaleOf(y);
   const [left, right] = frame ? [frame.left, frame.right] : x ? extentOf(x.range) : [0, width];
@@ -79,13 +103,13 @@ export function axisY(flow, value, {scales = {}, frame, options = {}} = {}) {
   const stroke = "currentColor";
   if (grid) flow.data(ticks).append(link, {x: left, x1: right, y: Y, y1: Y, stroke, strokeOpacity: 0.1});
   flow.data(ticks).append(link, {x: left, x1: left - tickSize, y: Y, y1: Y, stroke});
+  const [rotateY, padY] = rotatedY(tickRotate);
   flow.data(ticks).append(text, {
     ...font,
     text: formatOf(scale, options, count),
-    x: left - tickSize - tickPadding,
+    x: left - tickSize - tickPadding - padY,
     y: Y,
-    textAlign: "end",
-    textBaseline: "middle",
+    ...rotateY,
   });
   const label = labelOf(y, scale, "y", options);
   if (label == null) return;

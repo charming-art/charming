@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300">
+  <rect x="30" y="28.064516129032263" width="590" height="72.58064516129033"></rect>
+  <rect x="30" y="108.70967741935485" width="263.9473684210526" height="72.58064516129033"></rect>
+  <rect x="30" y="189.35483870967744" width="481.3157894736842" height="72.5806451612903"></rect>
+  <line x1="30" y1="20" x2="30" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="107.63157894736842" y1="20" x2="107.63157894736842" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="185.26315789473685" y1="20" x2="185.26315789473685" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="262.89473684210526" y1="20" x2="262.89473684210526" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="340.5263157894737" y1="20" x2="340.5263157894737" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="418.15789473684214" y1="20" x2="418.15789473684214" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="495.7894736842105" y1="20" x2="495.7894736842105" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="573.421052631579" y1="20" x2="573.421052631579" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="30" y1="270" x2="30" y2="276" stroke="currentColor" stroke-width="1"></line>
+  <line x1="107.63157894736842" y1="270" x2="107.63157894736842" y2="276" stroke="currentColor" stroke-width="1"></line>
+  <line x1="185.26315789473685" y1="270" x2="185.26315789473685" y2="276" stroke="currentColor" stroke-width="1"></line>
+  <line x1="262.89473684210526" y1="270" x2="262.89473684210526" y2="276" stroke="currentColor" stroke-width="1"></line>
+  <line x1="340.5263157894737" y1="270" x2="340.5263157894737" y2="276" stroke="currentColor" stroke-width="1"></line>
+  <line x1="418.15789473684214" y1="270" x2="418.15789473684214" y2="276" stroke="currentColor" stroke-width="1"></line>
+  <line x1="495.7894736842105" y1="270" x2="495.7894736842105" y2="276" stroke="currentColor" stroke-width="1"></line>
+  <line x1="573.421052631579" y1="270" x2="573.421052631579" y2="276" stroke="currentColor" stroke-width="1"></line>
+  <text x="30" y="279" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0</text>
+  <text x="107.63157894736842" y="279" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">20</text>
+  <text x="185.26315789473685" y="279" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">40</text>
+  <text x="262.89473684210526" y="279" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">60</text>
+  <text x="340.5263157894737" y="279" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">80</text>
+  <text x="418.15789473684214" y="279" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">100</text>
+  <text x="495.7894736842105" y="279" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">120</text>
+  <text x="573.421052631579" y="279" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">140</text>
+  <line x1="30" y1="64.35483870967744" x2="24" y2="64.35483870967744" stroke="currentColor" stroke-width="1"></line>
+  <line x1="30" y1="145" x2="24" y2="145" stroke="currentColor" stroke-width="1"></line>
+  <line x1="30" y1="225.6451612903226" x2="24" y2="225.6451612903226" stroke="currentColor" stroke-width="1"></line>
+  <text x="21" y="64.35483870967744" transform="rotate(-90,21,64.35483870967744)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">Adelie</text>
+  <text x="21" y="145" transform="rotate(-90,21,145)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">Chinstrap</text>
+  <text x="21" y="225.6451612903226" transform="rotate(-90,21,225.6451612903226)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">Gentoo</text>
+</svg>

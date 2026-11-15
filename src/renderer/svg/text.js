@@ -1,4 +1,4 @@
-import {append, paint} from "./create.js";
+import {append, degrees, paint} from "./create.js";
 
 const anchors = {start: "start", left: "start", center: "middle", end: "end", right: "end"};
 
@@ -22,11 +22,14 @@ export function svg$text({
   textBaseline,
   fontSize = 14,
   fontWeight = "normal",
+  rotate,
   ...options
 }) {
   const node = append(this, "text", {
     x: x,
     y: y,
+    // Like Canvas, the text turns around its position, in radians.
+    transform: rotate ? `rotate(${degrees(rotate)},${x},${y})` : null,
     "font-family": fontFamily,
     "font-size": fontSize,
     "font-weight": fontWeight === "normal" ? null : fontWeight,
