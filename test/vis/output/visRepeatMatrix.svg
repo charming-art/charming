@@ -32,6 +32,7 @@
     <text x="-9" y="83.90953436807098" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">45</text>
     <text x="-9" y="55.173392461197345" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">50</text>
     <text x="-9" y="26.43725055432374" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">55</text>
+    <rect x="0" y="0" width="142.68292682926835" height="158.0487804878049" fill="none" stroke="currentColor"></rect>
     <circle cx="36.319290465631944" cy="117.81818181818183" r="1.5" fill="#5470c6"></circle>
     <circle cx="38.39467849223948" cy="115.51929046563194" r="1.5" fill="#5470c6"></circle>
     <circle cx="42.54545454545455" cy="110.92150776053217" r="1.5" fill="#5470c6"></circle>
@@ -389,6 +390,7 @@
     <text x="-9" y="103.48432055749129" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">16</text>
     <text x="-9" y="65.85365853658537" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">18</text>
     <text x="-9" y="28.22299651567945" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">20</text>
+    <rect x="0" y="0" width="142.68292682926835" height="158.0487804878049" fill="none" stroke="currentColor"></rect>
     <circle cx="36.319290465631944" cy="52.682926829268304" r="1.5" fill="#5470c6"></circle>
     <circle cx="38.39467849223948" cy="77.14285714285717" r="1.5" fill="#5470c6"></circle>
     <circle cx="42.54545454545455" cy="65.85365853658537" r="1.5" fill="#5470c6"></circle>
@@ -752,6 +754,7 @@
     <text x="-9" y="56.254650682100056" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">210</text>
     <text x="-9" y="29.46672178586192" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">220</text>
     <text x="-9" y="2.6787928896238045" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">230</text>
+    <rect x="0" y="0" width="142.68292682926835" height="158.0487804878049" fill="none" stroke="currentColor"></rect>
     <circle cx="36.319290465631944" cy="133.93964448119058" r="1.5" fill="#5470c6"></circle>
     <circle cx="38.39467849223948" cy="120.54568003307152" r="1.5" fill="#5470c6"></circle>
     <circle cx="42.54545454545455" cy="96.43654402645721" r="1.5" fill="#5470c6"></circle>
@@ -1111,6 +1114,7 @@
     <text x="-9" y="100.97560975609753" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">4,000</text>
     <text x="-9" y="57.07317073170731" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">5,000</text>
     <text x="-9" y="13.170731707317076" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">6,000</text>
+    <rect x="0" y="0" width="142.68292682926835" height="158.04878048780483" fill="none" stroke="currentColor"></rect>
     <circle cx="36.319290465631944" cy="111.95121951219508" r="1.5" fill="#5470c6"></circle>
     <circle cx="38.39467849223948" cy="109.75609756097558" r="1.5" fill="#5470c6"></circle>
     <circle cx="42.54545454545455" cy="133.9024390243902" r="1.5" fill="#5470c6"></circle>
@@ -1462,6 +1466,7 @@
     <line x1="0" y1="83.90953436807098" x2="142.68292682926835" y2="83.90953436807098" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="55.173392461197345" x2="142.68292682926835" y2="55.173392461197345" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="26.43725055432374" x2="142.68292682926835" y2="26.43725055432374" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+    <rect x="0" y="0" width="142.68292682926835" height="158.0487804878049" fill="none" stroke="currentColor"></rect>
     <circle cx="95.12195121951223" cy="117.81818181818183" r="1.5" fill="#5470c6"></circle>
     <circle cx="73.04006968641116" cy="115.51929046563194" r="1.5" fill="#5470c6"></circle>
     <circle cx="83.23170731707322" cy="110.92150776053217" r="1.5" fill="#5470c6"></circle>
@@ -1812,6 +1817,7 @@
     <line x1="0" y1="103.48432055749129" x2="142.68292682926835" y2="103.48432055749129" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="65.85365853658537" x2="142.68292682926835" y2="65.85365853658537" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="28.22299651567945" x2="142.68292682926835" y2="28.22299651567945" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+    <rect x="0" y="0" width="142.68292682926835" height="158.0487804878049" fill="none" stroke="currentColor"></rect>
     <circle cx="95.12195121951223" cy="52.682926829268304" r="1.5" fill="#5470c6"></circle>
     <circle cx="73.04006968641116" cy="77.14285714285717" r="1.5" fill="#5470c6"></circle>
     <circle cx="83.23170731707322" cy="65.85365853658537" r="1.5" fill="#5470c6"></circle>
@@ -2164,6 +2170,7 @@
     <line x1="0" y1="56.254650682100056" x2="142.68292682926835" y2="56.254650682100056" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="29.46672178586192" x2="142.68292682926835" y2="29.46672178586192" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="2.6787928896238045" x2="142.68292682926835" y2="2.6787928896238045" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+    <rect x="0" y="0" width="142.68292682926835" height="158.0487804878049" fill="none" stroke="currentColor"></rect>
     <circle cx="95.12195121951223" cy="133.93964448119058" r="1.5" fill="#5470c6"></circle>
     <circle cx="73.04006968641116" cy="120.54568003307152" r="1.5" fill="#5470c6"></circle>
     <circle cx="83.23170731707322" cy="96.43654402645721" r="1.5" fill="#5470c6"></circle>
@@ -2518,6 +2525,7 @@
     <line x1="0" y1="100.97560975609753" x2="142.68292682926835" y2="100.97560975609753" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="57.07317073170731" x2="142.68292682926835" y2="57.07317073170731" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="13.170731707317076" x2="142.68292682926835" y2="13.170731707317076" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+    <rect x="0" y="0" width="142.68292682926835" height="158.04878048780483" fill="none" stroke="currentColor"></rect>
     <circle cx="95.12195121951223" cy="111.95121951219508" r="1.5" fill="#5470c6"></circle>
     <circle cx="73.04006968641116" cy="109.75609756097558" r="1.5" fill="#5470c6"></circle>
     <circle cx="83.23170731707322" cy="133.9024390243902" r="1.5" fill="#5470c6"></circle>
@@ -2868,6 +2876,7 @@
     <line x1="0" y1="83.90953436807098" x2="142.6829268292683" y2="83.90953436807098" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="55.173392461197345" x2="142.6829268292683" y2="55.173392461197345" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="26.43725055432374" x2="142.6829268292683" y2="26.43725055432374" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+    <rect x="0" y="0" width="142.6829268292683" height="158.0487804878049" fill="none" stroke="currentColor"></rect>
     <circle cx="21.76519222819347" cy="117.81818181818183" r="1.5" fill="#5470c6"></circle>
     <circle cx="33.85696568830095" cy="115.51929046563194" r="1.5" fill="#5470c6"></circle>
     <circle cx="55.62215791649442" cy="110.92150776053217" r="1.5" fill="#5470c6"></circle>
@@ -3217,6 +3226,7 @@
     <line x1="0" y1="103.48432055749129" x2="142.6829268292683" y2="103.48432055749129" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="65.85365853658537" x2="142.6829268292683" y2="65.85365853658537" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="28.22299651567945" x2="142.6829268292683" y2="28.22299651567945" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+    <rect x="0" y="0" width="142.6829268292683" height="158.0487804878049" fill="none" stroke="currentColor"></rect>
     <circle cx="21.76519222819347" cy="52.682926829268304" r="1.5" fill="#5470c6"></circle>
     <circle cx="33.85696568830095" cy="77.14285714285717" r="1.5" fill="#5470c6"></circle>
     <circle cx="55.62215791649442" cy="65.85365853658537" r="1.5" fill="#5470c6"></circle>
@@ -3568,6 +3578,7 @@
     <line x1="0" y1="56.254650682100056" x2="142.6829268292683" y2="56.254650682100056" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="29.46672178586192" x2="142.6829268292683" y2="29.46672178586192" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="2.6787928896238045" x2="142.6829268292683" y2="2.6787928896238045" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+    <rect x="0" y="0" width="142.6829268292683" height="158.0487804878049" fill="none" stroke="currentColor"></rect>
     <circle cx="21.76519222819347" cy="133.93964448119058" r="1.5" fill="#5470c6"></circle>
     <circle cx="33.85696568830095" cy="120.54568003307152" r="1.5" fill="#5470c6"></circle>
     <circle cx="55.62215791649442" cy="96.43654402645721" r="1.5" fill="#5470c6"></circle>
@@ -3919,6 +3930,7 @@
     <line x1="0" y1="100.97560975609753" x2="142.6829268292683" y2="100.97560975609753" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="57.07317073170731" x2="142.6829268292683" y2="57.07317073170731" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="13.170731707317076" x2="142.6829268292683" y2="13.170731707317076" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+    <rect x="0" y="0" width="142.6829268292683" height="158.04878048780483" fill="none" stroke="currentColor"></rect>
     <circle cx="21.76519222819347" cy="111.95121951219508" r="1.5" fill="#5470c6"></circle>
     <circle cx="33.85696568830095" cy="109.75609756097558" r="1.5" fill="#5470c6"></circle>
     <circle cx="55.62215791649442" cy="133.9024390243902" r="1.5" fill="#5470c6"></circle>
@@ -4270,6 +4282,7 @@
     <line x1="0" y1="83.90953436807098" x2="142.68292682926824" y2="83.90953436807098" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="55.173392461197345" x2="142.68292682926824" y2="55.173392461197345" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="26.43725055432374" x2="142.68292682926824" y2="26.43725055432374" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+    <rect x="0" y="0" width="142.68292682926824" height="158.0487804878049" fill="none" stroke="currentColor"></rect>
     <circle cx="41.61585365853657" cy="117.81818181818183" r="1.5" fill="#5470c6"></circle>
     <circle cx="43.597560975609746" cy="115.51929046563194" r="1.5" fill="#5470c6"></circle>
     <circle cx="21.798780487804873" cy="110.92150776053217" r="1.5" fill="#5470c6"></circle>
@@ -4620,6 +4633,7 @@
     <line x1="0" y1="103.48432055749129" x2="142.68292682926824" y2="103.48432055749129" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="65.85365853658537" x2="142.68292682926824" y2="65.85365853658537" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="28.22299651567945" x2="142.68292682926824" y2="28.22299651567945" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+    <rect x="0" y="0" width="142.68292682926824" height="158.0487804878049" fill="none" stroke="currentColor"></rect>
     <circle cx="41.61585365853657" cy="52.682926829268304" r="1.5" fill="#5470c6"></circle>
     <circle cx="43.597560975609746" cy="77.14285714285717" r="1.5" fill="#5470c6"></circle>
     <circle cx="21.798780487804873" cy="65.85365853658537" r="1.5" fill="#5470c6"></circle>
@@ -4972,6 +4986,7 @@
     <line x1="0" y1="56.254650682100056" x2="142.68292682926824" y2="56.254650682100056" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="29.46672178586192" x2="142.68292682926824" y2="29.46672178586192" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="2.6787928896238045" x2="142.68292682926824" y2="2.6787928896238045" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+    <rect x="0" y="0" width="142.68292682926824" height="158.0487804878049" fill="none" stroke="currentColor"></rect>
     <circle cx="41.61585365853657" cy="133.93964448119058" r="1.5" fill="#5470c6"></circle>
     <circle cx="43.597560975609746" cy="120.54568003307152" r="1.5" fill="#5470c6"></circle>
     <circle cx="21.798780487804873" cy="96.43654402645721" r="1.5" fill="#5470c6"></circle>
@@ -5326,6 +5341,7 @@
     <line x1="0" y1="100.97560975609753" x2="142.68292682926824" y2="100.97560975609753" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="57.07317073170731" x2="142.68292682926824" y2="57.07317073170731" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
     <line x1="0" y1="13.170731707317076" x2="142.68292682926824" y2="13.170731707317076" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+    <rect x="0" y="0" width="142.68292682926824" height="158.04878048780483" fill="none" stroke="currentColor"></rect>
     <circle cx="41.61585365853657" cy="111.95121951219508" r="1.5" fill="#5470c6"></circle>
     <circle cx="43.597560975609746" cy="109.75609756097558" r="1.5" fill="#5470c6"></circle>
     <circle cx="21.798780487804873" cy="133.9024390243902" r="1.5" fill="#5470c6"></circle>

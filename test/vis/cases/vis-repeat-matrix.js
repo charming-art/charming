@@ -26,6 +26,7 @@ export const visRepeatMatrix = withSVG(async () => {
         .transform(cm.encode, {x: "x", y: "y", fill: "species"})
         .transform(cm.plane, {resolve: {x: "independent", y: "independent"}})
         .add(cm.axis, {grid: true})
+        .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
         .add(cm.circle, {r: 1.5});
     },
     {width: 800, height: 800},
