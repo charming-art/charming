@@ -1,11 +1,29 @@
+import * as d3 from "d3";
+import * as cm from "../../../src/index.js";
 import {renderFlow, withSVG} from "../../helpers.js";
-import {titanic} from "./titanic.js";
-import {unitByClass} from "./unit-class.js";
+import {dot, titanic} from "./titanic.js";
 
 // G2's unit chart with shareSize (https://g2.antv.antgroup.com/en/examples/unit/unit/share-size/):
 // each panel's width is proportional to its number of passengers, with flex, so the dots have
 // about the same size in every panel.
 export const visUnitShareSize = withSVG(async () => {
-  const passengers = await titanic();
-  return renderFlow((root) => unitByClass(root, passengers, {flex: true}), {width: 640, height: 400});
+  const passengers = d3.sort(await titanic(), (d) => d.survived);
+  return renderFlow(
+    (root) => {
+      root
+        .data(d3.groups(passengers, (d) => d.pclass))
+        .transform(cm.encode, {x: ([pclass]) => pclass, n: ([, rows]) => rows.length})
+        .transform(cm.spreadX, {padding: 0.1, flex: "n"})
+        .transform(cm.plane)
+        .add(cm.axisX, {label: "pclass"})
+        .append(cm.group)
+        .data(([, rows]) => rows)
+        .transform(cm.encode, {fill: {value: (d) => (d.survived ? "Yes" : "No"), domain: ["Yes", "No"]}})
+        .transform(cm.plane)
+        .transform(cm.pack)
+        .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
+        .add(cm.circle, dot);
+    },
+    {width: 640, height: 400},
+  );
 });
