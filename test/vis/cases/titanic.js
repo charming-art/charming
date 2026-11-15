@@ -12,9 +12,5 @@ export function groups(rows, key, domain) {
   return domain ? domain.map((k) => groups.find(([g]) => g === k)).filter(Boolean) : groups;
 }
 
-// A dot filling its cell of cm.pack, with a small gap.
-export const dot = {
-  x: (d) => (d.x + d.x1) / 2,
-  y: (d) => (d.y + d.y1) / 2,
-  r: (d) => ((d.x1 - d.x) / 2) * 0.85,
-};
+// A dot centered in its cell of cm.pack, with a small gap: cm.circle centers itself in the box.
+export const dot = {r: (d) => ((d.x1 - d.x) / 2) * 0.85};
