@@ -36,13 +36,16 @@ function stackChunks(V, stacks, order, {chunk, padding}, B, B1) {
   const C = B && new Array(n).fill(NaN);
   const C1 = B && new Array(n).fill(NaN);
   const columns = scaleBand(range(chunk), [0, 1]).padding(padding);
+  // The extent of the rows without their insets, from 0, for the domain of the position.
+  let lo = 0;
+  let hi = 0;
   for (const stack of stacks) {
     if (order) stack.sort(order);
     let kn = 0;
     let kp = 0;
     for (const i of stack) {
       const v = V[i];
-      if (v == null) continue;
+      if (v == null || isNaN(v)) continue; // rows without a value take no cell
       const k = v < 0 ? kn++ : kp++;
       const sign = v < 0 ? -1 : 1;
       const r = Math.floor(k / chunk);
@@ -50,13 +53,15 @@ function stackChunks(V, stacks, order, {chunk, padding}, B, B1) {
       const inset = (h * padding) / 2;
       V1[i] = sign * (r * h + inset);
       V2[i] = sign * ((r + 1) * h - inset);
+      if (sign < 0) lo = Math.min(lo, -(r + 1) * h);
+      else hi = Math.max(hi, (r + 1) * h);
       if (!B) continue;
       const w = B1[i] - B[i];
       C[i] = B[i] + w * columns(k % chunk);
       C1[i] = C[i] + w * columns.bandwidth();
     }
   }
-  return [V2, V1, C, C1];
+  return [V2, V1, C, C1, [lo, hi]];
 }
 
 // Splits the band of each row, such as [x, x1], among the series, so that they sit side by side.
@@ -90,9 +95,11 @@ function stack(data, {chunk, padding = 0.1} = {}, [key, key1, other, other1], na
     if (chunk !== undefined) {
       // Columns split the band of the other position, if it has one, such as [x, x1] after a spread.
       const B1 = value[other1];
-      const [V2, V1, C, C1] = stackChunks(V, stacks, order, {chunk, padding}, B1 && O, B1);
+      const [V2, V1, C, C1, extent] = stackChunks(V, stacks, order, {chunk, padding}, B1 && O, B1);
       const columns = C ? {[other]: C, [other1]: C1} : {};
-      return {...context, value: {...value, [key]: V2, [key1]: V1, ...columns}};
+      // The domain spans the rows with their outer gaps and includes 0, unless one is given.
+      const newHints = hints[key]?.domain ? hints : {...hints, [key]: {...hints[key], domain: extent}};
+      return {...context, value: {...value, [key]: V2, [key1]: V1, ...columns}, hints: newHints};
     }
     const [V2, V1] = stackValues(V, stacks, order);
     return {...context, value: {...value, [key]: V2, [key1]: V1}};

@@ -71,3 +71,20 @@ test("cm.unitY groups by position and series, even if their values contain comma
   assert.deepStrictEqual(value.x, ["W,X", "W"]);
   assert.deepStrictEqual(value.fill, ["a", "X,a"]);
 });
+
+test("cm.unitY counts only the rows of the index", () => {
+  const data = [
+    {lake: "A", count: 3},
+    {lake: "B", count: 2},
+    {lake: "A", count: 1},
+  ].map((d) => d);
+  const [context] = cm.flow().data(data).transform(cm.encode, {x: "lake", y: "count"})._values;
+  const [{value}] = cm.unitY(null, [{...context, I: [2, 1]}]);
+  assert.deepStrictEqual(value.x, ["A", "B", "B"]);
+});
+
+test("cm.unitY orders the groups by the first appearance of their position, as values", () => {
+  const data = [new Date(0), new Date(1), new Date(0)].map((date) => ({date}));
+  const {value} = units(data, {x: "date"}, cm.unitY);
+  assert.deepStrictEqual(value.x, [new Date(0), new Date(0), new Date(1)]);
+});

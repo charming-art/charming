@@ -13,9 +13,11 @@ function unit(data, {unit = 1} = {}, [key, key1, other], name) {
     const V = value[key];
     const O = value[other];
     const {Z, domain} = seriesOf(context);
-    // The groups go by the other position, in order of first appearance, then by series.
-    const I = range(rows.length);
-    const position = O && new InternMap(Array.from(new Set(O), (o, i) => [o, i]));
+    // The groups go by the other position, in order of first appearance, then by series. Only the
+    // rows of the index are counted, if an earlier transform selected some.
+    const I = context.I ? Array.from(context.I) : range(rows.length);
+    const position = O && new InternMap();
+    if (O) for (const i of I) if (!position.has(O[i])) position.set(O[i], position.size);
     const bySeries = Z && seriesOrder(Z, domain);
     I.sort((i, j) => (position ? position.get(O[i]) - position.get(O[j]) : 0) || (bySeries ? bySeries(i, j) : 0));
     // Grouped with one map per level, so that values are compared as values, not as strings.

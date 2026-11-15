@@ -114,3 +114,21 @@ test("cm.stackY with chunk keeps the other position if it has no band", () => {
   assert.strictEqual(x1, undefined);
   assert.deepStrictEqual(y, [20, 20]);
 });
+
+test("cm.stackY with chunk skips rows without a value", () => {
+  const rows = [10, NaN, null, 10].map((n) => ({n}));
+  const {y, y1} = values(rows, {y: "n"}, (flow, data) => cm.stackY(flow, data, {chunk: 2, padding: 0}));
+  assert.deepStrictEqual(y1, [0, NaN, NaN, 0]);
+  assert.deepStrictEqual(y, [20, NaN, NaN, 20]);
+});
+
+test("cm.stackY with chunk hints a domain from 0 that spans the rows with their gaps", () => {
+  const stacked = (rows, options) =>
+    cm
+      .flow()
+      .data(rows)
+      .transform(cm.encode, {y: "n"})
+      .transform((flow, data) => cm.stackY(flow, data, {chunk: 5, ...options}))._values[0].hints.y;
+  assert.deepStrictEqual(stacked([10, 10, 10, 10, 10].map((n) => ({n}))).domain, [0, 50]);
+  assert.deepStrictEqual(stacked([-10, -10, 10].map((n) => ({n}))).domain, [-50, 50]);
+});
