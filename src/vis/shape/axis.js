@@ -85,8 +85,9 @@ export function axisX(flow, value, {scales = {}, frame, options = {}} = {}) {
     ...font,
     text: label,
     x: center ? (left + right) / 2 : width - 3,
-    // 3px from the edge of the chart, on the far side of the tick labels: a top axis's labels
-    // hang below their baseline, so its title is 3px higher.
+    // At the edge of the chart, on the far side of the tick labels: 3px above the bottom, on its
+    // baseline, or hanging from the top. Like the default margins, which leave room for a bottom
+    // axis, a top axis needs a margin given to cm.plane, such as marginTop: 40.
     y: isTop ? 0 : height - 3,
     textAlign: center ? "center" : "end",
     ...(isTop && {textBaseline: "top"}),
@@ -124,6 +125,7 @@ export function axisY(flow, value, {scales = {}, frame, options = {}} = {}) {
   });
   const label = labelOf(y, scale, "y", options);
   if (label == null || frame?.nested) return;
+  // A right axis needs a margin given to cm.plane, such as marginRight: 40, like a top axis.
   const [labelX, textAlign] = isRight ? [width - 3, "end"] : [3, "start"];
   flow.datum(label).append(text, {...font, text: label, x: labelX, y: 3, textAlign, textBaseline: "top"});
 }

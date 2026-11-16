@@ -82,3 +82,14 @@ test("cm.binX keeps rows that all have the same value, in one collapsed bin, lik
   const {value} = binned([3, 3], {x: (d) => d}, cm.binX);
   assert.deepStrictEqual(value, {x: [3], x1: [3], y1: [0], y: [2]});
 });
+
+test("cm.binX bins every fractional interval at its multiples, despite floating point", () => {
+  const {value} = binned([0.1, 0.2, 0.3], {x: (d) => d}, cm.binX, {interval: 0.1});
+  assert.deepStrictEqual(value.y, [1, 1, 1]);
+  const steps = Array.from({length: 30}, (_, i) => (i + 1) / 10);
+  assert.strictEqual(binned(steps, {x: (d) => d}, cm.binX, {interval: 0.1}).value.y.length, 30);
+});
+
+test("cm.binX throws an error for an output on the binned position, whose edges it holds", () => {
+  assert.throws(() => binned([1, 2], {x: (d) => d}, cm.binX, {x: "mean"}), /cm.binX bins x/);
+});
