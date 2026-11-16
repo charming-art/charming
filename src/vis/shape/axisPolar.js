@@ -3,6 +3,10 @@ import {path} from "../../core/shape/path.js";
 import {text} from "../../core/shape/text.js";
 import {font, formatOf, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
 
+// Tick marks are keyed by their values, so that transitions match ticks from render to render;
+// dates by their times, as keys compare as strings, which drop milliseconds.
+const key = (d) => (d instanceof Date ? +d : d);
+
 const stroke = "currentColor";
 
 // The point at the radius r and the angle a of a polar frame, clockwise from 12 o'clock.
@@ -41,6 +45,7 @@ export function polarAxisX(flow, frame, x, options) {
   if (grid) {
     const spoke = (radius, j) => (d, i) => at(radius, i)[j];
     flow.data(ticks).append(link, {
+      key,
       x: spoke(innerRadius, 0),
       y: spoke(innerRadius, 1),
       x1: spoke(outerRadius, 0),
@@ -52,6 +57,7 @@ export function polarAxisX(flow, frame, x, options) {
   const r1 = r + k * tickSize;
   const r2 = r + k * (tickSize + tickPadding);
   flow.data(ticks).append(link, {
+    key,
     x: (d, i) => at(r, i)[0],
     y: (d, i) => at(r, i)[1],
     x1: (d, i) => at(r1, i)[0],
@@ -61,6 +67,7 @@ export function polarAxisX(flow, frame, x, options) {
   const format = formatOf(scale, options, count);
   const align = ticks.map((d) => alignOf(k * Math.sin(A(d)), -k * Math.cos(A(d))));
   flow.data(ticks).append(text, {
+    key,
     ...font,
     text: format,
     x: (d, i) => at(r2, i)[0],
@@ -79,10 +86,10 @@ export function polarAxisY(flow, frame, y, options) {
   const count = countOf(options, outerRadius - innerRadius, 35);
   const R = positionOf(scale);
   const ticks = ticksOf(scale, options, count).filter((d) => R(d) > innerRadius + 1e-6);
-  if (grid) flow.data(ticks).append(path, {x: cx, y: cy, d: (d) => ringOf(R(d)), stroke, strokeOpacity: 0.1});
+  if (grid) flow.data(ticks).append(path, {key, x: cx, y: cy, d: (d) => ringOf(R(d)), stroke, strokeOpacity: 0.1});
   const format = formatOf(scale, options, count);
-  const label = {...font, text: format, x: cx, y: (d) => cy - R(d), textAlign: "center", textBaseline: "middle"};
-  flow.data(ticks).append(text, {...label, fill: null, stroke: "white", strokeWidth: 3});
+  const label = {...font, key, text: format, x: cx, y: (d) => cy - R(d), textAlign: "center", textBaseline: "middle"};
+  flow.data(ticks).append(text, {key, ...label, fill: null, stroke: "white", strokeWidth: 3});
   flow.data(ticks).append(text, label);
 }
 

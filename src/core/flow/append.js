@@ -26,6 +26,10 @@ function flatten(options) {
   return entries;
 }
 
+// Options whose values are functions themselves, such as the format of a text or an easing, rather
+// than functions of each row.
+const functions = new Set(["format", "ease", "enterEase", "exitEase"]);
+
 // Channels are plain arrays, even for typed array data, so they can hold any value. A string that
 // names a bound channel takes its values, such as {y: "v2"}; other strings are constants.
 export function valueOf(data, options, channels) {
@@ -35,7 +39,7 @@ export function valueOf(data, options, channels) {
       return [key, Array.from(data, (d) => d[value])];
     }
     if (Array.isArray(value)) return [key, Array.from(data, (d, i) => value[+d || i])];
-    const v = typeof value === "function" ? value : () => value;
+    const v = typeof value === "function" && !functions.has(key) ? value : () => value;
     const V = Array.from(data, (d, i) => v(d, i, data));
     return [key, V];
   });

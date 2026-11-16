@@ -152,3 +152,11 @@ test("svg.erase() and svg.render() reuse the elements drawn before, and remove t
   // An attribute no longer given is removed.
   assert.strictEqual(a.getAttribute("fill"), null);
 });
+
+test("svg.text({format}) keeps the spaces of the formatted text, like Canvas", () => {
+  const renderer = cm.svg({width: 100, height: 100});
+  renderer.text({x: 0, y: 0, text: 12, format: (d) => `    ${d}`});
+  const text = renderer.node().querySelector("text");
+  assert.strictEqual(text.textContent, "    12");
+  assert.strictEqual(text.getAttribute("style"), "white-space: pre");
+});

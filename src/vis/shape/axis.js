@@ -3,6 +3,10 @@ import {text} from "../../core/shape/text.js";
 import {polarAxisX, polarAxisY} from "./axisPolar.js";
 import {font, formatOf, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
 
+// Tick marks are keyed by their values, so that transitions match ticks from render to render;
+// dates by their times, as keys compare as strings, which drop milliseconds.
+const key = (d) => (d instanceof Date ? +d : d);
+
 // The count of ticks: the ticks option if it's a number, or one tick per spacing pixels, like Plot.
 function countOf({ticks}, [start, end], spacing) {
   return typeof ticks === "number" ? ticks : (end - start) / spacing;
@@ -64,14 +68,15 @@ export function axisX(flow, value, {scales = {}, frame, options = {}} = {}) {
   const ticks = ticksOf(scale, options, count);
   const X = positionOf(scale);
   const stroke = "currentColor";
-  if (grid) flow.data(ticks).append(link, {x: X, x1: X, y: top, y1: bottom, stroke, strokeOpacity: 0.1});
+  if (grid) flow.data(ticks).append(link, {key, x: X, x1: X, y: top, y1: bottom, stroke, strokeOpacity: 0.1});
   // In facets, only the cells along the anchor label x; nested charts leave titles to the outer chart.
   if (frame?.edges && !frame.edges[anchor]) return;
   const isTop = anchor === "top";
   const [edge, k] = isTop ? [top, -1] : [bottom, 1];
-  flow.data(ticks).append(link, {x: X, x1: X, y: edge, y1: edge + k * tickSize, stroke});
+  flow.data(ticks).append(link, {key, x: X, x1: X, y: edge, y1: edge + k * tickSize, stroke});
   const [rotateX, padX] = rotatedX(tickRotate, isTop);
   flow.data(ticks).append(text, {
+    key,
     ...font,
     text: formatOf(scale, options, count),
     x: X,
@@ -109,14 +114,15 @@ export function axisY(flow, value, {scales = {}, frame, options = {}} = {}) {
   const ticks = ticksOf(scale, options, count);
   const Y = positionOf(scale);
   const stroke = "currentColor";
-  if (grid) flow.data(ticks).append(link, {x: left, x1: right, y: Y, y1: Y, stroke, strokeOpacity: 0.1});
+  if (grid) flow.data(ticks).append(link, {key, x: left, x1: right, y: Y, y1: Y, stroke, strokeOpacity: 0.1});
   // In facets, only the cells along the anchor label y; nested charts leave titles to the outer chart.
   if (frame?.edges && !frame.edges[anchor]) return;
   const isRight = anchor === "right";
   const [edge, k] = isRight ? [right, 1] : [left, -1];
-  flow.data(ticks).append(link, {x: edge, x1: edge + k * tickSize, y: Y, y1: Y, stroke});
+  flow.data(ticks).append(link, {key, x: edge, x1: edge + k * tickSize, y: Y, y1: Y, stroke});
   const [rotateY, padY] = rotatedY(tickRotate, isRight);
   flow.data(ticks).append(text, {
+    key,
     ...font,
     text: formatOf(scale, options, count),
     x: edge + k * (tickSize + tickPadding + padY),

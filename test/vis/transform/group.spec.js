@@ -52,3 +52,10 @@ test("cm.group groups on x and y, with counts in fill by default, and an output 
 test("cm.group throws an error for an unknown reducer", () => {
   assert.throws(() => grouped({x: "island"}, cm.groupX, {y: "nope"}), /Unknown reducer: nope/);
 });
+
+test("cm.groupX keeps the key and group key a group shares, for transitions, and unsets them otherwise", () => {
+  const {value} = grouped({x: "island", key: "island", groupKey: "species"}, cm.groupX);
+  assert.deepStrictEqual(value.key, ["Biscoe", "Dream"]);
+  // Biscoe has Adelie and Gentoo penguins, so its group key is unset rather than one of them.
+  assert.deepStrictEqual(value.groupKey, [undefined, "Adelie"]);
+});

@@ -15,6 +15,7 @@ export const text = define((renderer, I, value, options) => {
   value = maybeBox(value, options);
   const {
     text: T = [],
+    format: FT = [],
     x: X = [],
     y: Y = [],
     fill: F = [],
@@ -34,6 +35,7 @@ export const text = define((renderer, I, value, options) => {
       x: X[i],
       y: Y[i],
       text: T[i],
+      format: FT[i],
       stroke: S[i],
       fill: F[i],
       fillOpacity: FO[i],

@@ -2,6 +2,7 @@ import {normalizeColorString} from "../../core/color.js";
 
 export function canvas$text({
   text,
+  format,
   x,
   y,
   fill,
@@ -16,6 +17,8 @@ export function canvas$text({
   fontWeight = "normal",
   rotate,
 }) {
+  // Like SVG, a format writes the value, and a missing text is empty.
+  if (typeof format === "function") text = format(text) ?? "";
   stroke = normalizeColorString(stroke, strokeOpacity);
   fill = normalizeColorString(fill, fillOpacity);
   const context = this._context;
