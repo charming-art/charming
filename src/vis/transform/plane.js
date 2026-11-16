@@ -1,7 +1,9 @@
 import {InternSet} from "d3-array";
 import {discrete, point, scale} from "../../core/transform/scale.js";
 import {
+  allKeysOf,
   axisHint,
+  byScaleName,
   callable,
   colorScales,
   hasAny,
@@ -14,6 +16,7 @@ import {
   positionScale,
   resolve,
   scaleDescriptors,
+  scaleName,
   sharedDomain,
   withoutHints,
   withSeries,
@@ -59,7 +62,7 @@ export function plane(
     marginRight,
     marginBottom,
     marginLeft,
-    resolve: {x: resolveX = "shared", y: resolveY = "shared"} = {},
+    resolve: resolution = {},
     keysX = ["x", "x1"],
     keysY = ["y", "y1"],
   } = {},
@@ -109,12 +112,32 @@ export function plane(
     frames = data.map(() => frame);
   }
 
-  // The scales shared by all the contexts: colors, and positions unless they're independent.
-  const allX = Array.from(new Set(data.flatMap(({value, hints = {}}) => keysOf(value, hints, keysX, "x"))));
-  const allY = Array.from(new Set(data.flatMap(({value, hints = {}}) => keysOf(value, hints, keysY, "y"))));
+  // The scales shared by the contexts: colors, and positions unless they're independent. A position
+  // is shared with the contexts whose positions use the same scale: the axis, by default, or a name
+  // given to it, such as x: {value: "culmen_length_mm", scale: "length"}. The options apply to the
+  // scale named after the axis, and resolve takes any name, such as {x: "independent"}.
+  const allX = allKeysOf(data, keysX, "x");
+  const allY = allKeysOf(data, keysY, "y");
   const colors = colorScales(merge(data, ["fill", "stroke"]), data[0]?.hints ?? {});
-  const sharedX = resolveX !== "independent" && sharedScale(data, allX, keysX, typeX, domainX);
-  const sharedY = resolveY !== "independent" && sharedScale(data, allY, keysY, typeY, domainY);
+  const independent = (name) => resolution[name] === "independent";
+  const sharedOf = (keys, axis, type, domain) =>
+    new Map(
+      Array.from(byScaleName(data, keys, axis), ([name, contexts]) => {
+        if (independent(name)) return [name, null];
+        const own = name === axis;
+        const all = allKeysOf(contexts, keys, axis);
+        return [name, sharedScale(contexts, all, keys, own ? type : undefined, own ? domain : undefined)];
+      }),
+    );
+  const sharedX = sharedOf(keysX, "x", typeX, domainX);
+  const sharedY = sharedOf(keysY, "y", typeY, domainY);
+  // The direction of a shared y comes from the first of its contexts with y.
+  const firstHintsY = new Map(
+    Array.from(byScaleName(data, keysY, "y"), ([name, contexts]) => [
+      name,
+      (contexts.find((context) => has(context, keysY, "y")) ?? contexts[0]).hints ?? {},
+    ]),
+  );
 
   return data.map((context, j) => {
     const {value, hints = {}} = context;
@@ -122,12 +145,26 @@ export function plane(
     const rangeX = [frame.left, frame.right];
     const rangeY = [frame.top, frame.bottom];
     if (reverseX) rangeX.reverse();
-    if (reverseOf(resolveY === "independent" ? hints : firstHints)) rangeY.reverse();
+    const nameX = scaleName(hints, keysX, "x");
+    const nameY = scaleName(hints, keysY, "y");
+    if (reverseOf(independent(nameY) ? hints : firstHintsY.get(nameY))) rangeY.reverse();
 
+    // An independent position is inferred from its own context, with the options if it's the axis's.
     const hintX = axisHint(hints, keysX);
     const hintY = axisHint(hints, keysY);
-    const x = sharedX || positionScale(value, allX, {type: typeX ?? hintX.type, domain: domainX ?? hintX.domain});
-    const y = sharedY || positionScale(value, allY, {type: typeY ?? hintY.type, domain: domainY ?? hintY.domain});
+    const [ownX, ownY] = [nameX === "x", nameY === "y"];
+    const x =
+      sharedX.get(nameX) ||
+      positionScale(value, allX, {
+        type: (ownX ? typeX : undefined) ?? hintX.type,
+        domain: (ownX ? domainX : undefined) ?? hintX.domain,
+      });
+    const y =
+      sharedY.get(nameY) ||
+      positionScale(value, allY, {
+        type: (ownY ? typeY : undefined) ?? hintY.type,
+        domain: (ownY ? domainY : undefined) ?? hintY.domain,
+      });
 
     // Colors are categorical by default, and positions are discrete points by default.
     const [colored] = scale(flow, [context], scaleDescriptors(colors));
