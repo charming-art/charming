@@ -20,7 +20,7 @@ export const visSimpsonsRatings = withSVG(async () => {
         .transform(cm.spreadY, {padding: 0})
         .transform(cm.plane, {marginTop: 40, marginBottom: 10})
         .add(cm.axis, {x: {anchor: "top", label: "Season"}, y: {label: "Episode"}, grid: true})
-        .add(cm.rect, {x: (d) => d.x + 0.5, x1: (d) => d.x1 - 0.5, y: (d) => d.y + 0.5, y1: (d) => d.y1 - 0.5})
+        .add(cm.rect, cm.inset(0.5))
         .add(cm.text, {
           x: (d) => (d.x + d.x1) / 2,
           y: (d) => (d.y + d.y1) / 2,

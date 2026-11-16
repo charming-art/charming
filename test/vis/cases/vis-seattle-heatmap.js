@@ -23,7 +23,7 @@ export const visSeattleHeatmap = withSVG(async () => {
         .transform(cm.spreadY, {padding: 0})
         .transform(cm.plane)
         .add(cm.axis, {y: {tickFormat: (d) => months[d]}})
-        .add(cm.rect, {x: (d) => d.x + 0.5, x1: (d) => d.x1 - 0.5, y: (d) => d.y + 0.5, y1: (d) => d.y1 - 0.5});
+        .add(cm.rect, cm.inset(0.5));
     },
     {width: 640, height: 300},
   );
