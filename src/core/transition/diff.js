@@ -16,15 +16,17 @@ export function diff(prev, next, options) {
   const byDatum = new Map();
   const byPosition = new Map();
   const keyed = new Map();
+  // Keys match within a shape drawn under the same parent rows (its path, with its scope), and
+  // group keys within the same parent rows; the first of duplicate keys wins.
   for (let i = 0; i < m; i++) {
-    const {path, key, datum, position} = prev[i];
+    const {path, scope, key, datum, position} = prev[i];
     if (key !== undefined) {
-      byKey.set(`${path}\0${key}`, i);
-      if (!keyed.has(key)) keyed.set(key, i);
-    } else {
-      // A keyed primitive only matches by its key.
-      byPosition.set(`${path}\0${position}`, i);
+      if (!byKey.has(`${path}\0${key}`)) byKey.set(`${path}\0${key}`, i);
+      if (!keyed.has(`${scope}\0${key}`)) keyed.set(`${scope}\0${key}`, i);
+      continue;
     }
+    // A keyed primitive only matches by its key.
+    byPosition.set(`${path}\0${position}`, i);
     if (datum) {
       if (!byDatum.has(path)) byDatum.set(path, new Map());
       byDatum.get(path).set(datum, i);
@@ -52,22 +54,22 @@ export function diff(prev, next, options) {
   // merges into the drawn one keyed by its group key.
   const nextKeyed = new Map();
   for (let j = 0; j < n; j++) {
-    const {key} = next[j];
-    if (matches[j] < 0 && key !== undefined && !nextKeyed.has(key)) nextKeyed.set(key, j);
+    const {scope, key} = next[j];
+    if (matches[j] < 0 && key !== undefined && !nextKeyed.has(`${scope}\0${key}`)) nextKeyed.set(`${scope}\0${key}`, j);
   }
   const merged = new Set();
   const items = [];
   for (let i = 0; i < m; i++) {
     if (used.has(i)) continue;
     const p = prev[i];
-    const j = p.groupKey !== undefined ? nextKeyed.get(p.groupKey) : undefined;
+    const j = p.groupKey !== undefined ? nextKeyed.get(`${p.scope}\0${p.groupKey}`) : undefined;
     if (j !== undefined) {
       const q = next[j];
       merged.add(j);
       // Merging marks move with the timing of the mark they merge into, from the new frame.
       const to = toward(p.attrs, q.attrs);
       items.push(item(p, "until-end", p.attrs, to, p.ops, opsOf(p, q), timing(q, "update", options)));
-    } else if (!splits(next, p, matches)) {
+    } else if (!splits(prev, next, i, keyed, matches)) {
       const exit = {...p.attrs, ...state(p.exit)};
       items.push(item(p, "until-end", p.attrs, exit, p.ops, p.ops, timing(p, "exit", options)));
     }
@@ -75,7 +77,7 @@ export function diff(prev, next, options) {
   for (let j = 0; j < n; j++) {
     const q = next[j];
     const i = matches[j];
-    const k = q.groupKey !== undefined ? keyed.get(q.groupKey) : undefined;
+    const k = q.groupKey !== undefined ? keyed.get(`${q.scope}\0${q.groupKey}`) : undefined;
     if (i >= 0) {
       const p = prev[i];
       items.push(item(q, "always", p.attrs, q.attrs, p.ops, q.ops, timing(q, "update", options)));
@@ -94,9 +96,15 @@ export function diff(prev, next, options) {
   return items;
 }
 
-// Whether a shown primitive is the source of a split, so that it doesn't exit on its own.
-function splits(next, p, matches) {
-  return p.key !== undefined && next.some((q, j) => matches[j] < 0 && q.groupKey === p.key);
+// Whether a shown primitive is the source of a split, so that it doesn't exit on its own: the first
+// primitive with its key in its scope, and the group key of a drawn primitive that matched nothing.
+function splits(prev, next, i, keyed, matches) {
+  const {scope, key} = prev[i];
+  if (key === undefined || keyed.get(`${scope}\0${key}`) !== i) return false;
+  for (let j = 0; j < next.length; j++) {
+    if (matches[j] < 0 && next[j].scope === scope && next[j].groupKey === key) return true;
+  }
+  return false;
 }
 
 // The attributes of a primitive with the values of another where it has them, such as the box of a

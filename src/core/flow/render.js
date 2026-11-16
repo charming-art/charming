@@ -21,9 +21,28 @@ function childIndex(child, node, index, k) {
   return child._shared ? 0 : offsets(node)[index] + k;
 }
 
-// The path of a node identifies its shape in the flow, so that transitions match what each shape
-// draws from one render to the next.
-function renderNode(renderer, node, index, context, path) {
+// A number for each datum object, so that rows are identified by their data from render to render.
+const ids = new WeakMap();
+let nextId = 0;
+
+function idOf(datum) {
+  if (!ids.has(datum)) ids.set(datum, nextId++);
+  return ids.get(datum);
+}
+
+// The identity of a row among the rows of its group: its key, else its datum if it's an object,
+// else its index.
+function rowOf(value, group, index, k) {
+  const key = value?.key?.[k];
+  if (key !== undefined) return `k${key}`;
+  const datum = group?.[k];
+  if (datum !== null && typeof datum === "object") return `d${idOf(datum)}`;
+  return `i${index}:${k}`;
+}
+
+// The path of a node identifies its shape in the flow, and the scope the rows of the parents it's
+// drawn under, so that transitions match what each shape draws from one render to the next.
+function renderNode(renderer, node, index, context, path, scope) {
   const data = node._data[index];
   const {render, I, value, options, group, context: bound} = data;
   const {builtin} = render;
@@ -39,10 +58,10 @@ function renderNode(renderer, node, index, context, path) {
     render(flow, value, {...bound, options});
     const made = node._children;
     node._children = children;
-    for (let c = 0; c < made.length; c++) renderNode(renderer, made[c], 0, context, `${path}/m${c}`);
+    for (let c = 0; c < made.length; c++) renderNode(renderer, made[c], 0, context, `${path}/m${c}`, scope);
   }
   if (builtin) {
-    renderer.begin?.({path, index, I, value, group});
+    renderer.begin?.({path: `${scope}${path}`, scope, index, I, value, group});
     render(renderer, I, value, options, group);
     renderer.end?.();
   }
@@ -58,9 +77,10 @@ function renderNode(renderer, node, index, context, path) {
       renderer.translate(x, y);
       if (r !== undefined) renderer.rotate(r);
     }
+    const rowScope = `${scope}${path}[${rowOf(value, group, index, k)}]`;
     for (let c = 0; c < children.length; c++) {
       const child = children[c];
-      renderNode(renderer, child, childIndex(child, node, index, k), context, `${path}/${c}`);
+      renderNode(renderer, child, childIndex(child, node, index, k), context, `${path}/${c}`, rowScope);
     }
     if (value) renderer.restore();
   }
@@ -74,7 +94,7 @@ export function flow$render() {
   const transition = transitionOptions(context.transition);
   const target = transition ? recorder() : renderer;
   const children = root._children;
-  for (let i = 0; i < children.length; i++) renderNode(target, children[i], 0, context, `${i}`);
+  for (let i = 0; i < children.length; i++) renderNode(target, children[i], 0, context, `${i}`, "");
   root._children = [];
   if (transition) {
     if (!context.transitionState) context.transitionState = {};

@@ -52,6 +52,11 @@ export function animate(state, renderer, next, options) {
 function draw(renderer, primitives) {
   renderer.erase();
   for (const {type, attrs, ops} of primitives) {
+    // A primitive drawn without translations or rotations isn't put in a group of its own.
+    if (!ops.length) {
+      renderer[type](attrs);
+      continue;
+    }
     renderer.save();
     for (const [op, ...args] of ops) renderer[op](...args);
     renderer[type](attrs);

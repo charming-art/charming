@@ -251,3 +251,99 @@ test("marks with a group key whose group mark stays match themselves rather than
     ],
   );
 });
+
+// The translations of the groups of the rects, in order.
+const translations = (renderer) =>
+  Array.from(renderer.node().querySelectorAll("rect"), (r) =>
+    r.parentNode
+      .getAttribute("transform")
+      .match(/-?[\d.]+/g)
+      .map(Number),
+  );
+
+test("keyed marks match within the parent rows they're drawn under", () => {
+  const [root, renderer] = chart();
+  const draw = (dy) => {
+    root
+      .data([0, 80])
+      .append(cm.g, {x: 0, y: (d) => d + dy, key: (d) => d})
+      .append(cm.rect, {x: 0, y: 0, width: 10, height: 10, key: "a"});
+    root.render();
+  };
+  draw(0);
+  draw(40);
+  vi.advanceTimersByTime(80);
+  // Each rect moves with its own group, halfway down: no fading or crossing.
+  assert.deepStrictEqual(translations(renderer), [
+    [0, 20],
+    [0, 100],
+  ]);
+});
+
+test("shared marks drawn under each parent row match under their own row", () => {
+  const [root, renderer] = chart();
+  const draw = (dx) => {
+    const groups = root.data([0, 100]).append(cm.g, {x: (d) => d + dx, y: 0, key: (d) => d});
+    groups.append(cm.g).data(["a"]).append(cm.rect, {x: 0, y: 0, width: 10, height: 10});
+    root.render();
+  };
+  draw(0);
+  draw(40);
+  vi.advanceTimersByTime(80);
+  assert.deepStrictEqual(
+    translations(renderer).map(([x]) => x),
+    [20, 120],
+  );
+});
+
+test("a keyed mark doesn't match an unkeyed one by datum: it exits and the other enters", () => {
+  const [root, renderer] = chart();
+  const datum = {};
+  root.data([datum]).append(cm.rect, {x: 0, y: 0, width: 10, height: 10, key: "a"});
+  root.render();
+  root.data([datum]).append(cm.rect, {x: 80, y: 0, width: 10, height: 10});
+  root.render();
+  vi.advanceTimersByTime(80);
+  assert.deepStrictEqual(
+    rects(renderer).map(([x]) => x),
+    [0, 80],
+  );
+});
+
+test("texts and other discrete attributes jump at the end, even from a missing value or a color name", () => {
+  const [root, renderer] = chart();
+  const draw = (text) => {
+    root.data([0]).append(cm.text, {x: 0, y: 0, text});
+    root.render();
+  };
+  draw("red");
+  draw("blue");
+  vi.advanceTimersByTime(80);
+  assert.strictEqual(renderer.node().querySelector("text").textContent, "red");
+  vi.advanceTimersByTime(96);
+  draw(undefined);
+  vi.advanceTimersByTime(176);
+  draw("hi");
+  vi.advanceTimersByTime(80);
+  assert.strictEqual(renderer.node().querySelector("text").textContent, "");
+});
+
+test("a group's translation interpolates even if it gains a rotation", () => {
+  const [root, renderer] = chart();
+  const draw = (x, rotate) => {
+    root.data([0]).append(cm.g, {x, y: 0, rotate}).append(cm.rect, {x: 0, y: 0, width: 10, height: 10});
+    root.render();
+  };
+  draw(0);
+  draw(100, 1);
+  vi.advanceTimersByTime(80);
+  assert.match(renderer.node().querySelector("rect").parentNode.getAttribute("transform"), /^translate\(50,\s*0\)/);
+});
+
+test("marks drawn without translations aren't put in groups of their own", () => {
+  const [root, renderer] = chart();
+  bars(root, [{id: "a", value: 50}]);
+  bars(root, [{id: "a", value: 100}]);
+  vi.advanceTimersByTime(80);
+  assert.strictEqual(renderer.node().querySelector("rect").parentNode, renderer.node());
+});

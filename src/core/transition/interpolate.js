@@ -5,6 +5,9 @@ import {interpolateRgb} from "d3-interpolate";
 // The default of an attribute that a primitive doesn't give, for interpolating to and from it.
 const defaults = {fillOpacity: 1, strokeOpacity: 1};
 
+// The attributes that are colors, which interpolate in RGB.
+const paints = new Set(["fill", "stroke"]);
+
 // Interpolates the attributes of a primitive: numbers linearly, colors in RGB, and anything else,
 // such as the d of a path or a text, jumps at the end.
 export function interpolateAttrs(from, to) {
@@ -15,20 +18,30 @@ export function interpolateAttrs(from, to) {
     const a = from[key] ?? defaults[key];
     const b = to[key] ?? defaults[key];
     if (typeof a === "number" && typeof b === "number") return [key, (t) => a + (b - a) * t];
-    if (typeof a === "string" && typeof b === "string" && a !== b && color(a) && color(b)) {
+    if (paints.has(key) && typeof a === "string" && typeof b === "string" && a !== b && color(a) && color(b)) {
       return [key, interpolateRgb(a, b)];
     }
-    return [key, (t) => (t < 1 && a !== undefined ? a : b)];
+    return [key, (t) => (t < 1 ? a : b)];
   });
   return (t) => Object.fromEntries(fns.map(([key, f]) => [key, f(t)]));
 }
 
-// Interpolates the translations and rotations of a primitive, if they have the same structure,
-// such as a group moving its children; otherwise they jump at the end.
+// Interpolates the translations and rotations of a primitive: the operations they share at the
+// start, such as the translation of a group, interpolate, and the ones added or removed after them,
+// such as a new rotation, jump at the end.
 export function interpolateOps(from, to) {
-  const same = from.length === to.length && from.every((op, i) => op[0] === to[i][0]);
-  if (!same) return (t) => (t < 1 ? from : to);
-  return (t) => from.map((op, i) => op.map((v, j) => (j === 0 ? v : v + (to[i][j] - v) * t)));
+  let shared = 0;
+  while (shared < from.length && shared < to.length && from[shared][0] === to[shared][0]) shared++;
+  return (t) => {
+    if (t >= 1) return to;
+    const ops = from.slice();
+    for (let i = 0; i < shared; i++) {
+      const a = from[i];
+      const b = to[i];
+      ops[i] = a.map((v, j) => (j === 0 ? v : v + (b[j] - v) * t));
+    }
+    return ops;
+  };
 }
 
 // An easing function by name, such as "cubic-in-out" for d3's easeCubicInOut, or as given.
