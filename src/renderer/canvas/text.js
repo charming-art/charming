@@ -17,7 +17,8 @@ export function canvas$text({
   fontWeight = "normal",
   rotate,
 }) {
-  if (format) text = format(text);
+  // Like SVG, a format writes the value, and a missing text is empty.
+  if (typeof format === "function") text = format(text) ?? "";
   stroke = normalizeColorString(stroke, strokeOpacity);
   fill = normalizeColorString(fill, fillOpacity);
   const context = this._context;

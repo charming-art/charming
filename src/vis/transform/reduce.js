@@ -44,15 +44,19 @@ export function seriesKey(value, outputs) {
 // channel of the same name, such as {fill: "max"}, and the other channels are dropped. The datum
 // of a row is the rows of its group. The hint of an output is its input's, or Frequency for a
 // count, like Plot. Extra channels, such as the edges of bins, are added from fields. The identity
-// of a row for transitions, key and groupKey, is kept like the channels in keys.
+// of a row for transitions, key and groupKey, is kept if every row of the group shares it, else
+// unset, so that a group isn't matched by the identity of one of its rows.
 export function reduceGroups(context, groups, keys, outputs, fields = {}) {
   const {value, hints = {}, group: rows} = context;
   const newValue = {};
   const newHints = {};
-  const identity = ["key", "groupKey"].filter((key) => key in value && !(key in outputs) && !keys.includes(key));
-  for (const key of [...keys, ...identity]) {
+  for (const key of keys) {
     newValue[key] = groups.map((I) => valueAt(value[key], I[0]));
     if (key in hints) newHints[key] = hints[key];
+  }
+  for (const key of ["key", "groupKey"]) {
+    if (!(key in value) || key in outputs || keys.includes(key)) continue;
+    newValue[key] = groups.map((I) => sharedOf(value[key], I));
   }
   for (const key in fields) newValue[key] = fields[key];
   for (const key in outputs) {
@@ -69,6 +73,13 @@ export function reduceGroups(context, groups, keys, outputs, fields = {}) {
     value: newValue,
     hints: newHints,
   };
+}
+
+// The value of a channel that every row of a group shares, else undefined.
+function sharedOf(V, I) {
+  const v = valueAt(V, I[0]);
+  for (let k = 1; k < I.length; k++) if (valueAt(V, I[k]) !== v) return undefined;
+  return v;
 }
 
 // The index of the rows of a context: all of them, unless an earlier transform selected some.

@@ -378,3 +378,19 @@ test("a numeric text without a format switches at the end, as it wouldn't read i
   vi.advanceTimersByTime(80);
   assert.strictEqual(renderer.node().querySelector("text").textContent, "10");
 });
+
+test("a text that gains a format ticks with it from the start, and a new format is used throughout", () => {
+  const [root, renderer] = chart();
+  const draw = (value, format) => {
+    root.data([value]).append(cm.text, {x: 0, y: 0, text: (d) => d, format});
+    root.render();
+  };
+  draw(0);
+  draw(100, (v) => `${Math.round(v)} units`);
+  vi.advanceTimersByTime(80);
+  assert.strictEqual(renderer.node().querySelector("text").textContent, "50 units");
+  vi.advanceTimersByTime(96);
+  draw(200, (v) => `${Math.round(v)} items`);
+  vi.advanceTimersByTime(80);
+  assert.strictEqual(renderer.node().querySelector("text").textContent, "150 items");
+});
