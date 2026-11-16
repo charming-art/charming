@@ -1,4 +1,5 @@
 import {flow$add} from "./add.js";
+import {flow$branch, flow$iterator} from "./branch.js";
 import {flow$append} from "./append.js";
 import {flow$call} from "./call.js";
 import {flow$data} from "./data.js";
@@ -8,8 +9,9 @@ import {flow$renderer} from "./renderer.js";
 import {flow$render} from "./render.js";
 import {Node} from "../node.js";
 
-export function Flow(groups = null, data = null, parent = null, context = null, values = null) {
+export function Flow(groups = null, data = null, parent = null, context = null, values = null, branches = null) {
   Object.defineProperties(this, {
+    _branches: {value: branches},
     _groups: {value: groups},
     _parent: {value: parent},
     _context: {value: context},
@@ -22,6 +24,8 @@ Object.defineProperties(Flow.prototype, {
   call: {value: flow$call},
   append: {value: flow$append},
   add: {value: flow$add},
+  branch: {value: flow$branch},
+  [Symbol.iterator]: {value: flow$iterator},
   data: {value: flow$data},
   datum: {value: flow$datum},
   transform: {value: flow$transform},

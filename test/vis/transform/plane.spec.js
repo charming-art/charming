@@ -497,3 +497,38 @@ test("cm.plane shares the union of hinted category domains, even of two numbers"
   assert.deepStrictEqual(a.scales.y.domain, [1, 2, 3]);
   assert.ok(Number.isFinite(a.value.y[0]));
 });
+
+// Plans two branches of x and y together, with options for cm.plane, and returns their scales.
+function branchScales(options) {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [a, b] = root
+    .branch(
+      (flow) =>
+        flow
+          .data([
+            {x: 0, y: 0},
+            {x: 5, y: 10},
+          ])
+          .transform(cm.encode, {x: "x", y: "y"}),
+      (flow) => flow.data([{x: 10, y: 1}]).transform(cm.encode, {x: "x", y: "y"}),
+    )
+    .transform(cm.plane, options);
+  return [a, b].map((flow) => flow._values[0].scales);
+}
+
+test("cm.plane shares the scales of branches, drawn in the same frame", () => {
+  const [a, b] = branchScales();
+  assert.deepStrictEqual(a.x.domain, [0, 10]);
+  assert.deepStrictEqual(b.x.domain, [0, 10]);
+  assert.deepStrictEqual(a.y.domain, [0, 10]);
+  assert.deepStrictEqual(b.y.domain, [0, 10]);
+});
+
+test("cm.plane resolves y per branch with resolve independent, and shares x, for dual axes", () => {
+  const [a, b] = branchScales({resolve: {y: "independent"}});
+  assert.deepStrictEqual(a.x.domain, [0, 10]);
+  assert.deepStrictEqual(b.x.domain, [0, 10]);
+  assert.deepStrictEqual(a.y.domain, [0, 10]);
+  assert.deepStrictEqual(b.y.domain, [1, 1]);
+  assert.deepStrictEqual(a.y.range, b.y.range);
+});

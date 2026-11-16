@@ -37,6 +37,8 @@ function rowsOf(value, group) {
 }
 
 export function flow$append(render, options = {}) {
+  // Each branch nests under its own shape, so a joined flow is split first.
+  if (this._branches) throw new Error("Split a joined flow before appending into it: const [a, b] = flow.");
   const flow = this._data ? this : this.data((d) => [d]);
   const groups = flow._groups;
   const parent = this._parent;
