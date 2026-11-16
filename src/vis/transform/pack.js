@@ -27,12 +27,13 @@ export function pack(flow, data, {share = false} = {}) {
     const {cols, size} = gridOf(shared ?? I.length, right - left, bottom - top);
     const n = group.length;
     const [X, X1, Y, Y1] = [0, 1, 2, 3].map(() => new Array(n).fill(NaN));
-    I.forEach((i, m) => {
+    for (let m = 0; m < I.length; m++) {
+      const i = I[m];
       X[i] = left + (m % cols) * size;
       X1[i] = X[i] + size;
       Y1[i] = bottom - Math.floor(m / cols) * size;
       Y[i] = Y1[i] - size;
-    });
+    }
     return {...context, value: {...value, x: X, x1: X1, y: Y, y1: Y1}};
   });
 }

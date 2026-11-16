@@ -90,10 +90,11 @@ function binOn(data, options, defaults, keys, name) {
       ),
     );
     const fields = {};
-    keys.forEach((key, k) => {
+    for (let k = 0; k < keys.length; k++) {
+      const key = keys[k];
       fields[key] = groups.map((J) => bins[k].edges[B[k][J[0]]]);
       fields[`${key}1`] = groups.map((J) => bins[k].edges[B[k][J[0]] + 1]);
-    });
+    }
     for (const key of ["x", "y"]) {
       if (key in outputs && !keys.includes(key) && !(`${key}1` in outputs)) fields[`${key}1`] = groups.map(() => 0);
     }

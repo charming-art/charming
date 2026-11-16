@@ -43,7 +43,9 @@ function spreadCategories(context, padding, flex, [key, key1, other, other1]) {
 function weightsOf(domain, V, F) {
   const index = new InternMap(domain.map((d, i) => [d, i]));
   const weights = domain.map(() => 0);
-  V.forEach((v, i) => index.has(v) && (weights[index.get(v)] += +F[i] || 0));
+  for (let i = 0; i < V.length; i++) {
+    if (index.has(V[i])) weights[index.get(V[i])] += +F[i] || 0;
+  }
   return weights;
 }
 
@@ -70,7 +72,7 @@ function spreadSlots(context, padding, chunk, [key, key1, other]) {
   let k = 0;
   for (const rows of parents.values()) {
     if (order) rows.sort(order);
-    rows.forEach((i, position) => (S[i] = Math.floor(position / chunk)));
+    for (let position = 0; position < rows.length; position++) S[rows[position]] = Math.floor(position / chunk);
     k = Math.max(k, Math.ceil(rows.length / chunk));
   }
   const scale = scaleOf(range(k), padding);
