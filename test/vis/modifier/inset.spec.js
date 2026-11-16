@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import {test} from "vitest";
-import * as cm from "../../src/index.js";
+import * as cm from "../../../src/index.js";
 
 // Evaluates the position options of a modifier on a row, like .add.
 function positions(options, d = {x: 0, x1: 10, y: 20, y1: 40}) {
