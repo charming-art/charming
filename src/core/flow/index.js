@@ -7,6 +7,7 @@ import {flow$datum} from "./datum.js";
 import {flow$transform} from "./transform.js";
 import {flow$renderer} from "./renderer.js";
 import {flow$render} from "./render.js";
+import {flow$finished} from "./finished.js";
 import {Node} from "../node.js";
 
 export function Flow(groups = null, data = null, parent = null, context = null, values = null, branches = null) {
@@ -31,10 +32,13 @@ Object.defineProperties(Flow.prototype, {
   transform: {value: flow$transform},
   renderer: {value: flow$renderer},
   render: {value: flow$render},
+  finished: {value: flow$finished},
 });
 
-export function flow() {
+// A flow takes options: transition, to animate from each render to the next, true or defaults such
+// as {duration: 500, ease: "linear"}.
+export function flow({transition} = {}) {
   const root = new Node();
-  const context = {root, renderer: null};
+  const context = {root, renderer: null, transition};
   return new Flow([[0]], [0], root, context);
 }

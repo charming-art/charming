@@ -124,3 +124,31 @@ test("svg.text(options) rotates text around its position, in radians", () => {
   assert.strictEqual(a.getAttribute("transform"), "rotate(-90,5,6)");
   assert.strictEqual(b.getAttribute("transform"), null);
 });
+
+test("svg.erase() and svg.render() reuse the elements drawn before, and remove the ones not drawn again", () => {
+  const renderer = cm.svg({width: 100, height: 100});
+  const frame = (rects) => {
+    renderer.erase();
+    for (const x of rects) {
+      renderer.save();
+      renderer.translate(x, 0);
+      renderer.rect({x: 0, y: 0, width: 10, height: 10, fill: x ? "red" : null});
+      renderer.restore();
+    }
+    renderer.render();
+  };
+  frame([0, 20]);
+  const [a, b] = renderer.node().querySelectorAll("rect");
+  frame([5, 25, 45]);
+  const rects = renderer.node().querySelectorAll("rect");
+  // The first two are the same elements, with their new attributes; the third is new.
+  assert.strictEqual(rects[0], a);
+  assert.strictEqual(rects[1], b);
+  assert.strictEqual(a.getAttribute("fill"), "red");
+  assert.match(a.parentNode.getAttribute("transform"), /^translate\(5,\s*0\)$/);
+  frame([0]);
+  assert.strictEqual(renderer.node().querySelectorAll("rect").length, 1);
+  assert.strictEqual(renderer.node().querySelector("rect"), a);
+  // An attribute no longer given is removed.
+  assert.strictEqual(a.getAttribute("fill"), null);
+});

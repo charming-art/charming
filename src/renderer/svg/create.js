@@ -12,11 +12,50 @@ export function create(name, attributes = {}) {
   return node;
 }
 
-// Appends an element to the current group of the renderer.
+// Appends an element to the current group of the renderer. Between erase and render, such as in the
+// frames of a transition, the element drawn at the same place last time is reused instead, if it
+// has the same name, so that only its attributes change.
 export function append(renderer, name, attributes) {
-  const node = create(name, attributes);
-  renderer._group.append(node);
+  const group = renderer._group;
+  const cursors = renderer._cursors;
+  if (!cursors) {
+    const node = create(name, attributes);
+    group.append(node);
+    return node;
+  }
+  // The cursor of a group is the element to reuse next, and how many have been drawn.
+  let cursor = cursors.get(group);
+  if (!cursor) {
+    cursor = {next: group.firstChild, n: 0};
+    cursors.set(group, cursor);
+  }
+  const child = cursor.next;
+  let node = child;
+  if (child && child.localName === name) update(child, attributes);
+  else {
+    node = create(name, attributes);
+    group.insertBefore(node, child);
+  }
+  cursor.next = node.nextSibling;
+  cursor.n++;
   return node;
+}
+
+// Sets the defined attributes of an element that changed, and removes the others.
+function update(node, attributes) {
+  for (const {name} of Array.from(node.attributes)) {
+    if (attributes[name] == null) node.removeAttribute(name);
+  }
+  for (const key in attributes) {
+    const value = attributes[key];
+    if (value != null && node.getAttribute(key) !== `${value}`) node.setAttribute(key, value);
+  }
+}
+
+// Whether something has been drawn in a group, in this frame if elements are reused.
+export function drawn(renderer, group) {
+  const cursors = renderer._cursors;
+  return cursors ? (cursors.get(group)?.n ?? 0) > 0 : group.hasChildNodes();
 }
 
 export function degrees(radians) {

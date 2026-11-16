@@ -10,6 +10,7 @@ import {canvas$path} from "./path.js";
 import {canvas$polygon} from "./polygon.js";
 import {canvas$text} from "./text.js";
 import {canvas$clear} from "./clear.js";
+import {canvas$erase} from "./erase.js";
 import {canvas$rotate} from "./rotate.js";
 import {canvas$save} from "./save.js";
 import {canvas$restore} from "./restore.js";
@@ -34,6 +35,7 @@ Object.defineProperties(Canvas.prototype, {
   polygon: {value: canvas$polygon},
   text: {value: canvas$text},
   clear: {value: canvas$clear},
+  erase: {value: canvas$erase},
   translate: {value: canvas$translate},
   rotate: {value: canvas$rotate},
   save: {value: canvas$save},

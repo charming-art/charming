@@ -122,3 +122,14 @@ test("flow.append(shape, options) keeps a color for fill and stroke, even if a c
   assert.deepStrictEqual(calls[0].stroke, ["red"]);
   assert.deepStrictEqual(calls[0].y, [5]);
 });
+
+test("flow.append(shape, options) flattens enter and exit states into channels, evaluated per row", () => {
+  const [context] = cm
+    .flow()
+    .data([1, 2])
+    .transform(cm.bind, {x: (d) => d, enter: {y: (d) => d * 10, delay: 5}, exit: {fillOpacity: 0}})._values;
+  assert.deepStrictEqual(context.value.enterY, [10, 20]);
+  assert.deepStrictEqual(context.value.enterDelay, [5, 5]);
+  assert.deepStrictEqual(context.value.exitFillOpacity, [0, 0]);
+  assert.strictEqual(context.value.enter, undefined);
+});

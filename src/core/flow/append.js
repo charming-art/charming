@@ -9,10 +9,27 @@ function isChannel(key, value, channels) {
   return !((key === "fill" || key === "stroke") && isColor(value));
 }
 
+// The states of a mark as it enters or exits, such as enter: {y: 200, delay: (d, i) => i * 50}, are
+// channels of their own, enterY and enterDelay, so that they move with their rows like any other.
+const states = new Set(["enter", "exit"]);
+
+function isState(key, value) {
+  return states.has(key) && value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function flatten(options) {
+  const entries = [];
+  for (const [key, value] of Object.entries(options)) {
+    if (!isState(key, value)) entries.push([key, value]);
+    else for (const name in value) entries.push([key + name[0].toUpperCase() + name.slice(1), value[name]]);
+  }
+  return entries;
+}
+
 // Channels are plain arrays, even for typed array data, so they can hold any value. A string that
 // names a bound channel takes its values, such as {y: "v2"}; other strings are constants.
 export function valueOf(data, options, channels) {
-  const values = Object.entries(options).map(([key, value]) => {
+  const values = flatten(options).map(([key, value]) => {
     if (value !== null && typeof value === "object" && value.preserve) return [key, value];
     if (isChannel(key, value, channels)) {
       return [key, Array.from(data, (d) => d[value])];
