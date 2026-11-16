@@ -3,6 +3,7 @@ export {visCell} from "./vis-cell.js";
 export {visDonut} from "./vis-donut.js";
 export {visDotXAnnotate} from "./vis-dot-x-annotate.js";
 export {visDotX} from "./vis-dot-x.js";
+export {visDualAxis} from "./vis-dual-axis.js";
 export {visFacetCircle} from "./vis-facet-circle.js";
 export {visFacetRectBar} from "./vis-facet-rect-bar.js";
 export {visFacetRectPie} from "./vis-facet-rect-pie.js";

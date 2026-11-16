@@ -497,3 +497,90 @@ test("cm.plane shares the union of hinted category domains, even of two numbers"
   assert.deepStrictEqual(a.scales.y.domain, [1, 2, 3]);
   assert.ok(Number.isFinite(a.value.y[0]));
 });
+
+// Plans two branches of x and y together, with options for cm.plane, and returns their scales.
+function branchScales(options) {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [a, b] = root
+    .branch(
+      (flow) =>
+        flow
+          .data([
+            {x: 0, y: 0},
+            {x: 5, y: 10},
+          ])
+          .transform(cm.encode, {x: "x", y: "y"}),
+      (flow) => flow.data([{x: 10, y: 1}]).transform(cm.encode, {x: "x", y: "y"}),
+    )
+    .transform(cm.plane, options);
+  return [a, b].map((flow) => flow._values[0].scales);
+}
+
+test("cm.plane shares the scales of branches, drawn in the same frame", () => {
+  const [a, b] = branchScales();
+  assert.deepStrictEqual(a.x.domain, [0, 10]);
+  assert.deepStrictEqual(b.x.domain, [0, 10]);
+  assert.deepStrictEqual(a.y.domain, [0, 10]);
+  assert.deepStrictEqual(b.y.domain, [0, 10]);
+});
+
+test("cm.plane resolves y per branch with resolve independent, and shares x, for dual axes", () => {
+  const [a, b] = branchScales({resolve: {y: "independent"}});
+  assert.deepStrictEqual(a.x.domain, [0, 10]);
+  assert.deepStrictEqual(b.x.domain, [0, 10]);
+  assert.deepStrictEqual(a.y.domain, [0, 10]);
+  assert.deepStrictEqual(b.y.domain, [1, 1]);
+  assert.deepStrictEqual(a.y.range, b.y.range);
+});
+
+test("cm.plane draws the branches of a nested flow in the cells of their parent rows", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [a, b] = root
+    .data([
+      {k: "p", n: 1},
+      {k: "q", n: 4},
+    ])
+    .transform(cm.encode, {x: "k", n: "n"})
+    .transform(cm.spreadX, {flex: "n", padding: 0})
+    .transform(cm.plane, {margin: 0})
+    .append(cm.g)
+    .data(() => [{v: 1}, {v: 2}])
+    .branch(
+      (flow) => flow.transform(cm.encode, {x: "v", y: "v"}),
+      (flow) => flow.transform(cm.encode, {x: "v", y: "v"}),
+    )
+    .transform(cm.plane);
+  const frames = (flow) => flow._values.map(({frame: {left, right}}) => [left, right]);
+  // Each cell is drawn at its band, so its frame spans the band's width, 20 and 80, from 0.
+  assert.deepStrictEqual(frames(a), [
+    [0, 20],
+    [0, 80],
+  ]);
+  assert.deepStrictEqual(frames(b), frames(a));
+});
+
+test("cm.plane points each independent y its own way, and leaves room for the positions of any branch", () => {
+  const plane = (first, second) => {
+    const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+    return [
+      ...root
+        .branch(
+          (flow) => first(flow.data([{c: "a", v: 1}])),
+          (flow) => second(flow.data([{c: "a", v: 1}])),
+        )
+        .transform(cm.plane, {resolve: {y: "independent"}}),
+    ].map((flow) => flow._values[0]);
+  };
+  const bands = (flow) => flow.transform(cm.encode, {y: "c"}).transform(cm.spreadY);
+  const values = (flow) => flow.transform(cm.encode, {y: "v"});
+  // A band y goes down from the top, and a linear y up from the bottom, in either order.
+  const [band, linear] = plane(bands, values);
+  assert.ok(band.scales.y.range[0] < band.scales.y.range[1]);
+  assert.ok(linear.scales.y.range[0] > linear.scales.y.range[1]);
+  const [linear2, band2] = plane(values, bands);
+  assert.deepStrictEqual(linear2.scales.y.range, linear.scales.y.range);
+  assert.deepStrictEqual(band2.scales.y.range, band.scales.y.range);
+  // Only the second branch has y, and the chart still has the margins of a y axis.
+  const [, only] = plane((flow) => flow.transform(cm.encode, {}), values);
+  assert.deepStrictEqual([only.frame.top, only.frame.left], [20, 40]);
+});
