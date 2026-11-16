@@ -26,7 +26,7 @@ export function transitionStagger() {
     async () => {
       ring = !ring;
       frame();
-      await root.transition();
+      await root.finished();
     },
     300,
   );

@@ -40,7 +40,7 @@ export function transitionBubbleSort() {
     async () => {
       step();
       frame();
-      await root.transition();
+      await root.finished();
     },
     50,
   );

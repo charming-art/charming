@@ -29,7 +29,7 @@ export function transitionSplitMerge() {
     async () => {
       split = !split;
       frame();
-      await root.transition();
+      await root.finished();
     },
     600,
   );

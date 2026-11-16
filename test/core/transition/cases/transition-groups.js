@@ -20,7 +20,7 @@ export function transitionGroups() {
     renderer.node(),
     async () => {
       frame();
-      await root.transition();
+      await root.finished();
     },
     400,
   );

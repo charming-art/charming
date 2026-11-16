@@ -40,7 +40,7 @@ export function transitionManyRects() {
     node,
     async () => {
       frame();
-      await root.transition();
+      await root.finished();
     },
     300,
   );

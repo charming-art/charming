@@ -74,7 +74,7 @@ test("bars matched by key update, new ones enter from their enter state, and rem
     [30, 185, 20, 15],
   ]);
   vi.advanceTimersByTime(96);
-  await root.transition();
+  await root.finished();
   assert.deepStrictEqual(rects(renderer), [
     [0, 80, 20, 120],
     [30, 170, 20, 30],

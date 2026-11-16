@@ -25,7 +25,7 @@ export function bars(renderer) {
     renderer.node(),
     async () => {
       frame();
-      await root.transition();
+      await root.finished();
     },
     750,
   );
