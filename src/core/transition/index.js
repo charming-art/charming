@@ -101,15 +101,30 @@ export function play(state, renderer, scenes, options) {
   state.sequence = new Promise((resolve) => {
     done = resolve;
   });
-  const step = (s) => {
-    if (state.token !== token || s >= order.length) {
-      done();
-      return;
-    }
-    const {primitives, timing} = scenes[order[s]];
-    state.playing = true;
-    animate(state, renderer, primitives, {...options, ...timing}, () => step(s + 1));
-    state.playing = false;
+  // A scene that ends at once, such as one without duration, calls next while it's being played;
+  // the loop then plays the following one, rather than nesting a call per scene.
+  let s = 0;
+  let playing = false;
+  let again = false;
+  const next = () => {
+    s++;
+    if (playing) again = true;
+    else run();
   };
-  step(0);
+  const run = () => {
+    do {
+      again = false;
+      if (state.token !== token || s >= order.length) {
+        done();
+        return;
+      }
+      const {primitives, timing} = scenes[order[s]];
+      playing = true;
+      state.playing = true;
+      animate(state, renderer, primitives, {...options, ...timing}, next);
+      state.playing = false;
+      playing = false;
+    } while (again);
+  };
+  run();
 }

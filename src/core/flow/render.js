@@ -109,7 +109,8 @@ function renderChildren(renderer, children, indexOf, context, path, scope, time)
     const child = children[c];
     const j = indexOf(child);
     if (time && child._data[j]?.render.keyframe) {
-      if (moment.child === child) renderNode(renderer, child, j, context, `${path}/k`, scope, time, moment.k);
+      // Keyframes without rows have no moment to draw.
+      if (moment?.child === child) renderNode(renderer, child, j, context, `${path}/k`, scope, time, moment.k);
     } else {
       renderNode(renderer, child, j, context, `${path}/${c}`, scope, time);
     }

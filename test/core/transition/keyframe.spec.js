@@ -131,3 +131,21 @@ test("a render during keyframes stops them, and finished resolves", async () => 
   await root.finished();
   assert.strictEqual(renderer.node().querySelectorAll("rect").length, 1);
 });
+
+test("keyframes without rows draw nothing, without an error", async () => {
+  const [root, renderer] = chart();
+  root.append(cm.text, {x: 0, y: 0, text: "title"});
+  root.data([]).append(cm.keyframe).append(cm.rect, {x: 0, y: 0, width: 10, height: 10});
+  assert.doesNotThrow(() => root.render());
+  await root.finished();
+  assert.deepStrictEqual(xs(renderer), []);
+  assert.strictEqual(renderer.node().querySelector("text").textContent, "title");
+});
+
+test("a long sequence of moments without duration plays without overflowing the stack", async () => {
+  const [root, renderer] = chart();
+  const steps = Array.from({length: 5000}, (_, i) => i % 100);
+  moments(root, steps, {duration: 0});
+  await root.finished();
+  assert.deepStrictEqual(xs(renderer), [steps[steps.length - 1]]);
+});
