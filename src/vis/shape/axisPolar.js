@@ -43,43 +43,37 @@ export function polarAxisX(flow, frame, x, options) {
   const at = (radius, i) => pointOf(frame, radius, A(ticks[i]));
   if (grid) {
     const spoke = (radius, j) => (d, i) => at(radius, i)[j];
-    flow
-      .data(ticks)
-      .append(link, {
-        key,
-        x: spoke(innerRadius, 0),
-        y: spoke(innerRadius, 1),
-        x1: spoke(outerRadius, 0),
-        y1: spoke(outerRadius, 1),
-        stroke,
-        strokeOpacity: 0.1,
-      });
+    flow.data(ticks).append(link, {
+      key,
+      x: spoke(innerRadius, 0),
+      y: spoke(innerRadius, 1),
+      x1: spoke(outerRadius, 0),
+      y1: spoke(outerRadius, 1),
+      stroke,
+      strokeOpacity: 0.1,
+    });
   }
   const r1 = r + k * tickSize;
   const r2 = r + k * (tickSize + tickPadding);
-  flow
-    .data(ticks)
-    .append(link, {
-      key,
-      x: (d, i) => at(r, i)[0],
-      y: (d, i) => at(r, i)[1],
-      x1: (d, i) => at(r1, i)[0],
-      y1: (d, i) => at(r1, i)[1],
-      stroke,
-    });
+  flow.data(ticks).append(link, {
+    key,
+    x: (d, i) => at(r, i)[0],
+    y: (d, i) => at(r, i)[1],
+    x1: (d, i) => at(r1, i)[0],
+    y1: (d, i) => at(r1, i)[1],
+    stroke,
+  });
   const format = formatOf(scale, options, count);
   const align = ticks.map((d) => alignOf(k * Math.sin(A(d)), -k * Math.cos(A(d))));
-  flow
-    .data(ticks)
-    .append(text, {
-      key,
-      ...font,
-      text: format,
-      x: (d, i) => at(r2, i)[0],
-      y: (d, i) => at(r2, i)[1],
-      textAlign: (d, i) => align[i].textAlign,
-      textBaseline: (d, i) => align[i].textBaseline,
-    });
+  flow.data(ticks).append(text, {
+    key,
+    ...font,
+    text: format,
+    x: (d, i) => at(r2, i)[0],
+    y: (d, i) => at(r2, i)[1],
+    textAlign: (d, i) => align[i].textAlign,
+    textBaseline: (d, i) => align[i].textBaseline,
+  });
 }
 
 // The radius axis of cm.polar, as in D3's radial stacked bar chart: a ring per tick, and tick

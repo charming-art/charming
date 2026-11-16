@@ -74,16 +74,14 @@ export function axisX(flow, value, {scales = {}, frame, options = {}} = {}) {
   const [edge, k] = isTop ? [top, -1] : [bottom, 1];
   flow.data(ticks).append(link, {key, x: X, x1: X, y: edge, y1: edge + k * tickSize, stroke});
   const [rotateX, padX] = rotatedX(tickRotate, isTop);
-  flow
-    .data(ticks)
-    .append(text, {
-      key,
-      ...font,
-      text: formatOf(scale, options, count),
-      x: X,
-      y: edge + k * (tickSize + tickPadding + padX),
-      ...rotateX,
-    });
+  flow.data(ticks).append(text, {
+    key,
+    ...font,
+    text: formatOf(scale, options, count),
+    x: X,
+    y: edge + k * (tickSize + tickPadding + padX),
+    ...rotateX,
+  });
   const label = labelOf(x, scale, "x", options);
   if (label == null || frame?.nested) return;
   const center = !scale.ticks;
@@ -122,16 +120,14 @@ export function axisY(flow, value, {scales = {}, frame, options = {}} = {}) {
   const [edge, k] = isRight ? [right, 1] : [left, -1];
   flow.data(ticks).append(link, {key, x: edge, x1: edge + k * tickSize, y: Y, y1: Y, stroke});
   const [rotateY, padY] = rotatedY(tickRotate, isRight);
-  flow
-    .data(ticks)
-    .append(text, {
-      key,
-      ...font,
-      text: formatOf(scale, options, count),
-      x: edge + k * (tickSize + tickPadding + padY),
-      y: Y,
-      ...rotateY,
-    });
+  flow.data(ticks).append(text, {
+    key,
+    ...font,
+    text: formatOf(scale, options, count),
+    x: edge + k * (tickSize + tickPadding + padY),
+    y: Y,
+    ...rotateY,
+  });
   const label = labelOf(y, scale, "y", options);
   if (label == null || frame?.nested) return;
   // A right axis needs a margin given to cm.plane, such as marginRight: 40, like a top axis.
