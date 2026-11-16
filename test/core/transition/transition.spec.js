@@ -366,3 +366,15 @@ test("a numeric text with a format interpolates as a ticker, and options keep fo
   vi.advanceTimersByTime(80);
   assert.strictEqual(renderer.node().querySelector("text").textContent, "50 units");
 });
+
+test("a numeric text without a format switches at the end, as it wouldn't read in between", () => {
+  const [root, renderer] = chart();
+  const draw = (value) => {
+    root.data([value]).append(cm.text, {x: 0, y: 0, text: (d) => d});
+    root.render();
+  };
+  draw(10);
+  draw(20);
+  vi.advanceTimersByTime(80);
+  assert.strictEqual(renderer.node().querySelector("text").textContent, "10");
+});

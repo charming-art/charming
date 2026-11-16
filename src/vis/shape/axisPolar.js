@@ -3,8 +3,9 @@ import {path} from "../../core/shape/path.js";
 import {text} from "../../core/shape/text.js";
 import {font, formatOf, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
 
-// Tick marks are keyed by their values, so that transitions match ticks from render to render.
-const key = (d) => d;
+// Tick marks are keyed by their values, so that transitions match ticks from render to render;
+// dates by their times, as keys compare as strings, which drop milliseconds.
+const key = (d) => (d instanceof Date ? +d : d);
 
 const stroke = "currentColor";
 

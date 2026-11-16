@@ -302,3 +302,28 @@ test("cm.axis keys its ticks by value, so that each tick moves to its own new pl
   // x is in [20, 180]: 10 moves from 180 to 100, so it's at 140 halfway, not on its way to 5's place.
   assert.strictEqual(+ten.getAttribute("x"), 140);
 });
+
+test("cm.axis keys date ticks by their time, so that ticks less than a second apart stay apart", () => {
+  vi.useFakeTimers();
+  const renderer = cm.svg({width: 200, height: 100});
+  const root = cm.flow({transition: {duration: 160, ease: "linear"}}).renderer(renderer);
+  const at = (ms) => new Date(Date.UTC(2020, 0, 1, 0, 0, 0, ms));
+  const draw = (ticks) => {
+    root
+      .data([at(0), at(800)])
+      .transform(cm.encode, {x: (d) => d})
+      .transform(cm.plane)
+      .add(cm.axisX, {ticks, tickFormat: (d) => `${d.getUTCMilliseconds()}`});
+    root.render();
+  };
+  draw([at(200), at(400)]);
+  draw([at(400), at(600)]);
+  vi.advanceTimersByTime(80);
+  const labels = Array.from(renderer.node().querySelectorAll("text"));
+  const opacity = (label) => labels.find((t) => t.textContent === label)?.getAttribute("fill-opacity");
+  vi.useRealTimers();
+  // 400 stays, opaque; 200 fades out and 600 fades in.
+  assert.strictEqual(opacity("400"), null);
+  assert.strictEqual(+opacity("200"), 0.5);
+  assert.strictEqual(+opacity("600"), 0.5);
+});

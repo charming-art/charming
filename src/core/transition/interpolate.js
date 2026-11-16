@@ -17,6 +17,8 @@ export function interpolateAttrs(from, to) {
     if (from[key] === undefined && to[key] === undefined) return [key, () => undefined];
     const a = from[key] ?? defaults[key];
     const b = to[key] ?? defaults[key];
+    // A numeric text only interpolates with a format, which writes it; otherwise it switches at the end.
+    if (key === "text" && !to.format) return [key, (t) => (t < 1 ? a : b)];
     if (typeof a === "number" && typeof b === "number") return [key, (t) => a + (b - a) * t];
     if (paints.has(key) && typeof a === "string" && typeof b === "string" && a !== b && color(a) && color(b)) {
       return [key, interpolateRgb(a, b)];
