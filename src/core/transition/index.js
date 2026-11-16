@@ -9,8 +9,14 @@ export function transitionOptions(transition) {
   return {...defaults, ...(transition === true ? {} : transition)};
 }
 
-const schedule = (f) => (typeof requestAnimationFrame === "function" ? requestAnimationFrame(f) : setTimeout(f, 16));
-const unschedule = (id) => (typeof cancelAnimationFrame === "function" ? cancelAnimationFrame(id) : clearTimeout(id));
+function schedule(f) {
+  return typeof requestAnimationFrame === "function" ? requestAnimationFrame(f) : setTimeout(f, 16);
+}
+
+function unschedule(id) {
+  if (typeof cancelAnimationFrame === "function") cancelAnimationFrame(id);
+  else clearTimeout(id);
+}
 
 // Animates from what the renderer shows to the primitives drawn by a render: matched primitives
 // update, and the others enter, exit, split or merge. The first render after transitions are on is
@@ -24,13 +30,18 @@ export function animate(state, renderer, next, options) {
   const end = Math.max(0, ...items.map((item) => item.end));
   state.shown = (time) => items.map((item) => item.at(time - start)).filter((p) => p);
   let done;
-  state.promise = new Promise((resolve) => (done = resolve));
   let id;
-  state.stop = () => (unschedule(id), done());
+  state.promise = new Promise((resolve) => {
+    done = resolve;
+  });
+  state.stop = () => {
+    unschedule(id);
+    done();
+  };
   const frame = () => {
-    const elapsed = Date.now() - start;
-    draw(renderer, state.shown(Date.now()));
-    if (elapsed >= end) state.stop();
+    const now = Date.now();
+    draw(renderer, state.shown(now));
+    if (now - start >= end) state.stop();
     else id = schedule(frame);
   };
   frame();

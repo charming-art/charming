@@ -9,67 +9,90 @@ const fade = {fillOpacity: 0, strokeOpacity: 0};
 // shown primitive whose key is its group key; a shown one that doesn't match may merge into a drawn
 // primitive whose key is its group key. The others enter or exit.
 export function diff(prev, next, options) {
+  const m = prev.length;
+  const n = next.length;
   const used = new Set();
   const byKey = new Map();
   const byDatum = new Map();
   const byPosition = new Map();
   const keyed = new Map();
-  prev.forEach((p, i) => {
-    if (p.key !== undefined) (byKey.set(`${p.path}\0${p.key}`, i), keyed.has(p.key) || keyed.set(p.key, i));
-    if (p.datum) (byDatum.get(p.path) ?? byDatum.set(p.path, new Map()).get(p.path)).set(p.datum, i);
-    // A keyed primitive only matches by its key.
-    if (p.key === undefined) byPosition.set(`${p.path}\0${p.position}`, i);
-  });
-  const take = (i) => (i !== undefined && !used.has(i) ? (used.add(i), i) : -1);
-  const matches = next.map((q) => {
-    if (q.key !== undefined) return take(byKey.get(`${q.path}\0${q.key}`));
-    // A primitive whose group is shown splits from it rather than matching otherwise.
-    if (q.groupKey !== undefined && keyed.has(q.groupKey)) return -1;
-    let i = q.datum ? take(byDatum.get(q.path)?.get(q.datum)) : -1;
-    if (i < 0) i = take(byPosition.get(`${q.path}\0${q.position}`));
+  for (let i = 0; i < m; i++) {
+    const {path, key, datum, position} = prev[i];
+    if (key !== undefined) {
+      byKey.set(`${path}\0${key}`, i);
+      if (!keyed.has(key)) keyed.set(key, i);
+    } else {
+      // A keyed primitive only matches by its key.
+      byPosition.set(`${path}\0${position}`, i);
+    }
+    if (datum) {
+      if (!byDatum.has(path)) byDatum.set(path, new Map());
+      byDatum.get(path).set(datum, i);
+    }
+  }
+
+  const take = (i) => {
+    if (i === undefined || used.has(i)) return -1;
+    used.add(i);
     return i;
-  });
+  };
+  const matches = new Array(n);
+  for (let j = 0; j < n; j++) {
+    const {path, key, groupKey, datum, position} = next[j];
+    let i = -1;
+    if (key !== undefined) i = take(byKey.get(`${path}\0${key}`));
+    // A primitive whose group is shown splits from it rather than matching otherwise.
+    else if (groupKey === undefined || !keyed.has(groupKey)) {
+      if (datum) i = take(byDatum.get(path)?.get(datum));
+      if (i < 0) i = take(byPosition.get(`${path}\0${position}`));
+    }
+    matches[j] = i;
+  }
 
   // Group keys: a drawn primitive splits from the shown one keyed by its group key, and a shown one
   // merges into the drawn one keyed by its group key.
   const nextKeyed = new Map();
-  next.forEach((q, j) => matches[j] < 0 && q.key !== undefined && !nextKeyed.has(q.key) && nextKeyed.set(q.key, j));
+  for (let j = 0; j < n; j++) {
+    const {key} = next[j];
+    if (matches[j] < 0 && key !== undefined && !nextKeyed.has(key)) nextKeyed.set(key, j);
+  }
   const merged = new Set();
-  const exits = [];
-  prev.forEach((p, i) => {
-    if (used.has(i)) return;
+  const items = [];
+  for (let i = 0; i < m; i++) {
+    if (used.has(i)) continue;
+    const p = prev[i];
     const j = p.groupKey !== undefined ? nextKeyed.get(p.groupKey) : undefined;
     if (j !== undefined) {
+      const q = next[j];
       merged.add(j);
-      exits.push(
-        item(
-          p,
-          "until-end",
-          p.attrs,
-          toward(p.attrs, next[j].attrs),
-          p.ops,
-          opsOf(p, next[j]),
-          timing(p, "update", options),
-        ),
+      items.push(
+        item(p, "until-end", p.attrs, toward(p.attrs, q.attrs), p.ops, opsOf(p, q), timing(p, "update", options)),
       );
     } else if (!splits(next, p, matches)) {
-      exits.push(
-        item(p, "until-end", p.attrs, {...p.attrs, ...state(p.exit)}, p.ops, p.ops, timing(p, "exit", options)),
-      );
+      const exit = {...p.attrs, ...state(p.exit)};
+      items.push(item(p, "until-end", p.attrs, exit, p.ops, p.ops, timing(p, "exit", options)));
     }
-  });
-  const items = next.map((q, j) => {
+  }
+  for (let j = 0; j < n; j++) {
+    const q = next[j];
     const i = matches[j];
-    if (i >= 0) return item(q, "always", prev[i].attrs, q.attrs, prev[i].ops, q.ops, timing(q, "update", options));
-    if (merged.has(j)) return item(q, "at-end", q.attrs, q.attrs, q.ops, q.ops, timing(q, "update", options));
     const k = q.groupKey !== undefined ? keyed.get(q.groupKey) : undefined;
-    if (k !== undefined && !used.has(k)) {
+    if (i >= 0) {
+      const p = prev[i];
+      items.push(item(q, "always", p.attrs, q.attrs, p.ops, q.ops, timing(q, "update", options)));
+    } else if (merged.has(j)) {
+      items.push(item(q, "at-end", q.attrs, q.attrs, q.ops, q.ops, timing(q, "update", options)));
+    } else if (k !== undefined && !used.has(k)) {
       const p = prev[k];
-      return item(q, "always", toward(q.attrs, p.attrs), q.attrs, opsOf(q, p), q.ops, timing(q, "update", options));
+      items.push(
+        item(q, "always", toward(q.attrs, p.attrs), q.attrs, opsOf(q, p), q.ops, timing(q, "update", options)),
+      );
+    } else {
+      const enter = {...q.attrs, ...state(q.enter)};
+      items.push(item(q, "always", enter, q.attrs, q.ops, q.ops, timing(q, "enter", options)));
     }
-    return item(q, "always", {...q.attrs, ...state(q.enter)}, q.attrs, q.ops, q.ops, timing(q, "enter", options));
-  });
-  return [...exits, ...items];
+  }
+  return items;
 }
 
 // Whether a shown primitive is the source of a split, so that it doesn't exit on its own.

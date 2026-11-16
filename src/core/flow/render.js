@@ -39,7 +39,7 @@ function renderNode(renderer, node, index, context, path) {
     render(flow, value, {...bound, options});
     const made = node._children;
     node._children = children;
-    made.forEach((child, c) => renderNode(renderer, child, 0, context, `${path}/m${c}`));
+    for (let c = 0; c < made.length; c++) renderNode(renderer, made[c], 0, context, `${path}/m${c}`);
   }
   if (builtin) {
     renderer.begin?.({path, index, I, value, group});
@@ -58,9 +58,10 @@ function renderNode(renderer, node, index, context, path) {
       renderer.translate(x, y);
       if (r !== undefined) renderer.rotate(r);
     }
-    children.forEach((child, c) =>
-      renderNode(renderer, child, childIndex(child, node, index, k), context, `${path}/${c}`),
-    );
+    for (let c = 0; c < children.length; c++) {
+      const child = children[c];
+      renderNode(renderer, child, childIndex(child, node, index, k), context, `${path}/${c}`);
+    }
     if (value) renderer.restore();
   }
 }
@@ -72,9 +73,12 @@ export function flow$render() {
   // With transitions, what's drawn is recorded, then animated from what the renderer shows.
   const transition = transitionOptions(context.transition);
   const target = transition ? recorder() : renderer;
-  root._children.forEach((d, i) => renderNode(target, d, 0, context, `${i}`));
+  const children = root._children;
+  for (let i = 0; i < children.length; i++) renderNode(target, children[i], 0, context, `${i}`);
   root._children = [];
-  if (transition) animate((context.transitionState ??= {}), renderer, target.recorded, transition);
-  else if (renderer.render) renderer.render();
+  if (transition) {
+    if (!context.transitionState) context.transitionState = {};
+    animate(context.transitionState, renderer, target.recorded, transition);
+  } else if (renderer.render) renderer.render();
   return this;
 }

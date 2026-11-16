@@ -17,25 +17,36 @@ export function recorder() {
   let start = 0;
   const renderer = {
     recorded,
-    save: () => (stack.push(ops), (ops = ops.slice())),
-    restore: () => (ops = stack.pop() ?? []),
-    translate: (x, y) => ops.push(["translate", x, y]),
-    rotate: (angle) => ops.push(["rotate", angle]),
+    save() {
+      stack.push(ops);
+      ops = ops.slice();
+    },
+    restore() {
+      ops = stack.pop() ?? [];
+    },
+    translate(x, y) {
+      ops.push(["translate", x, y]);
+    },
+    rotate(angle) {
+      ops.push(["rotate", angle]);
+    },
     begin(meta) {
       node = meta;
       start = recorded.length;
     },
     end() {
-      const drawn = recorded.slice(start);
       // A shape that draws a primitive per row, such as a rect, gives each primitive its row; one
       // that draws a primitive per group, such as a line, gives it the first row of the group.
-      const perRow = drawn.length === node.I.length;
-      drawn.forEach((primitive, n) => Object.assign(primitive, identify(node, perRow ? node.I[n] : null, n)));
+      const n = recorded.length - start;
+      const perRow = n === node.I.length;
+      for (let i = 0; i < n; i++) Object.assign(recorded[start + i], identify(node, perRow ? node.I[i] : null, i));
       node = null;
     },
   };
   for (const type of primitives) {
-    renderer[type] = (attrs) => recorded.push({type, attrs: {...attrs}, ops: ops.slice()});
+    renderer[type] = function (attrs) {
+      recorded.push({type, attrs: {...attrs}, ops: ops.slice()});
+    };
   }
   return renderer;
 }
