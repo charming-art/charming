@@ -70,21 +70,23 @@ export function plane(
   const nested = isNested(flow);
   data = data.map(withSeries);
 
-  // The margins leave room for the axes of the encoded positions. A position counts if it's
-  // encoded, or if a channel shares its scale, such as {value: "v2", scale: "y"}. A nested chart
-  // has no margins by default: its parent's margins and bands leave the room.
-  const {value: first = {}, hints: firstHints = {}} = data[0] ?? {};
-  const firstX = keysOf(first, firstHints, keysX, "x");
+  // The margins leave room for the axes of the positions encoded in any context, such as a layer
+  // of branches. A position counts if it's encoded, or if a channel shares its scale, such as
+  // {value: "v2", scale: "y"}. A nested chart has no margins by default: its parent's margins and
+  // bands leave the room. The size and direction of y come from the first context with y.
+  const has = ({value, hints = {}}, keys, name) => hasAny(value, keysOf(value, hints, keys, name));
+  const hasX = data.some((context) => has(context, keysX, "x"));
+  const hasY = data.some((context) => has(context, keysY, "y"));
+  const {value: first = {}, hints: firstHints = {}} = data.find((context) => has(context, keysY, "y")) ?? data[0] ?? {};
   const firstY = keysOf(first, firstHints, keysY, "y");
-  const hasX = hasAny(first, firstX);
-  const hasY = hasAny(first, firstY);
   marginTop ??= margin ?? (nested ? 0 : hasY ? 20 : 0);
   marginRight ??= margin ?? (nested ? 0 : 20);
   marginBottom ??= margin ?? (nested ? 0 : hasX ? 30 : 20);
   marginLeft ??= margin ?? (nested ? 0 : hasY ? 40 : 20);
 
-  // Values grow upward, but categories in bands go down from the top, like Plot's ordinal y.
-  reverseY ??= !axisHint(firstHints, keysY).band;
+  // Values grow upward, but categories in bands go down from the top, like Plot's ordinal y. An
+  // independent y points its own way in each context.
+  const reverseOf = (hints) => reverseY ?? !axisHint(hints, keysY).band;
 
   let frames;
   if (nested) {
@@ -110,7 +112,7 @@ export function plane(
   // The scales shared by all the contexts: colors, and positions unless they're independent.
   const allX = Array.from(new Set(data.flatMap(({value, hints = {}}) => keysOf(value, hints, keysX, "x"))));
   const allY = Array.from(new Set(data.flatMap(({value, hints = {}}) => keysOf(value, hints, keysY, "y"))));
-  const colors = colorScales(merge(data, ["fill", "stroke"]), firstHints);
+  const colors = colorScales(merge(data, ["fill", "stroke"]), data[0]?.hints ?? {});
   const sharedX = resolveX !== "independent" && sharedScale(data, allX, keysX, typeX, domainX);
   const sharedY = resolveY !== "independent" && sharedScale(data, allY, keysY, typeY, domainY);
 
@@ -120,7 +122,7 @@ export function plane(
     const rangeX = [frame.left, frame.right];
     const rangeY = [frame.top, frame.bottom];
     if (reverseX) rangeX.reverse();
-    if (reverseY) rangeY.reverse();
+    if (reverseOf(resolveY === "independent" ? hints : firstHints)) rangeY.reverse();
 
     const hintX = axisHint(hints, keysX);
     const hintY = axisHint(hints, keysY);

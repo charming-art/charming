@@ -536,9 +536,12 @@ test("cm.plane resolves y per branch with resolve independent, and shares x, for
 test("cm.plane draws the branches of a nested flow in the cells of their parent rows", () => {
   const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
   const [a, b] = root
-    .data(["p", "q"])
-    .transform(cm.encode, {x: (d) => d})
-    .transform(cm.spreadX, {padding: 0})
+    .data([
+      {k: "p", n: 1},
+      {k: "q", n: 4},
+    ])
+    .transform(cm.encode, {x: "k", n: "n"})
+    .transform(cm.spreadX, {flex: "n", padding: 0})
     .transform(cm.plane, {margin: 0})
     .append(cm.g)
     .data(() => [{v: 1}, {v: 2}])
@@ -548,10 +551,36 @@ test("cm.plane draws the branches of a nested flow in the cells of their parent 
     )
     .transform(cm.plane);
   const frames = (flow) => flow._values.map(({frame: {left, right}}) => [left, right]);
-  // Each cell is drawn at its band, so its frame spans the band's width from 0.
+  // Each cell is drawn at its band, so its frame spans the band's width, 20 and 80, from 0.
   assert.deepStrictEqual(frames(a), [
-    [0, 50],
-    [0, 50],
+    [0, 20],
+    [0, 80],
   ]);
   assert.deepStrictEqual(frames(b), frames(a));
+});
+
+test("cm.plane points each independent y its own way, and leaves room for the positions of any branch", () => {
+  const plane = (first, second) => {
+    const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+    return [
+      ...root
+        .branch(
+          (flow) => first(flow.data([{c: "a", v: 1}])),
+          (flow) => second(flow.data([{c: "a", v: 1}])),
+        )
+        .transform(cm.plane, {resolve: {y: "independent"}}),
+    ].map((flow) => flow._values[0]);
+  };
+  const bands = (flow) => flow.transform(cm.encode, {y: "c"}).transform(cm.spreadY);
+  const values = (flow) => flow.transform(cm.encode, {y: "v"});
+  // A band y goes down from the top, and a linear y up from the bottom, in either order.
+  const [band, linear] = plane(bands, values);
+  assert.ok(band.scales.y.range[0] < band.scales.y.range[1]);
+  assert.ok(linear.scales.y.range[0] > linear.scales.y.range[1]);
+  const [linear2, band2] = plane(values, bands);
+  assert.deepStrictEqual(linear2.scales.y.range, linear.scales.y.range);
+  assert.deepStrictEqual(band2.scales.y.range, band.scales.y.range);
+  // Only the second branch has y, and the chart still has the margins of a y axis.
+  const [, only] = plane((flow) => flow.transform(cm.encode, {}), values);
+  assert.deepStrictEqual([only.frame.top, only.frame.left], [20, 40]);
 });

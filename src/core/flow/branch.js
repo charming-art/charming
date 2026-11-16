@@ -7,12 +7,19 @@ import {Flow} from "./index.js";
 // transforms, splits it into one flow per branch, which take their own shapes.
 export function flow$branch(...branches) {
   const flows = branches.map((branch) => branch(this));
+  const nested = this._parent !== this._context.root;
   const groups = [];
   const values = [];
   const counts = [];
   for (const flow of flows) {
+    if (!(flow instanceof Flow)) throw new Error("Each branch must return its flow, such as (flow) => flow.data(A).");
     if (flow._parent !== this._parent) {
-      throw new Error("Each branch must stay at its flow's level: append inside it after the join.");
+      throw new Error("Each branch must end at its flow's level: append after the join and the split.");
+    }
+    // In a nested flow, each context is drawn under its parent row; an array would be drawn under
+    // every row, with the frame of the first.
+    if (nested && typeof flow._data !== "function") {
+      throw new Error("A branch of a nested flow keeps its rows: nest data with a function, not an array.");
     }
     const n = flow._groups.length;
     for (let j = 0; j < n; j++) {
@@ -22,6 +29,9 @@ export function flow$branch(...branches) {
     counts.push({count: n, data: flow._data});
   }
   const hasValues = flows.some((flow) => flow._values);
+  if (hasValues && !flows.every((flow) => flow._values)) {
+    throw new Error("Either every branch or none binds channels, such as with cm.encode, before the join.");
+  }
   const data = flows.map((flow) => flow._data);
   return new Flow(groups, data, this._parent, this._context, hasValues ? values : null, counts);
 }

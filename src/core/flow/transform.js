@@ -6,6 +6,10 @@ import {Flow} from "./index.js";
 export function flow$transform(transform, ...params) {
   const flow = this._data ? this : this.data((d) => [d]);
   const values = transform(flow, flow._values, ...params);
+  const branches = flow._branches;
+  if (branches && values && values.length !== branches.reduce((n, {count}) => n + count, 0)) {
+    throw new Error("A transform of a joined flow must keep one context per context: split the flow first.");
+  }
   const groups = values ? values.map((context, j) => context.group ?? flow._groups[j]) : flow._groups;
-  return new Flow(groups, flow._data, flow._parent, flow._context, values, flow._branches);
+  return new Flow(groups, flow._data, flow._parent, flow._context, values, branches);
 }

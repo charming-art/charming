@@ -86,11 +86,40 @@ test("a flow without branches iterates to itself", () => {
   assert.strictEqual(self, flow);
 });
 
-test("flow.branch(...branches) throws an error for a branch that leaves the flow's level", () => {
+test("flow.branch(...branches) throws an error for a branch that leaves the flow's level, or returns no flow", () => {
   assert.throws(
     () => cm.flow().branch((flow) => flow.data([1]).append(cm.g)),
-    /Each branch must stay at its flow's level/,
+    /Each branch must end at its flow's level: append after the join and the split/,
   );
+  assert.throws(() => cm.flow().branch(() => {}), /Each branch must return its flow/);
+});
+
+test("flow.branch(...branches) throws an error for branches with and without channels", () => {
+  assert.throws(
+    () =>
+      cm.flow().branch(
+        (flow) => xs(flow.data([1])),
+        (flow) => flow.data([2]),
+      ),
+    /Either every branch or none binds channels/,
+  );
+});
+
+test("flow.transform throws an error for a transform that changes the number of contexts of a joined flow", () => {
+  const joined = cm.flow().branch(
+    (flow) => xs(flow.data([1])),
+    (flow) => xs(flow.data([3])),
+  );
+  assert.throws(() => joined.transform((_, data) => data.slice(1)), /keep one context per context/);
+});
+
+test("flow.branch(...branches) throws an error for a branch of a nested flow that replaces its rows with an array", () => {
+  const nested = cm
+    .flow()
+    .data([[1], [2]])
+    .append(cm.g)
+    .data((d) => d);
+  assert.throws(() => nested.branch((flow) => xs(flow.data([3]))), /A branch of a nested flow keeps its rows/);
 });
 
 test("flow.branch(...branches) throws an error for appending into the joined flow before splitting it", () => {
