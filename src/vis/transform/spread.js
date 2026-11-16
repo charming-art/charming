@@ -21,7 +21,7 @@ function scaleOf(domain, {paddingInner, paddingOuter, align}) {
 // numeric and its y1 isn't bound, so that bars span from 0 to their values.
 function spreadCategories(context, padding, flex, [key, key1, other, other1]) {
   const {[key]: V, [other]: O, [other1]: O1} = context.value;
-  const {label, domain = sort(new InternSet(V))} = context.hints?.[key] ?? {};
+  const {label, scale: name, domain = sort(new InternSet(V))} = context.hints?.[key] ?? {};
   // With flex, each category's band is proportional to the sum of the flex channel over its rows,
   // such as its number of rows, like G2's shareSize.
   const F = flex === undefined ? null : context.value[flex];
@@ -34,7 +34,9 @@ function spreadCategories(context, padding, flex, [key, key1, other, other1]) {
   // The bands are in [0, 1], so the outer padding is kept when fitted. The band is kept for axes,
   // which label the categories.
   const hint = {domain: [0, 1], band: {domain: scale.domain(), ...padding, ...(weights && {flex: weights})}};
-  return {...context, value, hints: {...context.hints, [key]: label === undefined ? hint : {label, ...hint}}};
+  // The label and the name of the scale, if any, are kept.
+  const kept = {...(label !== undefined && {label}), ...(name !== undefined && {scale: name})};
+  return {...context, value, hints: {...context.hints, [key]: {...kept, ...hint}}};
 }
 
 // The weight of each category: the sum of its rows' values of the flex channel.
@@ -79,7 +81,10 @@ function spreadSlots(context, padding, chunk, [key, key1, other]) {
   const newValue = {...value, [key]: V0, [key1]: V1};
   // Chunks aren't categories, so a new spread of chunks records no band: on y, they're stacked up
   // from the baseline like values. A nested spread keeps the band of its parents for the axes.
-  const newHints = nested ? hints : {...hints, [key]: {domain: [0, 1], chunk}};
+  const name = hints[key]?.scale;
+  const newHints = nested
+    ? hints
+    : {...hints, [key]: {...(name !== undefined && {scale: name}), domain: [0, 1], chunk}};
   return {...context, value: newValue, hints: newHints};
 }
 
