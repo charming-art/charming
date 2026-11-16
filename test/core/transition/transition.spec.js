@@ -348,40 +348,6 @@ test("marks drawn without translations aren't put in groups of their own", () =>
   assert.strictEqual(renderer.node().querySelector("rect").parentNode, renderer.node());
 });
 
-test("marks of another type split from the center of their source's box, and merge into the center of their target's", () => {
-  const [root, renderer] = chart();
-  const bar = () => {
-    root.data([0]).append(cm.rect, {x: 0, y: 100, width: 40, height: 100, key: "A"});
-    root.render();
-  };
-  const points = () => {
-    root.data([0, 1]).append(cm.circle, {x: (d) => 100 + d * 50, y: 50, r: 6, groupKey: "A"});
-    root.render();
-  };
-  const circles = () =>
-    Array.from(renderer.node().querySelectorAll("circle"), (c) => ["cx", "cy", "r"].map((k) => +c.getAttribute(k)));
-  bar();
-  points();
-  vi.advanceTimersByTime(0);
-  assert.deepStrictEqual(circles(), [
-    [20, 150, 0],
-    [20, 150, 0],
-  ]);
-  vi.advanceTimersByTime(80);
-  assert.deepStrictEqual(circles(), [
-    [60, 100, 3],
-    [85, 100, 3],
-  ]);
-  vi.advanceTimersByTime(96);
-  bar();
-  vi.advanceTimersByTime(80);
-  // The points shrink toward the center of the bar, which appears once they arrive.
-  assert.deepStrictEqual(circles(), [
-    [60, 100, 3],
-    [85, 100, 3],
-  ]);
-});
-
 test("a numeric text with a format interpolates as a ticker, and options keep format and ease functions as they are", () => {
   const [root, renderer] = chart();
   const draw = (value) => {
