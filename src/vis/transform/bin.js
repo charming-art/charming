@@ -29,8 +29,10 @@ function edgesOf(V, {thresholds = "auto", interval}) {
   const threshold = typeof thresholds === "string" ? thresholdFunctions[thresholds.toLowerCase()] : thresholds;
   if (threshold === undefined) throw new Error(`Unknown thresholds: ${thresholds}.`);
   // d3 adds a collapsed bin for a maximum at a threshold, such as [10, 10]; it's in the last bin.
+  // Values that are all the same are in one collapsed bin, like Plot.
   const bins = binner().thresholds(threshold)(V);
-  return Array.from(new Set([bins[0].x0, ...bins.map((b) => b.x1)]));
+  const edges = Array.from(new Set([bins[0].x0, ...bins.map((b) => b.x1)]));
+  return edges.length === 1 ? [lo, lo] : edges;
 }
 
 // The bin of a value: bins include their lower edge, and the last one also its upper edge, like

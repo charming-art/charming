@@ -93,6 +93,11 @@ test("cm.plane maps linear colors with the interpolator of a scheme, case-insens
   assert.deepStrictEqual(fill, [d3.interpolatePiYG(1), d3.interpolatePiYG(0), d3.interpolatePiYG(5 / 160)]);
 });
 
+test("cm.plane maps linear colors through the colors of a range", () => {
+  const {fill} = encoded(genres, {x: "genre", fill: {value: "sold", type: "linear", range: ["white", "red"]}});
+  assert.deepStrictEqual(fill, ["rgb(255, 0, 0)", "rgb(255, 255, 255)", "rgb(255, 247, 247)"]);
+});
+
 test("cm.plane gives missing numeric colors no color", () => {
   const data = [
     {k: "a", v: 1},

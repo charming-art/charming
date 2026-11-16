@@ -77,3 +77,8 @@ test("cm.bin bins x and y, with counts in fill", () => {
   const {value} = binned(data, {x: ([x]) => x, y: ([, y]) => y}, cm.bin, {interval: 5});
   assert.deepStrictEqual(value, {x: [0, 5], x1: [5, 10], y: [0, 0], y1: [5, 5], fill: [2, 1]});
 });
+
+test("cm.binX keeps rows that all have the same value, in one collapsed bin, like Plot", () => {
+  const {value} = binned([3, 3], {x: (d) => d}, cm.binX);
+  assert.deepStrictEqual(value, {x: [3], x1: [3], y1: [0], y: [2]});
+});

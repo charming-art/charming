@@ -60,7 +60,7 @@ export function colorScales(value, hints) {
     const V = value[key];
     if (type === undefined && domain === undefined && range === undefined && isIdentity(V)) continue;
     if (type === "linear" || (type === undefined && isNumeric(V))) {
-      const sequential = range === undefined ? scaleSequential(interpolatorOf(scheme)) : scaleLinear().unknown();
+      const sequential = range === undefined ? scaleSequential(interpolatorOf(scheme)) : scaleLinear();
       scales[key] = {type: sequential, domain: domain ?? [min(V), max(V)], range};
       continue;
     }
