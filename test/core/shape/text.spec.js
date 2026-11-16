@@ -46,3 +46,33 @@ test("cm.text is a point along a position set without its pair, even with the ot
   const t = renderer.node().querySelector("text");
   assert.deepStrictEqual([+t.getAttribute("x"), +t.getAttribute("y")], [20, 50]);
 });
+
+test("cm.text and cm.circle are points along a position whose pair has no anchor", () => {
+  assert.deepStrictEqual(texts([1], {x: 10, y1: 30}), [[10, 0, null, null]]);
+  assert.deepStrictEqual(texts([1], {x1: 30, y: 10}), [[0, 10, null, null]]);
+  const renderer = cm.svg({width: 100, height: 100});
+  const root = cm.flow().renderer(renderer);
+  root.data([1]).append(cm.circle, {x1: 30, y: 10, r: 2});
+  root.render();
+  assert.strictEqual(+renderer.node().querySelector("circle").getAttribute("cy"), 10);
+});
+
+test("cm.text centers in a band bound by transforms, such as a column from spreadX, unless y is set", () => {
+  const draw = (options) => {
+    const renderer = cm.svg({width: 200, height: 200});
+    const root = cm.flow().renderer(renderer);
+    root
+      .data([{k: "A", v: 10}])
+      .transform(cm.encode, {x: "k", y: "v"})
+      .transform(cm.spreadX)
+      .transform(cm.plane, {margin: 0, domainY: [0, 10]})
+      .append(cm.text, {text: "A", ...options});
+    root.render();
+    const t = renderer.node().querySelector("text");
+    return [+t.getAttribute("x"), +t.getAttribute("y"), t.getAttribute("dominant-baseline")];
+  };
+  // The column spans the band in x and from 0 to 10 in y: the label sits in its middle.
+  assert.deepStrictEqual(draw(), [100, 100, "central"]);
+  // Setting y without y1 keeps the label at the top of the column.
+  assert.deepStrictEqual(draw({y: "y"}), [100, 0, null]);
+});
