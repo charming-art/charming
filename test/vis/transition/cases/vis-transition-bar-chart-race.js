@@ -13,6 +13,17 @@ export async function visTransitionBarChartRace() {
   const years = d3.groups(brands, (d) => d.date.getUTCFullYear());
   const renderer = cm.svg({width: 640, height: 480});
   const root = cm.flow({transition: {duration: 1000, ease: "linear"}}).renderer(renderer);
+  // The labels of a bar: dark and sans-serif, like the axis, rather than the bar's color, and in
+  // the middle of its band, sliding in and out from below with it.
+  const label = {
+    y: (d) => (d.y + d.y1) / 2,
+    fill: "#333",
+    fontSize: 12,
+    fontFamily: "system-ui, sans-serif",
+    textBaseline: "middle",
+    enter: {y: 500},
+    exit: {y: 500},
+  };
   const draw = () => {
     const keyframes = root.data(years).append(cm.keyframe);
     keyframes.append(cm.text, {
@@ -28,24 +39,13 @@ export async function visTransitionBarChartRace() {
       .data(([, rows]) => d3.sort(rows, (d) => -d.value).slice(0, n))
       .transform(cm.encode, {x: "value", y: "name", fill: "category", key: "name"})
       .transform(cm.spreadY, {padding: 0.1, sort: "-x"})
-      .transform(cm.plane, {marginTop: 30, marginLeft: 10, marginRight: 10, resolve: {x: "independent"}})
+      // The right margin leaves room for the value labels past the longest bar.
+      .transform(cm.plane, {marginTop: 30, marginLeft: 10, marginRight: 70, resolve: {x: "independent"}})
       .add(cm.axisX, {anchor: "top", grid: true, label: null})
-      .add(cm.rect, {fillOpacity: 0.7, enter: {fillOpacity: 0}})
-      .add(cm.text, {
-        x: (d) => d.x - 6,
-        y: (d) => (d.y + d.y1) / 2,
-        text: (d) => d.datum.name,
-        textAlign: "end",
-        textBaseline: "middle",
-        fontWeight: "bold",
-      })
-      .add(cm.text, {
-        x: (d) => d.x + 6,
-        y: (d) => (d.y + d.y1) / 2,
-        text: (d) => d.datum.value,
-        format: d3.format(",d"),
-        textBaseline: "middle",
-      });
+      // Like d3's, bars entering or leaving the top 12 slide in and out from below the chart.
+      .add(cm.rect, {fillOpacity: 0.7, enter: {y: 500}, exit: {y: 500}})
+      .add(cm.text, {...label, x: (d) => d.x - 6, text: (d) => d.datum.name, textAlign: "end", fontWeight: "bold"})
+      .add(cm.text, {...label, x: (d) => d.x + 6, text: (d) => d.datum.value, format: d3.format(",d")});
   };
   return replay(renderer.node(), root, draw);
 }
