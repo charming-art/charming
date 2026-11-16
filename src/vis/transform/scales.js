@@ -195,7 +195,10 @@ export function withSeries(context) {
 // Whether a flow is nested in a mark, such as flow.append(cm.g).data((d) => d.rows), rather
 // than at the root of the chart.
 export function isNested(flow) {
-  return flow._parent !== flow._context.root;
+  // Keyframes are moments in time, not places, so a chart in a keyframe at the root is at the root.
+  let node = flow._parent;
+  while (node !== flow._context.root && node._data?.[0]?.render.keyframe) node = node._parent;
+  return node !== flow._context.root;
 }
 
 // The channels of the contexts together, for the scales they share. The values are appended one
