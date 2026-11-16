@@ -3,6 +3,12 @@ import {Flow} from "./index.js";
 export function flow$data(data) {
   if (arguments.length === 0) return this._groups;
 
+  // A function nests data in each row, which must be numbered per branch, so a joined flow is split
+  // first; an array starts a new flow at the same level.
+  if (typeof data === "function" && this._branches) {
+    throw new Error("Split a joined flow before nesting data in it: const [a, b] = flow.");
+  }
+
   if (typeof data !== "function") {
     return new Flow([data], data, this._parent, this._context);
   }

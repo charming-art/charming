@@ -199,14 +199,17 @@ export function polarPoint({cx, cy}, r, a) {
 }
 
 // The parent row of each context of a nested flow: the groups of flow.data((d) => d.rows) are
-// numbered across the rows of all the parent's groups, as when they're rendered.
+// numbered across the rows of all the parent's groups, as when they're rendered. The branches of a
+// joined flow are each numbered from the first row, as each is drawn on its own.
 function parentRows(flow, n) {
-  const node = flow._parent;
-  const rows = [];
-  for (const entry of node._data) {
-    for (let k = 0; k < entry.group.length && rows.length < n; k++) rows.push([entry, k]);
-  }
-  return rows;
+  const counts = flow._branches?.map(({count}) => count) ?? [n];
+  return counts.flatMap((count) => {
+    const rows = [];
+    for (const entry of flow._parent._data) {
+      for (let k = 0; k < entry.group.length && rows.length < count; k++) rows.push([entry, k]);
+    }
+    return rows;
+  });
 }
 
 // Whether a context has no rows, such as a facet without data.

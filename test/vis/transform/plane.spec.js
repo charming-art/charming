@@ -532,3 +532,26 @@ test("cm.plane resolves y per branch with resolve independent, and shares x, for
   assert.deepStrictEqual(b.y.domain, [1, 1]);
   assert.deepStrictEqual(a.y.range, b.y.range);
 });
+
+test("cm.plane draws the branches of a nested flow in the cells of their parent rows", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [a, b] = root
+    .data(["p", "q"])
+    .transform(cm.encode, {x: (d) => d})
+    .transform(cm.spreadX, {padding: 0})
+    .transform(cm.plane, {margin: 0})
+    .append(cm.g)
+    .data(() => [{v: 1}, {v: 2}])
+    .branch(
+      (flow) => flow.transform(cm.encode, {x: "v", y: "v"}),
+      (flow) => flow.transform(cm.encode, {x: "v", y: "v"}),
+    )
+    .transform(cm.plane);
+  const frames = (flow) => flow._values.map(({frame: {left, right}}) => [left, right]);
+  // Each cell is drawn at its band, so its frame spans the band's width from 0.
+  assert.deepStrictEqual(frames(a), [
+    [0, 50],
+    [0, 50],
+  ]);
+  assert.deepStrictEqual(frames(b), frames(a));
+});

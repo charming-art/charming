@@ -97,3 +97,8 @@ test("flow.branch(...branches) throws an error for appending into the joined flo
   const joined = cm.flow().branch((flow) => xs(flow.data([1])));
   assert.throws(() => joined.append(cm.g), /Split a joined flow before appending into it/);
 });
+
+test("flow.branch(...branches) throws an error for nesting data in the joined flow before splitting it", () => {
+  const joined = cm.flow().branch((flow) => xs(flow.data([[1]])));
+  assert.throws(() => joined.data((d) => d), /Split a joined flow before nesting data in it/);
+});
