@@ -1,8 +1,9 @@
-// A position option read like .add reads it: a function of the row, the name of a bound channel, or
-// a constant; without one, the bound channel of the position itself.
+// A position option read like .add reads it: a function of the row, an array of values by row, the
+// name of a bound channel, or a constant; without one, the bound channel of the position itself.
 function positionOf(option, key) {
   if (option === undefined) return (d) => d[key];
   if (typeof option === "function") return option;
+  if (Array.isArray(option)) return (d, i) => option[i];
   if (typeof option === "string") return (d) => (Object.hasOwn(d, option) ? d[option] : option);
   return () => option;
 }

@@ -56,3 +56,15 @@ test("cm.inset gives cm.rect and cm.circle a smaller box", () => {
   );
   assert.strictEqual(+renderer.node().querySelector("circle").getAttribute("r"), 8);
 });
+
+test("cm.inset reads an array position per row, like .add", () => {
+  const options = cm.inset(1, {x: [0, 4]});
+  const rows = [
+    {x: 9, x1: 10},
+    {x: 9, x1: 10},
+  ];
+  assert.deepStrictEqual(
+    rows.map((d, i) => options.x(d, i, rows)),
+    [1, 5],
+  );
+});
