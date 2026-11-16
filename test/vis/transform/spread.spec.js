@@ -337,3 +337,13 @@ test("cm.spreadY sorts its categories too, such as the bars of a ranking", () =>
   const [{hints}] = contexts(fruits, {y: "k", x: "v"}, {sort: "-x"}, cm.spreadY);
   assert.deepStrictEqual(hints.y.band.domain, ["c", "a", "b"]);
 });
+
+test("cm.spreadX sorts its categories by a channel of strings too", () => {
+  const data = [
+    {k: "a", name: "pear"},
+    {k: "b", name: "apple"},
+    {k: "c", name: "fig"},
+  ];
+  assert.deepStrictEqual(bands(contexts(data, {x: "k", y: "name"}, {sort: "y"})), ["b", "c", "a"]);
+  assert.deepStrictEqual(bands(contexts(data, {x: "k", y: "name"}, {sort: "-y"})), ["a", "c", "b"]);
+});

@@ -1,4 +1,4 @@
-import {InternMap, InternSet, range, sort} from "d3-array";
+import {ascending, descending, InternMap, InternSet, range, sort} from "d3-array";
 import {scaleBand} from "d3-scale";
 import {scaleFlex} from "./scales.js";
 import {seriesOf, seriesOrder} from "./series.js";
@@ -18,14 +18,15 @@ function scaleOf(domain, {paddingInner, paddingOuter, align}) {
 
 // The categories of a channel, in order: sorted by default, like Plot; in the order of the rows
 // with sort false; or by the max of a channel, such as "y", descending with a minus sign, such as
-// "-y", like Plot's sort option. Categories without a value of that channel go last.
+// "-y", like Plot's sort option: numbers, dates or strings. Categories without a value of that
+// channel go last. Each context sorts its own categories, such as each keyframe of a ranking.
 function categoriesOf(V, value, order) {
   const categories = new InternSet(V);
   if (order === false) return Array.from(categories);
   const sorted = sort(categories);
   if (order === undefined) return sorted;
-  const descending = order.startsWith("-");
-  const C = value[descending ? order.slice(1) : order];
+  const reverse = order.startsWith("-");
+  const C = value[reverse ? order.slice(1) : order];
   const max = new InternMap();
   for (let i = 0; i < V.length; i++) {
     const c = C?.[i];
@@ -38,7 +39,7 @@ function categoriesOf(V, value, order) {
     const mb = max.get(b);
     if (ma === undefined) return mb === undefined ? 0 : 1;
     if (mb === undefined) return -1;
-    return descending ? mb - ma : ma - mb;
+    return reverse ? descending(ma, mb) : ascending(ma, mb);
   });
 }
 
