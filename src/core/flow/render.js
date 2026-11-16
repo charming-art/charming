@@ -1,5 +1,5 @@
 import {Flow} from "./index.js";
-import {animate, play, transitionOptions} from "../transition/index.js";
+import {animate, play, stopSequence, transitionOptions} from "../transition/index.js";
 import {recorder} from "../transition/record.js";
 
 // The first row of each group of a node, across all its groups: the groups of a child flow, such
@@ -99,18 +99,25 @@ function renderChildren(renderer, children, indexOf, context, path, scope, time)
       const j = indexOf(child);
       const data = child._data[j];
       if (!data?.render.keyframe) continue;
+      // A keyframe's moments would each need a span of time for the keyframes in it.
+      if (time.inside) throw new Error("Keyframes nested in keyframes aren't supported yet.");
       for (const k of data.I) sequence.push({child, j, k, value: data.value});
     }
     if (sequence.length > time.count) time.count = sequence.length;
   }
   const moment = sequence.length ? sequence[Math.min(time.m, sequence.length - 1)] : null;
-  if (moment && !time.timing) time.timing = timingOf(moment.value, moment.k);
+  // The timing of a scene comes from the sequences that move into it; a sequence holding its last
+  // moment doesn't move.
+  if (moment && time.m < sequence.length) time.timings.push(timingOf(moment.value, moment.k));
   for (let c = 0; c < children.length; c++) {
     const child = children[c];
     const j = indexOf(child);
     if (time && child._data[j]?.render.keyframe) {
       // Keyframes without rows have no moment to draw.
-      if (moment?.child === child) renderNode(renderer, child, j, context, `${path}/k`, scope, time, moment.k);
+      if (moment?.child !== child) continue;
+      time.inside = true;
+      renderNode(renderer, child, j, context, `${path}/k`, scope, time, moment.k);
+      time.inside = false;
     } else {
       renderNode(renderer, child, j, context, `${path}/${c}`, scope, time);
     }
@@ -122,6 +129,18 @@ function timingOf(value = {}, k) {
   const timing = {};
   for (const name of ["duration", "delay", "ease"]) {
     if (value[name]?.[k] !== undefined) timing[name] = value[name][k];
+  }
+  return timing;
+}
+
+// The timing of a scene, from the timings of the sequences that move into it: the longest duration
+// and delay, so that every sequence finishes, and the first ease.
+function sceneTiming(timings) {
+  const timing = {};
+  for (const {duration, delay, ease} of timings) {
+    if (duration !== undefined && !(timing.duration >= duration)) timing.duration = duration;
+    if (delay !== undefined && !(timing.delay >= delay)) timing.delay = delay;
+    if (ease !== undefined && timing.ease === undefined) timing.ease = ease;
   }
   return timing;
 }
@@ -145,20 +164,22 @@ export function flow$render() {
   if (hasKeyframe(children)) {
     const transition = transitionOptions(context.transition || true);
     const scenes = [];
-    const time = {m: 0, count: 1, timing: null};
+    const time = {m: 0, count: 1, timings: [], inside: false};
     for (let m = 0; m < time.count; m++) {
       const target = recorder();
       time.m = m;
-      time.timing = null;
+      time.timings = [];
       renderChildren(target, children, () => 0, context, "", "", time);
-      scenes.push({primitives: target.recorded, timing: time.timing});
+      scenes.push({primitives: target.recorded, timing: sceneTiming(time.timings)});
     }
     root._children = [];
     play(context.transitionState, renderer, scenes, transition);
     return this;
   }
-  // With transitions, what's drawn is recorded, then animated from what the renderer shows.
+  // With transitions, what's drawn is recorded, then animated from what the renderer shows; without,
+  // a sequence of keyframes playing is stopped first, so that it doesn't draw over the new chart.
   const transition = transitionOptions(context.transition);
+  if (!transition) stopSequence(context.transitionState);
   const target = transition ? recorder() : renderer;
   for (let i = 0; i < children.length; i++) renderNode(target, children[i], 0, context, `${i}`, "");
   root._children = [];

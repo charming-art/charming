@@ -76,25 +76,37 @@ function draw(renderer, primitives) {
   renderer.render?.();
 }
 
-// The order of the scenes of keyframes: in order, or back and forth if alternate, iterations times.
-function orderOf(n, {direction = "normal", iterations = 1}) {
-  const order = [];
-  for (let i = 0; i < iterations; i++) {
-    const forward = direction !== "alternate" || i % 2 === 0;
-    for (let j = 0; j < n; j++) {
-      const m = forward ? j : n - 1 - j;
-      // Alternating, a turn doesn't repeat the scene it turns at.
-      if (i > 0 && j === 0 && direction === "alternate") continue;
-      order.push(m);
-    }
-  }
-  return order;
+// The number of scenes played: in order, or back and forth if alternate, iterations times, where a
+// turn doesn't repeat the scene it turns at. It may be infinite.
+function lengthOf(n, {direction = "normal", iterations = 1}) {
+  if (n <= 1) return n;
+  return direction === "alternate" ? n + (iterations - 1) * (n - 1) : n * iterations;
+}
+
+// The scene played at step s, computed rather than listed, so that iterations can be infinite.
+function sceneAt(s, n, {direction = "normal"}) {
+  if (direction !== "alternate") return s % n;
+  if (s < n) return s;
+  const t = s - n;
+  const turn = Math.floor(t / (n - 1));
+  const i = t % (n - 1);
+  return turn % 2 === 0 ? n - 2 - i : 1 + i;
+}
+
+// Stops a sequence of keyframes: the token goes first, so that the animation it stops doesn't play
+// the next scene.
+export function stopSequence(state) {
+  state.token = null;
+  state.sequence = null;
+  if (state.stop) state.stop();
 }
 
 // Plays the scenes of keyframes in turn, each animated from the one before with the timing of its
-// keyframe. A render during the sequence stops it. The sequence resolves once the last scene ends.
+// keyframe. A render during the sequence stops it. The sequence resolves once the last scene ends,
+// or at once if playing fails, such as on a renderer that can't animate.
 export function play(state, renderer, scenes, options) {
-  const order = orderOf(scenes.length, options);
+  const n = scenes.length;
+  const length = lengthOf(n, options);
   const token = {};
   state.token = token;
   let done;
@@ -114,16 +126,24 @@ export function play(state, renderer, scenes, options) {
   const run = () => {
     do {
       again = false;
-      if (state.token !== token || s >= order.length) {
+      if (state.token !== token || s >= length) {
         done();
         return;
       }
-      const {primitives, timing} = scenes[order[s]];
+      const {primitives, timing} = scenes[sceneAt(s, n, options)];
       playing = true;
       state.playing = true;
-      animate(state, renderer, primitives, {...options, ...timing}, next);
-      state.playing = false;
-      playing = false;
+      try {
+        animate(state, renderer, primitives, {...options, ...timing}, next);
+      } catch (error) {
+        state.token = null;
+        state.sequence = null;
+        done();
+        throw error;
+      } finally {
+        state.playing = false;
+        playing = false;
+      }
     } while (again);
   };
   run();
