@@ -28,7 +28,7 @@ export async function visTransitionBarChartRace() {
     const keyframes = root.data(years).append(cm.keyframe);
     keyframes.append(cm.text, {
       x: 620,
-      y: 450,
+      y: 465,
       text: ([year]) => year,
       textAlign: "end",
       fontSize: 48,
@@ -39,8 +39,15 @@ export async function visTransitionBarChartRace() {
       .data(([, rows]) => d3.sort(rows, (d) => -d.value).slice(0, n))
       .transform(cm.encode, {x: "value", y: "name", fill: "category", key: "name"})
       .transform(cm.spreadY, {padding: 0.1, sort: "-x"})
-      // The right margin leaves room for the value labels past the longest bar.
-      .transform(cm.plane, {marginTop: 30, marginLeft: 10, marginRight: 70, resolve: {x: "independent"}})
+      // The right margin leaves room for the value labels past the longest bar. Like d3's, the chart
+      // ends at the bottom of the SVG, so bars sliding in and out from below are hidden outside it.
+      .transform(cm.plane, {
+        marginTop: 30,
+        marginLeft: 10,
+        marginRight: 70,
+        marginBottom: 0,
+        resolve: {x: "independent"},
+      })
       .add(cm.axisX, {anchor: "top", grid: true, label: null})
       // Like d3's, bars entering or leaving the top 12 slide in and out from below the chart.
       .add(cm.rect, {fillOpacity: 0.7, enter: {y: 500}, exit: {y: 500}})
