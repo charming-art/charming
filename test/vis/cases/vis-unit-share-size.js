@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as cm from "../../../src/index.js";
 import {renderFlow, withSVG} from "../../helpers.js";
-import {dot, titanic} from "./titanic.js";
+import {titanic} from "./titanic.js";
 
 // G2's unit chart with shareSize (https://g2.antv.antgroup.com/en/examples/unit/unit/share-size/):
 // each panel's width is proportional to its number of passengers, with flex, so the dots have
@@ -22,7 +22,7 @@ export const visUnitShareSize = withSVG(async () => {
         .transform(cm.plane)
         .transform(cm.pack)
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
-        .add(cm.circle, dot);
+        .add(cm.circle, cm.inset("7.5%"));
     },
     {width: 640, height: 400},
   );

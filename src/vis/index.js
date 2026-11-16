@@ -3,6 +3,7 @@ export {arc} from "./shape/arc.js";
 export {areaRadial, areaX, areaY} from "./shape/area.js";
 export {axis, axisX, axisY} from "./shape/axis.js";
 export {encode} from "./transform/encode.js";
+export {inset, insetX, insetY} from "./modifier/inset.js";
 export {lineRadial, lineX, lineY} from "./shape/line.js";
 export {pack} from "./transform/pack.js";
 export {plane} from "./transform/plane.js";
