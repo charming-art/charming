@@ -10,6 +10,7 @@ import {svg$path} from "./path.js";
 import {svg$polygon} from "./polygon.js";
 import {svg$text} from "./text.js";
 import {svg$clear} from "./clear.js";
+import {svg$erase} from "./erase.js";
 import {svg$rotate} from "./rotate.js";
 import {svg$save} from "./save.js";
 import {svg$restore} from "./restore.js";
@@ -36,6 +37,7 @@ Object.defineProperties(SVG.prototype, {
   polygon: {value: svg$polygon},
   text: {value: svg$text},
   clear: {value: svg$clear},
+  erase: {value: svg$erase},
   translate: {value: svg$translate},
   rotate: {value: svg$rotate},
   save: {value: svg$save},

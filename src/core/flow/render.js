@@ -1,4 +1,6 @@
 import {Flow} from "./index.js";
+import {animate, transitionOptions} from "../transition/index.js";
+import {recorder} from "../transition/record.js";
 
 // The first row of each group of a node, across all its groups: the groups of a child flow, such
 // as flow.data((d) => d.children), are numbered across the rows of all the parent's groups.
@@ -19,7 +21,9 @@ function childIndex(child, node, index, k) {
   return child._shared ? 0 : offsets(node)[index] + k;
 }
 
-function renderNode(renderer, node, index, context) {
+// The path of a node identifies its shape in the flow, so that transitions match what each shape
+// draws from one render to the next.
+function renderNode(renderer, node, index, context, path) {
   const data = node._data[index];
   const {render, I, value, options, group, context: bound} = data;
   const {builtin} = render;
@@ -35,9 +39,13 @@ function renderNode(renderer, node, index, context) {
     render(flow, value, {...bound, options});
     const made = node._children;
     node._children = children;
-    for (const child of made) renderNode(renderer, child, 0, context);
+    made.forEach((child, c) => renderNode(renderer, child, 0, context, `${path}/m${c}`));
   }
-  if (builtin) render(renderer, I, value, options, group);
+  if (builtin) {
+    renderer.begin?.({path, index, I, value, group});
+    render(renderer, I, value, options, group);
+    renderer.end?.();
+  }
   if (!children.length) return;
   for (let i = 0; i < I.length; i++) {
     const k = I[i];
@@ -50,7 +58,9 @@ function renderNode(renderer, node, index, context) {
       renderer.translate(x, y);
       if (r !== undefined) renderer.rotate(r);
     }
-    for (const child of children) renderNode(renderer, child, childIndex(child, node, index, k), context);
+    children.forEach((child, c) =>
+      renderNode(renderer, child, childIndex(child, node, index, k), context, `${path}/${c}`),
+    );
     if (value) renderer.restore();
   }
 }
@@ -59,8 +69,12 @@ export function flow$render() {
   const context = this._context;
   const {root, renderer} = context;
   if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before flow.render().");
-  root._children.forEach((d) => renderNode(renderer, d, 0, context));
+  // With transitions, what's drawn is recorded, then animated from what the renderer shows.
+  const transition = transitionOptions(context.transition);
+  const target = transition ? recorder() : renderer;
+  root._children.forEach((d, i) => renderNode(target, d, 0, context, `${i}`));
   root._children = [];
-  if (renderer.render) renderer.render();
+  if (transition) animate((context.transitionState ??= {}), renderer, target.recorded, transition);
+  else if (renderer.render) renderer.render();
   return this;
 }
