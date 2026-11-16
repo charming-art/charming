@@ -1,4 +1,4 @@
-import {InternMap, InternSet, range, sort} from "d3-array";
+import {ascending, descending, InternMap, InternSet, range, sort} from "d3-array";
 import {scaleBand} from "d3-scale";
 import {scaleFlex} from "./scales.js";
 import {seriesOf, seriesOrder} from "./series.js";
@@ -16,12 +16,40 @@ function scaleOf(domain, {paddingInner, paddingOuter, align}) {
   return scaleBand(domain, [0, 1]).paddingInner(paddingInner).paddingOuter(paddingOuter).align(align);
 }
 
+// The categories of a channel, in order: sorted by default, like Plot; in the order of the rows
+// with sort false; or by the max of a channel, such as "y", descending with a minus sign, such as
+// "-y", like Plot's sort option: numbers, dates or strings. Categories without a valid value of
+// that channel go last. Each context sorts its own categories, such as each keyframe of a ranking.
+function categoriesOf(V, value, order) {
+  const categories = new InternSet(V);
+  if (order === false) return Array.from(categories);
+  const sorted = sort(categories);
+  if (order === undefined) return sorted;
+  const reverse = order.startsWith("-");
+  const C = value[reverse ? order.slice(1) : order];
+  const max = new InternMap();
+  for (let i = 0; i < V.length; i++) {
+    const c = C?.[i];
+    // Like d3.max, missing and invalid values, such as NaN or an invalid date, are ignored.
+    if (c == null || !(c >= c)) continue;
+    const m = max.get(V[i]);
+    if (m === undefined || c > m) max.set(V[i], c);
+  }
+  return sorted.sort((a, b) => {
+    const ma = max.get(a);
+    const mb = max.get(b);
+    if (ma === undefined) return mb === undefined ? 0 : 1;
+    if (mb === undefined) return -1;
+    return reverse ? descending(ma, mb) : ascending(ma, mb);
+  });
+}
+
 // Places each category of the channel in a band of [0, 1] with a d3 band scale, ordered by the
-// domain of its hint, else sorted. The other position, such as y, gets a baseline of 0 if it's
-// numeric and its y1 isn't bound, so that bars span from 0 to their values.
-function spreadCategories(context, padding, flex, [key, key1, other, other1]) {
+// domain of its hint, else by the sort option. The other position, such as y, gets a baseline of 0
+// if it's numeric and its y1 isn't bound, so that bars span from 0 to their values.
+function spreadCategories(context, padding, flex, order, [key, key1, other, other1]) {
   const {[key]: V, [other]: O, [other1]: O1} = context.value;
-  const {label, scale: name, domain = sort(new InternSet(V))} = context.hints?.[key] ?? {};
+  const {label, scale: name, domain = categoriesOf(V, context.value, order)} = context.hints?.[key] ?? {};
   // With flex, each category's band is proportional to the sum of the flex channel over its rows,
   // such as its number of rows, like G2's shareSize.
   const F = flex === undefined ? null : context.value[flex];
@@ -92,7 +120,7 @@ function spreadSlots(context, padding, chunk, [key, key1, other]) {
 
 function spread(
   data,
-  {padding = 0.1, paddingInner = padding, paddingOuter = padding, align = 0.5, chunk, flex} = {},
+  {padding = 0.1, paddingInner = padding, paddingOuter = padding, align = 0.5, chunk, flex, sort: order} = {},
   keys,
   name,
 ) {
@@ -100,7 +128,7 @@ function spread(
   const options = {paddingInner, paddingOuter, align};
   return data.map((context) => {
     if (chunk === undefined && !isSpread(context.hints?.[keys[0]]))
-      return spreadCategories(context, options, flex, keys);
+      return spreadCategories(context, options, flex, order, keys);
     return spreadSlots(context, options, chunk ?? 1, keys);
   });
 }

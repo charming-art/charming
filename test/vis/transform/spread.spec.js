@@ -307,3 +307,64 @@ test("cm.spreadX keeps the name of a position's scale, for bands and chunks", ()
   assert.strictEqual(spread(), "n");
   assert.strictEqual(spread({chunk: 2}), "n");
 });
+
+// The categories of a spread, left to right.
+const bands = ([{hints}]) => hints.x.band.domain;
+
+const fruits = [
+  {k: "b", v: 1},
+  {k: "c", v: 5},
+  {k: "a", v: 3},
+  {k: "c", v: 2},
+];
+
+test("cm.spreadX sorts its categories by default, and keeps their order with sort false", () => {
+  assert.deepStrictEqual(bands(contexts(fruits, {x: "k"})), ["a", "b", "c"]);
+  assert.deepStrictEqual(bands(contexts(fruits, {x: "k"}, {sort: false})), ["b", "c", "a"]);
+});
+
+test("cm.spreadX sorts its categories by the max of a channel, descending with a minus sign, like Plot", () => {
+  assert.deepStrictEqual(bands(contexts(fruits, {x: "k", y: "v"}, {sort: "y"})), ["b", "a", "c"]);
+  assert.deepStrictEqual(bands(contexts(fruits, {x: "k", y: "v"}, {sort: "-y"})), ["c", "a", "b"]);
+});
+
+test("cm.spreadX keeps the domain given in encode, whatever sort says", () => {
+  const given = contexts(fruits, {x: {value: "k", domain: ["c", "a", "b"]}, y: "v"}, {sort: "y"});
+  assert.deepStrictEqual(bands(given), ["c", "a", "b"]);
+});
+
+test("cm.spreadY sorts its categories too, such as the bars of a ranking", () => {
+  const [{hints}] = contexts(fruits, {y: "k", x: "v"}, {sort: "-x"}, cm.spreadY);
+  assert.deepStrictEqual(hints.y.band.domain, ["c", "a", "b"]);
+});
+
+test("cm.spreadX sorts its categories by a channel of strings too", () => {
+  const data = [
+    {k: "a", name: "pear"},
+    {k: "b", name: "apple"},
+    {k: "c", name: "fig"},
+  ];
+  assert.deepStrictEqual(bands(contexts(data, {x: "k", y: "name"}, {sort: "y"})), ["b", "c", "a"]);
+  assert.deepStrictEqual(bands(contexts(data, {x: "k", y: "name"}, {sort: "-y"})), ["a", "c", "b"]);
+});
+
+test("cm.spreadX ignores missing and invalid values of the channel it sorts by, and puts categories without any last", () => {
+  const sorted = (data) => bands(contexts(data, {x: "k", y: "v"}, {sort: "y"}));
+  const rows = [
+    {k: "a", v: NaN},
+    {k: "a", v: 5},
+    {k: "b", v: 1},
+  ];
+  // The max of a is 5 in either order of its rows.
+  assert.deepStrictEqual(sorted(rows), ["b", "a"]);
+  assert.deepStrictEqual(sorted([rows[1], rows[0], rows[2]]), ["b", "a"]);
+  // c has only null, and d only an invalid date, so they go last, in either direction.
+  const missing = [
+    {k: "c", v: null},
+    {k: "a", v: 2},
+    {k: "d", v: new Date(NaN)},
+    {k: "b", v: 1},
+  ];
+  assert.deepStrictEqual(sorted(missing), ["b", "a", "c", "d"]);
+  assert.deepStrictEqual(bands(contexts(missing, {x: "k", y: "v"}, {sort: "-y"})), ["a", "b", "c", "d"]);
+});
