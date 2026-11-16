@@ -17,28 +17,27 @@ function bubbleSort(values) {
 }
 
 // A bubble sort, one keyframe per comparison: the bars are keyed by id, so swapped bars trade
-// places, and the pair compared is highlighted. Each step is a keyframe of its own, whose x domain
-// is the order of that step, so the axis labels the bars by value and its labels slide with them.
+// places, and the pair compared is highlighted. Each step keeps the order of its rows with sort
+// false, so the axis labels the bars by value and its labels slide with them.
 export function visTransitionBubbleSort() {
   const renderer = cm.svg({width: 640, height: 320});
   const root = cm.flow({transition: {duration: 240}}).renderer(renderer);
   const draw = () => {
     const values = d3.shuffle(d3.range(16).map((id) => ({id, value: 10 + id * 6})));
-    for (const step of bubbleSort(values)) {
-      root
-        .append(cm.keyframe)
-        .data(step.values.map((d) => ({...d, compared: step.compared.includes(d.id)})))
-        .transform(cm.encode, {
-          x: {value: "value", domain: step.values.map((d) => d.value)},
-          y: "value",
-          key: "id",
-          fill: {value: (d) => (d.compared ? "compared" : "value"), domain: ["value", "compared"]},
-        })
-        .transform(cm.spreadX)
-        .transform(cm.plane, {domainY: [0, 100]})
-        .add(cm.axis)
-        .add(cm.rect);
-    }
+    root
+      .data(bubbleSort(values))
+      .append(cm.keyframe)
+      .data((step) => step.values.map((d) => ({...d, compared: step.compared.includes(d.id)})))
+      .transform(cm.encode, {
+        x: "value",
+        y: "value",
+        key: "id",
+        fill: {value: (d) => (d.compared ? "compared" : "value"), domain: ["value", "compared"]},
+      })
+      .transform(cm.spreadX, {sort: false})
+      .transform(cm.plane, {domainY: [0, 100]})
+      .add(cm.axis)
+      .add(cm.rect);
   };
   return replay(renderer.node(), root, draw);
 }
