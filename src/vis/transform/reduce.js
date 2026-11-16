@@ -43,12 +43,14 @@ export function seriesKey(value, outputs) {
 // channels in keys take the values of the group's first row, each output reduces its input
 // channel of the same name, such as {fill: "max"}, and the other channels are dropped. The datum
 // of a row is the rows of its group. The hint of an output is its input's, or Frequency for a
-// count, like Plot. Extra channels, such as the edges of bins, are added from fields.
+// count, like Plot. Extra channels, such as the edges of bins, are added from fields. The identity
+// of a row for transitions, key and groupKey, is kept like the channels in keys.
 export function reduceGroups(context, groups, keys, outputs, fields = {}) {
   const {value, hints = {}, group: rows} = context;
   const newValue = {};
   const newHints = {};
-  for (const key of keys) {
+  const identity = ["key", "groupKey"].filter((key) => key in value && !(key in outputs) && !keys.includes(key));
+  for (const key of [...keys, ...identity]) {
     newValue[key] = groups.map((I) => valueAt(value[key], I[0]));
     if (key in hints) newHints[key] = hints[key];
   }

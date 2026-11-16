@@ -93,3 +93,8 @@ test("cm.binX bins every fractional interval at its multiples, despite floating 
 test("cm.binX throws an error for an output on the binned position, whose edges it holds", () => {
   assert.throws(() => binned([1, 2], {x: (d) => d}, cm.binX, {x: "mean"}), /cm.binX bins x/);
 });
+
+test("cm.binX keeps the key of each bin's first row, for transitions", () => {
+  const {value} = binned([1, 6], {x: (d) => d, key: (d) => `k${d}`}, cm.binX, {interval: 5});
+  assert.deepStrictEqual(value.key, ["k1", "k6"]);
+});

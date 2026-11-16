@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import * as d3 from "d3";
-import {test} from "vitest";
+import {test, vi} from "vitest";
 import * as cm from "../../../src/index.js";
 import {assertInDelta} from "../../helpers.js";
 
@@ -280,4 +280,25 @@ test("cm.axis draws no axes in facets without rows, and labels the nearest facet
   const filled = ([x, y]) => !(x === "a" && y === "2");
   assert.deepStrictEqual(labeledCells({y: false}, "middle", filled), new Set(["a1", "b2"]));
   assert.deepStrictEqual(labeledCells({x: false}, "end", filled), new Set(["a1", "b2"]));
+});
+
+test("cm.axis keys its ticks by value, so that each tick moves to its own new place in transitions", () => {
+  vi.useFakeTimers();
+  const renderer = cm.svg({width: 200, height: 100});
+  const root = cm.flow({transition: {duration: 160, ease: "linear"}}).renderer(renderer);
+  const draw = (max, ticks) => {
+    root
+      .data([0, max])
+      .transform(cm.encode, {x: (d) => d})
+      .transform(cm.plane)
+      .add(cm.axisX, {ticks});
+    root.render();
+  };
+  draw(10, [5, 10]);
+  draw(20, [0, 5, 10]);
+  vi.advanceTimersByTime(80);
+  const ten = Array.from(renderer.node().querySelectorAll("text")).find((t) => t.textContent === "10");
+  vi.useRealTimers();
+  // x is in [20, 180]: 10 moves from 180 to 100, so it's at 140 halfway, not on its way to 5's place.
+  assert.strictEqual(+ten.getAttribute("x"), 140);
 });

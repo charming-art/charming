@@ -13,6 +13,7 @@ const baselines = {
 
 export function svg$text({
   text,
+  format,
   x,
   y,
   fill,
@@ -40,8 +41,9 @@ export function svg$text({
     // Like Canvas, a stroked text is only filled if a fill is given.
     ...paint({fill: fill ?? (stroke ? "none" : undefined), stroke, ...options}),
   });
-  // A missing text is empty, as browsers would write undefined.
-  const content = `${text ?? ""}`;
+  // A missing text is empty, as browsers would write undefined; a format writes the value, such as
+  // a number that a transition interpolates.
+  const content = `${(format ? format(text) : text) ?? ""}`;
   if (node.textContent !== content) node.textContent = content;
   return this;
 }
