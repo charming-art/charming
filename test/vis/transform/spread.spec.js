@@ -296,3 +296,14 @@ test("cm.spreadX with equal flex gives the bands of d3.scaleBand for any align",
     flexed.x1.forEach((x, i) => assertInDelta(x, plain.x1[i]));
   }
 });
+
+test("cm.spreadX keeps the name of a position's scale, for bands and chunks", () => {
+  const spread = (options) =>
+    cm
+      .flow()
+      .data([{k: "a"}])
+      .transform(cm.encode, {x: {value: "k", scale: "n"}})
+      .transform((flow, data) => cm.spreadX(flow, data, options))._values[0].hints.x.scale;
+  assert.strictEqual(spread(), "n");
+  assert.strictEqual(spread({chunk: 2}), "n");
+});

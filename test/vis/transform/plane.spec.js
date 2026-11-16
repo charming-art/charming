@@ -584,3 +584,78 @@ test("cm.plane points each independent y its own way, and leaves room for the po
   const [, only] = plane((flow) => flow.transform(cm.encode, {}), values);
   assert.deepStrictEqual([only.frame.top, only.frame.left], [20, 40]);
 });
+
+test("cm.plane shares a position's scale with the contexts that give it the same name", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const length = (v) => ({value: () => v, scale: "length"});
+  const [scatter, top, right] = root
+    .branch(
+      (flow) => flow.data([0]).transform(cm.encode, {x: length(30), y: () => 15}),
+      (flow) => flow.data([0]).transform(cm.encode, {x: length(60), y: () => 40}),
+      (flow) => flow.data([0]).transform(cm.encode, {x: () => 80, y: () => 20}),
+    )
+    .transform(cm.plane);
+  const domains = (flow) => [flow._values[0].scales.x.domain, flow._values[0].scales.y.domain];
+  // Length is shared by the scatter and the top; the right's x keeps the scale named x; y is shared.
+  assert.deepStrictEqual(domains(scatter), [
+    [30, 60],
+    [15, 40],
+  ]);
+  assert.deepStrictEqual(domains(top), domains(scatter));
+  assert.deepStrictEqual(domains(right), [
+    [80, 80],
+    [15, 40],
+  ]);
+});
+
+test("cm.plane resolves a named scale independently, and applies its options to the scale named after the axis", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [a, b, c] = root
+    .branch(
+      (flow) => flow.data([0]).transform(cm.encode, {x: {value: () => 1, scale: "n"}}),
+      (flow) => flow.data([0]).transform(cm.encode, {x: {value: () => 2, scale: "n"}}),
+      (flow) => flow.data([0]).transform(cm.encode, {x: () => 3}),
+    )
+    .transform(cm.plane, {resolve: {n: "independent"}, domainX: [0, 10]});
+  const domain = (flow) => flow._values[0].scales.x.domain;
+  assert.deepStrictEqual(
+    [domain(a), domain(b), domain(c)],
+    [
+      [1, 1],
+      [2, 2],
+      [0, 10],
+    ],
+  );
+});
+
+test("cm.plane joins a channel to a named scale only in the contexts that name it", () => {
+  const plane = (options) => {
+    const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+    const [, b] = root
+      .branch(
+        (flow) =>
+          flow.data([{v: 1}]).transform(cm.encode, {
+            x: {value: () => 0, scale: "length"},
+            v: {value: "v", scale: "length"},
+          }),
+        (flow) => flow.data([{v: 50}]).transform(cm.encode, {x: () => 10, v: "v"}),
+      )
+      .transform(cm.plane, options);
+    return b._values[0];
+  };
+  // The second branch's v isn't a position: it stays 50, without a scale.
+  const {value, scales} = plane();
+  assert.deepStrictEqual(value.v, [50]);
+  assert.strictEqual(scales.v, undefined);
+  assert.deepStrictEqual(plane({resolve: {x: "independent"}}).scales.x.domain, [10, 10]);
+});
+
+test("cm.plane keeps each position on its own axis when x and y name the same scale", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [context] = root
+    .data([{a: 0}, {a: 1}])
+    .transform(cm.encode, {x: {value: "a", scale: "length"}, y: {value: "a", scale: "length"}})
+    .transform(cm.plane, {margin: 0})._values;
+  assert.deepStrictEqual(context.value.x, [0, 100]);
+  assert.deepStrictEqual(context.value.y, [100, 0]);
+});

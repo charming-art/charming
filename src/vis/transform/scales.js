@@ -126,11 +126,41 @@ export function callable(record) {
   return Object.defineProperties(record, properties);
 }
 
-// The keys of a position scale: its own, such as x and x1, and the channels that share it, such as
-// {value: "v2", scale: "y"}.
-export function keysOf(value, hints, keys, name) {
-  const shared = Object.keys(value).filter((key) => !keys.includes(key) && hints[key]?.scale === name);
+// The keys of a position scale in a context: its own, such as x and x1, and the other channels that
+// share it by the axis, such as {value: "v2", scale: "y"}, or by the name of the context's scale.
+export function keysOf(value, hints, keys, axis) {
+  const name = scaleName(hints, keys, axis);
+  // Positions choose their own scale, so only the other channels join one, even if names collide.
+  const shared = Object.keys(value).filter(
+    (key) => !positions.has(key) && !keys.includes(key) && (hints[key]?.scale === axis || hints[key]?.scale === name),
+  );
   return [...keys, ...shared];
+}
+
+const positions = new Set(["x", "x1", "y", "y1"]);
+
+// The name of the scale of a context's position along an axis: the scale given to its position,
+// such as x: {value: "culmen_length_mm", scale: "length"}, else the axis itself, such as x.
+export function scaleName(hints, keys, axis) {
+  return axisHint(hints, keys).scale ?? axis;
+}
+
+// The contexts by the name of their scale along an axis, in order: contexts whose positions use
+// the same scale, such as length in a scatterplot and the histogram above it, resolve it together.
+export function byScaleName(data, keys, axis) {
+  const groups = new Map();
+  for (const context of data) {
+    const name = scaleName(context.hints ?? {}, keys, axis);
+    if (!groups.has(name)) groups.set(name, []);
+    groups.get(name).push(context);
+  }
+  return groups;
+}
+
+// The keys of the channels of the contexts along an axis, such as x, x1 and the channels that
+// share their scale.
+export function allKeysOf(data, keys, axis) {
+  return Array.from(new Set(data.flatMap(({value, hints = {}}) => keysOf(value, hints, keys, axis))));
 }
 
 // The label of a channel, such as its field name, for axes and legends.

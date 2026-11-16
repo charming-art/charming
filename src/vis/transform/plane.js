@@ -1,7 +1,9 @@
 import {InternSet} from "d3-array";
 import {discrete, point, scale} from "../../core/transform/scale.js";
 import {
+  allKeysOf,
   axisHint,
+  byScaleName,
   callable,
   colorScales,
   hasAny,
@@ -14,6 +16,7 @@ import {
   positionScale,
   resolve,
   scaleDescriptors,
+  scaleName,
   sharedDomain,
   withoutHints,
   withSeries,
@@ -59,7 +62,7 @@ export function plane(
     marginRight,
     marginBottom,
     marginLeft,
-    resolve: {x: resolveX = "shared", y: resolveY = "shared"} = {},
+    resolve: resolution = {},
     keysX = ["x", "x1"],
     keysY = ["y", "y1"],
   } = {},
@@ -109,31 +112,66 @@ export function plane(
     frames = data.map(() => frame);
   }
 
-  // The scales shared by all the contexts: colors, and positions unless they're independent.
-  const allX = Array.from(new Set(data.flatMap(({value, hints = {}}) => keysOf(value, hints, keysX, "x"))));
-  const allY = Array.from(new Set(data.flatMap(({value, hints = {}}) => keysOf(value, hints, keysY, "y"))));
+  // The scales shared by the contexts: colors, and positions unless they're independent. A position
+  // is shared with the contexts whose positions use the same scale: the axis, by default, or a name
+  // given to it, such as x: {value: "culmen_length_mm", scale: "length"}. The options apply to the
+  // scale named after the axis, and resolve takes any name, such as {x: "independent"}.
   const colors = colorScales(merge(data, ["fill", "stroke"]), data[0]?.hints ?? {});
-  const sharedX = resolveX !== "independent" && sharedScale(data, allX, keysX, typeX, domainX);
-  const sharedY = resolveY !== "independent" && sharedScale(data, allY, keysY, typeY, domainY);
+  const independent = (name) => resolution[name] === "independent";
+  const sharedOf = (keys, axis, type, domain) =>
+    new Map(
+      Array.from(byScaleName(data, keys, axis), ([name, contexts]) => {
+        if (independent(name)) return [name, null];
+        const own = name === axis;
+        const all = allKeysOf(contexts, keys, axis);
+        return [name, sharedScale(contexts, all, keys, own ? type : undefined, own ? domain : undefined)];
+      }),
+    );
+  const sharedX = sharedOf(keysX, "x", typeX, domainX);
+  const sharedY = sharedOf(keysY, "y", typeY, domainY);
+  // The direction of a shared y comes from the first of its contexts with y.
+  const firstHintsY = new Map(
+    Array.from(byScaleName(data, keysY, "y"), ([name, contexts]) => [
+      name,
+      (contexts.find((context) => has(context, keysY, "y")) ?? contexts[0]).hints ?? {},
+    ]),
+  );
 
   return data.map((context, j) => {
     const {value, hints = {}} = context;
+    // The channels of this context's scales: its positions, and the channels that join them here.
+    const ownKeysX = keysOf(value, hints, keysX, "x");
+    const ownKeysY = keysOf(value, hints, keysY, "y");
     const frame = frames[j];
     const rangeX = [frame.left, frame.right];
     const rangeY = [frame.top, frame.bottom];
     if (reverseX) rangeX.reverse();
-    if (reverseOf(resolveY === "independent" ? hints : firstHints)) rangeY.reverse();
+    const nameX = scaleName(hints, keysX, "x");
+    const nameY = scaleName(hints, keysY, "y");
+    if (reverseOf(independent(nameY) ? hints : firstHintsY.get(nameY))) rangeY.reverse();
 
+    // An independent position is inferred from its own context, with the options if it's the axis's.
     const hintX = axisHint(hints, keysX);
     const hintY = axisHint(hints, keysY);
-    const x = sharedX || positionScale(value, allX, {type: typeX ?? hintX.type, domain: domainX ?? hintX.domain});
-    const y = sharedY || positionScale(value, allY, {type: typeY ?? hintY.type, domain: domainY ?? hintY.domain});
+    const [ownX, ownY] = [nameX === "x", nameY === "y"];
+    const x =
+      sharedX.get(nameX) ||
+      positionScale(value, ownKeysX, {
+        type: (ownX ? typeX : undefined) ?? hintX.type,
+        domain: (ownX ? domainX : undefined) ?? hintX.domain,
+      });
+    const y =
+      sharedY.get(nameY) ||
+      positionScale(value, ownKeysY, {
+        type: (ownY ? typeY : undefined) ?? hintY.type,
+        domain: (ownY ? domainY : undefined) ?? hintY.domain,
+      });
 
     // Colors are categorical by default, and positions are discrete points by default.
     const [colored] = scale(flow, [context], scaleDescriptors(colors));
     const descriptors = {};
-    for (const key of allX) if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX};
-    for (const key of allY) if (key in value) descriptors[key] = {scale: y.type, domain: y.domain, range: rangeY};
+    for (const key of ownKeysX) if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX};
+    for (const key of ownKeysY) if (key in value) descriptors[key] = {scale: y.type, domain: y.domain, range: rangeY};
     const [scaled] = scale(flow, [colored], descriptors, point);
 
     const scales = {...context.scales};
@@ -141,16 +179,16 @@ export function plane(
     const recordX = callable(labeled(positionRecord(x, rangeX, hintX), hintX));
     const recordY = callable(labeled(positionRecord(y, rangeY, hintY), hintY));
     // The scale is recorded as x or y, for axes, even if only channels that share it are encoded.
-    if (hasAny(value, allX)) scales[keysX[0]] = recordX;
-    if (hasAny(value, allY)) scales[keysY[0]] = recordY;
-    for (const key of allX) if (key in value) scales[key] = recordX;
-    for (const key of allY) if (key in value) scales[key] = recordY;
+    if (hasAny(value, ownKeysX)) scales[keysX[0]] = recordX;
+    if (hasAny(value, ownKeysY)) scales[keysY[0]] = recordY;
+    for (const key of ownKeysX) if (key in value) scales[key] = recordX;
+    for (const key of ownKeysY) if (key in value) scales[key] = recordY;
 
     const newValue = {...scaled.value};
-    if (hasAny(value, allX) && !hasAny(value, allY))
-      newValue[keysY[0]] = middle(value, allX, [frame.top, frame.bottom]);
-    if (hasAny(value, allY) && !hasAny(value, allX))
-      newValue[keysX[0]] = middle(value, allY, [frame.left, frame.right]);
+    if (hasAny(value, ownKeysX) && !hasAny(value, ownKeysY))
+      newValue[keysY[0]] = middle(value, ownKeysX, [frame.top, frame.bottom]);
+    if (hasAny(value, ownKeysY) && !hasAny(value, ownKeysX))
+      newValue[keysX[0]] = middle(value, ownKeysY, [frame.left, frame.right]);
     return {...withoutHints(scaled), value: newValue, scales, frame};
   });
 }

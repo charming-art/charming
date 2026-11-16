@@ -1,7 +1,9 @@
 import {scaleRadial} from "d3-scale";
 import {point, scale} from "../../core/transform/scale.js";
 import {
+  allKeysOf,
   axisHint,
+  byScaleName,
   callable,
   colorScales,
   hasAny,
@@ -14,6 +16,7 @@ import {
   positionScale,
   resolve,
   scaleDescriptors,
+  scaleName,
   sharedDomain,
   withoutHints,
   withSeries,
@@ -55,7 +58,7 @@ export function polar(
     marginRight,
     marginBottom,
     marginLeft,
-    resolve: {x: resolveX = "shared", y: resolveY = "shared"} = {},
+    resolve: resolution = {},
     keysX = ["x", "x1"],
     keysY = ["y", "y1"],
   } = {},
@@ -97,29 +100,54 @@ export function polar(
 
   // The scales shared by all the contexts: colors, and positions unless they're independent.
   const {hints: firstHints = {}} = data[0] ?? {};
-  const allX = Array.from(new Set(data.flatMap(({value, hints = {}}) => keysOf(value, hints, keysX, "x"))));
-  const allY = Array.from(new Set(data.flatMap(({value, hints = {}}) => keysOf(value, hints, keysY, "y"))));
+  // Like cm.plane, a position is shared by the name of its scale, the axis by default.
   const colors = colorScales(merge(data, ["fill", "stroke"]), firstHints);
   // The radius is radial by default, so that areas grow with values.
-  const radialY = (hints) => radial(typeY ?? axisHint(hints, keysY).type ?? "radial");
-  const sharedX = resolveX !== "independent" && sharedScale(data, allX, keysX, typeX, domainX);
-  const sharedY = resolveY !== "independent" && sharedScale(data, allY, keysY, radialY(firstHints), domainY);
+  const radialY = (hints, own = true) => radial((own ? typeY : undefined) ?? axisHint(hints, keysY).type ?? "radial");
+  const independent = (name) => resolution[name] === "independent";
+  const sharedOf = (keys, axis, typeOf, domain) =>
+    new Map(
+      Array.from(byScaleName(data, keys, axis), ([name, contexts]) => {
+        if (independent(name)) return [name, null];
+        const own = name === axis;
+        const all = allKeysOf(contexts, keys, axis);
+        return [name, sharedScale(contexts, all, keys, typeOf(contexts[0].hints ?? {}, own), own ? domain : undefined)];
+      }),
+    );
+  const sharedX = sharedOf(keysX, "x", (hints, own) => (own ? typeX : undefined), domainX);
+  const sharedY = sharedOf(keysY, "y", radialY, domainY);
 
   return data.map((context, j) => {
     const {value, hints = {}} = context;
+    // The channels of this context's scales: its positions, and the channels that join them here.
+    const ownKeysX = keysOf(value, hints, keysX, "x");
+    const ownKeysY = keysOf(value, hints, keysY, "y");
     const frame = frames[j];
     const {cx, cy, innerRadius: r0, outerRadius} = frame;
     const rangeY = [r0, outerRadius];
 
     const hintX = axisHint(hints, keysX);
     const hintY = axisHint(hints, keysY);
-    const x = sharedX || positionScale(value, allX, {type: typeX ?? hintX.type, domain: domainX ?? hintX.domain});
-    const y = sharedY || positionScale(value, allY, {type: radialY(hints), domain: domainY ?? hintY.domain});
+    const nameX = scaleName(hints, keysX, "x");
+    const nameY = scaleName(hints, keysY, "y");
+    const [ownX, ownY] = [nameX === "x", nameY === "y"];
+    const x =
+      sharedX.get(nameX) ||
+      positionScale(value, ownKeysX, {
+        type: (ownX ? typeX : undefined) ?? hintX.type,
+        domain: (ownX ? domainX : undefined) ?? hintX.domain,
+      });
+    const y =
+      sharedY.get(nameY) ||
+      positionScale(value, ownKeysY, {
+        type: radialY(hints, ownY),
+        domain: (ownY ? domainY : undefined) ?? hintY.domain,
+      });
 
     const [colored] = scale(flow, [context], scaleDescriptors(colors));
     const descriptors = {};
-    for (const key of allX) if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX};
-    for (const key of allY) if (key in value) descriptors[key] = {scale: y.type, domain: y.domain, range: rangeY};
+    for (const key of ownKeysX) if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX};
+    for (const key of ownKeysY) if (key in value) descriptors[key] = {scale: y.type, domain: y.domain, range: rangeY};
     const [scaled] = scale(flow, [colored], descriptors, point);
 
     const scales = {...context.scales};
@@ -127,17 +155,17 @@ export function polar(
     const recordX = callable(labeled(positionRecord(x, rangeX, hintX), hintX));
     const recordY = callable(labeled(positionRecord(y, rangeY, hintY), hintY));
     // The scale is recorded as x or y, for axes, even if only channels that share it are encoded.
-    if (hasAny(value, allX)) scales[keysX[0]] = recordX;
-    if (hasAny(value, allY)) scales[keysY[0]] = recordY;
-    for (const key of allX) if (key in value) scales[key] = recordX;
-    for (const key of allY) if (key in value) scales[key] = recordY;
+    if (hasAny(value, ownKeysX)) scales[keysX[0]] = recordX;
+    if (hasAny(value, ownKeysY)) scales[keysY[0]] = recordY;
+    for (const key of ownKeysX) if (key in value) scales[key] = recordX;
+    for (const key of ownKeysY) if (key in value) scales[key] = recordY;
 
     // A missing position fills its span: a pie has no y, so its wedges span the whole radius. Like a
     // stack, y is the outer radius and y1 the baseline.
     const newValue = {...scaled.value};
     const n = Object.values(value)[0]?.length ?? 0; // all channels have one value per row
-    if (!hasAny(value, allY)) [newValue[keysY[1]], newValue[keysY[0]]] = span(n, rangeY); // y outer, y1 inner
-    if (!hasAny(value, allX)) [newValue[keysX[0]], newValue[keysX[1]]] = span(n, rangeX);
+    if (!hasAny(value, ownKeysY)) [newValue[keysY[1]], newValue[keysY[0]]] = span(n, rangeY); // y outer, y1 inner
+    if (!hasAny(value, ownKeysX)) [newValue[keysX[0]], newValue[keysX[1]]] = span(n, rangeX);
     newValue.cx = Array.from({length: n}, () => cx);
     newValue.cy = Array.from({length: n}, () => cy);
     return {...withoutHints(scaled), value: newValue, scales, frame};
