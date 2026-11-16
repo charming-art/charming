@@ -173,11 +173,11 @@ test("marks split from the mark keyed by their group key, and merge back into it
   whole();
   parts();
   vi.advanceTimersByTime(0);
-  // The parts start in the whole's box, then spread to their own.
+  // The parts start in equal pieces of the whole's box, in order of position, then spread.
   assert.deepStrictEqual(rects(renderer), [
-    [0, 0, 90, 30],
-    [0, 0, 90, 30],
-    [0, 0, 90, 30],
+    [0, 0, 30, 30],
+    [30, 0, 30, 30],
+    [60, 0, 30, 30],
   ]);
   vi.advanceTimersByTime(176);
   assert.deepStrictEqual(
@@ -186,13 +186,13 @@ test("marks split from the mark keyed by their group key, and merge back into it
   );
   whole();
   vi.advanceTimersByTime(80);
-  // The parts move into the whole, which appears once they've arrived.
+  // The parts move into the pieces of the whole, which appears once they've arrived.
   assert.deepStrictEqual(
     rects(renderer).map(([x, y, width]) => [x, y, width]),
     [
-      [0, 50, 55],
-      [30, 50, 55],
-      [60, 50, 55],
+      [0, 50, 25],
+      [45, 50, 25],
+      [90, 50, 25],
     ],
   );
   vi.advanceTimersByTime(96);

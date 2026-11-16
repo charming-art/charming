@@ -1,4 +1,5 @@
 import {easeOf, interpolateAttrs, interpolateOps} from "./interpolate.js";
+import {boxOf, morph, morphable, pack, piece, sortByPosition} from "./morph.js";
 
 // A mark fades in and out unless it gives its own states.
 const fade = {fillOpacity: 0, strokeOpacity: 0};
@@ -57,37 +58,83 @@ export function diff(prev, next, options) {
     const {scope, key} = next[j];
     if (matches[j] < 0 && key !== undefined && !nextKeyed.has(`${scope}\0${key}`)) nextKeyed.set(`${scope}\0${key}`, j);
   }
-  const merged = new Set();
-  const items = [];
+  // The shown primitives merging into each drawn one, and the drawn primitives splitting from each
+  // shown one, so that each group shares the pieces of one box.
+  const merges = new Map();
+  const splitsOf = new Map();
   for (let i = 0; i < m; i++) {
     if (used.has(i)) continue;
+    const {scope, groupKey} = prev[i];
+    const j = groupKey !== undefined ? nextKeyed.get(`${scope}\0${groupKey}`) : undefined;
+    if (j === undefined) continue;
+    if (!merges.has(j)) merges.set(j, []);
+    merges.get(j).push(prev[i]);
+  }
+  for (let j = 0; j < n; j++) {
+    const {scope, groupKey} = next[j];
+    if (matches[j] >= 0 || merges.has(j) || groupKey === undefined) continue;
+    const k = keyed.get(`${scope}\0${groupKey}`);
+    if (k === undefined || used.has(k)) continue;
+    if (!splitsOf.has(k)) splitsOf.set(k, []);
+    splitsOf.get(k).push(next[j]);
+  }
+
+  const items = [];
+  // Shown primitives that don't match exit, unless they merge into a drawn one or split into some.
+  for (let i = 0; i < m; i++) {
+    if (used.has(i) || splitsOf.has(i)) continue;
     const p = prev[i];
-    const j = p.groupKey !== undefined ? nextKeyed.get(`${p.scope}\0${p.groupKey}`) : undefined;
-    if (j !== undefined) {
-      const q = next[j];
-      merged.add(j);
-      // Merging marks move with the timing of the mark they merge into, from the new frame.
-      const to = toward(p.attrs, q.attrs);
-      items.push(item(p, "until-end", p.attrs, to, p.ops, opsOf(p, q), timing(q, "update", options)));
-    } else if (!splits(prev, next, i, keyed, matches)) {
-      const exit = {...p.attrs, ...state(p.exit)};
-      items.push(item(p, "until-end", p.attrs, exit, p.ops, p.ops, timing(p, "exit", options)));
+    const {scope, groupKey} = p;
+    if (groupKey !== undefined && merges.has(nextKeyed.get(`${scope}\0${groupKey}`))) continue;
+    const exit = {...p.attrs, ...state(p.exit)};
+    items.push(item(p, "until-end", p.attrs, exit, p.ops, p.ops, timing(p, "exit", options)));
+  }
+  // Merging primitives move with the timing of the primitive they merge into, from the new frame:
+  // into a piece each of its box if they can morph, else into its attributes.
+  for (const [j, sources] of merges) {
+    const q = next[j];
+    const t = timing(q, "update", options);
+    if (morphable(q) && sources.every(morphable)) {
+      const pieces = pack(boxOf(q), sources.length);
+      const ordered = sortByPosition(sources);
+      for (let k = 0; k < ordered.length; k++) {
+        const p = ordered[k];
+        items.push(shift(p, "until-end", p, piece(pieces[k], q), t));
+      }
+    } else {
+      for (const p of sources) {
+        items.push(item(p, "until-end", p.attrs, toward(p.attrs, q.attrs), p.ops, opsOf(p, q), t));
+      }
+    }
+  }
+  // Splitting primitives start from a piece each of the box of the primitive they split from, if
+  // they can morph, else from its attributes.
+  const splitFrom = new Map();
+  for (const [k, targets] of splitsOf) {
+    const p = prev[k];
+    if (morphable(p) && targets.every(morphable)) {
+      const pieces = pack(boxOf(p), targets.length);
+      const ordered = sortByPosition(targets);
+      for (let i = 0; i < ordered.length; i++) splitFrom.set(ordered[i], piece(pieces[i], p));
+    } else {
+      for (const q of targets) splitFrom.set(q, p);
     }
   }
   for (let j = 0; j < n; j++) {
     const q = next[j];
     const i = matches[j];
-    const k = q.groupKey !== undefined ? keyed.get(`${q.scope}\0${q.groupKey}`) : undefined;
+    const t = timing(q, "update", options);
     if (i >= 0) {
       const p = prev[i];
-      items.push(item(q, "always", p.attrs, q.attrs, p.ops, q.ops, timing(q, "update", options)));
-    } else if (merged.has(j)) {
-      items.push(item(q, "at-end", q.attrs, q.attrs, q.ops, q.ops, timing(q, "update", options)));
-    } else if (k !== undefined && !used.has(k)) {
-      const p = prev[k];
-      items.push(
-        item(q, "always", toward(q.attrs, p.attrs), q.attrs, opsOf(q, p), q.ops, timing(q, "update", options)),
-      );
+      // A primitive of another type morphs into the new one, if both can.
+      if (p.type !== q.type && morphable(p) && morphable(q)) items.push(morph(q, "always", p, q, t));
+      else items.push(item(q, "always", p.attrs, q.attrs, p.ops, q.ops, t));
+    } else if (merges.has(j)) {
+      items.push(item(q, "at-end", q.attrs, q.attrs, q.ops, q.ops, t));
+    } else if (splitFrom.has(q)) {
+      const p = splitFrom.get(q);
+      if (prev.includes(p)) items.push(item(q, "always", toward(q.attrs, p.attrs), q.attrs, opsOf(q, p), q.ops, t));
+      else items.push(shift(q, "always", p, q, t));
     } else {
       const enter = {...q.attrs, ...state(q.enter)};
       items.push(item(q, "always", enter, q.attrs, q.ops, q.ops, timing(q, "enter", options)));
@@ -96,15 +143,13 @@ export function diff(prev, next, options) {
   return items;
 }
 
-// Whether a shown primitive is the source of a split, so that it doesn't exit on its own: the first
-// primitive with its key in its scope, and the group key of a drawn primitive that matched nothing.
-function splits(prev, next, i, keyed, matches) {
-  const {scope, key} = prev[i];
-  if (key === undefined || keyed.get(`${scope}\0${key}`) !== i) return false;
-  for (let j = 0; j < next.length; j++) {
-    if (matches[j] < 0 && next[j].scope === scope && next[j].groupKey === key) return true;
+// A primitive moving from one shape to another: by its attributes if they have the same type and
+// aren't transformed, such as a rect into a piece of a bar, else by morphing on the screen.
+function shift(source, show, from, to, t) {
+  if (from.type === to.type && !from.ops.length && !to.ops.length) {
+    return item(source, show, {...to.attrs, ...from.attrs}, to.attrs, [], [], t);
   }
-  return false;
+  return morph(source, show, from, to, t);
 }
 
 // The attributes of a primitive with the values of another where it has them, such as the box of a

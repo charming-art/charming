@@ -5,5 +5,6 @@ export {transitionColors} from "./transition-colors.js";
 export {transitionGroups} from "./transition-groups.js";
 export {transitionInterrupt} from "./transition-interrupt.js";
 export {transitionManyRects} from "./transition-many-rects.js";
+export {transitionMorph} from "./transition-morph.js";
 export {transitionSplitMerge} from "./transition-split-merge.js";
 export {transitionStagger} from "./transition-stagger.js";
