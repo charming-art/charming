@@ -82,10 +82,30 @@ test("cm.plane uses the scale, domain and range of a color descriptor", () => {
   assert.deepStrictEqual(ordinal, ["#fac858", "#5470c6", "#91cc75"]);
 });
 
-test("cm.plane leaves constant colors and numeric colors without a scale unchanged", () => {
+test("cm.plane leaves constant colors unchanged, and maps numeric colors with turbo, like Plot", () => {
   const {fill, stroke} = encoded(genres, {x: "genre", y: "sold", fill: "red", stroke: "sold"});
   assert.deepStrictEqual(fill, ["red", "red", "red"]);
-  assert.deepStrictEqual(stroke, [275, 115, 120]);
+  assert.deepStrictEqual(stroke, [d3.interpolateTurbo(1), d3.interpolateTurbo(0), d3.interpolateTurbo(5 / 160)]);
+});
+
+test("cm.plane maps linear colors with the interpolator of a scheme, case-insensitive", () => {
+  const {fill} = encoded(genres, {x: "genre", y: "sold", fill: {value: "sold", type: "linear", scheme: "piyg"}});
+  assert.deepStrictEqual(fill, [d3.interpolatePiYG(1), d3.interpolatePiYG(0), d3.interpolatePiYG(5 / 160)]);
+});
+
+test("cm.plane maps linear colors through the colors of a range", () => {
+  const {fill} = encoded(genres, {x: "genre", fill: {value: "sold", type: "linear", range: ["white", "red"]}});
+  assert.deepStrictEqual(fill, ["rgb(255, 0, 0)", "rgb(255, 255, 255)", "rgb(255, 247, 247)"]);
+});
+
+test("cm.plane gives missing numeric colors no color", () => {
+  const data = [
+    {k: "a", v: 1},
+    {k: "b", v: null},
+    {k: "c", v: 3},
+  ];
+  const {fill} = encoded(data, {x: "k", fill: "v"});
+  assert.deepStrictEqual(fill, [d3.interpolateTurbo(0), undefined, d3.interpolateTurbo(1)]);
 });
 
 test("cm.plane records the resolved scales and drops the hints", () => {
@@ -354,7 +374,7 @@ function facets(rows, channels, options) {
     .transform(cm.encode, {x: ([key]) => key})
     .transform(cm.spreadX, {padding: 0})
     .transform(cm.plane, {margin: 0})
-    .append(cm.group)
+    .append(cm.g)
     .data(([, values]) => values)
     .transform(cm.encode, channels)
     .transform(cm.plane, options)._values;
@@ -411,7 +431,7 @@ test("cm.plane combines the hinted domains of nested charts", () => {
     .transform(cm.encode, {x: ([key]) => key})
     .transform(cm.spreadX)
     .transform(cm.plane)
-    .append(cm.group)
+    .append(cm.g)
     .data(([, values]) => values)
     .transform(cm.encode, {y: (d) => d})
     .transform(cm.stackY, {chunk: 1, padding: 0})
@@ -427,7 +447,7 @@ test("cm.plane draws a nested chart at a point in a width × height box", () => 
     .data([{x: 1, y: 1, rows: [{v: 1}, {v: 2}]}])
     .transform(cm.encode, {x: "x", y: "y"})
     .transform(cm.plane)
-    .append(cm.group)
+    .append(cm.g)
     .data((d) => d.rows)
     .transform(cm.encode, {y: "v"})
     .transform(cm.plane, {width: 40, height: 20})._values;
@@ -456,7 +476,7 @@ function hinted(hints) {
     .transform(cm.encode, {x: ([key]) => key})
     .transform(cm.spreadX)
     .transform(cm.plane)
-    .append(cm.group)
+    .append(cm.g)
     .data(([, values]) => values)
     .transform(cm.encode, {y: "v"})
     .transform((flow, data) => data.map((d, j) => ({...d, hints: {...d.hints, y: {...d.hints.y, ...hints[j]}}})))

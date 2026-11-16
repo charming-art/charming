@@ -23,7 +23,7 @@ export const visNonFacetedMarks = withSVG(async () => {
           x: {label: null, tickSize: 0, tickPadding: 24},
           y: {label: null, tickSize: 0, tickPadding: 26, tickRotate: -90},
         })
-        .append(cm.group)
+        .append(cm.g)
         .data(([sex, species]) => penguins.filter((d) => d.sex === sex && d.species === species))
         .transform(cm.encode, {x: "culmen_length_mm", y: "culmen_depth_mm"})
         .transform(cm.plane)

@@ -12,7 +12,7 @@ const fields = Array.from({length: cols * rows}, (_, i) => {
 });
 
 function arrow(flow, {length, angle, x, y, rotate, ...options}) {
-  const group = flow.append(cm.group, {x, y, rotate});
+  const group = flow.append(cm.g, {x, y, rotate});
   const halfLengthPos = length.map((d) => d / 2);
   const halfLengthNeg = length.map((d) => -d / 2);
   const anglePos = angle.map((d) => d);

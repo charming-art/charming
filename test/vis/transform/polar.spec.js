@@ -138,7 +138,7 @@ test("cm.polar draws a nested chart in a width × height box around its parent p
     ])
     .transform(cm.encode, {x: "x", y: "y"})
     .transform(cm.plane)
-    .append(cm.group)
+    .append(cm.g)
     .data((d) => d.rows)
     .transform(cm.encode, {x: "n"})
     .transform(cm.stackX)

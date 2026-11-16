@@ -21,7 +21,7 @@ const barX =
     // Axis.
     const axis = flow
       .datum(0)
-      .append(cm.group, {
+      .append(cm.g, {
         x: 0,
         y: height,
       })
@@ -76,7 +76,7 @@ export function terminalBar() {
     (root) => {
       // Bar Chart.
       root
-        .append(cm.group, {x: marginX, y: marginY})
+        .append(cm.g, {x: marginX, y: marginY})
         .data(data)
         .append(
           barX({

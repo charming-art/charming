@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
+  <line x1="54.87179487179488" y1="370" x2="54.87179487179488" y2="376" stroke="currentColor" stroke-width="1"></line>
+  <line x1="129.23076923076923" y1="370" x2="129.23076923076923" y2="376" stroke="currentColor" stroke-width="1"></line>
+  <line x1="203.5897435897436" y1="370" x2="203.5897435897436" y2="376" stroke="currentColor" stroke-width="1"></line>
+  <line x1="277.9487179487179" y1="370" x2="277.9487179487179" y2="376" stroke="currentColor" stroke-width="1"></line>
+  <line x1="352.30769230769226" y1="370" x2="352.30769230769226" y2="376" stroke="currentColor" stroke-width="1"></line>
+  <line x1="426.66666666666663" y1="370" x2="426.66666666666663" y2="376" stroke="currentColor" stroke-width="1"></line>
+  <line x1="501.02564102564105" y1="370" x2="501.02564102564105" y2="376" stroke="currentColor" stroke-width="1"></line>
+  <line x1="575.3846153846154" y1="370" x2="575.3846153846154" y2="376" stroke="currentColor" stroke-width="1"></line>
+  <text x="54.87179487179488" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">−4</text>
+  <text x="129.23076923076923" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">−3</text>
+  <text x="203.5897435897436" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">−2</text>
+  <text x="277.9487179487179" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">−1</text>
+  <text x="352.30769230769226" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0</text>
+  <text x="426.66666666666663" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">1</text>
+  <text x="501.02564102564105" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">2</text>
+  <text x="575.3846153846154" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">3</text>
+  <line x1="40" y1="370" x2="34" y2="370" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="326.73671199011125" x2="34" y2="326.73671199011125" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="283.4734239802225" x2="34" y2="283.4734239802225" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="240.21013597033377" x2="34" y2="240.21013597033377" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="196.94684796044498" x2="34" y2="196.94684796044498" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="153.68355995055623" x2="34" y2="153.68355995055623" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="110.4202719406675" x2="34" y2="110.4202719406675" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="67.15698393077875" x2="34" y2="67.15698393077875" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40" y1="23.893695920889982" x2="34" y2="23.893695920889982" stroke="currentColor" stroke-width="1"></line>
+  <text x="31" y="370" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0</text>
+  <text x="31" y="326.73671199011125" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">100</text>
+  <text x="31" y="283.4734239802225" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">200</text>
+  <text x="31" y="240.21013597033377" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">300</text>
+  <text x="31" y="196.94684796044498" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">400</text>
+  <text x="31" y="153.68355995055623" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">500</text>
+  <text x="31" y="110.4202719406675" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">600</text>
+  <text x="31" y="67.15698393077875" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">700</text>
+  <text x="31" y="23.893695920889982" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">800</text>
+  <text x="3" y="3" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-before-edge" fill="currentColor">↑ Frequency</text>
+  <rect x="40.5" y="369.5673671199011" width="13.871794871794883" height="0.432632880098879"></rect>
+  <rect x="55.37179487179488" y="369.13473423980224" width="13.871794871794883" height="0.865265760197758"></rect>
+  <rect x="85.11538461538461" y="369.13473423980224" width="13.87179487179489" height="0.865265760197758"></rect>
+  <rect x="99.9871794871795" y="367.83683559950555" width="13.871794871794847" height="2.163164400494452"></rect>
+  <rect x="114.85897435897435" y="366.10630407911003" width="13.871794871794876" height="3.893695920889968"></rect>
+  <rect x="129.73076923076923" y="366.10630407911003" width="13.87179487179489" height="3.893695920889968"></rect>
+  <rect x="144.60256410256412" y="361.3473423980223" width="13.871794871794833" height="8.652657601977694"></rect>
+  <rect x="159.47435897435895" y="348.36835599505565" width="13.871794871794918" height="21.63164400494435"></rect>
+  <rect x="174.34615384615387" y="344.04202719406675" width="13.871794871794833" height="25.957972805933252"></rect>
+  <rect x="189.2179487179487" y="328.8998763906057" width="13.87179487179489" height="41.1001236093943"></rect>
+  <rect x="204.0897435897436" y="316.78615574783686" width="13.871794871794862" height="53.21384425216314"></rect>
+  <rect x="218.96153846153845" y="291.2608158220025" width="13.871794871794862" height="78.73918417799752"></rect>
+  <rect x="233.83333333333331" y="267.0333745364648" width="13.87179487179489" height="102.9666254635352"></rect>
+  <rect x="248.7051282051282" y="231.9901112484549" width="13.87179487179489" height="138.0098887515451"></rect>
+  <rect x="263.5769230769231" y="191.32262051915947" width="13.871794871794805" height="178.67737948084053"></rect>
+  <rect x="278.4487179487179" y="146.76143386897402" width="13.871794871794918" height="223.23856613102598"></rect>
+  <rect x="293.3205128205128" y="85.32756489493202" width="13.871794871794862" height="284.67243510506796"></rect>
+  <rect x="308.1923076923077" y="59.36959208899878" width="13.871794871794862" height="310.6304079110012"></rect>
+  <rect x="323.06410256410254" y="32.54635352286772" width="13.871794871794862" height="337.4536464771323"></rect>
+  <rect x="337.9358974358974" y="26.48949320148333" width="13.871794871794862" height="343.51050679851664"></rect>
+  <rect x="352.80769230769226" y="20" width="13.871794871794918" height="350"></rect>
+  <rect x="367.6794871794872" y="58.93695920889988" width="13.871794871794862" height="311.0630407911001"></rect>
+  <rect x="382.55128205128204" y="68.8875154511743" width="13.871794871794862" height="301.1124845488257"></rect>
+  <rect x="397.4230769230769" y="98.30655129789865" width="13.871794871794862" height="271.69344870210136"></rect>
+  <rect x="412.29487179487177" y="125.56242274412854" width="13.871794871794862" height="244.43757725587147"></rect>
+  <rect x="427.16666666666663" y="178.77626699629172" width="13.871794871794918" height="191.22373300370828"></rect>
+  <rect x="442.03846153846155" y="222.03955500618048" width="13.871794871794805" height="147.96044499381952"></rect>
+  <rect x="456.91025641025635" y="255.7849196538937" width="13.871794871794975" height="114.2150803461063"></rect>
+  <rect x="471.7820512820513" y="281.7428924598269" width="13.871794871794805" height="88.25710754017308"></rect>
+  <rect x="486.65384615384613" y="321.9777503090235" width="13.871794871794918" height="48.02224969097648"></rect>
+  <rect x="501.52564102564105" y="332.3609394313968" width="13.871794871794748" height="37.63906056860321"></rect>
+  <rect x="516.3974358974358" y="351.39678615574786" width="13.871794871794918" height="18.60321384425214"></rect>
+  <rect x="531.2692307692307" y="351.39678615574786" width="13.871794871794918" height="18.60321384425214"></rect>
+  <rect x="546.1410256410256" y="358.7515451174289" width="13.871794871794805" height="11.248454882571082"></rect>
+  <rect x="561.0128205128204" y="364.80840543881334" width="13.871794871794918" height="5.191594561186662"></rect>
+  <rect x="575.8846153846154" y="366.10630407911003" width="13.871794871794918" height="3.893695920889968"></rect>
+  <rect x="590.7564102564103" y="369.5673671199011" width="13.871794871794691" height="0.432632880098879"></rect>
+  <rect x="605.628205128205" y="367.83683559950555" width="13.871794871795032" height="2.163164400494452"></rect>
+</svg>

@@ -75,7 +75,7 @@ export function polar(
 
   let boxes;
   if (nested) {
-    boxes = nestedFrames(flow, data.length, {width, height});
+    boxes = nestedFrames(flow, data, {width, height});
   } else {
     const {auto, width: rendererWidth, height: rendererHeight} = renderer._props;
     width ??= auto?.width ? 640 : rendererWidth;

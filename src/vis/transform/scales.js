@@ -1,5 +1,6 @@
 import {InternMap, InternSet, max, min, sort} from "d3-array";
-import {scaleBand, scaleLinear, scalePoint, scaleUtc} from "d3-scale";
+import {scaleBand, scaleLinear, scalePoint, scaleSequential, scaleUtc} from "d3-scale";
+import * as chromatic from "d3-scale-chromatic";
 import {discrete, domainOf} from "../../core/transform/scale.js";
 import {isColor} from "../color.js";
 import {seriesOf} from "./series.js";
@@ -35,14 +36,32 @@ export function resolve({type, domain, range}) {
   return {type: s, domain, range: s.range()};
 }
 
-// The scales of the hinted color channels, categorical by default.
+// The interpolators of d3-scale-chromatic by scheme name, case-insensitive like Plot's schemes.
+const interpolators = new Map(
+  Object.entries(chromatic)
+    .filter(([name]) => name.startsWith("interpolate"))
+    .map(([name, interpolate]) => [name.slice("interpolate".length).toLowerCase(), interpolate]),
+);
+
+function interpolatorOf(scheme) {
+  const interpolate = interpolators.get(`${scheme}`.toLowerCase());
+  if (!interpolate) throw new Error(`Unknown scheme: ${scheme}.`);
+  return interpolate;
+}
+
+// The scales of the hinted color channels: categorical by default, and sequential for numbers or
+// a linear type, like Plot, through the scheme's interpolator ("turbo" by default) or the range's
+// colors. Missing numbers have no color.
 export function colorScales(value, hints) {
   const scales = {};
   for (const key of colorKeys) {
     if (!(key in hints) || !(key in value)) continue;
-    const {type, domain, range} = hints[key];
+    const {type, domain, range, scheme = "turbo"} = hints[key];
     const V = value[key];
-    if (type === undefined && domain === undefined && range === undefined && (isNumeric(V) || isIdentity(V))) {
+    if (type === undefined && domain === undefined && range === undefined && isIdentity(V)) continue;
+    if (type === "linear" || (type === undefined && isNumeric(V))) {
+      const sequential = range === undefined ? scaleSequential(interpolatorOf(scheme)) : scaleLinear();
+      scales[key] = {type: sequential, domain: domain ?? [min(V), max(V)], range};
       continue;
     }
     const ordinal = type === undefined || type === "ordinal";
@@ -143,7 +162,7 @@ export function withSeries(context) {
   return Z ? {...context, value: {...value, z: Z}} : context;
 }
 
-// Whether a flow is nested in a mark, such as flow.append(cm.group).data((d) => d.rows), rather
+// Whether a flow is nested in a mark, such as flow.append(cm.g).data((d) => d.rows), rather
 // than at the root of the chart.
 export function isNested(flow) {
   return flow._parent !== flow._context.root;
@@ -190,14 +209,20 @@ function parentRows(flow, n) {
   return rows;
 }
 
+// Whether a context has no rows, such as a facet without data.
+function isEmptyContext({I, group = []}) {
+  return (I ?? group).length === 0;
+}
+
 // The frames of the contexts of a nested flow, in the coordinates of their parent rows, which
 // they're drawn at. Along each axis, a parent row with an extent, such as a band, gives the
 // frame its extent, as a facet's cell; a row at a point gives a frame of the given size around
 // it, as a glyph; and an axis the parent doesn't encode gives the parent's frame. A polar parent
 // places its rows at their screen points, so they're glyphs. Every frame is marked nested, so that
-// axes leave their titles to the outer chart; the cells of a grid also record the edges they label.
-export function nestedFrames(flow, n, {width = 40, height = 40} = {}) {
-  const boxes = parentRows(flow, n).map(([{value = {}, context = {}}, k]) => {
+// axes leave their titles to the outer chart, and empty if it has no rows, so that it draws no
+// axes; the cells of a grid also record the edges they label.
+export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
+  const boxes = parentRows(flow, data.length).map(([{value = {}, context = {}}, k]) => {
     const {x: X = [], x1: X1, y: Y = [], y1: Y1} = value;
     const {frame: parent, scales = {}} = context;
     const tx = X[k] ?? 0;
@@ -218,12 +243,17 @@ export function nestedFrames(flow, n, {width = 40, height = 40} = {}) {
     // A cell of a grid has an extent, such as a band; a glyph at a point labels its own axes.
     return {box: [left, right, top, bottom], tx, ty, cell: !!(X1 || Y1)};
   });
-  // Facets in a grid: the bottom cell of each column labels x, and the left cell of each row labels
-  // y, even if the grid has empty cells, such as the days before the first of a month.
+  // Facets in a grid: the bottom (or top) cell of each column labels x, and the left (or right)
+  // cell of each row labels y, by the anchor of the axis. Like Plot, cells without rows are
+  // skipped, as they draw no axes, so an edge falls on the nearest cell with rows; and cells
+  // missing from the grid, such as the days before the first of a month, don't count.
+  const filled = boxes.filter((_, j) => !isEmptyContext(data[j]));
   const same = (a, b) => Math.abs(a - b) < 1e-6;
-  const isBottom = ({box: [l, , , b]}) => boxes.every(({box}) => !same(box[0], l) || box[3] <= b + 1e-6);
-  const isLeft = ({box: [l, , t]}) => boxes.every(({box}) => !same(box[2], t) || box[0] >= l - 1e-6);
-  return boxes.map((frame) => {
+  const isBottom = ({box: [l, , , b]}) => filled.every(({box}) => !same(box[0], l) || box[3] <= b + 1e-6);
+  const isTop = ({box: [l, , t]}) => filled.every(({box}) => !same(box[0], l) || box[2] >= t - 1e-6);
+  const isLeft = ({box: [l, , t]}) => filled.every(({box}) => !same(box[2], t) || box[0] >= l - 1e-6);
+  const isRight = ({box: [, r, t]}) => filled.every(({box}) => !same(box[2], t) || box[1] <= r + 1e-6);
+  return boxes.map((frame, j) => {
     const {
       box: [l, r, t, b],
       tx,
@@ -236,7 +266,10 @@ export function nestedFrames(flow, n, {width = 40, height = 40} = {}) {
       top: t - ty,
       bottom: b - ty,
       nested: true,
-      ...(cell && {edges: {bottom: isBottom(frame), left: isLeft(frame)}}),
+      ...(isEmptyContext(data[j]) && {empty: true}),
+      ...(cell && {
+        edges: {top: isTop(frame), right: isRight(frame), bottom: isBottom(frame), left: isLeft(frame)},
+      }),
     };
   });
 }

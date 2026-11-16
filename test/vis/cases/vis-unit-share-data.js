@@ -16,7 +16,7 @@ export const visUnitShareData = withSVG(async () => {
         .transform(cm.spreadX, {padding: 0.1})
         .transform(cm.plane)
         .add(cm.axisX, {label: "pclass"})
-        .append(cm.group)
+        .append(cm.g)
         .data(([, rows]) => rows)
         .transform(cm.encode, {fill: {value: (d) => (d.survived ? "Yes" : "No"), domain: ["Yes", "No"]}})
         .transform(cm.plane)
