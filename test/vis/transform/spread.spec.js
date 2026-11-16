@@ -347,3 +347,24 @@ test("cm.spreadX sorts its categories by a channel of strings too", () => {
   assert.deepStrictEqual(bands(contexts(data, {x: "k", y: "name"}, {sort: "y"})), ["b", "c", "a"]);
   assert.deepStrictEqual(bands(contexts(data, {x: "k", y: "name"}, {sort: "-y"})), ["a", "c", "b"]);
 });
+
+test("cm.spreadX ignores missing and invalid values of the channel it sorts by, and puts categories without any last", () => {
+  const sorted = (data) => bands(contexts(data, {x: "k", y: "v"}, {sort: "y"}));
+  const rows = [
+    {k: "a", v: NaN},
+    {k: "a", v: 5},
+    {k: "b", v: 1},
+  ];
+  // The max of a is 5 in either order of its rows.
+  assert.deepStrictEqual(sorted(rows), ["b", "a"]);
+  assert.deepStrictEqual(sorted([rows[1], rows[0], rows[2]]), ["b", "a"]);
+  // c has only null, and d only an invalid date, so they go last, in either direction.
+  const missing = [
+    {k: "c", v: null},
+    {k: "a", v: 2},
+    {k: "d", v: new Date(NaN)},
+    {k: "b", v: 1},
+  ];
+  assert.deepStrictEqual(sorted(missing), ["b", "a", "c", "d"]);
+  assert.deepStrictEqual(bands(contexts(missing, {x: "k", y: "v"}, {sort: "-y"})), ["a", "b", "c", "d"]);
+});
