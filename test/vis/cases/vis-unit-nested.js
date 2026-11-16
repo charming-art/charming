@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as cm from "../../../src/index.js";
 import {renderFlow, withSVG} from "../../helpers.js";
-import {dot, titanic} from "./titanic.js";
+import {titanic} from "./titanic.js";
 
 // G2's nested unit chart (https://g2.antv.antgroup.com/en/examples/unit/unit/nested/): the
 // passengers by class, then by survival, then by sex, each level a chart nested in the bands of the
@@ -40,7 +40,7 @@ export const visUnitNested = withSVG(async () => {
         .transform(cm.plane)
         .transform(cm.pack)
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
-        .add(cm.circle, dot);
+        .add(cm.circle, cm.inset("7.5%"));
     },
     {width: 640, height: 640},
   );

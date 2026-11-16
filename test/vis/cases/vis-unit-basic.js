@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as cm from "../../../src/index.js";
 import {renderFlow, withSVG} from "../../helpers.js";
-import {dot, titanic} from "./titanic.js";
+import {titanic} from "./titanic.js";
 
 // G2's basic unit chart (https://g2.antv.antgroup.com/en/examples/unit/unit/basic/): one panel per
 // class, each a chart nested in its band, whose passengers are packed into a grid, colored by
@@ -22,7 +22,7 @@ export const visUnitBasic = withSVG(async () => {
         .transform(cm.plane)
         .transform(cm.pack)
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
-        .add(cm.circle, dot);
+        .add(cm.circle, cm.inset("7.5%"));
     },
     {width: 640, height: 400},
   );

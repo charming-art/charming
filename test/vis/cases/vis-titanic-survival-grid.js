@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as cm from "../../../src/index.js";
 import {renderFlow, withSVG} from "../../helpers.js";
-import {dot, titanic} from "./titanic.js";
+import {titanic} from "./titanic.js";
 
 // GoFish's Titanic survival unit grid (https://gofish.graphics/js/examples/titanic-survival-unit-grid):
 // the passengers by class and sex, each cell a chart nested in the bands of the grid, its
@@ -35,7 +35,7 @@ export const visTitanicSurvivalGrid = withSVG(async () => {
         .transform(cm.plane)
         .transform(cm.pack)
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
-        .add(cm.circle, dot);
+        .add(cm.circle, cm.inset("7.5%"));
     },
     {width: 640, height: 480},
   );

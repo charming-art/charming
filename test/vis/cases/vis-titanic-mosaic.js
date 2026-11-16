@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as cm from "../../../src/index.js";
 import {renderFlow, withSVG} from "../../helpers.js";
-import {dot, titanic} from "./titanic.js";
+import {titanic} from "./titanic.js";
 
 // GoFish's Titanic unit mosaic (https://gofish.graphics/js/examples/titanic-unit-mosaic), the
 // headline chart of Atom: class rows, sex rows within them, and survival columns within those,
@@ -36,7 +36,7 @@ export const visTitanicMosaic = withSVG(async () => {
         .transform(cm.plane)
         .transform(cm.pack)
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
-        .add(cm.circle, dot);
+        .add(cm.circle, cm.inset("7.5%"));
     },
     {width: 640, height: 480},
   );

@@ -1,7 +1,6 @@
 import * as d3 from "d3";
 import * as cm from "../../../src/index.js";
 import {renderFlow, withSVG} from "../../helpers.js";
-import {dot} from "./titanic.js";
 
 // G2's 2d unit chart (https://g2.antv.antgroup.com/en/examples/unit/unit/2d/): the passengers and
 // crew of the Titanic by class and sex, each cell a chart nested in the bands of the grid, its
@@ -33,7 +32,7 @@ export const visUnit2d = withSVG(async () => {
         .transform(cm.plane)
         .transform(cm.pack)
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
-        .add(cm.circle, dot);
+        .add(cm.circle, cm.inset("7.5%"));
     },
     {width: 640, height: 400},
   );
