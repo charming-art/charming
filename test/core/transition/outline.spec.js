@@ -99,3 +99,42 @@ test("pathOf(points, closed) gives the d of a path through the points", () => {
   assert.strictEqual(pathOf(points, true), "M0,0L1,2Z");
   assert.strictEqual(pathOf(points, false), "M0,0L1,2");
 });
+
+test("outlineOf(primitive) matches the renderers: points have a radius of 1, triangles and lines turn", () => {
+  const point = outlineOf({type: "point", attrs: {x: 0, y: 0}});
+  for (const [x, y] of point.points) assertInDelta(Math.hypot(x, y), 1);
+  // A triangle turns around the origin.
+  const triangle = outlineOf({type: "triangle", attrs: {x: 1, y: 0, x1: 2, y1: 0, x2: 1, y2: 1, rotate: Math.PI / 2}});
+  assertInDelta(triangle.points[0][0], 0);
+  assertInDelta(triangle.points[0][1], 1);
+  // A line turns around its start by default, or its center or end.
+  const line = (transformOrigin) =>
+    outlineOf({type: "line", attrs: {x: 0, y: 0, x1: 2, y1: 0, rotate: Math.PI / 2, transformOrigin}}).points;
+  const [, end] = line();
+  assertInDelta(end[0], 0);
+  assertInDelta(end[1], 2);
+  const [start] = line("end");
+  assertInDelta(start[0], 2);
+  assertInDelta(start[1], -2);
+});
+
+test("outlineOf(primitive) keeps whether the outline of a morphing primitive is closed", () => {
+  const points = [
+    [0, 0],
+    [1, 0],
+  ];
+  assert.strictEqual(outlineOf({type: "path", attrs: {}, points, closed: false}).closed, false);
+  assert.strictEqual(outlineOf({type: "path", attrs: {}, points}).closed, true);
+});
+
+test("align(a, b) also lines up an outline wound the other way", () => {
+  const a = [
+    [0, 0],
+    [1, 0],
+    [1, 1],
+    [0, 1],
+  ];
+  // The same square, counterclockwise.
+  const b = [a[0], a[3], a[2], a[1]];
+  assert.deepStrictEqual(align(a, b), a);
+});

@@ -1,24 +1,35 @@
 // The points of the outline of a primitive, in the coordinates it's drawn in, and whether it's
 // closed: the corners of a rect, points along a circle, the vertices of a triangle or polygon, or
-// the ends of a line. Other primitives, such as paths and texts, have no outline, so they don't
-// morph. A primitive caught in the middle of a morph keeps its points.
-export function outlineOf({type, attrs, points}) {
-  if (points) return {points, closed: true};
-  const {x = 0, y = 0} = attrs;
+// the ends of a line, turned as the renderers turn them. Other primitives, such as paths and texts,
+// have no outline, so they don't morph. A primitive caught in the middle of a morph keeps its points,
+// and whether they're closed.
+export function outlineOf({type, attrs, points, closed = true}) {
+  if (points) return {points, closed};
+  const {x = 0, y = 0, rotate} = attrs;
   if (type === "rect") return rect(attrs);
   if (type === "circle") return circle(x, y, attrs.r ?? 0);
-  if (type === "point") return circle(x, y, 0.5);
-  if (type === "triangle") return polygon([x, attrs.x1, attrs.x2], [y, attrs.y1, attrs.y2]);
+  // The renderers draw a point as a circle with a radius of 1.
+  if (type === "point") return circle(x, y, 1);
+  if (type === "triangle") {
+    const outline = polygon([x, attrs.x1, attrs.x2], [y, attrs.y1, attrs.y2]);
+    // A triangle turns around the origin.
+    return rotate ? {points: turn(outline.points, rotate, 0, 0), closed: true} : outline;
+  }
   if (type === "polygon") return polygon(attrs.x, attrs.y);
-  if (type === "line")
-    return {
-      points: [
-        [x, y],
-        [attrs.x1 ?? x, attrs.y1 ?? y],
-      ],
-      closed: false,
-    };
+  if (type === "line") return line(attrs);
   return null;
+}
+
+// A line turns around its start, center or end, as its transformOrigin says.
+function line({x = 0, y = 0, x1 = x, y1 = y, rotate, transformOrigin = "start"}) {
+  const points = [
+    [x, y],
+    [x1, y1],
+  ];
+  if (!rotate) return {points, closed: false};
+  const [cx, cy] =
+    transformOrigin === "center" ? [(x + x1) / 2, (y + y1) / 2] : transformOrigin === "end" ? [x1, y1] : [x, y];
+  return {points: turn(points, rotate, cx, cy), closed: false};
 }
 
 function rect({x = 0, y = 0, width = 0, height = 0, rotate, anchor}) {
@@ -114,25 +125,28 @@ export function resample(points, closed, n) {
   return resampled;
 }
 
-// The outline b turned to start at the point that best lines up with a, so that a morph doesn't
-// twist: the offset with the smallest sum of squared distances.
+// The outline b turned to start at the point that best lines up with a, and wound the same way, so
+// that a morph doesn't twist or turn inside out: the offset, in either direction, with the smallest
+// sum of squared distances.
 export function align(a, b) {
   const n = a.length;
-  let best = 0;
+  let best = b;
   let min = Infinity;
-  for (let k = 0; k < n; k++) {
-    let sum = 0;
-    for (let i = 0; i < n && sum < min; i++) {
-      const [ax, ay] = a[i];
-      const [bx, by] = b[(i + k) % n];
-      sum += (ax - bx) ** 2 + (ay - by) ** 2;
-    }
-    if (sum < min) {
-      min = sum;
-      best = k;
+  for (const c of [b, b.slice().reverse()]) {
+    for (let k = 0; k < n; k++) {
+      let sum = 0;
+      for (let i = 0; i < n && sum < min; i++) {
+        const [ax, ay] = a[i];
+        const [cx, cy] = c[(i + k) % n];
+        sum += (ax - cx) ** 2 + (ay - cy) ** 2;
+      }
+      if (sum < min) {
+        min = sum;
+        best = k ? c.slice(k).concat(c.slice(0, k)) : c;
+      }
     }
   }
-  return best ? b.slice(best).concat(b.slice(0, best)) : b;
+  return best;
 }
 
 // The d of a path through points.

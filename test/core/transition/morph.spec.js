@@ -128,3 +128,29 @@ test("marks of the same type still interpolate their attributes", () => {
   assert.deepStrictEqual(names(renderer), ["rect"]);
   assert.strictEqual(+renderer.node().querySelector("rect").getAttribute("x"), 50);
 });
+
+test("a morph paints like the shapes: black when they have no fill, and a point's black stroke", () => {
+  const [root, renderer] = chart();
+  root.append(cm.rect, {x: 0, y: 0, width: 40, height: 40, key: "a"});
+  root.render();
+  root.append(cm.point, {x: 100, y: 100, key: "a"});
+  root.render();
+  vi.advanceTimersByTime(80);
+  const path = renderer.node().querySelector("path");
+  assert.strictEqual(path.getAttribute("fill"), "black");
+  // The rect has no stroke, so the point's stroke fades in.
+  assert.strictEqual(path.getAttribute("stroke"), "#000");
+  assert.strictEqual(+path.getAttribute("stroke-opacity"), 0.5);
+});
+
+test("pieces of a rect with an anchor or a rotation morph rather than interpolate", () => {
+  const [root, renderer] = chart();
+  root.data([0]).append(cm.rect, {x: 30, y: 30, width: 60, height: 60, key: "A"});
+  root.render();
+  root
+    .data([0, 1])
+    .append(cm.rect, {x: (d) => 50 + d * 100, y: 150, width: 20, height: 20, anchor: "center", groupKey: "A"});
+  root.render();
+  vi.advanceTimersByTime(80);
+  assert.deepStrictEqual(names(renderer), ["path", "path"]);
+});

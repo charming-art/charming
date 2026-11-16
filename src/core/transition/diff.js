@@ -149,12 +149,19 @@ export function diff(prev, next, options) {
 }
 
 // A primitive moving from one shape to another: by its attributes if they have the same type and
-// aren't transformed, such as a rect into a piece of a bar, else by morphing on the screen.
+// aren't transformed, anchored or turned, such as a rect into a piece of a bar, else by morphing on
+// the screen.
 function shift(source, show, from, to, t) {
-  if (from.type === to.type && !from.ops.length && !to.ops.length) {
+  if (from.type === to.type && plain(from) && plain(to)) {
     return item(source, show, {...to.attrs, ...from.attrs}, to.attrs, [], [], t);
   }
   return morph(source, show, from, to, t);
+}
+
+// Whether a primitive is drawn where its attributes say: not in a group that's moved or turned, and
+// not anchored at its center or turned itself.
+function plain({ops, attrs}) {
+  return !ops.length && !attrs.rotate && (attrs.anchor === undefined || attrs.anchor === "start");
 }
 
 // The attributes of a primitive with the values of another where it has them, such as the box of a

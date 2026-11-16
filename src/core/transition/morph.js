@@ -2,11 +2,18 @@ import {interpolateAttrs} from "./interpolate.js";
 import {align, lengthOf, outlineOf, pathOf, project, resample} from "./outline.js";
 
 // The attributes that paint a morphing primitive; its geometry morphs as an outline.
-const paints = ["fill", "stroke", "fillOpacity", "strokeOpacity", "strokeWidth"];
+const paints = ["fill", "stroke", "fillOpacity", "strokeOpacity", "strokeWidth", "strokeCap", "strokeJoin"];
 
-function paintOf(attrs) {
+// The primitives that the renderers fill black without a fill, unlike a path, which they don't.
+const filled = new Set(["rect", "circle", "point", "triangle", "polygon"]);
+
+// The paint of a primitive, with the defaults its renderers draw it with, so that the path of a
+// morph looks like the shapes at its ends: black without a fill, and a point's black stroke.
+function paintOf({type, attrs}) {
   const paint = {};
   for (const key of paints) if (attrs[key] !== undefined) paint[key] = attrs[key];
+  if (paint.fill === undefined) paint.fill = filled.has(type) ? "black" : "none";
+  if (type === "point" && paint.stroke === undefined) paint.stroke = "#000";
   return paint;
 }
 
@@ -51,9 +58,31 @@ export function pack([x0, y0, x1, y1], count) {
   return pieces;
 }
 
+// The paint at both ends of a morph, where a fill or stroke that only one end has is given to the
+// other end transparent, so that it fades in or out rather than appearing at the end.
+function fade(from, to) {
+  from = {...from};
+  to = {...to};
+  for (const [key, opacity] of [
+    ["fill", "fillOpacity"],
+    ["stroke", "strokeOpacity"],
+  ]) {
+    const a = from[key] === undefined || from[key] === "none";
+    const b = to[key] === undefined || to[key] === "none";
+    if (a && !b) {
+      from[key] = to[key];
+      from[opacity] = 0;
+    } else if (b && !a) {
+      to[key] = from[key];
+      to[opacity] = 0;
+    }
+  }
+  return [from, to];
+}
+
 // A piece of a box as a rect, painted like a primitive.
-export function piece([x, y, width, height], {attrs}) {
-  return {type: "rect", attrs: {x, y, width, height, ...paintOf(attrs)}, ops: []};
+export function piece([x, y, width, height], primitive) {
+  return {type: "rect", attrs: {x, y, width, height, ...paintOf(primitive)}, ops: []};
 }
 
 // Primitives in the order of their positions, top to bottom, then left to right, so that they take
@@ -84,7 +113,7 @@ export function morph(source, show, from, to, {delay, duration, ease}) {
   const n = Math.max(16, Math.min(64, Math.round(length / 4)));
   const A = resample(a.points, a.closed, n);
   const B = closed ? align(A, resample(b.points, b.closed, n)) : resample(b.points, b.closed, n);
-  const paint = interpolateAttrs(paintOf(from.attrs), paintOf(to.attrs));
+  const paint = interpolateAttrs(...fade(paintOf(from), paintOf(to)));
   const local = (elapsed) =>
     duration > 0 ? Math.max(0, Math.min(1, (elapsed - delay) / duration)) : +(elapsed >= delay);
   return {
@@ -95,8 +124,9 @@ export function morph(source, show, from, to, {delay, duration, ease}) {
       if (t >= 1) return {...source, type: to.type, attrs: to.attrs, ops: to.ops};
       const e = ease(t);
       const points = A.map(([x, y], i) => [x + (B[i][0] - x) * e, y + (B[i][1] - y) * e]);
-      // The points are kept, so that a render during the morph starts from the shape as shown.
-      return {...source, type: "path", attrs: {...paint(e), d: pathOf(points, closed)}, ops: [], points};
+      // The points are kept, and whether they're closed, so that a render during the morph starts
+      // from the shape as shown.
+      return {...source, type: "path", attrs: {...paint(e), d: pathOf(points, closed)}, ops: [], points, closed};
     },
   };
 }
