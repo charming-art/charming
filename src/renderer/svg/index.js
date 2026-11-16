@@ -11,6 +11,7 @@ import {svg$polygon} from "./polygon.js";
 import {svg$text} from "./text.js";
 import {svg$clear} from "./clear.js";
 import {svg$erase} from "./erase.js";
+import {svg$render} from "./render.js";
 import {svg$rotate} from "./rotate.js";
 import {svg$save} from "./save.js";
 import {svg$restore} from "./restore.js";
@@ -21,6 +22,7 @@ function SVG() {
     _node: {value: null, writable: true},
     _group: {value: null, writable: true},
     _stack: {value: null, writable: true},
+    _cursors: {value: null, writable: true},
     _props: {value: {}, writable: true},
   });
 }
@@ -38,6 +40,7 @@ Object.defineProperties(SVG.prototype, {
   text: {value: svg$text},
   clear: {value: svg$clear},
   erase: {value: svg$erase},
+  render: {value: svg$render},
   translate: {value: svg$translate},
   rotate: {value: svg$rotate},
   save: {value: svg$save},

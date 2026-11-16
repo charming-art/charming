@@ -40,6 +40,6 @@ export function svg$text({
     // Like Canvas, a stroked text is only filled if a fill is given.
     ...paint({fill: fill ?? (stroke ? "none" : undefined), stroke, ...options}),
   });
-  node.textContent = text;
+  if (node.textContent !== `${text ?? ""}`) node.textContent = text;
   return this;
 }

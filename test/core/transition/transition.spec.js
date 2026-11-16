@@ -218,3 +218,15 @@ test("transitions draw on Canvas too, and other renderers throw an error", () =>
   terminal.data([0]).append(cm.rect, {x: 0, y: 0, width: 1, height: 1});
   assert.throws(() => terminal.render(), /only support the SVG and Canvas renderers/);
 });
+
+test("transitions on SVG update the same elements from frame to frame", () => {
+  const [root, renderer] = chart();
+  bars(root, [{id: "a", value: 50}]);
+  const rect = renderer.node().querySelector("rect");
+  bars(root, [{id: "a", value: 100}]);
+  vi.advanceTimersByTime(80);
+  assert.strictEqual(renderer.node().querySelector("rect"), rect);
+  vi.advanceTimersByTime(96);
+  assert.strictEqual(renderer.node().querySelector("rect"), rect);
+  assert.deepStrictEqual(rects(renderer), [[0, 100, 20, 100]]);
+});
