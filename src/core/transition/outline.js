@@ -91,16 +91,18 @@ export function resample(points, closed, n) {
   if (!count) return Array.from({length: n}, () => [0, 0]);
   if (!length) return Array.from({length: n}, () => points[0].slice());
   const step = length / (closed ? n : n - 1);
+  // A closed outline has a segment back to its first point.
+  const segments = closed ? count : count - 1;
   const resampled = [];
   let segment = 0;
   let start = 0;
   for (let k = 0; k < n; k++) {
     const target = k * step;
-    while (segment < count - 1 + closed) {
+    while (segment < segments) {
       const [x0, y0] = points[segment];
       const [x1, y1] = points[(segment + 1) % count];
       const l = Math.hypot(x1 - x0, y1 - y0);
-      if (start + l >= target || segment === count - 2 + closed) {
+      if (start + l >= target || segment === segments - 1) {
         const t = l ? Math.min(1, (target - start) / l) : 0;
         resampled.push([x0 + (x1 - x0) * t, y0 + (y1 - y0) * t]);
         break;

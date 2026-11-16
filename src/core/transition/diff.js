@@ -110,12 +110,17 @@ export function diff(prev, next, options) {
   // Splitting primitives start from a piece each of the box of the primitive they split from, if
   // they can morph, else from its attributes.
   const splitFrom = new Map();
+  const pieces = new Set();
   for (const [k, targets] of splitsOf) {
     const p = prev[k];
     if (morphable(p) && targets.every(morphable)) {
-      const pieces = pack(boxOf(p), targets.length);
+      const boxes = pack(boxOf(p), targets.length);
       const ordered = sortByPosition(targets);
-      for (let i = 0; i < ordered.length; i++) splitFrom.set(ordered[i], piece(pieces[i], p));
+      for (let i = 0; i < ordered.length; i++) {
+        const from = piece(boxes[i], p);
+        pieces.add(from);
+        splitFrom.set(ordered[i], from);
+      }
     } else {
       for (const q of targets) splitFrom.set(q, p);
     }
@@ -133,8 +138,8 @@ export function diff(prev, next, options) {
       items.push(item(q, "at-end", q.attrs, q.attrs, q.ops, q.ops, t));
     } else if (splitFrom.has(q)) {
       const p = splitFrom.get(q);
-      if (prev.includes(p)) items.push(item(q, "always", toward(q.attrs, p.attrs), q.attrs, opsOf(q, p), q.ops, t));
-      else items.push(shift(q, "always", p, q, t));
+      if (pieces.has(p)) items.push(shift(q, "always", p, q, t));
+      else items.push(item(q, "always", toward(q.attrs, p.attrs), q.attrs, opsOf(q, p), q.ops, t));
     } else {
       const enter = {...q.attrs, ...state(q.enter)};
       items.push(item(q, "always", enter, q.attrs, q.ops, q.ops, timing(q, "enter", options)));
