@@ -27,7 +27,9 @@ export function animate(state, renderer, next, options) {
   const prev = state.shown?.(start);
   state.stop?.();
   const items = prev ? diff(prev, next, options) : next.map((p) => ({end: 0, at: () => p}));
-  const end = Math.max(0, ...items.map((item) => item.end));
+  // The end of the last item, in a loop rather than spread into Math.max, for large scenes.
+  let end = 0;
+  for (const item of items) if (item.end > end) end = item.end;
   state.shown = (time) => items.map((item) => item.at(time - start)).filter((p) => p);
   let done;
   let id;

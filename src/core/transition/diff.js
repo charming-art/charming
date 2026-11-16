@@ -38,11 +38,10 @@ export function diff(prev, next, options) {
   };
   const matches = new Array(n);
   for (let j = 0; j < n; j++) {
-    const {path, key, groupKey, datum, position} = next[j];
+    const {path, key, datum, position} = next[j];
     let i = -1;
     if (key !== undefined) i = take(byKey.get(`${path}\0${key}`));
-    // A primitive whose group is shown splits from it rather than matching otherwise.
-    else if (groupKey === undefined || !keyed.has(groupKey)) {
+    else {
       if (datum) i = take(byDatum.get(path)?.get(datum));
       if (i < 0) i = take(byPosition.get(`${path}\0${position}`));
     }
@@ -65,9 +64,9 @@ export function diff(prev, next, options) {
     if (j !== undefined) {
       const q = next[j];
       merged.add(j);
-      items.push(
-        item(p, "until-end", p.attrs, toward(p.attrs, q.attrs), p.ops, opsOf(p, q), timing(p, "update", options)),
-      );
+      // Merging marks move with the timing of the mark they merge into, from the new frame.
+      const to = toward(p.attrs, q.attrs);
+      items.push(item(p, "until-end", p.attrs, to, p.ops, opsOf(p, q), timing(q, "update", options)));
     } else if (!splits(next, p, matches)) {
       const exit = {...p.attrs, ...state(p.exit)};
       items.push(item(p, "until-end", p.attrs, exit, p.ops, p.ops, timing(p, "exit", options)));

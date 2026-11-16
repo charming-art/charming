@@ -230,3 +230,24 @@ test("transitions on SVG update the same elements from frame to frame", () => {
   assert.strictEqual(renderer.node().querySelector("rect"), rect);
   assert.deepStrictEqual(rects(renderer), [[0, 100, 20, 100]]);
 });
+
+test("marks with a group key whose group mark stays match themselves rather than entering again", () => {
+  const [root, renderer] = chart();
+  const draw = (y) => {
+    root.data([0]).append(cm.rect, {x: 0, y: 0, width: 90, height: 30, key: "A"});
+    root.data([0, 1]).append(cm.rect, {x: (d) => d * 60, y, width: 20, height: 30, groupKey: "A"});
+    root.render();
+  };
+  draw(100);
+  draw(140);
+  vi.advanceTimersByTime(80);
+  // The parts move from 100 to 140, without fading in.
+  const parts = Array.from(renderer.node().querySelectorAll("rect")).slice(1);
+  assert.deepStrictEqual(
+    parts.map((r) => [+r.getAttribute("y"), r.getAttribute("fill-opacity")]),
+    [
+      [120, null],
+      [120, null],
+    ],
+  );
+});

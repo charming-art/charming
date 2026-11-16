@@ -10,6 +10,8 @@ const defaults = {fillOpacity: 1, strokeOpacity: 1};
 export function interpolateAttrs(from, to) {
   const keys = new Set([...Object.keys(from), ...Object.keys(to)]);
   const fns = Array.from(keys, (key) => {
+    // An attribute neither gives stays unset, as without transitions.
+    if (from[key] === undefined && to[key] === undefined) return [key, () => undefined];
     const a = from[key] ?? defaults[key];
     const b = to[key] ?? defaults[key];
     if (typeof a === "number" && typeof b === "number") return [key, (t) => a + (b - a) * t];
