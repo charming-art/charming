@@ -116,8 +116,6 @@ export function plane(
   // is shared with the contexts whose positions use the same scale: the axis, by default, or a name
   // given to it, such as x: {value: "culmen_length_mm", scale: "length"}. The options apply to the
   // scale named after the axis, and resolve takes any name, such as {x: "independent"}.
-  const allX = allKeysOf(data, keysX, "x");
-  const allY = allKeysOf(data, keysY, "y");
   const colors = colorScales(merge(data, ["fill", "stroke"]), data[0]?.hints ?? {});
   const independent = (name) => resolution[name] === "independent";
   const sharedOf = (keys, axis, type, domain) =>
@@ -141,6 +139,9 @@ export function plane(
 
   return data.map((context, j) => {
     const {value, hints = {}} = context;
+    // The channels of this context's scales: its positions, and the channels that join them here.
+    const ownKeysX = keysOf(value, hints, keysX, "x");
+    const ownKeysY = keysOf(value, hints, keysY, "y");
     const frame = frames[j];
     const rangeX = [frame.left, frame.right];
     const rangeY = [frame.top, frame.bottom];
@@ -155,13 +156,13 @@ export function plane(
     const [ownX, ownY] = [nameX === "x", nameY === "y"];
     const x =
       sharedX.get(nameX) ||
-      positionScale(value, allX, {
+      positionScale(value, ownKeysX, {
         type: (ownX ? typeX : undefined) ?? hintX.type,
         domain: (ownX ? domainX : undefined) ?? hintX.domain,
       });
     const y =
       sharedY.get(nameY) ||
-      positionScale(value, allY, {
+      positionScale(value, ownKeysY, {
         type: (ownY ? typeY : undefined) ?? hintY.type,
         domain: (ownY ? domainY : undefined) ?? hintY.domain,
       });
@@ -169,8 +170,8 @@ export function plane(
     // Colors are categorical by default, and positions are discrete points by default.
     const [colored] = scale(flow, [context], scaleDescriptors(colors));
     const descriptors = {};
-    for (const key of allX) if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX};
-    for (const key of allY) if (key in value) descriptors[key] = {scale: y.type, domain: y.domain, range: rangeY};
+    for (const key of ownKeysX) if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX};
+    for (const key of ownKeysY) if (key in value) descriptors[key] = {scale: y.type, domain: y.domain, range: rangeY};
     const [scaled] = scale(flow, [colored], descriptors, point);
 
     const scales = {...context.scales};
@@ -178,16 +179,16 @@ export function plane(
     const recordX = callable(labeled(positionRecord(x, rangeX, hintX), hintX));
     const recordY = callable(labeled(positionRecord(y, rangeY, hintY), hintY));
     // The scale is recorded as x or y, for axes, even if only channels that share it are encoded.
-    if (hasAny(value, allX)) scales[keysX[0]] = recordX;
-    if (hasAny(value, allY)) scales[keysY[0]] = recordY;
-    for (const key of allX) if (key in value) scales[key] = recordX;
-    for (const key of allY) if (key in value) scales[key] = recordY;
+    if (hasAny(value, ownKeysX)) scales[keysX[0]] = recordX;
+    if (hasAny(value, ownKeysY)) scales[keysY[0]] = recordY;
+    for (const key of ownKeysX) if (key in value) scales[key] = recordX;
+    for (const key of ownKeysY) if (key in value) scales[key] = recordY;
 
     const newValue = {...scaled.value};
-    if (hasAny(value, allX) && !hasAny(value, allY))
-      newValue[keysY[0]] = middle(value, allX, [frame.top, frame.bottom]);
-    if (hasAny(value, allY) && !hasAny(value, allX))
-      newValue[keysX[0]] = middle(value, allY, [frame.left, frame.right]);
+    if (hasAny(value, ownKeysX) && !hasAny(value, ownKeysY))
+      newValue[keysY[0]] = middle(value, ownKeysX, [frame.top, frame.bottom]);
+    if (hasAny(value, ownKeysY) && !hasAny(value, ownKeysX))
+      newValue[keysX[0]] = middle(value, ownKeysY, [frame.left, frame.right]);
     return {...withoutHints(scaled), value: newValue, scales, frame};
   });
 }

@@ -126,15 +126,18 @@ export function callable(record) {
   return Object.defineProperties(record, properties);
 }
 
-// The keys of a position scale: its own, such as x and x1, and the channels that share it by the
-// axis, such as {value: "v2", scale: "y"}, or by the name of the context's scale.
+// The keys of a position scale in a context: its own, such as x and x1, and the other channels that
+// share it by the axis, such as {value: "v2", scale: "y"}, or by the name of the context's scale.
 export function keysOf(value, hints, keys, axis) {
   const name = scaleName(hints, keys, axis);
+  // Positions choose their own scale, so only the other channels join one, even if names collide.
   const shared = Object.keys(value).filter(
-    (key) => !keys.includes(key) && (hints[key]?.scale === axis || hints[key]?.scale === name),
+    (key) => !positions.has(key) && !keys.includes(key) && (hints[key]?.scale === axis || hints[key]?.scale === name),
   );
   return [...keys, ...shared];
 }
+
+const positions = new Set(["x", "x1", "y", "y1"]);
 
 // The name of the scale of a context's position along an axis: the scale given to its position,
 // such as x: {value: "culmen_length_mm", scale: "length"}, else the axis itself, such as x.
