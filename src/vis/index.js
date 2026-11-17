@@ -7,6 +7,7 @@ export {encode} from "./transform/encode.js";
 export {group, groupX, groupY} from "./transform/group.js";
 export {inset, insetX, insetY} from "./modifier/inset.js";
 export {label} from "./shape/label.js";
+export {legend} from "./shape/legend.js";
 export {lineRadial, lineX, lineY} from "./shape/line.js";
 export {pack} from "./transform/pack.js";
 export {plane} from "./transform/plane.js";
