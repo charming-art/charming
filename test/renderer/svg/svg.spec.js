@@ -229,3 +229,12 @@ test("cm.svg() renderers name their clip paths apart", () => {
   });
   assert.notStrictEqual(ids[0], ids[1]);
 });
+
+test("svg.text(options) paints the stroke under the fill with paintOrder stroke, such as a halo", () => {
+  const renderer = cm.svg();
+  renderer.text({text: "a", x: 0, y: 0, fill: "black", stroke: "white", paintOrder: "stroke"});
+  renderer.text({text: "b", x: 0, y: 0, fill: "black", stroke: "white"});
+  const [halo, plain] = renderer.node().querySelectorAll("text");
+  assert.strictEqual(halo.getAttribute("paint-order"), "stroke");
+  assert.strictEqual(plain.getAttribute("paint-order"), null);
+});

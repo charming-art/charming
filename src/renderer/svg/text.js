@@ -24,6 +24,7 @@ export function svg$text({
   fontSize = 14,
   fontWeight = "normal",
   rotate,
+  paintOrder,
   ...options
 }) {
   // A missing text is empty, as browsers would write undefined; a format writes the value, such as
@@ -43,6 +44,8 @@ export function svg$text({
     style: /^\s|\s$|\s\s/.test(content) ? "white-space: pre" : null,
     // Like Canvas, a stroked text is only filled if a fill is given.
     ...paint({fill: fill ?? (stroke ? "none" : undefined), stroke, ...options}),
+    // With paintOrder "stroke", the stroke is painted under the fill, such as the halo of a label.
+    "paint-order": paintOrder,
   });
   if (node.textContent !== content) node.textContent = content;
   return this;

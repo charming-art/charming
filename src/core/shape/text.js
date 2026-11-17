@@ -14,7 +14,7 @@ function maybeBox(value, options) {
 
 // A format is a function of the text, or a d3 number format, such as ",d", like an axis's tickFormat;
 // each string is made a function once.
-function formatsOf(F) {
+export function formatsOf(F) {
   const formats = new Map();
   return F.map((f) => {
     if (typeof f !== "string") return f;
@@ -41,6 +41,7 @@ export const text = define((renderer, I, value, options) => {
     fontSize: FS = [],
     fontWeight: FW = [],
     rotate: R = [],
+    paintOrder: PO = [],
   } = value;
   const FT = formatsOf(FM);
   for (const i of I) {
@@ -60,6 +61,7 @@ export const text = define((renderer, I, value, options) => {
       fontSize: FS[i],
       fontWeight: FW[i],
       ...(R[i] && {rotate: R[i]}),
+      ...(PO[i] && {paintOrder: PO[i]}),
     });
   }
 });
