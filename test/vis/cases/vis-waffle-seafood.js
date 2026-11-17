@@ -16,8 +16,7 @@ export const visWaffleSeafood = withSVG(async () => {
         .transform(cm.spreadY, {chunk: 5})
         .transform(cm.spreadX)
         .transform(cm.plane, {y: {axis: null}})
-        .add(cm.rect)
-        .add(cm.axisX);
+        .add(cm.rect);
     },
     {width: 640, height: 400},
   );

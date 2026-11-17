@@ -13,10 +13,9 @@ export const visNormalizedStack = withSVG(async () => {
         .data(riaa)
         .transform(cm.encode, {x: "year", y: "revenue", z: "format", fill: "group"})
         .transform(cm.stackY, {offset: "normalize", order: "fill", reverse: true})
-        .transform(cm.plane)
+        .transform(cm.plane, {y: {tickFormat: "%", label: "↑ Annual revenue (%)"}})
         .add(cm.areaY)
-        .add(cm.annotate(cm.link), {data: [0, 1], y: (d) => d, stroke: "currentColor"})
-        .add(cm.axis, {y: {tickFormat: "%", label: "↑ Annual revenue (%)"}});
+        .add(cm.annotate(cm.link), {data: [0, 1], y: (d) => d, stroke: "currentColor"});
     },
     {width: 640, height: 400},
   );

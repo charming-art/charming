@@ -39,8 +39,9 @@ export async function visTransitionBarChartRace() {
         marginRight: 70,
         marginBottom: 0,
         resolve: {x: "independent"},
+        x: {axis: "top", grid: true, label: null},
+        y: {axis: null},
       })
-      .add(cm.axisX, {anchor: "top", grid: true, label: null})
       // Like d3's, bars entering or leaving the top 12 slide in and out from below the chart.
       .add(cm.rect, {fillOpacity: 0.7, enter: {y: 500}, exit: {y: 500}})
       .add(cm.label, {...label, position: "inside-right", text: (d) => d.datum.name, fontWeight: "bold"})

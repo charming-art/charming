@@ -13,9 +13,8 @@ export const visGroupedBar = withSVG(async () => {
         .transform(cm.encode, {y: "state", x: "population", fill: "age"})
         .transform(cm.spreadY)
         .transform(cm.stackY, {order: ages})
-        .transform(cm.plane)
-        .add(cm.rect)
-        .add(cm.axis, {x: {tickFormat: "s"}});
+        .transform(cm.plane, {x: {tickFormat: "s"}})
+        .add(cm.rect);
     },
     {width: 640, height: 400},
   );

@@ -19,12 +19,16 @@ export const visStatePopulationChange = withSVG(async () => {
         .transform(cm.plane, {
           marginTop: 30,
           marginLeft: 50,
-          x: {label: "← decrease · Change in population, 2010–2019 (%) · increase →"},
+          // Like Plot's percent option, the ticks are in percentage points.
+          x: {
+            label: "← decrease · Change in population, 2010–2019 (%) · increase →",
+            axis: "top",
+            labelAnchor: "center",
+            tickFormat: (d) => d3.format("+.0f")(d * 100),
+          },
           y: {axis: null},
           fill: {type: "ordinal", range: [d3.schemePiYG[3][0], d3.schemePiYG[3][2]]},
         })
-        // Like Plot's percent option, the ticks are in percentage points.
-        .add(cm.axisX, {anchor: "top", labelAnchor: "center", tickFormat: (d) => d3.format("+.0f")(d * 100)})
         .add(cm.rect)
         .add(cm.label, {
           text: (d) => d.datum.State,

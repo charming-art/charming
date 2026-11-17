@@ -18,11 +18,10 @@ export const visRangeArea = withSVG(async () => {
           v2: {value: "v2", scale: "y"},
           v3: {value: "v3", scale: "y"},
         })
-        .transform(cm.plane)
+        .transform(cm.plane, {y: {label: null}})
         .add(cm.areaY, {curve: "natural", fill: "#64b5f6", fillOpacity: 0.65, stroke: "#64b5f6"})
         .add(cm.circle, {y: "v2", r: 2, fill: "currentColor"})
-        .add(cm.lineY, {y: "v3", stroke: "#FF6B3B", curve: "natural"})
-        .add(cm.axis, {y: {label: null}});
+        .add(cm.lineY, {y: "v3", stroke: "#FF6B3B", curve: "natural"});
     },
     {width: 640, height: 400},
   );

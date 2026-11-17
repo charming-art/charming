@@ -1,7 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300">
-  <rect x="30" y="28.064516129032263" width="590" height="72.58064516129033"></rect>
-  <rect x="30" y="108.70967741935485" width="263.9473684210526" height="72.58064516129033"></rect>
-  <rect x="30" y="189.35483870967744" width="481.3157894736842" height="72.5806451612903"></rect>
   <line x1="30" y1="20" x2="30" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
   <line x1="107.63157894736842" y1="20" x2="107.63157894736842" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
   <line x1="185.26315789473685" y1="20" x2="185.26315789473685" y2="270" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
@@ -32,4 +29,7 @@
   <text x="21" y="64.35483870967744" transform="rotate(-90,21,64.35483870967744)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">Adelie</text>
   <text x="21" y="145" transform="rotate(-90,21,145)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">Chinstrap</text>
   <text x="21" y="225.6451612903226" transform="rotate(-90,21,225.6451612903226)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">Gentoo</text>
+  <rect x="30" y="28.064516129032263" width="590" height="72.58064516129033"></rect>
+  <rect x="30" y="108.70967741935485" width="263.9473684210526" height="72.58064516129033"></rect>
+  <rect x="30" y="189.35483870967744" width="481.3157894736842" height="72.5806451612903"></rect>
 </svg>

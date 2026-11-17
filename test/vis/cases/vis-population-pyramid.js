@@ -23,8 +23,6 @@ export const visPopulationPyramid = withSVG(async () => {
             domain: ["ledig", "verheiratet", "geschieden", "verwitwet"],
             range: ["#69AEBE", "#F1757A", "#F2B678", "#989D9E"],
           },
-        })
-        .add(cm.axis, {
           x: {label: "← men · population (thousands) · women →", tickFormat: Math.abs},
           y: {grid: true},
         })

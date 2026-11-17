@@ -15,15 +15,14 @@ export const visLabeledBars = withSVG(async () => {
         .data(alphabet)
         .transform(cm.encode, {x: "frequency", y: "letter"})
         .transform(cm.spreadY, {sort: "-x"})
-        .transform(cm.plane, {marginLeft: 30, x: {label: "Frequency"}})
+        .transform(cm.plane, {marginLeft: 30, x: {label: "Frequency", tickFormat: "%"}, y: {label: null}})
         .add(cm.rect, {fill: "steelblue"})
         .add(cm.label, {
           text: (d) => d.datum.frequency,
           format: ".1%",
           position: (d) => (room(d) ? "inside-right" : "right"),
           fill: (d) => (room(d) ? "white" : "currentColor"),
-        })
-        .add(cm.axis, {x: {tickFormat: "%"}, y: {label: null}});
+        });
     },
     {width: 640, height: 560},
   );

@@ -12,9 +12,8 @@ export const visRibbonArea = withSVG(async () => {
         .data(data)
         .transform(cm.encode, {x: "date", y: "unemployed", fill: "industry"})
         .transform(cm.stackY, {order: "value"})
-        .transform(cm.plane)
-        .add(cm.areaY)
-        .add(cm.axis, {y: {grid: true}});
+        .transform(cm.plane, {y: {grid: true}})
+        .add(cm.areaY);
     },
     {width: 640, height: 400},
   );
