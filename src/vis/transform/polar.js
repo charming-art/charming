@@ -1,5 +1,7 @@
 import {scaleRadial} from "d3-scale";
 import {arc} from "d3-shape";
+import {axisX, axisY} from "../shape/axis.js";
+import {legend} from "../shape/legend.js";
 import {point, scale} from "../../core/transform/scale.js";
 import {
   allKeysOf,
@@ -8,6 +10,8 @@ import {
   callable,
   channelHints,
   channelScales,
+  guideMarks,
+  guidesOf,
   hasAny,
   isNested,
   keysOf,
@@ -46,12 +50,12 @@ function radial(type) {
 // in a width × height box. The resolved scales are kept in context.scales, and the polar frame in
 // context.frame. With clip, the marks are clipped to the frame: its disc, ring or sector, unless a
 // mark gives its own clip option, as in cm.plane. As in cm.plane, the options of scales are given by
-// name in scales, such as {y: {type: "linear"}} for the radius, and colors, radii and opacities.
+// name, such as {y: {type: "linear"}} for the radius, and colors, radii and opacities, with their
+// guides; unlike it, a polar chart draws no axes unless asked, such as {x: {axis: true}}.
 export function polar(
   flow,
   data,
   {
-    scales: options = {},
     innerRadius = 0,
     startAngle = 0,
     endAngle = 2 * Math.PI,
@@ -66,6 +70,8 @@ export function polar(
     clip = false,
     keysX = ["x", "x1"],
     keysY = ["y", "y1"],
+    // The other options are the options of scales, by name, such as y, fill or a named radius.
+    ...options
   } = {},
 ) {
   if (!data) throw new Error("No channels: call flow.transform(cm.encode, channels) before cm.polar.");
@@ -131,6 +137,8 @@ export function polar(
   const sharedX = sharedOf(keysX, "x");
   const sharedY = sharedOf(keysY, "y", "radial");
 
+  // The id of the chart's guides, which tells them apart from the guides of other charts.
+  const id = {};
   return data.map((context, j) => {
     const {value, hints = {}} = context;
     // The channels of this context's scales: its positions, and the channels that join them here.
@@ -180,6 +188,12 @@ export function polar(
     // Unlike cm.plane's, the axes of cm.polar are titled only by labels given to scales, such as
     // {y: {label: "Population"}}, not by field names, so that radial charts stay uncluttered.
     const titles = {x: options[nameX]?.label, y: options[nameY]?.label};
-    return {...withoutHints(scaled), value: newValue, scales, frame, titles, clip: shape, clipped: clip};
+    // Unlike cm.plane, cm.polar draws axes only when asked, such as {x: {axis: true}}, as pies and
+    // donuts have none.
+    const guides = guidesOf(id, options, nameX, nameY, {x: [], y: []}, {x: [], y: []});
+    return {...withoutHints(scaled), value: newValue, scales, frame, titles, clip: shape, clipped: clip, guides};
   });
 }
+
+// The axes and legends that a polar chart draws, when asked, before the shapes added to it.
+polar.marks = (values) => guideMarks(values, {axisX, axisY, legend});

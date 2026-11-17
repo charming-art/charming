@@ -25,11 +25,9 @@ export const visDualAxis = withSVG(async () => {
               .transform(cm.groupX, {y: "mean"}),
         )
         .transform(cm.plane, {
-          scales: {
-            x: {label: null},
-            temperature: {label: "Avg. Temperature (°C)"},
-            precipitation: {label: "Precipitation (inches)"},
-          },
+          x: {label: null},
+          temperature: {label: "Avg. Temperature (°C)"},
+          precipitation: {label: "Precipitation (inches)"},
           marginRight: 40,
         });
       temperature

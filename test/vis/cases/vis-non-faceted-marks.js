@@ -18,8 +18,9 @@ export const visNonFacetedMarks = withSVG(async () => {
         .transform(cm.encode, {x: ([sex]) => `${sex}`, y: ([, species]) => species})
         .transform(cm.spreadX)
         .transform(cm.spreadY)
-        .transform(cm.plane, {marginLeft: 50, marginBottom: 50})
-        .add(cm.axis, {
+        .transform(cm.plane, {
+          marginLeft: 50,
+          marginBottom: 50,
           x: {label: null, tickSize: 0, tickPadding: 24},
           y: {label: null, tickSize: 0, tickPadding: 26, tickRotate: -90},
         })

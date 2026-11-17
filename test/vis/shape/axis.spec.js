@@ -49,7 +49,7 @@ test("cm.axis formats ticks for the count of ticks given", () => {
   root
     .data([0, 1])
     .transform(cm.encode, {x: (d) => d, y: (d) => d})
-    .transform(cm.plane)
+    .transform(cm.plane, {x: {axis: null}})
     .add(cm.axisY, {ticks: 20, label: null});
   root.render();
   const T = Array.from(renderer.node().querySelectorAll("text"), (d) => d.textContent);
@@ -150,7 +150,7 @@ test("cm.axis labels facets only along the bottom of each column and the left of
     .transform(cm.encode, {x: ([x]) => x, y: ([, y]) => y})
     .transform(cm.spreadX)
     .transform(cm.spreadY)
-    .transform(cm.plane)
+    .transform(cm.plane, {x: {axis: null}, y: {axis: null}})
     .append(cm.g)
     .data(() => [{v: 1}, {v: 2}])
     .transform(cm.encode, {x: "v", y: "v"})
@@ -249,7 +249,7 @@ function labeledCells(options, anchor, filled = () => true) {
     .transform(cm.encode, {x: ([x]) => x, y: ([, y]) => y})
     .transform(cm.spreadX)
     .transform(cm.spreadY)
-    .transform(cm.plane)
+    .transform(cm.plane, {x: {axis: null}, y: {axis: null}})
     .append(cm.g)
     .data((d) => (filled(d) ? [{v: 1}, {v: 2}] : []))
     .transform(cm.encode, {x: "v", y: "v"})
@@ -375,9 +375,9 @@ function polarTitles(polarOptions, axisOptions) {
 
 test("cm.axis in polar titles its axes only with the labels given to scales, not field names", () => {
   assert.deepStrictEqual(polarTitles(), []);
-  assert.deepStrictEqual(polarTitles({scales: {x: {label: "Name"}, y: {label: "Value"}}}), ["Name", "Value"]);
+  assert.deepStrictEqual(polarTitles({x: {label: "Name"}, y: {label: "Value"}}), ["Name", "Value"]);
   // The label option of an axis gives a title, or hides one with null.
-  assert.deepStrictEqual(polarTitles({scales: {y: {label: "Value"}}}, {y: {label: null}, x: {label: "N"}}), ["N"]);
+  assert.deepStrictEqual(polarTitles({y: {label: "Value"}}, {y: {label: null}, x: {label: "N"}}), ["N"]);
 });
 
 test("cm.axis in polar puts the radius title at the top left and the angle title at the bottom right", () => {
@@ -387,7 +387,7 @@ test("cm.axis in polar puts the radius title at the top left and the angle title
     .data([{name: "a", value: 10}])
     .transform(cm.encode, {x: "name", y: "value"})
     .transform(cm.spreadX)
-    .transform(cm.polar, {scales: {x: {label: "Name"}, y: {label: "Value"}}})
+    .transform(cm.polar, {x: {label: "Name"}, y: {label: "Value"}})
     .add(cm.axis);
   root.render();
   const at = (t) => {
@@ -410,7 +410,7 @@ test("cm.axis draws no titles for polar charts nested in a chart", () => {
     .data([{v: 1}, {v: 2}])
     .transform(cm.encode, {x: "v"})
     .transform(cm.stackX)
-    .transform(cm.polar, {scales: {x: {label: "Share"}}})
+    .transform(cm.polar, {x: {label: "Share"}})
     .add(cm.axisX);
   root.render();
   const T = Array.from(renderer.node().querySelectorAll("text"), (d) => d.textContent);
@@ -424,7 +424,7 @@ test("cm.axis places its titles with labelAnchor, like Plot, in the margins", ()
     root
       .data([0, 1])
       .transform(cm.encode, {x: (d) => d, y: (d) => d})
-      .transform(cm.plane, {margin: 20, scales: {x: {label: "X"}, y: {label: "Y"}}})
+      .transform(cm.plane, {margin: 20, x: {label: "X"}, y: {label: "Y"}})
       .add(axis, options);
     root.render();
     return Array.from(renderer.node().querySelectorAll("text"))
@@ -453,6 +453,137 @@ test("cm.axis places its titles with labelAnchor, like Plot, in the margins", ()
     ["↑ Y", 3, 97, "start", null],
   ]);
   // A right axis turns its centered title the same way, sitting left of the right edge.
-  const [right] = titles({anchor: "right", labelAnchor: "center"}, cm.axisY);
+  // The implicit x axis is still drawn: cm.axisY replaces only the implicit y axis.
+  const [, right] = titles({anchor: "right", labelAnchor: "center"}, cm.axisY);
   assert.deepStrictEqual(right, ["Y →", 197, 50, "middle", "rotate(-90,197,50)"]);
+});
+
+// Renders a chart of x and y in [0, 1] with the options of cm.plane and the given shapes added, and
+// returns the texts of its axes with their anchors.
+function implicit(plane, add = (flow) => flow, {coordinate = cm.plane} = {}) {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  add(
+    root
+      .data([
+        {x: 0, y: 0},
+        {x: 1, y: 1},
+      ])
+      .transform(cm.encode, {x: "x", y: "y"})
+      .transform(coordinate, {margin: 30, ...plane}),
+  );
+  root.render();
+  return Array.from(renderer.node().querySelectorAll("text"), (t) => t.textContent);
+}
+
+test("cm.plane draws the axes of its positions by default, at the bottom and the left", () => {
+  const T = implicit();
+  assert.deepStrictEqual(
+    T,
+    implicit({}, (flow) => flow.add(cm.axis)),
+  );
+  assert.ok(T.includes("x →") && T.includes("↑ y"));
+});
+
+test("cm.plane hides an axis with axis null", () => {
+  assert.deepStrictEqual(implicit({x: {axis: null}, y: {axis: null}}), []);
+  const T = implicit({y: {axis: null}});
+  assert.ok(T.includes("x →") && !T.includes("↑ y"));
+});
+
+test("cm.plane places an axis with axis, on a side or both", () => {
+  const ticks = (plane) => {
+    const renderer = cm.svg({width: 200, height: 200});
+    const root = cm.flow().renderer(renderer);
+    root
+      .data([0, 1])
+      .transform(cm.encode, {x: (d) => d, y: (d) => d})
+      .transform(cm.plane, {margin: 30, y: {axis: null}, ...plane});
+    root.render();
+    return Array.from(renderer.node().querySelectorAll("text"))
+      .filter((t) => t.textContent === "0.0")
+      .map((t) => +t.getAttribute("y"));
+  };
+  assert.deepStrictEqual(ticks(), [179]);
+  assert.deepStrictEqual(ticks({x: {axis: "top"}}), [21]);
+  assert.deepStrictEqual(ticks({x: {axis: "both"}}), [179, 21]);
+  assert.deepStrictEqual(ticks({x: {axis: true}}), [179]);
+});
+
+test("cm.plane passes the options of a position to its axis, such as a tick format", () => {
+  const T = implicit({x: {tickFormat: (d) => `[${d}]`, label: "X"}, y: {axis: null}});
+  assert.ok(T.includes("[0]") && T.includes("X →"));
+  // Options given to cm.axis explicitly come first.
+  const E = implicit({x: {tickFormat: (d) => `[${d}]`}, y: {axis: null}}, (flow) =>
+    flow.add(cm.axis, {x: {tickFormat: (d) => `<${d}>`}, y: false}),
+  );
+  assert.ok(E.includes("<0>") && !E.includes("[0]"));
+});
+
+test("an axis added explicitly replaces the implicit axis of its kind", () => {
+  const x = implicit({}, (flow) => flow.add(cm.axisX, {label: "X"}));
+  assert.ok(x.includes("X") && !x.includes("x →") && x.includes("↑ y"));
+  // cm.axis replaces both, even the axis it skips.
+  assert.deepStrictEqual(
+    implicit({}, (flow) => flow.add(cm.axis, {x: false, y: false})),
+    [],
+  );
+  // An explicit axis defaults to the side given to the plane.
+  const top = implicit({x: {axis: "top"}, y: {axis: null}}, (flow) => flow.add(cm.axis, {y: false}));
+  assert.deepStrictEqual(top, implicit({x: {axis: "top"}, y: {axis: null}}));
+});
+
+test("cm.plane draws the axes of a layer of branches once per scale", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  const [a, b] = root
+    .data([
+      {x: 0, a: 0, b: 0},
+      {x: 1, a: 1, b: 10},
+    ])
+    .branch(
+      (flow) => flow.transform(cm.encode, {x: "x", y: {value: "a", scale: "a"}}),
+      (flow) => flow.transform(cm.encode, {x: "x", y: {value: "b", scale: "b"}}),
+    )
+    .transform(cm.plane, {margin: 30, a: {label: "A"}, b: {label: "B", axis: "right"}});
+  a.add(cm.line);
+  b.add(cm.line);
+  root.render();
+  const T = Array.from(renderer.node().querySelectorAll("text"), (t) => t.textContent);
+  // One x axis for both layers, and an axis of y per scale, each on its side.
+  assert.strictEqual(T.filter((d) => d === "x →").length, 1, T);
+  assert.strictEqual(T.filter((d) => d === "↑ A").length, 1, T);
+  assert.strictEqual(T.filter((d) => d === "↑ B").length, 1, T);
+  const ten = Array.from(renderer.node().querySelectorAll("text")).find((t) => t.textContent === "10");
+  assert.strictEqual(ten.getAttribute("text-anchor"), "start");
+});
+
+test("cm.plane draws no axes in charts nested in a chart, unless asked", () => {
+  const nested = (options) => {
+    const renderer = cm.svg({width: 200, height: 200});
+    const root = cm.flow().renderer(renderer);
+    root
+      .data(["a"])
+      .transform(cm.encode, {x: (d) => d})
+      .transform(cm.spreadX)
+      .transform(cm.plane, {x: {axis: null}})
+      .append(cm.g)
+      .data([0, 1])
+      .transform(cm.encode, {x: (d) => d, y: (d) => d})
+      .transform(cm.plane, options);
+    root.render();
+    return Array.from(renderer.node().querySelectorAll("text"), (t) => t.textContent);
+  };
+  assert.deepStrictEqual(nested(), []);
+  assert.ok(nested({x: {axis: "bottom"}}).includes("0.0"));
+});
+
+test("cm.polar draws no axes unless asked", () => {
+  assert.deepStrictEqual(implicit({}, undefined, {coordinate: cm.polar}), []);
+  const T = implicit({x: {axis: true}}, undefined, {coordinate: cm.polar});
+  assert.deepStrictEqual(
+    T,
+    implicit({}, (flow) => flow.add(cm.axisX), {coordinate: cm.polar}),
+  );
+  assert.ok(T.length > 0);
 });

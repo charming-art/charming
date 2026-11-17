@@ -11,8 +11,7 @@ export const visLabeledMultiLine = withSVG(async () => {
       root
         .data(data)
         .transform(cm.encode, {x: "Date", y: "Close", stroke: "Symbol"})
-        .transform(cm.plane)
-        .add(cm.axis, {y: {grid: true}})
+        .transform(cm.plane, {y: {grid: true}})
         .add(cm.lineY);
     },
     {width: 640, height: 400},

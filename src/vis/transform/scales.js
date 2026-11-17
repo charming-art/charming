@@ -461,3 +461,50 @@ export function scaleFlex(domain, weights, {paddingInner = 0, paddingOuter = 0, 
   scale.range = () => [r0, r1];
   return scale;
 }
+
+// The options of an axis given with the options of its scale, such as {x: {axis: "top", grid:
+// true}}: the label stays the scale's, so that its arrow is the scale's.
+const axisKeys = ["ticks", "tickFormat", "tickSize", "tickPadding", "tickRotate", "grid", "labelAnchor"];
+
+// The options of a legend given with the options of its scale, such as {fill: {legend: true}}.
+const legendKeys = ["ticks", "tickFormat", "width"];
+
+function pick(options = {}, keys) {
+  return definedOptions(Object.fromEntries(keys.map((key) => [key, options[key]])));
+}
+
+// The guides of a context, for its axes and legends: the sides of each axis, from the axis option
+// of its scale, such as "top", "both", true for its first side, or null for none, else the default
+// sides, and the options of each axis and legend. The sides of x and y are given in pairs, such as
+// ["bottom", "top"], with their defaults, such as ["bottom"] or none in a nested chart.
+export function guidesOf(id, options, nameX, nameY, {x: [x0, x1], y: [y0, y1]}, defaults) {
+  const sides = (option, first, second, side) => {
+    if (option === undefined) return side;
+    if (option === null || option === false) return [];
+    if (option === true) return [first];
+    return option === "both" ? [first, second] : [option];
+  };
+  const {axis: axisX} = options[nameX] ?? {};
+  const {axis: axisY} = options[nameY] ?? {};
+  const legends = {};
+  for (const key of scaledKeys) {
+    if (options[key]?.legend) legends[key] = pick(options[key], legendKeys);
+  }
+  return {
+    id,
+    x: {name: nameX, anchors: sides(axisX, x0, x1, defaults.x), ...pick(options[nameX], axisKeys)},
+    y: {name: nameY, anchors: sides(axisY, y0, y1, defaults.y), ...pick(options[nameY], axisKeys)},
+    legends,
+  };
+}
+
+// The implicit marks of the guides of contexts, for cm.plane and cm.polar: an axis of x and of y
+// per side that any context draws, and a legend if any context has one.
+export function guideMarks(values, {axisX, axisY, legend}) {
+  const marks = [];
+  const sides = (axis) => Math.max(0, ...values.map(({guides}) => guides?.[axis].anchors.length ?? 0));
+  for (let side = 0; side < sides("x"); side++) marks.push([axisX, {side}]);
+  for (let side = 0; side < sides("y"); side++) marks.push([axisY, {side}]);
+  if (values.some(({guides}) => guides && Object.keys(guides.legends).length)) marks.push([legend, {}]);
+  return marks;
+}

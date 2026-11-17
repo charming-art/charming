@@ -15,8 +15,7 @@ export const visPenguinSpeciesIsland = withSVG(async () => {
         .transform(cm.group, {r: "count"})
         .transform(cm.spreadX, {padding: 0})
         .transform(cm.spreadY, {padding: 0})
-        .transform(cm.plane, {marginLeft: 70, scales: {r: {range: [0, 40]}}})
-        .add(cm.axis, {grid: true})
+        .transform(cm.plane, {marginLeft: 70, r: {range: [0, 40]}, x: {grid: true}, y: {grid: true}})
         .add(cm.circle, {fill: "steelblue", fillOpacity: 0.8})
         .add(cm.label, {text: (d) => d.datum.length, fill: "white", fontWeight: "bold"});
     },

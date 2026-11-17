@@ -16,8 +16,9 @@ export const visRepeatMatrix = withSVG(async () => {
         .transform(cm.encode, {x: ([fx]) => fx, y: ([, fy]) => fy})
         .transform(cm.spreadX, {domain: fields})
         .transform(cm.spreadY, {domain: fields})
-        .transform(cm.plane, {marginLeft: 60, marginBottom: 60})
-        .add(cm.axis, {
+        .transform(cm.plane, {
+          marginLeft: 60,
+          marginBottom: 60,
           x: {label: null, tickSize: 0, tickPadding: 24},
           y: {label: null, tickSize: 0, tickPadding: 36, tickRotate: -90},
         })

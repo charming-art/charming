@@ -17,7 +17,7 @@ export const visTitanicMosaic = withSVG(async () => {
         .data(d3.groups(passengers, (d) => d.pclass))
         .transform(cm.encode, {y: ([pclass]) => pclass, n})
         .transform(cm.spreadY, {padding: 0.05, flex: "n", domain: [3, 2, 1]})
-        .transform(cm.plane, {margin: 10})
+        .transform(cm.plane, {margin: 10, y: {axis: null}})
         .append(cm.g)
         .data(([, rows]) => d3.groups(rows, (d) => d.sex))
         .transform(cm.encode, {y: ([sex]) => sex, n})
@@ -31,7 +31,7 @@ export const visTitanicMosaic = withSVG(async () => {
         .append(cm.g)
         .data(([, rows]) => rows)
         .transform(cm.encode, {fill: "survived"})
-        .transform(cm.plane, {scales: {fill: {type: "ordinal", domain: [1, 0], range: ["#2b8cbe", "#ff8408"]}}})
+        .transform(cm.plane, {fill: {type: "ordinal", domain: [1, 0], range: ["#2b8cbe", "#ff8408"]}})
         .transform(cm.pack)
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
         .add(cm.circle, cm.inset("7.5%"));

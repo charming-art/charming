@@ -1,5 +1,7 @@
 import {InternSet} from "d3-array";
 import {discrete, point, scale} from "../../core/transform/scale.js";
+import {axisX, axisY} from "../shape/axis.js";
+import {legend} from "../shape/legend.js";
 import {
   allKeysOf,
   axisHint,
@@ -7,6 +9,8 @@ import {
   callable,
   channelHints,
   channelScales,
+  guideMarks,
+  guidesOf,
   hasAny,
   isNested,
   keysOf,
@@ -42,26 +46,34 @@ function middle(value, keys, [start, end]) {
   return Array.from({length: n}, () => (start + end) / 2);
 }
 
+// The sides of the axes of a plane: the first is the side of axis true, and both are "both".
+const sidesOfPlane = {x: ["bottom", "top"], y: ["left", "right"]};
+
 // Resolves the scales of the channels, and maps positions to the chart area with y up and the
 // default margins of a chart. A renderer without a given size is resized, like Plot: 640 wide, with
 // a height that depends on y. The scales are resolved once for all the contexts, so that facets
 // compare; with resolve, a position can be inferred per context instead. Colors are always shared.
-// The options of scales are given by name in scales, like Plot's: the type, domain, reverse and
-// label of a position, such as {y: {domain: [0, 100]}} or a named {length: {type: "log"}}; the
-// type, domain, range, scheme and label of a color, such as {fill: {scheme: "PiYG"}}; and the type,
-// domain, range and label of a radius or an opacity, such as {r: {range: [0, 20]}}. The type
-// "identity" leaves a color, radius or opacity as it is.
+// The options of scales are given by name, like Plot's: the type, domain, reverse and label of a
+// position, such as {y: {domain: [0, 100]}} or a named {length: {type: "log"}}; the type, domain,
+// range, scheme and label of a color, such as {fill: {scheme: "PiYG"}}; and the type, domain, range
+// and label of a radius or an opacity, such as {r: {range: [0, 20]}}. The type "identity" leaves a
+// color, radius or opacity as it is. The other options of the plane can't name
+// a scale. Like Plot's, a chart draws the axes of its positions, at the bottom and the left: the
+// options of a position also take axis, "top", "both" or null for x, "right", "both" or null for y,
+// and the options of cm.axis, such as {x: {axis: "top", grid: true}}; a scale such as fill takes
+// legend: true to draw its legend, and the options of cm.legend. An axis or legend added to the
+// chart explicitly replaces the one of its kind drawn for the same scale, such as cm.axisY with
+// anchor "right" for a second scale of y.
 // In a nested flow, such as one chart per row of a parent mark, each context is drawn in the frame
 // of its parent row: the cell of a band, or a width × height box around a point. The resolved
 // scales are kept in context.scales, and the chart area in context.frame. With clip, the marks are
 // clipped to the frame, like Plot's clip, such as bars sliding in from outside it, unless a mark
 // gives its own clip option, false to draw outside it or true to be clipped without the plane's
-// clip; axes aren't.
+// clip; axes aren't. A chart nested in a chart draws no axes unless asked, such as x: {axis: "bottom"}.
 export function plane(
   flow,
   data,
   {
-    scales: options = {},
     width,
     height,
     margin,
@@ -73,6 +85,8 @@ export function plane(
     clip = false,
     keysX = ["x", "x1"],
     keysY = ["y", "y1"],
+    // The other options are the options of scales, by name, such as x, fill or length.
+    ...options
   } = {},
 ) {
   if (!data) throw new Error("No channels: call flow.transform(cm.encode, channels) before cm.plane.");
@@ -156,6 +170,9 @@ export function plane(
     ]),
   );
 
+  // The guides of the contexts are drawn once per scale, for all of them: the id tells them apart
+  // from the guides of other charts.
+  const id = {};
   return data.map((context, j) => {
     const {value, hints = {}} = context;
     // The channels of this context's scales: its positions, and the channels that join them here.
@@ -203,6 +220,20 @@ export function plane(
     // clip option is the default of the marks.
     const {left, top, right, bottom} = frame;
     const shape = {x: left, y: top, width: right - left, height: bottom - top};
-    return {...withoutHints(scaled), value: newValue, scales, frame, clip: shape, clipped: clip};
+    // The guides of the context, which its axes and legends draw: like Plot's, a chart has axes at
+    // the bottom and the left by default, and a chart nested in a chart none unless asked.
+    const guides = guidesOf(
+      id,
+      options,
+      nameX,
+      nameY,
+      sidesOfPlane,
+      nested ? {x: [], y: []} : {x: ["bottom"], y: ["left"]},
+    );
+    return {...withoutHints(scaled), value: newValue, scales, frame, clip: shape, clipped: clip, guides};
   });
 }
+
+// The axes and legends that a chart draws, from the guides of its contexts, before the shapes
+// added to it; one of the same kind added explicitly replaces them.
+plane.marks = (values) => guideMarks(values, {axisX, axisY, legend});

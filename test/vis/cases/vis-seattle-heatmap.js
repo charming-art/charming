@@ -21,8 +21,7 @@ export const visSeattleHeatmap = withSVG(async () => {
         .transform(cm.group, {fill: "max"})
         .transform(cm.spreadX, {padding: 0})
         .transform(cm.spreadY, {padding: 0})
-        .transform(cm.plane)
-        .add(cm.axis, {y: {tickFormat: (d) => months[d]}})
+        .transform(cm.plane, {y: {tickFormat: (d) => months[d]}})
         .add(cm.rect, cm.inset(0.5));
     },
     {width: 640, height: 300},

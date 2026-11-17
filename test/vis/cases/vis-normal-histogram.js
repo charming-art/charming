@@ -12,7 +12,6 @@ export function visNormalHistogram() {
     .transform(cm.encode, {x: (d) => d})
     .transform(cm.binX, {y: "count"})
     .transform(cm.plane)
-    .add(cm.axis)
     .add(cm.rect, cm.insetX(0.5));
   root.render();
   return renderer.node();

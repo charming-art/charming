@@ -15,7 +15,7 @@ export const visLabeledBars = withSVG(async () => {
         .data(alphabet)
         .transform(cm.encode, {x: "frequency", y: "letter"})
         .transform(cm.spreadY, {sort: "-x"})
-        .transform(cm.plane, {marginLeft: 30, scales: {x: {label: "Frequency"}}})
+        .transform(cm.plane, {marginLeft: 30, x: {label: "Frequency"}})
         .add(cm.rect, {fill: "steelblue"})
         .add(cm.label, {
           text: (d) => d.datum.frequency,

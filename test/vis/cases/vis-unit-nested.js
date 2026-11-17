@@ -20,8 +20,7 @@ export const visUnitNested = withSVG(async () => {
         .data(d3.groups(passengers, (d) => d.pclass))
         .transform(cm.encode, {y: ([pclass]) => pclass, n: ([, rows]) => rows.length})
         .transform(cm.spreadY, {padding: 0.05, flex: "n", domain: [1, 2, 3]})
-        .transform(cm.plane, {marginLeft: 85, marginBottom: 40})
-        .add(cm.axisY, {label: "pclass", tickSize: 0, tickPadding: 50})
+        .transform(cm.plane, {marginLeft: 85, marginBottom: 40, y: {label: "pclass", tickSize: 0, tickPadding: 50}})
         .append(cm.g)
         .data(([, rows]) => d3.groups(rows, survival))
         .transform(cm.encode, {x: ([s]) => s, n: ([, rows]) => rows.length})
@@ -37,7 +36,7 @@ export const visUnitNested = withSVG(async () => {
         .append(cm.g)
         .data(([, rows]) => rows)
         .transform(cm.encode, {fill: survival})
-        .transform(cm.plane, {scales: {fill: {domain: ["Yes", "No"]}}})
+        .transform(cm.plane, {fill: {domain: ["Yes", "No"]}})
         .transform(cm.pack)
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
         .add(cm.circle, cm.inset("7.5%"));

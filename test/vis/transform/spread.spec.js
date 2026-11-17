@@ -270,7 +270,7 @@ test("cm.plane records flex bands of a reversed range, so that axes label their 
     ])
     .transform(cm.encode, {x: "k", n: "n"})
     .transform(cm.spreadX, {flex: "n", padding: 0})
-    .transform(cm.plane, {margin: 0, scales: {x: {reverse: true}}})._values;
+    .transform(cm.plane, {margin: 0, x: {reverse: true}})._values;
   assert.strictEqual(context.scales.x.apply("a"), 87.5);
   assert.strictEqual(context.scales.x.apply("b"), 37.5);
 });

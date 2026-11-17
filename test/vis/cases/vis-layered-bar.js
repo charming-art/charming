@@ -12,7 +12,7 @@ export const visLayeredBar = withSVG(async () => {
         .data(data)
         .transform(cm.encode, {y: "state", x: "population", fill: "age"})
         .transform(cm.spreadY)
-        .transform(cm.plane, {scales: {fill: {domain: ages}}})
+        .transform(cm.plane, {fill: {domain: ages}})
         .add(cm.rect, {fillOpacity: 0.6})
         .add(cm.axis, {x: {tickFormat: "s"}});
     },

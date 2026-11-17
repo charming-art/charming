@@ -1,7 +1,7 @@
 import {link} from "../../core/shape/link.js";
 import {text} from "../../core/shape/text.js";
 import {polarAxisX, polarAxisY} from "./axisPolar.js";
-import {countOf, font, formatOf, key, labelOf, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
+import {axisOptions, countOf, font, formatOf, key, labelOf, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
 
 // The tick labels of an x axis, rotated by tickRotate degrees like Plot's bottom axis: below 10°,
 // they turn around their center; from 10° on, they end at their tick if turned counterclockwise and
@@ -33,8 +33,12 @@ function extentOf(range) {
 }
 
 // Draws the x axis of the scales recorded by cm.plane, at the bottom of the chart, like Plot, or at
-// the top with anchor "top"; or the angle axis of cm.polar.
-export function axisX(flow, value, {scales = {}, frame, titles, options = {}} = {}) {
+// the top with anchor "top"; or the angle axis of cm.polar. Its options default to the guides of the
+// plane, such as {x: {axis: "top", grid: true}}; cm.plane draws it implicitly, and an axis added
+// explicitly over the same contexts replaces the implicit one.
+export function axisX(flow, value, {scales = {}, frame, titles, guides, options = {}} = {}) {
+  options = axisOptions(flow, guides, "x", options, [axis, axisX]);
+  if (!options) return;
   const {x, y} = scales;
   if (!x || frame?.empty) return; // like Plot, a facet without rows has no axes
   if (frame?.type === "polar") return polarAxisX(flow, frame, x, options, titles);
@@ -84,7 +88,9 @@ export function axisX(flow, value, {scales = {}, frame, titles, options = {}} = 
 
 // Draws the y axis of the scales recorded by cm.plane, on the left of the chart, like Plot, or on
 // the right with anchor "right"; or the radius axis of cm.polar.
-export function axisY(flow, value, {scales = {}, frame, titles, options = {}} = {}) {
+export function axisY(flow, value, {scales = {}, frame, titles, guides, options = {}} = {}) {
+  options = axisOptions(flow, guides, "y", options, [axis, axisY]);
+  if (!options) return;
   const {x, y} = scales;
   if (!y || frame?.empty) return;
   if (frame?.type === "polar") return polarAxisY(flow, frame, y, options, titles);

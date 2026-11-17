@@ -15,8 +15,7 @@ export const visAxisOptions = withSVG(() => {
       root
         .data(data)
         .transform(cm.encode, {x: "weight", y: "height"})
-        .transform(cm.plane)
-        .add(cm.axis, {grid: true, x: {label: "Weight (kg) →"}, y: {tickFormat: (d) => `${d}cm`}})
+        .transform(cm.plane, {x: {label: "Weight (kg)", grid: true}, y: {tickFormat: (d) => `${d}cm`, grid: true}})
         .add(cm.circle, {r: 3});
     },
     {width: 640, height: 400},

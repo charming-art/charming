@@ -14,7 +14,6 @@ export const visFacetRectPie = withSVG(async () => {
         .transform(cm.spreadX, {domain: days})
         .transform(cm.spreadY)
         .transform(cm.plane)
-        .add(cm.axis)
         .append(cm.g)
         .data((cell) => cell.rows)
         .transform(cm.encode, {x: "value", fill: "activity"})

@@ -11,8 +11,7 @@ export const visMultipleLine = withSVG(async () => {
       root
         .data(bls)
         .transform(cm.encode, {x: "date", y: "unemployment", z: "division"})
-        .transform(cm.plane)
-        .add(cm.axis, {y: {grid: true, label: "↑ Unemployment (%)"}})
+        .transform(cm.plane, {y: {grid: true, label: "Unemployment (%)"}})
         .add(cm.lineY);
     },
     {width: 640, height: 400},

@@ -15,7 +15,7 @@ function legend(channels, options, plane = {}, width = 400) {
       {k: "c", v: 9},
     ])
     .transform(cm.encode, {x: "v", y: "v", ...channels})
-    .transform(cm.plane, {marginRight: 150, ...plane})
+    .transform(cm.plane, {marginRight: 150, x: {axis: null}, y: {axis: null}, ...plane})
     .add(cm.legend, options);
   root.render();
   return renderer.node();
@@ -97,7 +97,7 @@ test("cm.legend draws nothing in charts nested in a chart, nor without scales to
     .data(["A", "B"])
     .transform(cm.encode, {x: (d) => d})
     .transform(cm.spreadX)
-    .transform(cm.plane)
+    .transform(cm.plane, {x: {axis: null}})
     .append(cm.g)
     .data([{k: "a"}])
     .transform(cm.encode, {fill: "k"})
@@ -136,7 +136,7 @@ function margin(values, channels, marginRight, plane = {}) {
   root
     .data(values)
     .transform(cm.encode, {x: (d) => d.v, y: (d) => d.v, ...channels})
-    .transform(cm.plane, {marginRight, ...plane})
+    .transform(cm.plane, {marginRight, x: {axis: null}, y: {axis: null}, ...plane})
     .add(cm.legend);
   root.render();
   return renderer.node();
@@ -151,7 +151,7 @@ test("cm.legend aligns the labels at the ends of a ramp inward, so that they sta
 });
 
 test("cm.legend places the ticks of a ramp through its scale, such as a log opacity", () => {
-  const node = margin([{v: 1}, {v: 1000}], {fillOpacity: (d) => d.v}, 250, {scales: {fillOpacity: {type: "log"}}});
+  const node = margin([{v: 1}, {v: 1000}], {fillOpacity: (d) => d.v}, 250, {fillOpacity: {type: "log"}});
   const x = (t) =>
     +Array.from(node.querySelectorAll("text"))
       .find((d) => d.textContent === t)
@@ -175,4 +175,39 @@ test("cm.legend shortens swatch labels that are wider than the margin", () => {
   const label = Array.from(node.querySelectorAll("text")).find((t) => t.textContent.startsWith("Transp"));
   assert.ok(label.textContent.endsWith("…"));
   assert.ok(+label.getAttribute("x") + label.textContent.length * 6 <= 400);
+});
+
+test("cm.plane draws the legends of the scales given legend true, with their options", () => {
+  const chart = (plane, add = (flow) => flow) => {
+    const renderer = cm.svg({width: 400, height: 200});
+    const root = cm.flow().renderer(renderer);
+    add(
+      root
+        .data([
+          {k: "a", v: 1},
+          {k: "b", v: 4},
+        ])
+        .transform(cm.encode, {x: "v", y: "v", fill: "k", r: "v"})
+        .transform(cm.plane, {marginRight: 150, x: {axis: null}, y: {axis: null}, ...plane}),
+    );
+    root.render();
+    return texts(renderer.node());
+  };
+  // No legends unless asked, like Plot.
+  assert.deepStrictEqual(chart(), []);
+  assert.deepStrictEqual(chart({fill: {legend: true}}), ["k", "a", "b"]);
+  assert.deepStrictEqual(chart({fill: {legend: true, tickFormat: (d) => d.toUpperCase()}}), ["k", "A", "B"]);
+  assert.deepStrictEqual(
+    chart({fill: {legend: true}}),
+    chart({}, (flow) => flow.add(cm.legend, {r: false})),
+  );
+  // An explicit legend replaces the implicit ones, and takes their options.
+  assert.deepStrictEqual(
+    chart({fill: {legend: true, tickFormat: (d) => d.toUpperCase()}}, (flow) => flow.add(cm.legend, {r: false})),
+    ["k", "A", "B"],
+  );
+  assert.deepStrictEqual(
+    chart({fill: {legend: true}}, (flow) => flow.add(cm.legend, {fill: false, r: false})),
+    [],
+  );
 });

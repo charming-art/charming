@@ -17,7 +17,8 @@ export const visConnectedScatterplot = withSVG(async () => {
           (flow) => flow.data(fifth).transform(cm.encode, {x: "miles", y: "gas", side: "side"}),
         )
         .transform(cm.plane, {
-          scales: {x: {label: "Miles driven (per person-year)"}, y: {label: "Cost of gasoline ($ per gallon)"}},
+          x: {label: "Miles driven (per person-year)"},
+          y: {label: "Cost of gasoline ($ per gallon)"},
         });
       line
         .add(cm.axis, {grid: true})

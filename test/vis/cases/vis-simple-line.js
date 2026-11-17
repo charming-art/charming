@@ -11,8 +11,7 @@ export const visSimpleLine = withSVG(async () => {
       root
         .data(aapl)
         .transform(cm.encode, {x: "Date", y: "Close"})
-        .transform(cm.plane)
-        .add(cm.axis, {y: {grid: true}})
+        .transform(cm.plane, {y: {grid: true}})
         .add(cm.lineY);
     },
     {width: 640, height: 400},

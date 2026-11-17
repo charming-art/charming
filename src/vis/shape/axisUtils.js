@@ -58,3 +58,39 @@ export function positionOf(scale) {
   const offset = scale.bandwidth ? scale.bandwidth() / 2 : 0;
   return (d) => scale(d) + offset;
 }
+
+// Whether an implicit guide, drawn by cm.plane or cm.polar, isn't drawn: if a guide of the given
+// shapes for the same scale of the same chart is added explicitly, in any of its layers, or the
+// same implicit one is drawn before it, such as in the first of the layers sharing x. Same tells
+// from the guides and the options of another guide whether it's for the same scale.
+export function replaced(flow, shapes, same) {
+  const node = flow._parent;
+  const siblings = node._parent._children;
+  const index = siblings.indexOf(node);
+  return siblings.some(
+    (sibling, i) =>
+      sibling !== node &&
+      sibling._data.some(
+        ({render, options, context}) =>
+          shapes.includes(render) &&
+          (!options?.implicit || i < index) &&
+          context?.guides &&
+          same(context.guides, options),
+      ),
+  );
+}
+
+// The options of an axis, from the guides of its context and the options given to it: an implicit
+// axis draws the side of its guide, and an explicit one its anchor, else the first side of its
+// guide. Null if an implicit axis has no such side, or isn't drawn.
+export function axisOptions(flow, guides, axis, options, shapes) {
+  const {anchors = [], name, ...guided} = guides?.[axis] ?? {};
+  if (options.implicit) {
+    const same = (other, {implicit, side} = {}) =>
+      other.id === guides.id && other[axis].name === name && (!implicit || side === options.side);
+    if (options.side >= anchors.length || replaced(flow, shapes, same)) return null;
+    return {...guided, anchor: anchors[options.side]};
+  }
+  const anchor = options.anchor ?? anchors[0];
+  return {...guided, ...options, ...(anchor !== undefined && {anchor})};
+}
