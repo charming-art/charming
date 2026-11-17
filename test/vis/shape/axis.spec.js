@@ -225,8 +225,9 @@ test("cm.axisX with anchor top labels the ticks above the chart, and titles it a
   // The top of the chart is at 20; the tick is 6px and the padding 3px.
   assert.strictEqual(+a.getAttribute("y"), 20 - 6 - 3);
   assert.strictEqual(a.getAttribute("dominant-baseline"), "text-after-edge");
+  // Like Plot's, the title hangs 3px below the top, in the margin.
   const title = rotated({x: {anchor: "top"}, y: false})("letter");
-  assert.strictEqual(+title.getAttribute("y"), 0);
+  assert.strictEqual(+title.getAttribute("y"), 3);
 });
 
 test("cm.axisY with anchor right labels the ticks right of the chart, aligned to their start", () => {
@@ -414,4 +415,44 @@ test("cm.axis draws no titles for polar charts nested in a chart", () => {
   root.render();
   const T = Array.from(renderer.node().querySelectorAll("text"), (d) => d.textContent);
   assert.ok(!T.includes("Share"));
+});
+
+test("cm.axis places its titles with labelAnchor, like Plot, in the margins", () => {
+  const titles = (options, axis = cm.axis) => {
+    const renderer = cm.svg({width: 200, height: 100});
+    const root = cm.flow().renderer(renderer);
+    root
+      .data([0, 1])
+      .transform(cm.encode, {x: (d) => d, y: (d) => d})
+      .transform(cm.plane, {margin: 20, scales: {x: {label: "X"}, y: {label: "Y"}}})
+      .add(axis, options);
+    root.render();
+    return Array.from(renderer.node().querySelectorAll("text"))
+      .filter((d) => /[XY]/.test(d.textContent))
+      .map((d) => [
+        d.textContent,
+        +d.getAttribute("x"),
+        +d.getAttribute("y"),
+        d.getAttribute("text-anchor"),
+        d.getAttribute("transform"),
+      ]);
+  };
+  // By default: x at the right of the chart, y at its top.
+  assert.deepStrictEqual(titles(), [
+    ["X →", 197, 97, "end", null],
+    ["↑ Y", 3, 3, "start", null],
+  ]);
+  // Centered on each axis, the y title turned to read along it, bottom to top, its arrow along it.
+  assert.deepStrictEqual(titles({labelAnchor: "center"}), [
+    ["X →", 100, 97, "middle", null],
+    ["Y →", 3, 50, "middle", "rotate(-90,3,50)"],
+  ]);
+  // At the left and the bottom of the chart, in the margins 3px from the edges.
+  assert.deepStrictEqual(titles({x: {labelAnchor: "left"}, y: {labelAnchor: "bottom"}}), [
+    ["X →", 3, 97, "start", null],
+    ["↑ Y", 3, 97, "start", null],
+  ]);
+  // A right axis turns its centered title the same way, sitting left of the right edge.
+  const [right] = titles({anchor: "right", labelAnchor: "center"}, cm.axisY);
+  assert.deepStrictEqual(right, ["Y →", 197, 50, "middle", "rotate(-90,197,50)"]);
 });

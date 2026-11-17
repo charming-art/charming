@@ -1,7 +1,7 @@
 import {link} from "../../core/shape/link.js";
 import {path} from "../../core/shape/path.js";
 import {text} from "../../core/shape/text.js";
-import {countOf, font, formatOf, key, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
+import {alignOf, countOf, font, formatOf, key, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
 
 const stroke = "currentColor";
 
@@ -13,15 +13,6 @@ function pointOf({cx, cy}, r, a) {
 // A ring of radius r around (0, 0), drawn as a path so that it's only stroked.
 function ringOf(r) {
   return `M${r},0A${r},${r},0,1,1,${-r},0A${r},${r},0,1,1,${r},0Z`;
-}
-
-// Labels stay horizontal, so they're aligned by the direction of their tick: a label to the right
-// of its tick starts there, one above it sits on it, and so on.
-function alignOf(dx, dy) {
-  return {
-    textAlign: dx > 0.3 ? "start" : dx < -0.3 ? "end" : "center",
-    textBaseline: dy < -0.3 ? "bottom" : dy > 0.3 ? "top" : "middle",
-  };
 }
 
 // The title of a polar axis: the label option of the axis, else the label given to its scale in

@@ -2,7 +2,16 @@ import {scaleOf} from "../transform/scales.js";
 
 // The helpers shared by the axes of cm.plane and cm.polar.
 
-export const font = {fill: "currentColor", fontSize: 10, fontFamily: "system-ui, sans-serif"};
+export {font} from "../font.js";
+
+// Labels that stay horizontal are aligned by a direction, such as of a polar tick from the center:
+// a label to the right of its point starts there, one above it sits on it, and so on.
+export function alignOf(dx, dy) {
+  return {
+    textAlign: dx > 0.3 ? "start" : dx < -0.3 ? "end" : "center",
+    textBaseline: dy < -0.3 ? "bottom" : dy > 0.3 ? "top" : "middle",
+  };
+}
 
 // Tick marks are keyed by their values, so that transitions match ticks from render to render;
 // dates by their times, as keys compare as strings, which drop milliseconds. The keys are set apart
@@ -17,14 +26,16 @@ export function countOf({ticks}, length, spacing) {
 }
 
 // Like Plot, the label of a continuous scale has an arrow for the direction of increasing values,
-// unless the label is given explicitly or already has one.
-export function labelOf({label, domain, range}, scale, axis, options) {
+// unless the label is given explicitly or already has one. A y title turned to read along its axis,
+// bottom to top, takes the arrows of an x title, so that once turned they point along the axis.
+export function labelOf({label, domain, range}, scale, axis, options, turned = false) {
   if (options.label !== undefined) return options.label;
   if (label == null) return null;
   if (!scale.ticks || /[↑↓→←]/.test(label)) return `${label}`;
   const order = Math.sign(domain[domain.length - 1] - domain[0]) * Math.sign(range[range.length - 1] - range[0]);
   if (!order) return `${label}`;
   if (axis === "x") return order > 0 ? `${label} →` : `← ${label}`;
+  if (turned) return order < 0 ? `${label} →` : `← ${label}`;
   return order < 0 ? `↑ ${label}` : `↓ ${label}`;
 }
 

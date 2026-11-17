@@ -60,3 +60,22 @@ test("canvas.clip(rect) clips to a rect, and canvas.clip(path) to a path at x an
   assert.ok(at("translate, 5, 6") < at("translate, -5, -6"));
   assert.strictEqual(lines.filter((line) => line.startsWith("clip")).length, 2);
 });
+
+test("canvas.text(options) strokes before it fills with paintOrder stroke, such as a halo", () => {
+  const order = (paintOrder) => {
+    const renderer = cm.canvas({width: 10, height: 10, dpi: 1});
+    renderer.text({text: "a", x: 0, y: 0, fill: "black", stroke: "white", paintOrder});
+    const lines = `${renderer.node()}`.split("\n");
+    return [lines.findIndex((d) => d.startsWith("strokeText")), lines.findIndex((d) => d.startsWith("fillText"))];
+  };
+  const [stroke, fill] = order("stroke");
+  assert.ok(stroke < fill);
+  const [stroke1, fill1] = order(undefined);
+  assert.ok(fill1 < stroke1);
+});
+
+test("canvas.text(options) joins its stroke with strokeJoin", () => {
+  const renderer = cm.canvas({width: 10, height: 10, dpi: 1});
+  renderer.text({text: "a", x: 0, y: 0, stroke: "white", strokeJoin: "round"});
+  assert.ok(`${renderer.node()}`.split("\n").includes("lineJoin, round"));
+});

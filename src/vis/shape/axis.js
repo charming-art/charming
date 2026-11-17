@@ -64,16 +64,20 @@ export function axisX(flow, value, {scales = {}, frame, titles, options = {}} = 
   });
   const label = labelOf(x, scale, "x", options);
   if (label == null || frame?.nested) return;
-  const center = !scale.ticks;
+  // Like Plot's labelAnchor, the title is at the right of the chart, or centered over a discrete
+  // axis by default, or at the left of the chart or the center of the axis: in the margins, 3px
+  // from the edges.
+  const {labelAnchor = scale.ticks ? "right" : "center"} = options;
+  const center = labelAnchor === "center";
   flow.datum(label).append(text, {
     ...font,
     text: label,
-    x: center ? (left + right) / 2 : width - 3,
+    x: center ? (left + right) / 2 : labelAnchor === "left" ? 3 : width - 3,
     // At the edge of the chart, on the far side of the tick labels: 3px above the bottom, on its
-    // baseline, or hanging from the top. Like the default margins, which leave room for a bottom
-    // axis, a top axis needs a margin given to cm.plane, such as marginTop: 40.
-    y: isTop ? 0 : height - 3,
-    textAlign: center ? "center" : "end",
+    // baseline, or hanging 3px below the top. Like the default margins, which leave room for a
+    // bottom axis, a top axis needs a margin given to cm.plane, such as marginTop: 40.
+    y: isTop ? 3 : height - 3,
+    textAlign: center ? "center" : labelAnchor === "left" ? "start" : "end",
     ...(isTop && {textBaseline: "top"}),
   });
 }
@@ -85,7 +89,7 @@ export function axisY(flow, value, {scales = {}, frame, titles, options = {}} = 
   if (!y || frame?.empty) return;
   if (frame?.type === "polar") return polarAxisY(flow, frame, y, options, titles);
   const {tickSize = 6, tickPadding = 3, tickRotate = 0, grid = false, anchor = "left"} = options;
-  const {width} = flow.renderer()._props;
+  const {width, height} = flow.renderer()._props;
   const scale = scaleOf(y);
   const [left, right] = frame ? [frame.left, frame.right] : x ? extentOf(x.range) : [0, width];
   const [top, bottom] = extentOf(y.range);
@@ -108,11 +112,28 @@ export function axisY(flow, value, {scales = {}, frame, titles, options = {}} = 
     y: Y,
     ...rotateY,
   });
-  const label = labelOf(y, scale, "y", options);
+  // Like Plot's labelAnchor, the title is at the top of the chart by default, or at its bottom, in
+  // the margins 3px from the edges; or at the center of the axis, turned to read along it, bottom
+  // to top, on either side. A right axis needs a margin given to cm.plane, such as marginRight: 40,
+  // like a top axis.
+  const {labelAnchor = "top"} = options;
+  const turned = labelAnchor === "center";
+  const label = labelOf(y, scale, "y", options, turned);
   if (label == null || frame?.nested) return;
-  // A right axis needs a margin given to cm.plane, such as marginRight: 40, like a top axis.
-  const [labelX, textAlign] = isRight ? [width - 3, "end"] : [3, "start"];
-  flow.datum(label).append(text, {...font, text: label, x: labelX, y: 3, textAlign, textBaseline: "top"});
+  const labelX = isRight ? width - 3 : 3;
+  if (turned) {
+    // Turned a quarter counterclockwise, the text hangs right of the left edge, or sits left of the
+    // right edge.
+    const textBaseline = isRight ? "bottom" : "top";
+    const y = (top + bottom) / 2;
+    flow
+      .datum(label)
+      .append(text, {...font, text: label, x: labelX, y, rotate: -Math.PI / 2, textAlign: "center", textBaseline});
+    return;
+  }
+  const textAlign = isRight ? "end" : "start";
+  const [labelY, textBaseline] = labelAnchor === "bottom" ? [height - 3, "bottom"] : [3, "top"];
+  flow.datum(label).append(text, {...font, text: label, x: labelX, y: labelY, textAlign, textBaseline});
 }
 
 // Draws both axes. The options x and y are the options of each axis, or false to skip it; the
