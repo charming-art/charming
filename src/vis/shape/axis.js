@@ -64,16 +64,19 @@ export function axisX(flow, value, {scales = {}, frame, titles, options = {}} = 
   });
   const label = labelOf(x, scale, "x", options);
   if (label == null || frame?.nested) return;
-  const center = !scale.ticks;
+  // Like Plot's labelAnchor, the title is at the right of the chart, or centered over a discrete
+  // axis by default, or at the left or the center of the axis.
+  const {labelAnchor = scale.ticks ? "right" : "center"} = options;
+  const center = labelAnchor === "center";
   flow.datum(label).append(text, {
     ...font,
     text: label,
-    x: center ? (left + right) / 2 : width - 3,
+    x: center ? (left + right) / 2 : labelAnchor === "left" ? left : width - 3,
     // At the edge of the chart, on the far side of the tick labels: 3px above the bottom, on its
     // baseline, or hanging from the top. Like the default margins, which leave room for a bottom
     // axis, a top axis needs a margin given to cm.plane, such as marginTop: 40.
     y: isTop ? 0 : height - 3,
-    textAlign: center ? "center" : "end",
+    textAlign: center ? "center" : labelAnchor === "left" ? "start" : "end",
     ...(isTop && {textBaseline: "top"}),
   });
 }
@@ -110,9 +113,22 @@ export function axisY(flow, value, {scales = {}, frame, titles, options = {}} = 
   });
   const label = labelOf(y, scale, "y", options);
   if (label == null || frame?.nested) return;
-  // A right axis needs a margin given to cm.plane, such as marginRight: 40, like a top axis.
-  const [labelX, textAlign] = isRight ? [width - 3, "end"] : [3, "start"];
-  flow.datum(label).append(text, {...font, text: label, x: labelX, y: 3, textAlign, textBaseline: "top"});
+  // Like Plot's labelAnchor, the title is at the top of the chart by default, along the edge; or at
+  // the center or the bottom of the axis, turned to read along it at the center. A right axis needs
+  // a margin given to cm.plane, such as marginRight: 40, like a top axis.
+  const {labelAnchor = "top"} = options;
+  const labelX = isRight ? width - 3 : 3;
+  if (labelAnchor === "center") {
+    const rotate = isRight ? Math.PI / 2 : -Math.PI / 2;
+    const y = (top + bottom) / 2;
+    flow
+      .datum(label)
+      .append(text, {...font, text: label, x: labelX, y, rotate, textAlign: "center", textBaseline: "top"});
+    return;
+  }
+  const textAlign = isRight ? "end" : "start";
+  const [labelY, textBaseline] = labelAnchor === "bottom" ? [bottom, "bottom"] : [3, "top"];
+  flow.datum(label).append(text, {...font, text: label, x: labelX, y: labelY, textAlign, textBaseline});
 }
 
 // Draws both axes. The options x and y are the options of each axis, or false to skip it; the

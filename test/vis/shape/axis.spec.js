@@ -415,3 +415,40 @@ test("cm.axis draws no titles for polar charts nested in a chart", () => {
   const T = Array.from(renderer.node().querySelectorAll("text"), (d) => d.textContent);
   assert.ok(!T.includes("Share"));
 });
+
+test("cm.axis places its titles with labelAnchor, like Plot", () => {
+  const titles = (options) => {
+    const renderer = cm.svg({width: 200, height: 100});
+    const root = cm.flow().renderer(renderer);
+    root
+      .data([0, 1])
+      .transform(cm.encode, {x: (d) => d, y: (d) => d})
+      .transform(cm.plane, {margin: 20, scales: {x: {label: "X"}, y: {label: "Y"}}})
+      .add(cm.axis, options);
+    root.render();
+    const at = (t) => {
+      const node = Array.from(renderer.node().querySelectorAll("text")).find((d) => d.textContent.includes(t));
+      return [
+        +node.getAttribute("x"),
+        +node.getAttribute("y"),
+        node.getAttribute("text-anchor"),
+        node.getAttribute("transform"),
+      ];
+    };
+    return [at("X"), at("Y")];
+  };
+  // By default: x at the right of the chart, y at its top.
+  assert.deepStrictEqual(titles(), [
+    [197, 97, "end", null],
+    [3, 3, "start", null],
+  ]);
+  // Centered on each axis, the y title turned to read along it.
+  assert.deepStrictEqual(titles({labelAnchor: "center"}), [
+    [100, 97, "middle", null],
+    [3, 50, "middle", "rotate(-90,3,50)"],
+  ]);
+  assert.deepStrictEqual(titles({x: {labelAnchor: "left"}, y: {labelAnchor: "bottom"}}), [
+    [20, 97, "start", null],
+    [3, 80, "start", null],
+  ]);
+});
