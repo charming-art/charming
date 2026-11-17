@@ -4,7 +4,8 @@ import {replay} from "./replay.js";
 
 // G2's point keyframe (https://g2.antv.antgroup.com/en/examples/storytelling/storytelling/point-keyframe/):
 // a bar per gender at its mean weight, then a point per person, back and forth. The bars are keyed
-// by gender and the points grouped by it, so each bar splits into its points and they merge back.
+// by gender and the points grouped by it, so each bar splits into equal pieces, one per person,
+// that morph into its points, and the points morph back into the pieces of their bar to merge.
 export async function visTransitionPointKeyframe() {
   const people = await d3.json("data/people.json");
   const renderer = cm.svg({width: 640, height: 480});

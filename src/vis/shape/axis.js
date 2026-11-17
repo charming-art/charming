@@ -4,8 +4,10 @@ import {polarAxisX, polarAxisY} from "./axisPolar.js";
 import {font, formatOf, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
 
 // Tick marks are keyed by their values, so that transitions match ticks from render to render;
-// dates by their times, as keys compare as strings, which drop milliseconds.
-const key = (d) => (d instanceof Date ? +d : d);
+// dates by their times, as keys compare as strings, which drop milliseconds. The keys are set apart
+// from the keys of marks, so that a mark whose group key is a tick's value splits from or merges
+// into the mark keyed by it, not the tick.
+const key = (d) => `tick\0${d instanceof Date ? +d : d}`;
 
 // The count of ticks: the ticks option if it's a number, or one tick per spacing pixels, like Plot.
 function countOf({ticks}, [start, end], spacing) {
