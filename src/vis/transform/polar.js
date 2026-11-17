@@ -46,7 +46,7 @@ function radial(type) {
 // in a width × height box. The resolved scales are kept in context.scales, and the polar frame in
 // context.frame. With clip, the marks are clipped to the frame: its disc, ring or sector, unless a
 // mark gives its own clip option, as in cm.plane. As in cm.plane, the options of scales are given by
-// name in scales, such as {y: {type: "linear"}} for the radius, and colors.
+// name in scales, such as {y: {type: "linear"}} for the radius, and colors, radii and opacities.
 export function polar(
   flow,
   data,

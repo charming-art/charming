@@ -917,3 +917,23 @@ test("cm.plane takes named continuous types of positions, such as log", () => {
   // categories of a point scale would be.
   assertAllInDelta(y, [400, (400 * 2) / 3, 0]);
 });
+
+test("cm.plane leaves colors, radii and opacities as they are with the type identity", () => {
+  const options = {scales: {r: {type: "identity"}, fillOpacity: {type: "identity"}, fill: {type: "identity"}}};
+  const {r, fillOpacity, fill} = encoded(
+    [
+      {s: 2, o: 0.3, c: "a"},
+      {s: 8, o: 0.6, c: "b"},
+    ],
+    {x: "s", r: "s", fillOpacity: "o", fill: "c"},
+    options,
+  );
+  assert.deepStrictEqual(
+    [r, fillOpacity, fill],
+    [
+      [2, 8],
+      [0.3, 0.6],
+      ["a", "b"],
+    ],
+  );
+});

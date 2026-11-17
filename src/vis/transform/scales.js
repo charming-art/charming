@@ -83,12 +83,14 @@ function radiusRange(V, domain) {
 // sequential for numbers or a linear type, like Plot, through the scheme's interpolator ("turbo"
 // by default) or the range's colors; missing numbers have no color. Radii and opacities are
 // numbers from 0: a radius by a square root, so that the area of a dot tracks its value, and an
-// opacity linearly to [0, 1]. Values that aren't numbers, such as given radii, aren't scaled.
+// opacity linearly to [0, 1]. Values that aren't numbers aren't scaled, and like Plot's, the type
+// "identity" leaves values as they are, such as radii already in pixels.
 export function channelScales(value, hints) {
   const scales = {};
   for (const key of ["r", ...opacityKeys]) {
     if (!(key in hints) || !(key in value)) continue;
     const {type, domain, range} = hints[key];
+    if (type === "identity") continue;
     const V = value[key];
     if (type === undefined && !isNumeric(V)) continue;
     const d = domain ?? [0, max(V) ?? 1];
@@ -99,6 +101,7 @@ export function channelScales(value, hints) {
   for (const key of colorKeys) {
     if (!(key in hints) || !(key in value)) continue;
     const {type, domain, range, scheme = "turbo"} = hints[key];
+    if (type === "identity") continue;
     const V = value[key];
     if (type === undefined && domain === undefined && range === undefined && isIdentity(V)) continue;
     if (type === "linear" || (type === undefined && isNumeric(V))) {

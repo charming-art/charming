@@ -47,8 +47,10 @@ function middle(value, keys, [start, end]) {
 // a height that depends on y. The scales are resolved once for all the contexts, so that facets
 // compare; with resolve, a position can be inferred per context instead. Colors are always shared.
 // The options of scales are given by name in scales, like Plot's: the type, domain, reverse and
-// label of a position, such as {y: {domain: [0, 100]}} or a named {length: {type: "log"}}, and the
-// type, domain, range, scheme and label of a color, such as {fill: {scheme: "PiYG"}}.
+// label of a position, such as {y: {domain: [0, 100]}} or a named {length: {type: "log"}}; the
+// type, domain, range, scheme and label of a color, such as {fill: {scheme: "PiYG"}}; and the type,
+// domain, range and label of a radius or an opacity, such as {r: {range: [0, 20]}}. The type
+// "identity" leaves a color, radius or opacity as it is.
 // In a nested flow, such as one chart per row of a parent mark, each context is drawn in the frame
 // of its parent row: the cell of a band, or a width × height box around a point. The resolved
 // scales are kept in context.scales, and the chart area in context.frame. With clip, the marks are
