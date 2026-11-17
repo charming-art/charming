@@ -1,7 +1,7 @@
 import {ascending} from "d3-array";
 import {area as d3area} from "d3-shape";
 import {define} from "../../core/shape/define.js";
-import {curveOf, polarContext, seriesOf} from "./curve.js";
+import {curveOf, polarContext, seriesGroups} from "./curve.js";
 
 // The points of a series, sorted along the position it runs on, such as x for cm.areaY. A row with a
 // band on that position, such as a bar of cm.spreadX, has a point at each edge, so that the area is
@@ -35,7 +35,7 @@ function drawArea(renderer, I, value, options, shape, [p, p1, v, v1], center) {
     strokeWidth: SW = [],
   } = value;
   const path = shape.curve(curveOf(options.curve)).defined(defined);
-  for (const series of seriesOf(I, value)) {
+  for (const series of seriesGroups(I, value)) {
     const [i] = series;
     if (i === undefined) continue;
     renderer.path({

@@ -19,7 +19,7 @@ import {
   resolve,
   scaleDescriptors,
   scaleName,
-  sharedDomain,
+  sharedScale,
   withoutHints,
   withScaleOptions,
   withSeries,
@@ -136,7 +136,11 @@ export function plane(
     new Map(
       Array.from(byScaleName(data, keys, axis), ([name, contexts]) => {
         if (independent(name)) return [name, null];
-        return [name, sharedScale(contexts, allKeysOf(contexts, keys, axis), keys, options[name])];
+        const hints = contexts.map(({hints = {}}) => axisHint(hints, keys));
+        return [
+          name,
+          sharedScale(contexts, allKeysOf(contexts, keys, axis), keys, positionOptions(hints, options[name])),
+        ];
       }),
     );
   const sharedX = sharedOf(keysX, "x");
@@ -198,20 +202,4 @@ export function plane(
     const shape = {x: left, y: top, width: right - left, height: bottom - top};
     return {...withoutHints(scaled), value: newValue, scales, frame, clip: shape, clipped: clip};
   });
-}
-
-// The scale of a position shared by the contexts: its type and domain from the options of the
-// scale, unless it has bands, which come from their spread, else from the hints of the contexts,
-// else inferred from the values of all of them.
-function sharedScale(data, all, keys, options = {}) {
-  const hints = data.map(({hints = {}}) => axisHint(hints, keys));
-  let {type, domain} = positionOptions(hints, options);
-  type ??= hints[0]?.type;
-  const values = merge(data, all);
-  domain ??= sharedDomain(
-    hints.map((hint) => hint.domain),
-    type ?? hints[0]?.type,
-    all.flatMap((key) => values[key] ?? []),
-  );
-  return positionScale(values, all, {type, domain});
 }

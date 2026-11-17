@@ -1,11 +1,7 @@
 import {ascending, descending, InternMap, InternSet, range, sort} from "d3-array";
 import {scaleBand} from "d3-scale";
-import {scaleFlex} from "./scales.js";
+import {isNumeric, scaleFlex} from "./scales.js";
 import {seriesOf, seriesOrder} from "./series.js";
-
-function isNumeric(values) {
-  return typeof values?.find((d) => d != null) === "number";
-}
 
 // Whether a position has been spread, into categories (band) or chunks.
 function isSpread(hint) {

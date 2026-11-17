@@ -1,6 +1,6 @@
-import {greatest, group, groupSort, InternMap, InternSet, range, rollup, sum} from "d3-array";
+import {group, InternMap, InternSet, range} from "d3-array";
 import {scaleBand} from "d3-scale";
-import {seriesOf, seriesOrder, withSeriesOrder} from "./series.js";
+import {orderOf, seriesOf, seriesOrder, withSeriesOrder} from "./series.js";
 
 // Adapted from the stack transform of Observable Plot (ISC license): the rows of each group are
 // stacked in order, with one running sum for negative values and one for the others. Rows
@@ -65,79 +65,6 @@ function stackChunks(V, stacks, arrange, {chunk, padding}, B, B1) {
   return [V2, V1, C, C1, [lo, hi]];
 }
 
-// Like Plot, missing values, such as null or NaN, are ordered last either way.
-function defined(d) {
-  return d != null && d >= d;
-}
-
-function ascendingDefined(a, b) {
-  return !defined(a) - !defined(b) || (a < b ? -1 : a > b ? 1 : 0);
-}
-
-function descendingDefined(a, b) {
-  return !defined(a) - !defined(b) || (a < b ? 1 : a > b ? -1 : 0);
-}
-
-// The orders of Plot's stack transform (ISC license): by value within each stack, or a series
-// order shared by all stacks, by sum, appearance, inside-out or as given. A "-" prefix descends,
-// and names are case-insensitive, as in Plot.
-function orderOf(order, V, O, Z, value) {
-  if (order == null) return null;
-  if (Array.isArray(order)) return orderSeries(ascendingDefined, Z, () => order);
-  const raw = `${order}`;
-  order = raw.toLowerCase();
-  const descend = order.startsWith("-");
-  const compare = descend ? descendingDefined : ascendingDefined;
-  const I = range(V.length);
-  const X = O ?? I;
-  const appearance = () =>
-    groupSort(
-      I,
-      (G) => X[greatest(G, (i) => V[i])],
-      (i) => Z[i],
-    );
-  switch (descend ? order.slice(1) : order) {
-    case "value":
-      return (i, j) => compare(V[i], V[j]);
-    case "z":
-      return (i, j) => compare(Z[i], Z[j]);
-    case "sum":
-      return orderSeries(compare, Z, () =>
-        groupSort(
-          I,
-          (G) => sum(G, (i) => V[i]),
-          (i) => Z[i],
-        ),
-      );
-    case "appearance":
-      return orderSeries(compare, Z, appearance);
-    case "inside-out":
-      return orderSeries(compare, Z, () => {
-        const sums = rollup(
-          I,
-          (G) => sum(G, (i) => V[i]),
-          (i) => Z[i],
-        );
-        const Kp = [];
-        const Kn = [];
-        let s = 0;
-        for (const k of appearance()) {
-          if (s < 0) ((s += sums.get(k)), Kp.push(k));
-          else ((s -= sums.get(k)), Kn.push(k));
-        }
-        return Kn.reverse().concat(Kp);
-      });
-  }
-  // Like a field in Plot, any other name of a bound channel orders the rows by it, such as
-  // {order: "fill"}; Plot's names, above, come first.
-  const name = raw.replace(/^-/, "");
-  if (Object.hasOwn(value, name)) {
-    const C = value[name];
-    return (i, j) => compare(C[i], C[j]);
-  }
-  return null;
-}
-
 // Like Plot's normalize offset, rescales each stack to [0, 1]: from its lowest value, or 0, to its
 // highest value, or 0, such as the columns of a Marimekko chart.
 function normalize(stacks, V2, V1) {
@@ -154,13 +81,6 @@ function normalize(stacks, V2, V1) {
       V2[i] = k * (V2[i] - lo);
     }
   }
-}
-
-// A series order shared by all stacks, from a domain of the series.
-function orderSeries(compare, Z, domain) {
-  if (!Z) return null;
-  const index = new InternMap(domain().map((d, i) => [d, i]));
-  return (i, j) => compare(index.get(Z[i]), index.get(Z[j]));
 }
 
 // Splits the band of each row, such as [x, x1], among the series, so that they sit side by side.

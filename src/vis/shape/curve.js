@@ -46,7 +46,7 @@ export function curveOf(curve = "linear") {
 }
 
 // The rows of each series, by z, else fill, else stroke, in order of first appearance.
-export function seriesOf(I, {z, fill, stroke}) {
+export function seriesGroups(I, {z, fill, stroke}) {
   const Z = z ?? fill ?? stroke;
   if (!Z) return [I];
   const series = new InternMap();

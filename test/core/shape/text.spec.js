@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {test} from "vitest";
+import {test, vi} from "vitest";
 import * as cm from "../../../src/index.js";
 
 // Renders texts with SVG and returns their x, y, text-anchor and dominant-baseline.
@@ -75,4 +75,36 @@ test("cm.text centers in a band bound by transforms, such as a column from sprea
   assert.deepStrictEqual(draw(), [100, 100, "central"]);
   // Setting y without y1 keeps the label at the top of the column.
   assert.deepStrictEqual(draw({y: "y"}), [100, 0, null]);
+});
+
+test("cm.text formats its text with a d3 number format, or a function", () => {
+  const draw = (format) => {
+    const renderer = cm.svg({width: 100, height: 100});
+    const root = cm.flow().renderer(renderer);
+    root.data([1234.5, 0.25]).append(cm.text, {x: 0, y: 0, text: (d) => d, format});
+    root.render();
+    return Array.from(renderer.node().querySelectorAll("text"), (t) => t.textContent);
+  };
+  assert.deepStrictEqual(draw(",d"), ["1,235", "0"]);
+  assert.deepStrictEqual(draw(".0%"), ["123450%", "25%"]);
+  assert.deepStrictEqual(
+    draw((d) => `#${d}`),
+    ["#1234.5", "#0.25"],
+  );
+});
+
+test("cm.text with a string format interpolates numeric texts in transitions", () => {
+  vi.useFakeTimers();
+  const renderer = cm.svg({width: 100, height: 100});
+  const root = cm.flow({transition: {duration: 160, ease: "linear"}}).renderer(renderer);
+  const draw = (v) => {
+    root.data([v]).append(cm.text, {x: 0, y: 0, text: (d) => d, format: ",d", key: "a"});
+    root.render();
+  };
+  draw(0);
+  draw(2000);
+  vi.advanceTimersByTime(80);
+  const text = renderer.node().querySelector("text").textContent;
+  vi.useRealTimers();
+  assert.strictEqual(text, "1,000");
 });

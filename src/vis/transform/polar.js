@@ -20,7 +20,7 @@ import {
   resolve,
   scaleDescriptors,
   scaleName,
-  sharedDomain,
+  sharedScale,
   withoutHints,
   withScaleOptions,
   withSeries,
@@ -96,14 +96,16 @@ export function polar(
     ({width, height} = renderer._props);
     boxes = data.map(() => ({left: 0, right: width, top: 0, bottom: height}));
   }
-  const frames = boxes.map(({left, right, top, bottom}) => {
+  const frames = boxes.map(({left, right, top, bottom, nested}) => {
     const l = left + marginLeft;
     const r = right - marginRight;
     const t = top + marginTop;
     const b = bottom - marginBottom;
     const outerRadius = Math.max(0, Math.min(r - l, b - t) / 2);
     const r0 = innerRadius * outerRadius;
-    return {type: "polar", cx: (l + r) / 2, cy: (t + b) / 2, innerRadius: r0, outerRadius, startAngle, endAngle};
+    const frame = {type: "polar", cx: (l + r) / 2, cy: (t + b) / 2, innerRadius: r0, outerRadius, startAngle, endAngle};
+    // Like cm.plane's, a nested frame is marked, so that its axes leave titles to the outer chart.
+    return nested ? {...frame, nested} : frame;
   });
   // The scales shared by all the contexts: colors, and positions unless they're independent.
   // Like cm.plane, a position is shared by the name of its scale, the axis by default.
@@ -122,7 +124,7 @@ export function polar(
         const all = allKeysOf(contexts, keys, axis);
         const hints = contexts.map(({hints = {}}) => axisHint(hints, keys));
         const {type, domain} = positionOf(hints, keys, name, fallback);
-        return [name, sharedScale(contexts, all, keys, type, domain)];
+        return [name, sharedScale(contexts, all, keys, {type, domain})];
       }),
     );
   const sharedX = sharedOf(keysX, "x");
@@ -174,19 +176,9 @@ export function polar(
     newValue.cy = Array.from({length: n}, () => cy);
     // As in cm.plane, the frame is kept as a clip shape, and the clip option is the default of marks.
     const shape = {x: frame.cx, y: frame.cy, d: arc()(frame)};
-    return {...withoutHints(scaled), value: newValue, scales, frame, clip: shape, clipped: clip};
+    // Unlike cm.plane's, the axes of cm.polar are titled only by labels given to scales, such as
+    // {y: {label: "Population"}}, not by field names, so that radial charts stay uncluttered.
+    const titles = {x: options[nameX]?.label, y: options[nameY]?.label};
+    return {...withoutHints(scaled), value: newValue, scales, frame, titles, clip: shape, clipped: clip};
   });
-}
-
-// The scale of a position shared by the contexts: its type and domain from the options, else from
-// the hints of the contexts, else inferred from the values of all of them.
-function sharedScale(data, all, keys, type, domain) {
-  const hints = data.map(({hints = {}}) => axisHint(hints, keys));
-  const values = merge(data, all);
-  domain ??= sharedDomain(
-    hints.map((hint) => hint.domain),
-    type ?? hints[0]?.type,
-    all.flatMap((key) => values[key] ?? []),
-  );
-  return positionScale(values, all, {type: type ?? hints[0]?.type, domain});
 }
