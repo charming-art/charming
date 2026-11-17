@@ -76,28 +76,31 @@ function swatches(key, scale, options, maxWidth, column) {
 
 // A continuous color or an opacity: a ramp of slices painted through the scale, as the renderers
 // have no gradients, with ticks under it, like a small axis.
-function ramp(key, scale, options, maxWidth) {
+function ramp(key, scale, options, maxWidth, column) {
   const s = scaleOf(scale);
   const [d0, d1] = [scale.domain[0], scale.domain[scale.domain.length - 1]];
   const opacity = key.endsWith("Opacity");
   const label = options.label !== undefined ? options.label : scale.label;
-  const width = Math.min(options.width ?? 240, maxWidth);
+  // In a row, the title comes first, beside the ramp; in a column, above it.
+  const head = column || label == null ? 0 : widthOf(label) + 8;
+  const top = column && label != null ? lineHeight : 0;
+  const width = Math.max(0, Math.min(options.width ?? 240, maxWidth - head));
   const count = typeof options.ticks === "number" ? options.ticks : Math.max(2, width / 50);
   const ticks = ticksOf(s, options, count);
   const format = formatOf(s, options, count);
   const n = 64;
   const slices = Array.from({length: n}, (_, i) => i);
   const at = (d) => ((d - d0) / (d1 - d0 || 1)) * width;
-  const top = label == null ? 0 : lineHeight;
   return {
-    width,
+    width: head + width,
     height: top + rampHeight + 4 + lineHeight,
     draw(flow, x0, y0) {
       if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
+      const x1 = x0 + head;
       const value = (i) => d0 + ((d1 - d0) * (i + 0.5)) / n;
       flow.data(slices).append(rect, {
         key: (i) => `legend\0${key}\0slice\0${i}`,
-        x: (i) => x0 + (i * width) / n,
+        x: (i) => x1 + (i * width) / n,
         y: y0 + top,
         // Slices overlap by a pixel, so that no seam shows between them.
         width: width / n + 1,
@@ -109,7 +112,7 @@ function ramp(key, scale, options, maxWidth) {
         ...font,
         key: k,
         text: format,
-        x: (d) => x0 + at(d),
+        x: (d) => x1 + at(d),
         y: y0 + top + rampHeight + 4,
         textAlign: "center",
         textBaseline: "top",
@@ -118,30 +121,37 @@ function ramp(key, scale, options, maxWidth) {
   };
 }
 
-// A radius: circles at a few ticks of the scale, side by side, each labeled under it.
-function sizes(key, scale, options) {
+// A radius: circles at a few ticks of the scale, side by side, each labeled under it. In a row,
+// the title comes first, beside the circles; in a column, above them.
+function sizes(key, scale, options, column) {
   const s = scaleOf(scale);
   const label = options.label !== undefined ? options.label : scale.label;
   const count = typeof options.ticks === "number" ? options.ticks : 3;
   const values = ticksOf(s, options, count).filter((d) => s(d) > 0);
   const format = formatOf(s, options, count);
   const radius = Math.max(0, ...values.map((d) => s(d)));
+  const head = column || label == null ? 0 : widthOf(label) + 8;
+  const top = column && label != null ? lineHeight : 0;
   const items = [];
-  let x = 0;
+  let x = head;
   for (const d of values) {
     const r = s(d);
     const w = Math.max(2 * r, widthOf(format(d)));
     items.push({d, x: x + w / 2, r});
     x += w + 8;
   }
-  const top = label == null ? 0 : lineHeight;
   return {
-    width: Math.max(0, x - 8, label == null ? 0 : widthOf(label)),
+    width: Math.max(head, x - 8, column && label != null ? widthOf(label) : 0),
     height: top + 2 * radius + 4 + lineHeight,
     draw(flow, x0, y0) {
-      if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
-      const k = keyOf(key);
       const cy = y0 + top + radius;
+      // Beside the circles, the title is centered on them.
+      if (label != null) {
+        flow
+          .datum(label)
+          .append(text, {...title, text: label, x: x0, y: column ? y0 : cy, textBaseline: column ? "top" : "middle"});
+      }
+      const k = keyOf(key);
       flow.data(items).append(circle, {
         key: ({d}) => k(d),
         x: ({x}) => x0 + x,
@@ -164,9 +174,9 @@ function sizes(key, scale, options) {
 }
 
 function legendOf(key, scale, options, maxWidth, column) {
-  if (key === "r") return sizes(key, scale, options);
+  if (key === "r") return sizes(key, scale, options, column);
   if (scale.type === "ordinal") return swatches(key, scale, options, maxWidth, column);
-  return ramp(key, scale, options, maxWidth);
+  return ramp(key, scale, options, maxWidth, column);
 }
 
 // Draws the legends of the scales recorded by cm.plane or cm.polar besides positions: swatches for

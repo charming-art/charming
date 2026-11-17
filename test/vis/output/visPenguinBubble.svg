@@ -47,13 +47,13 @@
   <text x="67" y="3" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Adelie</text>
   <text x="127" y="3" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Chinstrap</text>
   <text x="205" y="3" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Gentoo</text>
-  <text x="257" y="3" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" dominant-baseline="text-before-edge" fill="currentColor">body_mass_g</text>
-  <circle cx="272" cy="26.759000729485333" r="5.634361698190111" fill="none" stroke="currentColor"></circle>
-  <circle cx="310" cy="26.759000729485333" r="7.968190728895958" fill="none" stroke="currentColor"></circle>
-  <circle cx="348" cy="26.759000729485333" r="9.759000729485333" fill="none" stroke="currentColor"></circle>
-  <text x="272" y="40.518001458970666" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">2,000</text>
-  <text x="310" y="40.518001458970666" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">4,000</text>
-  <text x="348" y="40.518001458970666" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">6,000</text>
+  <text x="257" y="12.759000729485333" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" dominant-baseline="central" fill="currentColor">body_mass_g</text>
+  <circle cx="346" cy="12.759000729485333" r="5.634361698190111" fill="none" stroke="currentColor"></circle>
+  <circle cx="384" cy="12.759000729485333" r="7.968190728895958" fill="none" stroke="currentColor"></circle>
+  <circle cx="422" cy="12.759000729485333" r="9.759000729485333" fill="none" stroke="currentColor"></circle>
+  <text x="346" y="26.518001458970666" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">2,000</text>
+  <text x="384" y="26.518001458970666" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">4,000</text>
+  <text x="422" y="26.518001458970666" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">6,000</text>
   <circle cx="187.63636363636363" cy="196.66666666666669" r="7.715167498104596" fill="#5470c6" fill-opacity="0.5" stroke="white" stroke-width="0.5"></circle>
   <circle cx="196.07272727272726" cy="255.47619047619054" r="7.766431633476234" fill="#5470c6" fill-opacity="0.5" stroke="white" stroke-width="0.5"></circle>
   <circle cx="212.94545454545448" cy="228.33333333333331" r="7.182430061427788" fill="#5470c6" fill-opacity="0.5" stroke="white" stroke-width="0.5"></circle>
