@@ -704,3 +704,18 @@ test("cm.plane doesn't clip by default", () => {
   const [, [a]] = facets(columns, {y: "v"});
   assert.strictEqual(a.clip, undefined);
 });
+
+test("cm.plane({clip: true}) also clips the marks appended to a clipped mark", () => {
+  const renderer = cm.svg({width: 200, height: 100});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([0, 1])
+    .transform(cm.encode, {x: (d) => d, y: (d) => d})
+    .transform(cm.plane, {margin: 10, clip: true})
+    .append(cm.g)
+    .append(cm.circle, {x: 0, y: 0, r: 300});
+  root.render();
+  const circles = renderer.node().querySelectorAll("circle");
+  assert.strictEqual(circles.length, 2);
+  for (const circle of circles) assert.ok(circle.closest("[clip-path]"));
+});
