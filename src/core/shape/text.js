@@ -1,3 +1,4 @@
+import {format as numberFormat} from "d3-format";
 import {center} from "./box.js";
 import {define} from "./define.js";
 
@@ -11,11 +12,22 @@ function maybeBox(value, options) {
   return centered;
 }
 
+// A format is a function of the text, or a d3 number format, such as ",d", like an axis's tickFormat;
+// each string is made a function once.
+function formatsOf(F) {
+  const formats = new Map();
+  return F.map((f) => {
+    if (typeof f !== "string") return f;
+    if (!formats.has(f)) formats.set(f, numberFormat(f));
+    return formats.get(f);
+  });
+}
+
 export const text = define((renderer, I, value, options) => {
   value = maybeBox(value, options);
   const {
     text: T = [],
-    format: FT = [],
+    format: FM = [],
     x: X = [],
     y: Y = [],
     fill: F = [],
@@ -30,6 +42,7 @@ export const text = define((renderer, I, value, options) => {
     fontWeight: FW = [],
     rotate: R = [],
   } = value;
+  const FT = formatsOf(FM);
   for (const i of I) {
     renderer.text({
       x: X[i],

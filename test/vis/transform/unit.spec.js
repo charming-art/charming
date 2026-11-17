@@ -89,9 +89,36 @@ test("cm.unitY orders the groups by the first appearance of their position, as v
   assert.deepStrictEqual(value.x, [new Date(0), new Date(0), new Date(1)]);
 });
 
-test("cm.unitY takes the order of the series as an array, and throws an error otherwise", () => {
-  assert.throws(
-    () => units(counts, {x: "lake", y: "count", fill: "species"}, cm.unitY, {order: "value"}),
-    /cm.unitY orders the series as an array/,
-  );
+test("cm.unitY orders the series like cm.stackY, by the name of an order", () => {
+  // By sum: trout has 2 units in lake A and bass 3, so bass comes first, descending.
+  const bySum = units(counts, {x: "lake", y: "count", fill: "species"}, cm.unitY, {order: "-sum"});
+  assert.deepStrictEqual(bySum.value.fill, ["bass", "bass", "bass", "trout", "trout", "bass"]);
+  const ascending = units(counts, {x: "lake", y: "count", fill: "species"}, cm.unitY, {order: "sum"});
+  assert.deepStrictEqual(ascending.value.fill, ["trout", "trout", "bass", "bass", "bass", "bass"]);
+  // Names aren't recorded as the domain of the colors; only arrays are.
+  assert.strictEqual(bySum.hints.fill.domain, undefined);
+  // Without a channel, each row counts 1.
+  const rows = [{s: "a"}, {s: "b"}, {s: "b"}];
+  const byCount = units(rows, {x: () => 0, fill: "s"}, cm.unitY, {order: "-sum"});
+  assert.deepStrictEqual(byCount.value.fill, ["b", "b", "a"]);
+});
+
+test("cm.unitY orders the series by the rows of the index only, which are the rows it counts", () => {
+  const selected = (rows, channels, I, options) =>
+    cm
+      .flow()
+      .data(rows)
+      .transform(cm.encode, channels)
+      .transform((flow, data) => data.map((context) => ({...context, I})))
+      .transform(cm.unitY, options)._values[0];
+  const fish = [
+    {species: "bass", count: 1},
+    {species: "trout", count: 5},
+    {species: "bass", count: 100},
+  ];
+  const bySum = selected(fish, {y: "count", fill: "species"}, [0, 1], {order: "-sum"});
+  assert.deepStrictEqual(bySum.value.fill, ["trout", "trout", "trout", "trout", "trout", "bass"]);
+  const rows = ["a", "b", "b", "a", "a"].map((s) => ({s}));
+  const byCount = selected(rows, {fill: "s"}, [0, 1, 2], {order: "-sum"});
+  assert.deepStrictEqual(byCount.value.fill, ["b", "b", "a"]);
 });

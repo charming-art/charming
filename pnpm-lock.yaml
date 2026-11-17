@@ -20,6 +20,9 @@ importers:
       d3-ease:
         specifier: ^3.0.1
         version: 3.0.1
+      d3-format:
+        specifier: ^3.1.0
+        version: 3.1.2
       d3-interpolate:
         specifier: ^3.0.1
         version: 3.0.1

@@ -9,8 +9,8 @@ import {schemeCategory} from "../scheme.js";
 // The scales shared by cm.plane and cm.polar.
 const colorKeys = ["fill", "stroke"];
 
-function isNumeric(values) {
-  return typeof values.find((d) => d != null) === "number";
+export function isNumeric(values) {
+  return typeof values?.find((d) => d != null) === "number";
 }
 
 // Like Plot, values that are already colors aren't scaled, and neither are objects such as
@@ -191,10 +191,10 @@ export function withScaleOptions(context, scales, axes) {
     const options = scales[scaleName(hints, keys, axis)];
     if (!options) continue;
     const {reverse, label} = options;
-    hints[keys[0]] = {...hints[keys[0]], ...defined({reverse, label})};
+    hints[keys[0]] = {...hints[keys[0]], ...definedOptions({reverse, label})};
   }
   for (const key of colorKeys) {
-    if (scales[key] && key in hints) hints[key] = {...hints[key], ...defined(scales[key])};
+    if (scales[key] && key in hints) hints[key] = {...hints[key], ...definedOptions(scales[key])};
   }
   return {...context, hints};
 }
@@ -204,7 +204,7 @@ export function withScaleOptions(context, scales, axes) {
 // that share the scale.
 export function positionOptions(hints, options = {}) {
   if (hints.some((hint) => hint.band !== undefined)) return {};
-  return defined({type: options.type, domain: options.domain});
+  return definedOptions({type: options.type, domain: options.domain});
 }
 
 // The hints of the colors of the contexts, for colorScales: for each color, the hint of the first
@@ -222,7 +222,7 @@ export function colorHints(data) {
   return hints;
 }
 
-function defined(options) {
+function definedOptions(options) {
   return Object.fromEntries(Object.entries(options).filter(([, v]) => v !== undefined));
 }
 
@@ -271,6 +271,21 @@ export function sharedDomain(domains, type, values) {
   if (discrete(type, values)) return Array.from(new InternSet(domains.flat()));
   const extent = [min(domains, (d) => min(d)), max(domains, (d) => max(d))];
   return domains.every((d) => d[0] > d[d.length - 1]) ? extent.reverse() : extent;
+}
+
+// The scale of a position shared by the contexts, for cm.plane and cm.polar: its type and domain as
+// given, such as the options of the scale, else from the hints of the contexts, else inferred from
+// the values of all of them.
+export function sharedScale(data, all, keys, {type, domain} = {}) {
+  const hints = data.map(({hints = {}}) => axisHint(hints, keys));
+  type ??= hints[0]?.type;
+  const values = merge(data, all);
+  domain ??= sharedDomain(
+    hints.map((hint) => hint.domain),
+    type,
+    all.flatMap((key) => values[key] ?? []),
+  );
+  return positionScale(values, all, {type, domain});
 }
 
 // The point at the radius r and the angle a of a polar frame, clockwise from 12 o'clock.

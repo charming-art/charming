@@ -353,3 +353,65 @@ test("cm.axis keys its ticks apart from the keys of marks, so that marks split f
   // The bar splits into the points, through paths; it doesn't fade out on its own.
   assert.deepStrictEqual([count("rect"), count("path")], [0, 3]);
 });
+
+// Renders a rose with cm.polar and both axes, and returns the texts that aren't tick labels.
+function polarTitles(polarOptions, axisOptions) {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {name: "a", value: 10},
+      {name: "b", value: 4},
+    ])
+    .transform(cm.encode, {x: "name", y: "value"})
+    .transform(cm.spreadX)
+    .transform(cm.polar, polarOptions)
+    .add(cm.axis, axisOptions);
+  root.render();
+  const isTick = (t) => /^[\d.]+$/.test(t) || t === "a" || t === "b";
+  return Array.from(renderer.node().querySelectorAll("text"), (d) => d.textContent).filter((t) => !isTick(t));
+}
+
+test("cm.axis in polar titles its axes only with the labels given to scales, not field names", () => {
+  assert.deepStrictEqual(polarTitles(), []);
+  assert.deepStrictEqual(polarTitles({scales: {x: {label: "Name"}, y: {label: "Value"}}}), ["Name", "Value"]);
+  // The label option of an axis gives a title, or hides one with null.
+  assert.deepStrictEqual(polarTitles({scales: {y: {label: "Value"}}}, {y: {label: null}, x: {label: "N"}}), ["N"]);
+});
+
+test("cm.axis in polar puts the radius title at the top left and the angle title at the bottom right", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([{name: "a", value: 10}])
+    .transform(cm.encode, {x: "name", y: "value"})
+    .transform(cm.spreadX)
+    .transform(cm.polar, {scales: {x: {label: "Name"}, y: {label: "Value"}}})
+    .add(cm.axis);
+  root.render();
+  const at = (t) => {
+    const node = Array.from(renderer.node().querySelectorAll("text")).find((d) => d.textContent === t);
+    return [+node.getAttribute("x"), +node.getAttribute("y")];
+  };
+  assert.deepStrictEqual(at("Value"), [3, 3]);
+  assert.deepStrictEqual(at("Name"), [197, 197]);
+});
+
+test("cm.axis draws no titles for polar charts nested in a chart", () => {
+  const renderer = cm.svg({width: 200, height: 100});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(["A", "B"])
+    .transform(cm.encode, {x: (d) => d})
+    .transform(cm.spreadX)
+    .transform(cm.plane, {margin: 0})
+    .append(cm.g)
+    .data([{v: 1}, {v: 2}])
+    .transform(cm.encode, {x: "v"})
+    .transform(cm.stackX)
+    .transform(cm.polar, {scales: {x: {label: "Share"}}})
+    .add(cm.axisX);
+  root.render();
+  const T = Array.from(renderer.node().querySelectorAll("text"), (d) => d.textContent);
+  assert.ok(!T.includes("Share"));
+});

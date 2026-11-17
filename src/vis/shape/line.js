@@ -1,7 +1,7 @@
 import {ascending} from "d3-array";
 import {line as d3line} from "d3-shape";
 import {define} from "../../core/shape/define.js";
-import {curveOf, polarContext, seriesOf} from "./curve.js";
+import {curveOf, polarContext, seriesGroups} from "./curve.js";
 
 // The points of a series, sorted along the position it runs on, such as x for cm.lineY. A row with
 // a band on that position, such as a bar of cm.spreadX, is at the middle of its band, as Plot puts
@@ -32,7 +32,7 @@ function drawLine(renderer, I, value, options, shape, [p, p1, v], center) {
     strokeJoin: SJ = [],
   } = value;
   const path = shape.curve(curveOf(options.curve)).defined(defined);
-  for (const series of seriesOf(I, value)) {
+  for (const series of seriesGroups(I, value)) {
     const [i] = series;
     if (i === undefined) continue;
     renderer.path({

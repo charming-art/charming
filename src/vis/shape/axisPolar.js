@@ -1,11 +1,7 @@
 import {link} from "../../core/shape/link.js";
 import {path} from "../../core/shape/path.js";
 import {text} from "../../core/shape/text.js";
-import {font, formatOf, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
-
-// Tick marks are keyed by their values, so that transitions match ticks from render to render;
-// dates by their times, as keys compare as strings, which drop milliseconds.
-const key = (d) => (d instanceof Date ? +d : d);
+import {countOf, font, formatOf, key, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
 
 const stroke = "currentColor";
 
@@ -28,9 +24,18 @@ function alignOf(dx, dy) {
   };
 }
 
+// The title of a polar axis: the label option of the axis, else the label given to its scale in
+// cm.polar's scales, recorded in titles, null for none; not in nested charts, which leave titles
+// to the outer chart.
+function titleOf(frame, titles = {}, axis, {label}) {
+  if (frame.nested) return null;
+  return label !== undefined ? label : (titles[axis] ?? null);
+}
+
 // The angle axis of cm.polar. The ticks point into the hole, as in D3's radial stacked bar chart,
-// or out of the chart, as in GoFish's donut chart. The anchor is inner if there's a hole.
-export function polarAxisX(flow, frame, x, options) {
+// or out of the chart, as in GoFish's donut chart. The anchor is inner if there's a hole. Its
+// title is at the bottom right, like a plane's x axis.
+export function polarAxisX(flow, frame, x, options, titles) {
   const {innerRadius, outerRadius, startAngle, endAngle} = frame;
   const {tickSize = 6, tickPadding = 3, grid = false, anchor = innerRadius > 0 ? "inner" : "outer"} = options;
   const scale = scaleOf(x);
@@ -75,11 +80,17 @@ export function polarAxisX(flow, frame, x, options) {
     textAlign: (d, i) => align[i].textAlign,
     textBaseline: (d, i) => align[i].textBaseline,
   });
+  const title = titleOf(frame, titles, "x", options);
+  if (title == null) return;
+  const {width, height} = flow.renderer()._props;
+  flow.datum(title).append(text, {...font, text: title, x: width - 3, y: height - 3, textAlign: "end"});
 }
 
 // The radius axis of cm.polar, as in D3's radial stacked bar chart: a ring per tick, and tick
 // labels with a halo along the line at 12 o'clock. A tick at the baseline is skipped, as in D3.
-export function polarAxisY(flow, frame, y, options) {
+// Like D3's, the rings are drawn by default, with grid; there are no tick marks, so tickSize and
+// tickPadding don't apply. Its title is at the top left, like a plane's y axis.
+export function polarAxisY(flow, frame, y, options, titles) {
   const {cx, cy, innerRadius, outerRadius} = frame;
   const {grid = true} = options;
   const scale = scaleOf(y);
@@ -91,8 +102,7 @@ export function polarAxisY(flow, frame, y, options) {
   const label = {...font, key, text: format, x: cx, y: (d) => cy - R(d), textAlign: "center", textBaseline: "middle"};
   flow.data(ticks).append(text, {key, ...label, fill: null, stroke: "white", strokeWidth: 3});
   flow.data(ticks).append(text, label);
-}
-
-function countOf({ticks}, length, spacing) {
-  return typeof ticks === "number" ? ticks : length / spacing;
+  const title = titleOf(frame, titles, "y", options);
+  if (title == null) return;
+  flow.datum(title).append(text, {...font, text: title, x: 3, y: 3, textAlign: "start", textBaseline: "top"});
 }
