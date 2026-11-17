@@ -3,8 +3,8 @@ import * as cm from "../../../src/index.js";
 import {renderFlow, withSVG} from "../../helpers.js";
 
 // Plot's stacked area chart (https://observablehq.com/@observablehq/plot-stacked-area-chart): the
-// unemployed by industry over time, stacked with stackY, with a legend of the industries in a
-// column right of the chart.
+// unemployed by industry over time, stacked with stackY, with a legend of the industries right of
+// the chart.
 export const visStackedArea = withSVG(async () => {
   const data = await d3.csv("data/bls-industry-unemployment.csv", d3.autoType);
   return renderFlow(
@@ -16,7 +16,7 @@ export const visStackedArea = withSVG(async () => {
         .transform(cm.plane, {marginRight: 170})
         .add(cm.areaY)
         .add(cm.axis, {y: {grid: true}})
-        .add(cm.legend, {anchor: "right"});
+        .add(cm.legend);
     },
     {width: 640, height: 400},
   );

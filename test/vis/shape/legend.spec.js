@@ -14,7 +14,7 @@ function legend(channels, options, plane = {}, width = 400) {
       {k: "c", v: 9},
     ])
     .transform(cm.encode, {x: "v", y: "v", ...channels})
-    .transform(cm.plane, {marginTop: 60, ...plane})
+    .transform(cm.plane, {marginRight: 150, ...plane})
     .add(cm.legend, options);
   root.render();
   return renderer.node();
@@ -32,42 +32,13 @@ test("cm.legend draws a swatch per category of a color, labeled, after the title
   );
 });
 
-test("cm.legend starts its rows at the top left of the chart, by default, like Plot's legends", () => {
-  const node = legend({fill: "k"});
-  const [title] = node.querySelectorAll("text");
-  assert.deepStrictEqual([+title.getAttribute("x"), +title.getAttribute("y")], [3, 3]);
-  assert.ok(rects(node).every((r) => +r.getAttribute("y") < 20));
-});
-
-test("cm.legend leaves the top of the margin to legends: the titles of the axes stay by the frame", () => {
-  const renderer = cm.svg({width: 400, height: 200});
-  const root = cm.flow().renderer(renderer);
-  root
-    .data([
-      {v: 1, k: "a"},
-      {v: 2, k: "b"},
-    ])
-    .transform(cm.encode, {x: "v", y: "v", fill: "k"})
-    .transform(cm.plane, {marginTop: 60})
-    .add(cm.axis)
-    .add(cm.legend);
-  root.render();
-  const find = (t) => Array.from(renderer.node().querySelectorAll("text")).find((d) => d.textContent === t);
-  // The legend is at the top; the title of y is 17px over the frame, below it.
-  assert.strictEqual(+find("k").getAttribute("y"), 3);
-  assert.strictEqual(+find("↑ v").getAttribute("y"), 60 - 17);
-});
-
-test("cm.legend wraps swatches within the width of the chart", () => {
-  const node = legend({fill: "k"}, {}, {}, 80);
-  const ys = new Set(rects(node).map((r) => r.getAttribute("y")));
-  assert.ok(ys.size > 1);
-});
-
-test("cm.legend draws a ramp for a continuous color, with ticks", () => {
+test("cm.legend draws a ramp for a continuous color, with ticks, within the margin", () => {
   const node = legend({fill: "v"});
   const slices = rects(node);
   assert.strictEqual(slices.length, 64);
+  // The ramp narrows to fit the margin, ending 3px from the right of the chart.
+  const last = slices[63];
+  assert.ok(+last.getAttribute("x") + +last.getAttribute("width") <= 400 - 3 + 1);
   // The ramp goes from the color of the lowest value to that of the highest.
   assert.notStrictEqual(slices[0].getAttribute("fill"), slices[63].getAttribute("fill"));
   assert.ok(texts(node).includes("v"));
@@ -99,16 +70,23 @@ test("cm.legend takes options per scale, such as a label, or false to skip a leg
   assert.deepStrictEqual(texts(legend({fill: "k"}, {label: null})), ["a", "b", "c"]);
 });
 
-test("cm.legend with anchor right stacks its legends in a column right of the frame", () => {
-  const node = legend({fill: "k"}, {anchor: "right"}, {marginRight: 100});
-  const xs = rects(node).map((r) => +r.getAttribute("x"));
-  assert.deepStrictEqual(new Set(xs).size, 1);
-  assert.strictEqual(xs[0], 400 - 100 + 12);
-  const ys = rects(node).map((r) => +r.getAttribute("y"));
+test("cm.legend stacks its legends in a column right of the frame, from its top", () => {
+  const node = legend({fill: "k", r: "v"});
+  // The frame ends at 400 - 150 and starts at 20; the column starts 12px right of it.
+  const [title] = node.querySelectorAll("text");
+  assert.deepStrictEqual([+title.getAttribute("x"), +title.getAttribute("y")], [400 - 150 + 12, 20]);
+  const swatches = rects(node);
+  assert.deepStrictEqual(new Set(swatches.map((r) => r.getAttribute("x"))).size, 1);
+  const ys = swatches.map((r) => +r.getAttribute("y"));
   assert.deepStrictEqual(
     ys,
     ys.slice().sort((a, b) => a - b),
   );
+  // The size legend is under the swatches.
+  const circles = Array.from(node.querySelectorAll("circle"), (c) => +c.getAttribute("cy") - +c.getAttribute("r"));
+  assert.ok(circles.every((top) => top > ys[ys.length - 1]));
+  // Its circles are aligned at their tops.
+  assert.strictEqual(new Set(circles.map((d) => Math.round(d * 1e6))).size, 1);
 });
 
 test("cm.legend draws nothing in charts nested in a chart, nor without scales to show", () => {

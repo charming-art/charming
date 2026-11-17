@@ -25,7 +25,7 @@
   <text x="295.8523344191097" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">2006</text>
   <text x="381.05863192182414" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">2008</text>
   <text x="466.3816503800217" y="379" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">2010</text>
-  <text x="487" y="397" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" fill="currentColor">date →</text>
+  <text x="637" y="397" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" fill="currentColor">date →</text>
   <line x1="40" y1="370" x2="470" y2="370" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
   <line x1="40" y1="323.7190082644628" x2="470" y2="323.7190082644628" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
   <line x1="40" y1="277.43801652892563" x2="470" y2="277.43801652892563" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
