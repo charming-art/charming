@@ -64,11 +64,12 @@ const paints = ["fill", "fillOpacity", "stroke", "strokeOpacity", "strokeWidth"]
 // with the sign of a value; dx and dy nudge a label after it's placed. With contrast, the fill is
 // black or white by the mark's fill, and with halo, a stroke of haloWidth is painted under it.
 export const label = define((renderer, I, value, options = {}) => {
+  // Like cm.text, a position set in the options without its pair is a point, such as {x: (d) =>
+  // d.x1} over a bar, rather than an edge of the box.
+  const point = (key, key1) => key in options && !(key1 in options);
   const {
     x: X = [],
-    x1: X1 = X,
     y: Y = [],
-    y1: Y1 = Y,
     cx: CX,
     cy: CY,
     text: T = [],
@@ -87,6 +88,8 @@ export const label = define((renderer, I, value, options = {}) => {
     fontWeight: FW = [],
     rotate: R = [],
   } = value;
+  const X1 = point("x", "x1") ? X : (value.x1 ?? X);
+  const Y1 = point("y", "y1") ? Y : (value.y1 ?? Y);
   const own = Object.fromEntries(paints.map((key) => [key, key in options ? value[key] : []]));
   const marked = value.fill ?? [];
   const FT = formatsOf(FM);

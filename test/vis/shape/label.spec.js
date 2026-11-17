@@ -166,3 +166,11 @@ test("cm.label moves with its bar between keyframes, by key", () => {
   vi.useRealTimers();
   assert.strictEqual(x, 44);
 });
+
+test("cm.label is a point along a position set in its options without its pair, like cm.text", () => {
+  // x is given, so the label sits at x 20 rather than in the middle of the box from 20 to 40.
+  assert.deepStrictEqual(at({x: 20}), [20, 60, "middle", "central"]);
+  assert.deepStrictEqual(at({x: 20, position: "right"}), [24, 60, "start", "central"]);
+  // Both of a pair given span the box.
+  assert.deepStrictEqual(at({x: 10, x1: 30}), [20, 60, "middle", "central"]);
+});
