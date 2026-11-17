@@ -5,8 +5,8 @@ import {
   axisHint,
   byScaleName,
   callable,
-  colorHints,
-  colorScales,
+  channelHints,
+  channelScales,
   hasAny,
   isNested,
   keysOf,
@@ -19,6 +19,7 @@ import {
   resolve,
   scaleDescriptors,
   scaleName,
+  scaledKeys,
   sharedScale,
   withoutHints,
   withScaleOptions,
@@ -130,7 +131,7 @@ export function plane(
   // is shared with the contexts whose positions use the same scale: the axis, by default, or a name
   // given to it, such as x: {value: "culmen_length_mm", scale: "length"}. The options of scales and
   // resolve take any name, such as {x: "independent"}.
-  const colors = colorScales(merge(data, ["fill", "stroke"]), colorHints(data));
+  const colors = channelScales(merge(data, scaledKeys), channelHints(data));
   const independent = (name) => resolution[name] === "independent";
   const sharedOf = (keys, axis) =>
     new Map(

@@ -853,3 +853,67 @@ test("cm.plane doesn't apply the domain of scales to bands that share the scale 
   assert.deepStrictEqual(linear.value.y, unsetLinear.value.y);
   assert.strictEqual(bands.scales.y.type, "band");
 });
+
+function assertAllInDelta(actual, expected) {
+  assert.strictEqual(actual.length, expected.length);
+  actual.forEach((d, i) => assertInDelta(d, expected[i]));
+}
+
+test("cm.plane scales r by a square root from 0, with the first quartile of positive values at 3px, like Plot", () => {
+  const {r} = encoded([1, 4, 4, 16], {x: (d) => d, r: (d) => d});
+  // The first quartile is 3.25, so r is 3 · √(v / 3.25).
+  assertInDelta(r[0], 3 * Math.sqrt(1 / 3.25));
+  assertInDelta(r[3], 3 * Math.sqrt(16 / 3.25));
+  // The largest radius is at most 30px.
+  const {r: capped} = encoded([1, 1, 1, 10000], {x: (d) => d, r: (d) => d});
+  assertInDelta(capped[3], 30);
+});
+
+test("cm.plane takes the type, domain and range of r in scales, and leaves constant radii unscaled", () => {
+  const {r} = encoded([0, 25, 100], {x: (d) => d, r: (d) => d}, {scales: {r: {range: [0, 10]}}});
+  assertAllInDelta(r, [0, 5, 10]);
+  const {r: linear} = encoded(
+    [0, 25, 100],
+    {x: (d) => d, r: (d) => d},
+    {scales: {r: {type: "linear", range: [0, 10]}}},
+  );
+  assertAllInDelta(linear, [0, 2.5, 10]);
+  const {r: constant} = encoded([0, 1], {x: (d) => d, r: 3});
+  assert.deepStrictEqual(constant, [3, 3]);
+});
+
+test("cm.plane scales fillOpacity and strokeOpacity linearly from 0 to [0, 1]", () => {
+  const {fillOpacity, strokeOpacity} = encoded([0, 5, 10], {
+    x: (d) => d,
+    fillOpacity: (d) => d,
+    strokeOpacity: (d) => d * 2,
+  });
+  assertAllInDelta(fillOpacity, [0, 0.5, 1]);
+  assertAllInDelta(strokeOpacity, [0, 0.5, 1]);
+  const {fillOpacity: given} = encoded(
+    [0, 5, 10],
+    {x: (d) => d, fillOpacity: (d) => d},
+    {scales: {fillOpacity: {range: [0.2, 1]}}},
+  );
+  assertAllInDelta(given, [0.2, 0.6, 1]);
+  const {fillOpacity: constant} = encoded([0, 1], {x: (d) => d, fillOpacity: 0.5});
+  assert.deepStrictEqual(constant, [0.5, 0.5]);
+});
+
+test("cm.plane records the scales of r and opacities, with the labels of their fields", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [context] = root
+    .data([{v: 4, o: 2}])
+    .transform(cm.encode, {x: "v", r: "v", fillOpacity: "o"})
+    .transform(cm.plane)._values;
+  assert.deepStrictEqual(context.scales.r.domain, [0, 4]);
+  assert.strictEqual(context.scales.r.label, "v");
+  assert.deepStrictEqual(context.scales.fillOpacity.range, [0, 1]);
+});
+
+test("cm.plane takes named continuous types of positions, such as log", () => {
+  const {y} = encoded([1, 10, 1000], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "log"}}});
+  // y is up: 1 at the bottom, 1000 at the top, and 10 a third of the way, not in the middle as the
+  // categories of a point scale would be.
+  assertAllInDelta(y, [400, (400 * 2) / 3, 0]);
+});

@@ -6,8 +6,8 @@ import {
   axisHint,
   byScaleName,
   callable,
-  colorHints,
-  colorScales,
+  channelHints,
+  channelScales,
   hasAny,
   isNested,
   keysOf,
@@ -20,6 +20,7 @@ import {
   resolve,
   scaleDescriptors,
   scaleName,
+  scaledKeys,
   sharedScale,
   withoutHints,
   withScaleOptions,
@@ -109,7 +110,7 @@ export function polar(
   });
   // The scales shared by all the contexts: colors, and positions unless they're independent.
   // Like cm.plane, a position is shared by the name of its scale, the axis by default.
-  const colors = colorScales(merge(data, ["fill", "stroke"]), colorHints(data));
+  const colors = channelScales(merge(data, scaledKeys), channelHints(data));
   const independent = (name) => resolution[name] === "independent";
   // The type and domain of a position: the options of its scale, unless it has bands, else its
   // hint; the radius is radial by default, so that areas grow with values.
