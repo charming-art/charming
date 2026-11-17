@@ -10,9 +10,9 @@ export const visLayeredColumn = withSVG(async () => {
     (root) => {
       root
         .data(data)
-        .transform(cm.encode, {x: "state", y: "population", fill: {value: "age", domain: ages}})
+        .transform(cm.encode, {x: "state", y: "population", fill: "age"})
         .transform(cm.spreadX)
-        .transform(cm.plane)
+        .transform(cm.plane, {scales: {fill: {domain: ages}}})
         .add(cm.rect, {fillOpacity: 0.6})
         .add(cm.axis, {y: {tickFormat: "s"}});
     },

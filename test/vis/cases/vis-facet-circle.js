@@ -13,8 +13,8 @@ export const visFacetCircle = withSVG(async () => {
     (root) => {
       root
         .data(d3.groups(data, (d) => d.month))
-        .transform(cm.encode, {x: {value: ([month]) => month, domain: months}})
-        .transform(cm.spreadX)
+        .transform(cm.encode, {x: ([month]) => month})
+        .transform(cm.spreadX, {domain: months})
         .transform(cm.polar, {innerRadius: 0.7})
         .add(cm.axisX)
         .append(cm.g)

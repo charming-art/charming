@@ -35,20 +35,33 @@ test("cm.stackY stacks negative values down from 0, and skips rows without a val
   assert.deepStrictEqual(y, [2, -1, NaN, 5, -3, NaN]);
 });
 
-test("cm.stackY orders the series by the domain of their hint", () => {
-  const {y, y1} = values(data, {x: "state", y: "n", fill: {value: "age", domain: ["b", "a"]}}, cm.spreadX, cm.stackY);
-  assert.deepStrictEqual(y1, [2, 0, 0]);
-  assert.deepStrictEqual(y, [3, 2, 3]);
+const stackYOf = (options) => (flow, data) => cm.stackY(flow, data, options);
+
+test("cm.stackY orders the series by an order given as the series, and records it as their domain", () => {
+  const flow = cm
+    .flow()
+    .data(data)
+    .transform(cm.encode, {x: "state", y: "n", fill: "age"})
+    .transform(cm.spreadX)
+    .transform(cm.stackY, {order: ["b", "a"]});
+  const [{value, hints}] = flow._values;
+  assert.deepStrictEqual(value.y1, [2, 0, 0]);
+  assert.deepStrictEqual(value.y, [3, 2, 3]);
+  assert.deepStrictEqual(hints.fill.domain, ["b", "a"]);
 });
 
 test("cm.stackY uses z for the series before fill", () => {
-  const {y1} = values(
-    data,
-    {x: "state", y: "n", z: {value: "age", domain: ["b", "a"]}, fill: {value: "age", domain: ["a", "b"]}},
-    cm.spreadX,
-    cm.stackY,
-  );
-  assert.deepStrictEqual(y1, [2, 0, 0]);
+  const flow = cm
+    .flow()
+    .data(data)
+    .transform(cm.encode, {x: "state", y: "n", z: "age", fill: "age"})
+    .transform(cm.spreadX)
+    .transform(cm.stackY, {order: ["b", "a"]});
+  const [{value, hints}] = flow._values;
+  assert.deepStrictEqual(value.y1, [2, 0, 0]);
+  // The order is the domain of z, not of fill, whose colors keep their own.
+  assert.deepStrictEqual(hints.z.domain, ["b", "a"]);
+  assert.strictEqual(hints.fill.domain, undefined);
 });
 
 test("cm.stackX sums x per y band, for stacked bars", () => {
@@ -69,7 +82,7 @@ test("cm.stackX splits the x bands of cm.spreadX among the series, for grouped c
 });
 
 test("cm.stackY splits the y bands of cm.spreadY among the series, for grouped bars", () => {
-  const {y, y1} = values(data, {y: "state", x: "n", fill: {value: "age", domain: ["b", "a"]}}, cm.spreadY, cm.stackY);
+  const {y, y1} = values(data, {y: "state", x: "n", fill: "age"}, cm.spreadY, stackYOf({order: ["b", "a"]}));
   const band = d3.scaleBand(["A", "B"], [0, 1]).padding(0.1);
   const w = band.bandwidth() / 2;
   assertAllInDelta(y, [band("A") + w, band("A"), band("B") + w]);
@@ -251,4 +264,15 @@ test("cm.stackY resolves Plot's order names before channel names, like Plot", ()
     cm.stackY(flow, data, {order: "value"}),
   );
   assert.deepStrictEqual(named.y1, byValue.y1);
+});
+
+test("cm.stackY with an order leaves a constant fill unscaled", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [context] = root
+    .data(data)
+    .transform(cm.encode, {x: "state", y: "n", fill: "steelblue"})
+    .transform(cm.spreadX)
+    .transform(cm.stackY, {order: ["steelblue"]})
+    .transform(cm.plane)._values;
+  assert.deepStrictEqual(context.value.fill, ["steelblue", "steelblue", "steelblue"]);
 });

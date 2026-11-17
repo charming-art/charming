@@ -44,10 +44,10 @@ test("cm.unitY keeps the sign of the amount of each group", () => {
   assert.deepStrictEqual(value.y, [1, -1, -1]);
 });
 
-test("cm.unitY orders the units of each group by series, and keeps the hints", () => {
-  const context = units(counts, {x: "lake", y: "count", fill: {value: "species", domain: ["trout", "bass"]}}, cm.unitY);
+test("cm.unitY orders the units of each group by series, with order, and records it as their domain", () => {
+  const context = units(counts, {x: "lake", y: "count", fill: "species"}, cm.unitY, {order: ["trout", "bass"]});
   assert.deepStrictEqual(context.value.fill, ["trout", "trout", "bass", "bass", "bass", "bass"]);
-  assert.deepStrictEqual(context.hints.fill.domain, ["trout", "bass"]);
+  assert.deepStrictEqual(context.hints.fill, {label: "species", domain: ["trout", "bass"]});
 });
 
 test("cm.unitX mirrors cm.unitY", () => {
@@ -87,4 +87,11 @@ test("cm.unitY orders the groups by the first appearance of their position, as v
   const data = [new Date(0), new Date(1), new Date(0)].map((date) => ({date}));
   const {value} = units(data, {x: "date"}, cm.unitY);
   assert.deepStrictEqual(value.x, [new Date(0), new Date(0), new Date(1)]);
+});
+
+test("cm.unitY takes the order of the series as an array, and throws an error otherwise", () => {
+  assert.throws(
+    () => units(counts, {x: "lake", y: "count", fill: "species"}, cm.unitY, {order: "value"}),
+    /cm.unitY orders the series as an array/,
+  );
 });

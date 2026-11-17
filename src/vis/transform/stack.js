@@ -1,11 +1,12 @@
 import {greatest, group, groupSort, InternMap, InternSet, range, rollup, sum} from "d3-array";
 import {scaleBand} from "d3-scale";
-import {seriesOf, seriesOrder} from "./series.js";
+import {seriesOf, seriesOrder, withSeriesOrder} from "./series.js";
 
 // Adapted from the stack transform of Observable Plot (ISC license): the rows of each group are
 // stacked in order, with one running sum for negative values and one for the others. Rows
-// without a value are skipped. Like Plot, the input order is kept unless an order is given,
-// here the domain of the series from its hint.
+// without a value are skipped. Like Plot, the input order is kept unless an order is given, or the
+// series have a domain from an earlier transform. An order given as the series, such as {order:
+// ages}, is recorded as their domain, so that colors follow it.
 function stackValues(V, stacks, arrange) {
   const n = V.length;
   const V1 = new Array(n).fill(NaN);
@@ -178,19 +179,23 @@ function splitBands(B, B1, Z, domain) {
 function stack(data, {chunk, padding = 0.1, order, reverse = false, offset} = {}, [key, key1, other, other1], name) {
   if (!data) throw new Error(`No channels: call flow.transform(cm.encode, channels) before cm.${name}.`);
   return data.map((context) => {
-    const {value, hints = {}} = context;
-    const {Z, domain} = seriesOf(context);
+    const {value} = context;
+    const {key: series, Z, domain: hinted} = seriesOf(context);
+    const given = Array.isArray(order) ? order : undefined;
+    const domain = given ?? hinted;
+    const hints = given && Z ? withSeriesOrder(context.hints ?? {}, series, given) : (context.hints ?? {});
     if (hints[key]?.band) {
       if (!Z) return context;
+      // Grouped bars: the bands are split among the series in their order.
       const [B, B1] = splitBands(value[key], value[key1], Z, domain ?? Array.from(new InternSet(Z)));
-      return {...context, value: {...value, [key]: B, [key1]: B1}};
+      return {...context, value: {...value, [key]: B, [key1]: B1}, hints};
     }
     const V = value[key];
     const O = value[other];
     const I = Array.from(V, (_, i) => i);
     const stacks = O ? Array.from(group(I, (i) => O[i]).values()) : [I];
     // Like Plot, the input order is kept unless an order is given, or the series have a domain.
-    const compare = order != null ? orderOf(order, V, O, Z, value) : domain && seriesOrder(Z, domain);
+    const compare = order != null ? orderOf(order, V, O, Z, value) : hinted && seriesOrder(Z, hinted);
     const arrange = (stack) => {
       if (compare) stack.sort(compare);
       if (reverse) stack.reverse();
@@ -200,14 +205,14 @@ function stack(data, {chunk, padding = 0.1, order, reverse = false, offset} = {}
       const B1 = value[other1];
       const [V2, V1, C, C1, extent] = stackChunks(V, stacks, arrange, {chunk, padding}, B1 && O, B1);
       const columns = C ? {[other]: C, [other1]: C1} : {};
-      // The domain spans the rows with their outer gaps and includes 0, unless one is given.
+      // The domain spans the rows with their outer gaps and includes 0, unless one is recorded.
       const newHints = hints[key]?.domain ? hints : {...hints, [key]: {...hints[key], domain: extent}};
       return {...context, value: {...value, [key]: V2, [key1]: V1, ...columns}, hints: newHints};
     }
     const [V2, V1] = stackValues(V, stacks, arrange);
     // Like Plot, normalize has the older name expand, and names are case-insensitive.
     if (/^(normalize|expand)$/i.test(offset)) normalize(stacks, V2, V1);
-    return {...context, value: {...value, [key]: V2, [key1]: V1}};
+    return {...context, value: {...value, [key]: V2, [key1]: V1}, hints};
   });
 }
 
