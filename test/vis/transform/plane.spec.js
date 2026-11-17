@@ -937,3 +937,38 @@ test("cm.plane leaves colors, radii and opacities as they are with the type iden
     ],
   );
 });
+
+test("cm.plane infers the domain of a log scale from the positive values, like Plot", () => {
+  // A log opacity or radius isn't from 0.
+  const {fillOpacity} = encoded(
+    [1, 10, 100],
+    {x: (d) => d, fillOpacity: (d) => d},
+    {scales: {fillOpacity: {type: "log"}}},
+  );
+  assertAllInDelta(fillOpacity, [0, 0.5, 1]);
+  const {r} = encoded([1, 10, 100], {x: (d) => d, r: (d) => d}, {scales: {r: {type: "log", range: [1, 10]}}});
+  assertAllInDelta(r, [1, 5.5, 10]);
+  // A log position skips zeros, rather than mapping every row to NaN.
+  const {y} = encoded([0, 1, 10, 100], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "log"}}});
+  assertAllInDelta(y.slice(1), [400, 200, 0]);
+  // Entirely negative values take their own extent.
+  const {y: negative} = encoded([-1, -10, -100], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "log"}}});
+  assert.ok(negative.every((v) => Number.isFinite(v)));
+});
+
+test("cm.plane applies the exponent of pow, the base of log and the constant of symlog", () => {
+  const {y} = encoded([0, 2, 4], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "pow", exponent: 2}}});
+  // 2 is 4/16 of the way up from the bottom, at 400 - 100.
+  assertAllInDelta(y, [400, 300, 0]);
+  const {r} = encoded([0, 2, 4], {x: (d) => d, r: (d) => d}, {scales: {r: {type: "pow", exponent: 2, range: [0, 16]}}});
+  assertAllInDelta(r, [0, 4, 16]);
+  const symlog = (constant) =>
+    encoded([-10, 1, 10], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "symlog", constant}}}).y[1];
+  assert.ok(Math.abs(symlog(1) - symlog(10)) > 1);
+  const root = cm.flow().renderer(cm.svg({width: 640, height: 400}));
+  const [context] = root
+    .data([1, 1000])
+    .transform(cm.encode, {x: (d) => d, y: (d) => d})
+    .transform(cm.plane, {scales: {y: {type: "log", base: 2}}})._values;
+  assert.strictEqual(context.scales.y.type.base(), 2);
+});

@@ -22,12 +22,31 @@ const colorKeys = ["fill", "stroke"];
 const opacityKeys = ["fillOpacity", "strokeOpacity"];
 export const scaledKeys = [...colorKeys, "r", ...opacityKeys];
 
-// The d3 scales of the continuous types that are named, like Plot's, such as {type: "log"}. Other
-// types, such as "linear", "ordinal" or a d3 scale, are as given.
-const continuous = {log: scaleLog, sqrt: scaleSqrt, pow: scalePow, symlog: scaleSymlog};
+// The d3 scales of the continuous types that are named, like Plot's, such as {type: "log"}, with
+// their options: the exponent of pow, the base of log and the constant of symlog. Other types, such
+// as "linear", "ordinal" or a d3 scale, are as given.
+const continuous = {
+  log: ({base}) => (base === undefined ? scaleLog() : scaleLog().base(base)),
+  sqrt: () => scaleSqrt(),
+  pow: ({exponent}) => (exponent === undefined ? scalePow() : scalePow().exponent(exponent)),
+  symlog: ({constant}) => (constant === undefined ? scaleSymlog() : scaleSymlog().constant(constant)),
+};
 
-export function typeOf(type) {
-  return typeof type === "string" && Object.hasOwn(continuous, type) ? continuous[type]() : type;
+export function typeOf(type, options = {}) {
+  return typeof type === "string" && Object.hasOwn(continuous, type) ? continuous[type](options) : type;
+}
+
+// Whether a scale is logarithmic, which only maps values of one sign.
+function isLog(type) {
+  return typeof type?.base === "function";
+}
+
+// Like Plot's, the domain of a log scale is the extent of the positive values, or of the negative
+// values if none is positive, as zero and values of the other sign have no logarithm.
+function logDomain(V) {
+  const positive = [min(V, (v) => (v > 0 ? v : NaN)), max(V, (v) => (v > 0 ? v : NaN))];
+  if (positive[0] !== undefined) return positive;
+  return [min(V, (v) => (v < 0 ? v : NaN)) ?? -1, max(V, (v) => (v < 0 ? v : NaN)) ?? -1];
 }
 
 export function isNumeric(values) {
@@ -89,14 +108,16 @@ export function channelScales(value, hints) {
   const scales = {};
   for (const key of ["r", ...opacityKeys]) {
     if (!(key in hints) || !(key in value)) continue;
-    const {type, domain, range} = hints[key];
+    const {type, domain, range, ...options} = hints[key];
     if (type === "identity") continue;
     const V = value[key];
     if (type === undefined && !isNumeric(V)) continue;
-    const d = domain ?? [0, max(V) ?? 1];
     const radius = key === "r";
+    const t = typeOf(type ?? (radius ? "sqrt" : "linear"), options);
+    // From 0, unless the scale is logarithmic, which has no logarithm of 0.
+    const d = domain ?? (isLog(t) ? logDomain(V) : [0, max(V) ?? 1]);
     const r = range ?? (radius ? radiusRange(V, d) : [0, 1]);
-    scales[key] = {type: typeOf(type ?? (radius ? "sqrt" : "linear")), domain: d, range: r};
+    scales[key] = {type: t, domain: d, range: r};
   }
   for (const key of colorKeys) {
     if (!(key in hints) || !(key in value)) continue;
@@ -133,7 +154,7 @@ function isTemporal(values) {
 export function positionScale(value, keys, {type, domain, range}) {
   type = typeOf(type);
   const V = keys.filter((key) => key in value).flatMap((key) => Array.from(value[key]));
-  if (domain === undefined) domain = domainOf(type, V);
+  if (domain === undefined) domain = isLog(type) ? logDomain(V) : domainOf(type, V);
   // cm.fit maps discrete positions with a point scale, unless a d3 scale is given. Dates are
   // mapped linearly, but recorded as a UTC time scale for the ticks of axes.
   const resolved = typeof type === "function" ? type : discrete(type, V) ? "point" : isTemporal(V) ? "utc" : "linear";
@@ -250,7 +271,7 @@ export function withScaleOptions(context, scales, axes) {
 // that share the scale.
 export function positionOptions(hints, options = {}) {
   if (hints.some((hint) => hint.band !== undefined)) return {};
-  return definedOptions({type: typeOf(options.type), domain: options.domain});
+  return definedOptions({type: typeOf(options.type, options), domain: options.domain});
 }
 
 // The hints of the scaled channels of the contexts, for channelScales: for each channel, such as a
