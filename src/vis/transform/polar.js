@@ -40,7 +40,8 @@ function radial(type) {
 // cm.plane, the scales are resolved once for all the contexts, unless resolve makes a position
 // independent, and a nested context is drawn in the frame of its parent row, such as a pie glyph
 // in a width × height box. The resolved scales are kept in context.scales, and the polar frame in
-// context.frame. With clip, the marks are clipped to the frame: its disc, ring or sector.
+// context.frame. With clip, the marks are clipped to the frame: its disc, ring or sector, unless a
+// mark gives its own clip option, as in cm.plane.
 export function polar(
   flow,
   data,
@@ -170,8 +171,9 @@ export function polar(
     if (!hasAny(value, ownKeysX)) [newValue[keysX[0]], newValue[keysX[1]]] = span(n, rangeX);
     newValue.cx = Array.from({length: n}, () => cx);
     newValue.cy = Array.from({length: n}, () => cy);
-    const clipped = clip ? {clip: {x: frame.cx, y: frame.cy, d: arc()(frame)}} : {};
-    return {...withoutHints(scaled), value: newValue, scales, frame, ...clipped};
+    // As in cm.plane, the frame is kept as a clip shape, and the clip option is the default of marks.
+    const shape = {x: frame.cx, y: frame.cy, d: arc()(frame)};
+    return {...withoutHints(scaled), value: newValue, scales, frame, clip: shape, clipped: clip};
   });
 }
 

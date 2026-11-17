@@ -61,9 +61,12 @@ function renderNode(renderer, node, index, context, path, scope, time, pick) {
     node._children = children;
     for (let c = 0; c < made.length; c++) renderNode(renderer, made[c], 0, context, `${path}/m${c}`, scope, time);
   }
-  // A shape in a clipped context, such as a mark of cm.plane({clip: true}), is clipped to its shape
-  // on renderers that clip, with what's appended to it, such as the marks in a cm.g.
-  const clip = builtin && bound?.clip && renderer.clip ? bound.clip : null;
+  // A shape is clipped to the clip shape of its context, such as the frame of cm.plane, if its clip
+  // option says so, else if the context's does, such as cm.plane({clip: true}), on renderers that
+  // clip, with what's appended to it, such as the marks in a cm.g. Composites, such as axes, aren't
+  // clipped: the shapes they make are drawn without their context.
+  const clipped = builtin && renderer.clip && (options?.clip ?? bound?.clipped);
+  const clip = clipped && bound?.clip ? bound.clip : null;
   if (clip) {
     renderer.save();
     renderer.clip(clip);

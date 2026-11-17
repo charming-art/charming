@@ -45,7 +45,9 @@ function middle(value, keys, [start, end]) {
 // In a nested flow, such as one chart per row of a parent mark, each context is drawn in the frame
 // of its parent row: the cell of a band, or a width × height box around a point. The resolved
 // scales are kept in context.scales, and the chart area in context.frame. With clip, the marks are
-// clipped to the frame, like Plot's clip, such as bars sliding in from outside it; axes aren't.
+// clipped to the frame, like Plot's clip, such as bars sliding in from outside it, unless a mark
+// gives its own clip option, false to draw outside it or true to be clipped without the plane's
+// clip; axes aren't.
 export function plane(
   flow,
   data,
@@ -191,9 +193,11 @@ export function plane(
       newValue[keysY[0]] = middle(value, ownKeysX, [frame.top, frame.bottom]);
     if (hasAny(value, ownKeysY) && !hasAny(value, ownKeysX))
       newValue[keysX[0]] = middle(value, ownKeysY, [frame.left, frame.right]);
+    // The frame is kept as a clip shape, so that a mark can opt in with its own clip option; the
+    // clip option is the default of the marks.
     const {left, top, right, bottom} = frame;
-    const clipped = clip ? {clip: {x: left, y: top, width: right - left, height: bottom - top}} : {};
-    return {...withoutHints(scaled), value: newValue, scales, frame, ...clipped};
+    const shape = {x: left, y: top, width: right - left, height: bottom - top};
+    return {...withoutHints(scaled), value: newValue, scales, frame, clip: shape, clipped: clip};
   });
 }
 

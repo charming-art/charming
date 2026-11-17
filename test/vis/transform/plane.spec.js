@@ -701,8 +701,39 @@ test("cm.plane({clip: true}) clips the marks of a nested chart to its cell", () 
 });
 
 test("cm.plane doesn't clip by default", () => {
-  const [, [a]] = facets(columns, {y: "v"});
-  assert.strictEqual(a.clip, undefined);
+  const [renderer, [a]] = facets(columns, {y: "v"});
+  assert.strictEqual(a.clipped, false);
+  assert.strictEqual(renderer.node().querySelector("[clip-path]"), null);
+});
+
+// A clipped or unclipped plane with a rect and a text, each with its own options.
+function clipMarks(plane, rect, text) {
+  const renderer = cm.svg({width: 200, height: 100});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([0, 1])
+    .transform(cm.encode, {x: (d) => d, y: (d) => d})
+    .transform(cm.plane, {margin: 10, ...plane})
+    .add(cm.rect, {width: 5, height: 5, ...rect})
+    .add(cm.text, {text: "a", ...text});
+  root.render();
+  const node = renderer.node();
+  return ["rect", "text"].map((name) =>
+    Array.from(node.querySelectorAll(name))
+      .filter((element) => !element.closest("clipPath"))
+      .map((element) => !!element.closest("[clip-path]")),
+  );
+}
+
+test("a mark's clip option overrides the clip of its plane", () => {
+  assert.deepStrictEqual(clipMarks({clip: true}, {}, {clip: false}), [
+    [true, true],
+    [false, false],
+  ]);
+  assert.deepStrictEqual(clipMarks({}, {clip: true}, {}), [
+    [true, true],
+    [false, false],
+  ]);
 });
 
 test("cm.plane({clip: true}) also clips the marks appended to a clipped mark", () => {

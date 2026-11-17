@@ -396,7 +396,7 @@ test("a text that gains a format ticks with it from the start, and a new format 
 });
 
 // A transform that clips the shapes after it, like cm.plane({clip: true}).
-const clipped = (flow, data, clip) => data.map((context) => ({...context, clip}));
+const clipped = (flow, data, clip) => data.map((context) => ({...context, clip, clipped: true}));
 
 function clippedRect(root, clip, attrs) {
   root
