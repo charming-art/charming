@@ -2,6 +2,7 @@ import assert from "node:assert";
 import {test} from "vitest";
 import "../../install-canvas-mock.js";
 import * as cm from "../../../src/index.js";
+import {assertInDelta} from "../../helpers.js";
 
 // Renders a chart of the channels with cm.legend and returns the renderer's node.
 function legend(channels, options, plane = {}, width = 400) {
@@ -38,7 +39,7 @@ test("cm.legend draws a ramp for a continuous color, with ticks, within the marg
   assert.strictEqual(slices.length, 64);
   // The ramp narrows to fit the margin, ending 3px from the right of the chart.
   const last = slices[63];
-  assert.ok(+last.getAttribute("x") + +last.getAttribute("width") <= 400 - 3 + 1);
+  assert.ok(+last.getAttribute("x") + +last.getAttribute("width") <= 400 - 3 + 1e-6);
   // The ramp goes from the color of the lowest value to that of the highest.
   assert.notStrictEqual(slices[0].getAttribute("fill"), slices[63].getAttribute("fill"));
   assert.ok(texts(node).includes("v"));
@@ -125,4 +126,53 @@ test("cm.legend in cm.polar stacks its legends right of the disc, from its top",
   const [title] = Array.from(renderer.node().querySelectorAll("text"));
   assert.deepStrictEqual([+title.getAttribute("x"), +title.getAttribute("y")], [280 + 12, 20]);
   assert.ok(rects(renderer.node()).every((r) => +r.getAttribute("x") < 400));
+});
+
+// Renders a legend of a channel over the given values, in a margin of the given width, and returns
+// the renderer's node.
+function margin(values, channels, marginRight, plane = {}) {
+  const renderer = cm.svg({width: 400, height: 300});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(values)
+    .transform(cm.encode, {x: (d) => d.v, y: (d) => d.v, ...channels})
+    .transform(cm.plane, {marginRight, ...plane})
+    .add(cm.legend);
+  root.render();
+  return renderer.node();
+}
+
+test("cm.legend aligns the labels at the ends of a ramp inward, so that they stay within it", () => {
+  const node = margin([{v: 0}, {v: 10}], {fill: (d) => d.v}, 150);
+  const ticks = Array.from(node.querySelectorAll("text")).filter((t) => /^\d+$/.test(t.textContent));
+  assert.strictEqual(ticks[0].getAttribute("text-anchor"), "start");
+  assert.strictEqual(ticks[ticks.length - 1].getAttribute("text-anchor"), "end");
+  assert.strictEqual(+ticks[ticks.length - 1].getAttribute("x"), 400 - 3);
+});
+
+test("cm.legend places the ticks of a ramp through its scale, such as a log opacity", () => {
+  const node = margin([{v: 1}, {v: 1000}], {fillOpacity: (d) => d.v}, 250, {scales: {fillOpacity: {type: "log"}}});
+  const x = (t) =>
+    +Array.from(node.querySelectorAll("text"))
+      .find((d) => d.textContent === t)
+      .getAttribute("x");
+  // 1, 10, 100 and 1000 are evenly spaced, as on a log axis.
+  assertInDelta(x("10") - x("1"), x("100") - x("10"));
+  assertInDelta(x("100") - x("10"), x("1k") - x("100"));
+});
+
+test("cm.legend keeps sizes within the margin, dropping the ticks in the middle", () => {
+  // Mostly small values: the default range puts the largest radius at 30px, so 5,000 and 10,000
+  // side by side are 110px wide, wider than the 85px the margin leaves.
+  const node = margin([{v: 1}, {v: 1}, {v: 1}, {v: 10000}], {r: (d) => d.v}, 100);
+  const circles = Array.from(node.querySelectorAll("circle"));
+  assert.strictEqual(circles.length, 1);
+  for (const c of circles) assert.ok(+c.getAttribute("cx") + +c.getAttribute("r") <= 400);
+});
+
+test("cm.legend shortens swatch labels that are wider than the margin", () => {
+  const node = margin([{v: 1, k: "Transportation and Utilities"}], {fill: (d) => d.k}, 100);
+  const label = Array.from(node.querySelectorAll("text")).find((t) => t.textContent.startsWith("Transp"));
+  assert.ok(label.textContent.endsWith("…"));
+  assert.ok(+label.getAttribute("x") + label.textContent.length * 6 <= 400);
 });

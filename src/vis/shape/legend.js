@@ -23,16 +23,28 @@ const keyOf = (key) => (d) => `legend\0${key}\0${d instanceof Date ? +d : d}`;
 
 const title = {...font, fontWeight: "bold", textBaseline: "top"};
 
-function labelOf(scale, options) {
-  return options.label !== undefined ? options.label : scale.label;
+// A text shortened with an ellipsis to fit a width, such as a long label in a narrow margin.
+function fit(value, width) {
+  const string = `${value}`;
+  if (widthOf(string) <= width) return string;
+  const n = Math.max(0, Math.floor(width / (font.fontSize * 0.6)) - 1);
+  return `${string.slice(0, n)}…`;
 }
 
-// A categorical color: its title, then a swatch per value with its label, one per line.
-function swatches(key, scale, options) {
+// The title of a legend, if any, shortened to fit the column.
+function labelOf(scale, options, maxWidth) {
+  const label = options.label !== undefined ? options.label : scale.label;
+  return label == null ? label : fit(label, maxWidth);
+}
+
+// A categorical color: its title, then a swatch per value with its label, one per line, shortened
+// to fit the column.
+function swatches(key, scale, options, maxWidth) {
   const {domain, range} = scale;
   const color = (d) => range[domain.indexOf(d) % range.length];
-  const format = typeof options.tickFormat === "function" ? options.tickFormat : (d) => `${d}`;
-  const label = labelOf(scale, options);
+  const formatValue = typeof options.tickFormat === "function" ? options.tickFormat : (d) => `${d}`;
+  const format = (d) => fit(formatValue(d), maxWidth - swatchSize - 4);
+  const label = labelOf(scale, options, maxWidth);
   const top = label == null ? 0 : lineHeight;
   const items = domain.map((d, i) => ({d, y: top + i * lineHeight}));
   return {
@@ -61,41 +73,50 @@ function swatches(key, scale, options) {
 }
 
 // A continuous color or an opacity: its title, then a ramp of slices painted through the scale, as
-// the renderers have no gradients, with ticks under it, like a small axis.
+// the renderers have no gradients, with ticks under it, like a small axis. A scale to numbers, such
+// as a log opacity, places its ticks and samples its slices through the scale itself, so that
+// they share its axis; a scale to colors, such as a sequential one, is linear in its domain.
 function ramp(key, scale, options, maxWidth) {
   const s = scaleOf(scale);
   const [d0, d1] = [scale.domain[0], scale.domain[scale.domain.length - 1]];
   const opacity = key.endsWith("Opacity");
-  const label = labelOf(scale, options);
+  const label = labelOf(scale, options, maxWidth);
   const top = label == null ? 0 : lineHeight;
   const width = Math.max(0, Math.min(options.width ?? 240, maxWidth));
   const count = typeof options.ticks === "number" ? options.ticks : Math.max(2, width / 50);
   const ticks = ticksOf(s, options, count);
   const format = formatOf(s, options, count);
+  // Ticks without a label, such as the minor ticks of a log scale, aren't drawn.
+  const labeled = ticks.filter((d) => `${format(d) ?? ""}` !== "");
   const n = 64;
   const slices = Array.from({length: n}, (_, i) => i);
-  const at = (d) => ((d - d0) / (d1 - d0 || 1)) * width;
+  const numeric = !s.interpolator && typeof s.range?.()[0] === "number" && typeof s.invert === "function";
+  const p = numeric ? s.copy().range([0, width]) : null;
+  const at = p ?? ((d) => ((d - d0) / (d1 - d0 || 1)) * width);
+  const value = p ? (i) => p.invert(((i + 0.5) * width) / n) : (i) => d0 + ((d1 - d0) * (i + 0.5)) / n;
+  // The labels at the ends are aligned inward, so that they stay within the ramp's width.
+  const alignOf = (d) => (at(d) <= 0.5 ? "start" : at(d) >= width - 0.5 ? "end" : "center");
   return {
     height: top + rampHeight + 4 + lineHeight,
     draw(flow, x0, y0) {
       if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
-      const value = (i) => d0 + ((d1 - d0) * (i + 0.5)) / n;
       flow.data(slices).append(rect, {
         key: (i) => `legend\0${key}\0slice\0${i}`,
         x: (i) => x0 + (i * width) / n,
         y: y0 + top,
-        // Slices overlap by a pixel, so that no seam shows between them.
-        width: width / n + 1,
+        // Slices overlap the next by a pixel, so that no seam shows between them; the last doesn't,
+        // so that the ramp ends within its width.
+        width: (i) => width / n + (i < n - 1 ? 1 : 0),
         height: rampHeight,
         ...(opacity ? {fill: "currentColor", fillOpacity: (i) => s(value(i))} : {fill: (i) => s(value(i))}),
       });
-      flow.data(ticks).append(text, {
+      flow.data(labeled).append(text, {
         ...font,
         key: keyOf(key),
         text: format,
         x: (d) => x0 + at(d),
         y: y0 + top + rampHeight + 4,
-        textAlign: "center",
+        textAlign: alignOf,
         textBaseline: "top",
       });
     },
@@ -103,23 +124,35 @@ function ramp(key, scale, options, maxWidth) {
 }
 
 // A radius: its title, then circles at a few ticks of the scale, side by side, aligned at their
-// tops, each labeled in a row under the largest.
-function sizes(key, scale, options) {
+// tops, each labeled in a row under the largest. If they're wider than the column, the ticks in the
+// middle are dropped, keeping the smallest and the largest, then the largest only.
+function sizes(key, scale, options, maxWidth) {
   const s = scaleOf(scale);
-  const label = labelOf(scale, options);
+  const label = labelOf(scale, options, maxWidth);
   const top = label == null ? 0 : lineHeight;
   const count = typeof options.ticks === "number" ? options.ticks : 3;
-  const values = ticksOf(s, options, count).filter((d) => s(d) > 0);
+  const ticks = ticksOf(s, options, count).filter((d) => s(d) > 0);
   const format = formatOf(s, options, count);
-  const radius = Math.max(0, ...values.map((d) => s(d)));
-  const items = [];
-  let x = 0;
-  for (const d of values) {
-    const r = s(d);
-    const w = Math.max(2 * r, widthOf(format(d)));
-    items.push({d, x: x + w / 2, r});
-    x += w + 8;
+  const layout = (values) => {
+    const items = [];
+    let x = 0;
+    for (const d of values) {
+      const r = s(d);
+      const w = Math.max(2 * r, widthOf(format(d)));
+      items.push({d, x: x + w / 2, r});
+      x += w + 8;
+    }
+    return [items, x - 8];
+  };
+  const candidates = [ticks, ticks.length > 2 ? [ticks[0], ticks[ticks.length - 1]] : null, ticks.slice(-1)];
+  let [items] = layout(ticks);
+  for (const values of candidates) {
+    if (!values) continue;
+    const [fitted, width] = layout(values);
+    items = fitted;
+    if (width <= maxWidth) break;
   }
+  const radius = Math.max(0, ...items.map(({r}) => r));
   return {
     height: top + 1 + 2 * radius + 4 + lineHeight,
     draw(flow, x0, y0) {
@@ -148,8 +181,8 @@ function sizes(key, scale, options) {
 }
 
 function legendOf(key, scale, options, maxWidth) {
-  if (key === "r") return sizes(key, scale, options);
-  if (scale.type === "ordinal") return swatches(key, scale, options);
+  if (key === "r") return sizes(key, scale, options, maxWidth);
+  if (scale.type === "ordinal") return swatches(key, scale, options, maxWidth);
   return ramp(key, scale, options, maxWidth);
 }
 

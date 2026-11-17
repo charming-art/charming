@@ -224,7 +224,7 @@
   <rect x="629.1875" y="54" width="2.953125" height="10" fill="rgb(60, 125, 30)"></rect>
   <rect x="631.140625" y="54" width="2.953125" height="10" fill="rgb(54, 118, 28)"></rect>
   <rect x="633.09375" y="54" width="2.953125" height="10" fill="rgb(48, 111, 27)"></rect>
-  <rect x="635.046875" y="54" width="2.953125" height="10" fill="rgb(42, 104, 26)"></rect>
+  <rect x="635.046875" y="54" width="1.953125" height="10" fill="rgb(42, 104, 26)"></rect>
   <text x="551.8936170212766" y="68" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">6</text>
   <text x="605.0851063829788" y="68" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">8</text>
   <rect x="40.5" y="224.1" width="15.42857142857143" height="19.399999999999977" fill="rgb(219, 240, 192)"></rect>
