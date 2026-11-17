@@ -43,18 +43,22 @@ export function boxOf(primitive) {
   return [x0, y0, x1, y1];
 }
 
-// Count equal pieces of a box, in rows from the top left, with as many columns as the box's aspect
-// allows, like G2's pack: the pieces that a mark splits into, or that marks merge into. Unlike G2's,
-// the pieces of the last row keep their size, so that they're all the same.
+// Count pieces of a box, in rows from the top left, with as many columns as the box's aspect allows,
+// like G2's pack: the pieces that a mark splits into, or that marks merge into. The pieces of the
+// last row, if it's shorter, are wider, so that the pieces fill the box without leftover.
 export function pack([x0, y0, x1, y1], count) {
   const width = x1 - x0;
   const height = y1 - y0;
   const cols = Math.max(1, Math.ceil(Math.sqrt((count * width) / (height || 1))));
   const rows = Math.ceil(count / cols);
-  const w = width / cols;
+  const last = (rows - 1) * cols;
   const h = height / rows;
   const pieces = new Array(count);
-  for (let i = 0; i < count; i++) pieces[i] = [x0 + (i % cols) * w, y0 + Math.floor(i / cols) * h, w, h];
+  for (let i = 0; i < count; i++) {
+    const w = width / (i < last ? cols : count - last);
+    const col = i < last ? i % cols : i - last;
+    pieces[i] = [x0 + col * w, y0 + Math.floor(i / cols) * h, w, h];
+  }
   return pieces;
 }
 

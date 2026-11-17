@@ -15,17 +15,21 @@ function chart() {
 
 const names = (renderer) => Array.from(renderer.node().children, (node) => node.localName);
 
-test("pack(box, count) cuts a box into equal pieces in rows, with columns for its aspect", () => {
+test("pack(box, count) cuts a box into pieces in rows, with columns for its aspect", () => {
   assert.deepStrictEqual(pack([0, 0, 90, 30], 3), [
     [0, 0, 30, 30],
     [30, 0, 30, 30],
     [60, 0, 30, 30],
   ]);
-  // Five pieces of a square: three columns, two rows, the last row as wide as the others.
-  const pieces = pack([0, 0, 60, 60], 5);
-  assert.strictEqual(pieces.length, 5);
-  for (const [, , w, h] of pieces) assert.deepStrictEqual([w, h], [20, 30]);
-  assert.deepStrictEqual(pieces[4], [20, 30, 20, 30]);
+  // Five pieces of a square: three columns, two rows, the pieces of the shorter last row wider, so
+  // that they fill the box without leftover.
+  assert.deepStrictEqual(pack([0, 0, 60, 60], 5), [
+    [0, 0, 20, 30],
+    [20, 0, 20, 30],
+    [40, 0, 20, 30],
+    [0, 30, 30, 30],
+    [30, 30, 30, 30],
+  ]);
 });
 
 test("sortByPosition(primitives) orders primitives top to bottom, then left to right", () => {
