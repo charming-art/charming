@@ -171,12 +171,12 @@ function legendOf(key, scale, options, maxWidth, column) {
 
 // Draws the legends of the scales recorded by cm.plane or cm.polar besides positions: swatches for
 // categorical colors, a ramp for continuous colors and opacities, and circles for radii. Like
-// Plot's, they're at the top of the chart by default, in rows aligned to its right, so that the
-// title of a y axis at its top left stays clear; with anchor "right", they're in a column right of
-// the frame. Like the margins of a top or right axis, the room for them is given to cm.plane, such
-// as marginTop: 60. The options x, y and the names of scales, such as {fill: {label: "Species"}},
-// are the options of each legend, or false to skip it; the other options apply to all of them.
-// Charts nested in a chart, such as facets, have no legends yet.
+// Plot's legends above its charts, they're in rows at the top left of the chart by default; with
+// anchor "right", they're in a column right of the frame. The room for them is given to cm.plane,
+// such as marginTop: 70, and the titles of the axes stay by the frame, below the legends. The
+// names of scales, such as {fill: {label: "Species"}}, take the options of each legend, or false
+// to skip it; the other options apply to all of them. Charts nested in a chart, such as facets,
+// have no legends yet.
 export function legend(flow, value, {scales = {}, frame, options = {}} = {}) {
   if (frame?.nested) return;
   const {anchor = "top", ...rest} = options;
@@ -199,7 +199,7 @@ export function legend(flow, value, {scales = {}, frame, options = {}} = {}) {
     }
     return;
   }
-  // Rows of legends, each aligned to the right of the chart, wrapping within its width.
+  // Rows of legends from the left of the chart, wrapping within its width.
   const rows = [];
   for (const block of blocks) {
     const row = rows[rows.length - 1];
@@ -210,7 +210,7 @@ export function legend(flow, value, {scales = {}, frame, options = {}} = {}) {
   }
   let y = 3;
   for (const row of rows) {
-    let x = width - 3 - row.width;
+    let x = left;
     for (const block of row.blocks) {
       block.draw(flow, x, y);
       x += block.width + 16;

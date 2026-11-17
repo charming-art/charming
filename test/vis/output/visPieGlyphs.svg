@@ -11,7 +11,7 @@
   <text x="375.8275295406526" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">80</text>
   <text x="460.34118475624064" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">100</text>
   <text x="544.8548399718287" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">120</text>
-  <text x="637" y="397" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" fill="currentColor">x →</text>
+  <text x="617" y="397" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" fill="currentColor">x →</text>
   <line x1="60" y1="322.9998667909951" x2="54" y2="322.9998667909951" stroke="currentColor" stroke-width="1"></line>
   <line x1="60" y1="280.37298521380046" x2="54" y2="280.37298521380046" stroke="currentColor" stroke-width="1"></line>
   <line x1="60" y1="237.74610363660582" x2="54" y2="237.74610363660582" stroke="currentColor" stroke-width="1"></line>
@@ -26,7 +26,7 @@
   <text x="51" y="152.4923404822166" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">120</text>
   <text x="51" y="109.86545890502197" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">140</text>
   <text x="51" y="67.2385773278273" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">160</text>
-  <text x="3" y="3" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-before-edge" fill="currentColor">↑ y</text>
+  <text x="3" y="23" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-before-edge" fill="currentColor">↑ y</text>
   <g transform="translate(60,360)">
     <path d="M19.719,-3.339A20,20,0,0,0,0,-20L0,0Z" fill="#5470c6" stroke="white"></path>
     <path d="M-3.038,19.768A20,20,0,0,0,19.719,-3.339L0,0Z" fill="#73c0de" stroke="white"></path>

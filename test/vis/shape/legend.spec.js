@@ -32,13 +32,30 @@ test("cm.legend draws a swatch per category of a color, labeled, after the title
   );
 });
 
-test("cm.legend aligns its row to the right of the chart, at the top, by default", () => {
+test("cm.legend starts its rows at the top left of the chart, by default, like Plot's legends", () => {
   const node = legend({fill: "k"});
-  const right = Math.max(
-    ...Array.from(node.querySelectorAll("text"), (t) => +t.getAttribute("x") + t.textContent.length * 6),
-  );
-  assert.strictEqual(right, 400 - 3);
+  const [title] = node.querySelectorAll("text");
+  assert.deepStrictEqual([+title.getAttribute("x"), +title.getAttribute("y")], [3, 3]);
   assert.ok(rects(node).every((r) => +r.getAttribute("y") < 20));
+});
+
+test("cm.legend leaves the top of the margin to legends: the titles of the axes stay by the frame", () => {
+  const renderer = cm.svg({width: 400, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {v: 1, k: "a"},
+      {v: 2, k: "b"},
+    ])
+    .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+    .transform(cm.plane, {marginTop: 60})
+    .add(cm.axis)
+    .add(cm.legend);
+  root.render();
+  const find = (t) => Array.from(renderer.node().querySelectorAll("text")).find((d) => d.textContent === t);
+  // The legend is at the top; the title of y is 17px over the frame, below it.
+  assert.strictEqual(+find("k").getAttribute("y"), 3);
+  assert.strictEqual(+find("↑ v").getAttribute("y"), 60 - 17);
 });
 
 test("cm.legend wraps swatches within the width of the chart", () => {

@@ -65,18 +65,21 @@ export function axisX(flow, value, {scales = {}, frame, titles, options = {}} = 
   const label = labelOf(x, scale, "x", options);
   if (label == null || frame?.nested) return;
   // Like Plot's labelAnchor, the title is at the right of the chart, or centered over a discrete
-  // axis by default, or at the left of the chart or the center of the axis: in the margins, 3px
-  // from the edges.
+  // axis by default, or at the left of the chart or the center of the axis, in the margins. At the
+  // right, it ends by the frame, where the default margin puts it 3px from the edge, so that a wide
+  // right margin, such as for a legend, doesn't carry it away from the axis.
   const {labelAnchor = scale.ticks ? "right" : "center"} = options;
   const center = labelAnchor === "center";
+  // Over a top axis, the title hangs past its tick labels, 30px over the frame by default, so that
+  // the top of a wide top margin is left for legends; under a bottom axis, it's 3px above the
+  // bottom. Like the default margins, which leave room for a bottom axis, a top axis needs a margin
+  // given to cm.plane, such as marginTop: 40.
+  const over = tickSize + tickPadding + padX + 21;
   flow.datum(label).append(text, {
     ...font,
     text: label,
-    x: center ? (left + right) / 2 : labelAnchor === "left" ? 3 : width - 3,
-    // At the edge of the chart, on the far side of the tick labels: 3px above the bottom, on its
-    // baseline, or hanging 3px below the top. Like the default margins, which leave room for a
-    // bottom axis, a top axis needs a margin given to cm.plane, such as marginTop: 40.
-    y: isTop ? 3 : height - 3,
+    x: center ? (left + right) / 2 : labelAnchor === "left" ? 3 : Math.min(width - 3, right + 17),
+    y: isTop ? Math.max(3, top - over) : height - 3,
     textAlign: center ? "center" : labelAnchor === "left" ? "start" : "end",
     ...(isTop && {textBaseline: "top"}),
   });
@@ -132,7 +135,9 @@ export function axisY(flow, value, {scales = {}, frame, titles, options = {}} = 
     return;
   }
   const textAlign = isRight ? "end" : "start";
-  const [labelY, textBaseline] = labelAnchor === "bottom" ? [height - 3, "bottom"] : [3, "top"];
+  // At the top, the title is just over the frame, 17px, where the default margin puts it 3px from
+  // the top, so that the top of a wide top margin is left for legends.
+  const [labelY, textBaseline] = labelAnchor === "bottom" ? [height - 3, "bottom"] : [Math.max(3, top - 17), "top"];
   flow.datum(label).append(text, {...font, text: label, x: labelX, y: labelY, textAlign, textBaseline});
 }
 
