@@ -102,3 +102,23 @@ test("cm.unitY orders the series like cm.stackY, by the name of an order", () =>
   const byCount = units(rows, {x: () => 0, fill: "s"}, cm.unitY, {order: "-sum"});
   assert.deepStrictEqual(byCount.value.fill, ["b", "b", "a"]);
 });
+
+test("cm.unitY orders the series by the rows of the index only, which are the rows it counts", () => {
+  const selected = (rows, channels, I, options) =>
+    cm
+      .flow()
+      .data(rows)
+      .transform(cm.encode, channels)
+      .transform((flow, data) => data.map((context) => ({...context, I})))
+      .transform(cm.unitY, options)._values[0];
+  const fish = [
+    {species: "bass", count: 1},
+    {species: "trout", count: 5},
+    {species: "bass", count: 100},
+  ];
+  const bySum = selected(fish, {y: "count", fill: "species"}, [0, 1], {order: "-sum"});
+  assert.deepStrictEqual(bySum.value.fill, ["trout", "trout", "trout", "trout", "trout", "bass"]);
+  const rows = ["a", "b", "b", "a", "a"].map((s) => ({s}));
+  const byCount = selected(rows, {fill: "s"}, [0, 1, 2], {order: "-sum"});
+  assert.deepStrictEqual(byCount.value.fill, ["b", "b", "a"]);
+});

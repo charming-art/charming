@@ -22,7 +22,9 @@ function unit(data, {unit = 1, order} = {}, [key, key1, other], name) {
     const I = context.I ? Array.from(context.I) : range(rows.length);
     const position = O && new InternMap();
     if (O) for (const i of I) if (!position.has(O[i])) position.set(O[i], position.size);
-    const amounts = V ?? Array.from(rows, () => 1);
+    // The amounts that orders such as "sum" add up: only the rows of the index count.
+    const counted = new Set(I);
+    const amounts = Array.from(rows, (_, i) => (counted.has(i) ? (V ? V[i] : 1) : NaN));
     const bySeries = order != null ? Z && orderOf(order, amounts, O, Z, value) : Z && seriesOrder(Z, hinted);
     I.sort((i, j) => (position ? position.get(O[i]) - position.get(O[j]) : 0) || (bySeries ? bySeries(i, j) : 0));
     // Grouped with one map per level, so that values are compared as values, not as strings.

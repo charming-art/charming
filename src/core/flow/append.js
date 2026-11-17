@@ -27,7 +27,8 @@ function flatten(options) {
 }
 
 // Options whose values are functions themselves, such as the format of a text or an easing, rather
-// than functions of each row.
+// than functions of each row, or strings that aren't the names of channels, such as the d3 format
+// "x" of a text, rather than the values of a channel x.
 const functions = new Set(["format", "ease", "enterEase", "exitEase"]);
 
 // Channels are plain arrays, even for typed array data, so they can hold any value. A string that
@@ -35,7 +36,7 @@ const functions = new Set(["format", "ease", "enterEase", "exitEase"]);
 export function valueOf(data, options, channels) {
   const values = flatten(options).map(([key, value]) => {
     if (value !== null && typeof value === "object" && value.preserve) return [key, value];
-    if (isChannel(key, value, channels)) {
+    if (!functions.has(key) && isChannel(key, value, channels)) {
       return [key, Array.from(data, (d) => d[value])];
     }
     if (Array.isArray(value)) return [key, Array.from(data, (d, i) => value[+d || i])];

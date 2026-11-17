@@ -108,3 +108,14 @@ test("cm.text with a string format interpolates numeric texts in transitions", (
   vi.useRealTimers();
   assert.strictEqual(text, "1,000");
 });
+
+test("cm.text takes a string format as a d3 format, even if a channel has its name", () => {
+  const renderer = cm.svg({width: 100, height: 100});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([255])
+    .transform(cm.bind, {x: () => "Jan", y: 0})
+    .append(cm.text, {text: (d) => d.datum, format: "x"});
+  root.render();
+  assert.strictEqual(renderer.node().querySelector("text").textContent, "ff");
+});
