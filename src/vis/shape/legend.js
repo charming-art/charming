@@ -142,20 +142,17 @@ function sizes(key, scale, options, column) {
   }
   return {
     width: Math.max(head, x - 8, column && label != null ? widthOf(label) : 0),
-    height: top + 2 * radius + 4 + lineHeight,
+    height: top + 1 + 2 * radius + 4 + lineHeight,
     draw(flow, x0, y0) {
-      const cy = y0 + top + radius;
-      // Beside the circles, the title is centered on them.
-      if (label != null) {
-        flow
-          .datum(label)
-          .append(text, {...title, text: label, x: x0, y: column ? y0 : cy, textBaseline: column ? "top" : "middle"});
-      }
+      // Like swatches, the title hangs from the top, and the circles are aligned at their tops, the
+      // top of a swatch, with their labels in a row under the largest.
+      if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
       const k = keyOf(key);
+      const y1 = y0 + top + 1;
       flow.data(items).append(circle, {
         key: ({d}) => k(d),
         x: ({x}) => x0 + x,
-        y: cy,
+        y: ({r}) => y1 + r,
         r: ({r}) => r,
         fill: "none",
         stroke: "currentColor",
@@ -165,7 +162,7 @@ function sizes(key, scale, options, column) {
         key: ({d}) => k(d),
         text: ({d}) => format(d),
         x: ({x}) => x0 + x,
-        y: cy + radius + 4,
+        y: y1 + 2 * radius + 4,
         textAlign: "center",
         textBaseline: "top",
       });
