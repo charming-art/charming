@@ -69,11 +69,19 @@ function draw(renderer, primitives) {
       continue;
     }
     renderer.save();
-    for (const [op, ...args] of ops) renderer[op](...args);
+    for (const [op, ...args] of ops) {
+      if (op === "clip") renderer.clip?.(clipOf(args));
+      else renderer[op](...args);
+    }
     renderer[type](attrs);
     renderer.restore();
   }
   renderer.render?.();
+}
+
+// The shape of a recorded clip.
+function clipOf([type, x, y, a, b]) {
+  return type === "rect" ? {x, y, width: a, height: b} : {x, y, d: a};
 }
 
 // The number of scenes played: in order, or back and forth if alternate, iterations times, where a

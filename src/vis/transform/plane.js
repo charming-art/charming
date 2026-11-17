@@ -44,7 +44,8 @@ function middle(value, keys, [start, end]) {
 // compare; with resolve, a position can be inferred per context instead. Colors are always shared.
 // In a nested flow, such as one chart per row of a parent mark, each context is drawn in the frame
 // of its parent row: the cell of a band, or a width × height box around a point. The resolved
-// scales are kept in context.scales, and the chart area in context.frame.
+// scales are kept in context.scales, and the chart area in context.frame. With clip, the marks are
+// clipped to the frame, like Plot's clip, such as bars sliding in from outside it; axes aren't.
 export function plane(
   flow,
   data,
@@ -63,6 +64,7 @@ export function plane(
     marginBottom,
     marginLeft,
     resolve: resolution = {},
+    clip = false,
     keysX = ["x", "x1"],
     keysY = ["y", "y1"],
   } = {},
@@ -189,7 +191,9 @@ export function plane(
       newValue[keysY[0]] = middle(value, ownKeysX, [frame.top, frame.bottom]);
     if (hasAny(value, ownKeysY) && !hasAny(value, ownKeysX))
       newValue[keysX[0]] = middle(value, ownKeysY, [frame.left, frame.right]);
-    return {...withoutHints(scaled), value: newValue, scales, frame};
+    const {left, top, right, bottom} = frame;
+    const clipped = clip ? {clip: {x: left, y: top, width: right - left, height: bottom - top}} : {};
+    return {...withoutHints(scaled), value: newValue, scales, frame, ...clipped};
   });
 }
 

@@ -160,3 +160,72 @@ test("svg.text({format}) keeps the spaces of the formatted text, like Canvas", (
   assert.strictEqual(text.textContent, "    12");
   assert.strictEqual(text.getAttribute("style"), "white-space: pre");
 });
+
+test("svg.clip(rect) clips what's drawn next to a rect, in a group of its own, until restore", () => {
+  const renderer = cm.svg();
+  renderer.save();
+  renderer.clip({x: 10, y: 20, width: 30, height: 40});
+  renderer.rect({x: 0, y: 0, width: 100, height: 100});
+  renderer.restore();
+  renderer.rect({x: 0, y: 0, width: 5, height: 5});
+  const node = renderer.node();
+  const id = node.querySelector("clipPath").id;
+  assert.strictEqual(
+    markup(renderer),
+    `<g><clipPath id="${id}" clipPathUnits="userSpaceOnUse"><rect x="10" y="20" width="30" height="40"></rect></clipPath>` +
+      `<g clip-path="url(#${id})"><rect x="0" y="0" width="100" height="100"></rect></g></g>` +
+      '<rect x="0" y="0" width="5" height="5"></rect>',
+  );
+});
+
+test("svg.clip(path) clips to a path at x and y", () => {
+  const renderer = cm.svg();
+  renderer.save();
+  renderer.clip({x: 50, y: 60, d: "M0,-10L10,10L-10,10Z"});
+  renderer.circle({x: 50, y: 60, r: 20});
+  renderer.restore();
+  const path = renderer.node().querySelector("clipPath > path");
+  assert.strictEqual(path.getAttribute("d"), "M0,-10L10,10L-10,10Z");
+  assert.strictEqual(path.getAttribute("transform"), "translate(50,60)");
+});
+
+test("svg.translate(x, y) after svg.clip(shape) nests a group, so that the clip doesn't move", () => {
+  const renderer = cm.svg();
+  renderer.save();
+  renderer.clip({x: 0, y: 0, width: 10, height: 10});
+  renderer.translate(5, 5);
+  renderer.rect({x: 0, y: 0, width: 10, height: 10});
+  renderer.restore();
+  const rect = renderer.node().querySelector("g > rect");
+  assert.strictEqual(rect.parentNode.getAttribute("transform"), "translate(5,5)");
+  assert.ok(rect.parentNode.parentNode.hasAttribute("clip-path"));
+  assert.ok(!rect.parentNode.hasAttribute("clip-path"));
+});
+
+test("svg.clip(shape) shares a clip path between clips of the same shape, with ids that stay across frames", () => {
+  const renderer = cm.svg();
+  const frame = () => {
+    renderer.erase();
+    for (let i = 0; i < 3; i++) {
+      renderer.save();
+      renderer.clip({x: 0, y: 0, width: 10, height: 10});
+      renderer.rect({x: i, y: 0, width: 10, height: 10});
+      renderer.restore();
+    }
+    renderer.render();
+    return Array.from(renderer.node().querySelectorAll("[clip-path]"), (g) => g.getAttribute("clip-path"));
+  };
+  const first = frame();
+  assert.strictEqual(renderer.node().querySelectorAll("clipPath").length, 1);
+  assert.strictEqual(new Set(first).size, 1);
+  assert.deepStrictEqual(frame(), first);
+  assert.strictEqual(renderer.node().querySelectorAll("clipPath").length, 1);
+});
+
+test("cm.svg() renderers name their clip paths apart", () => {
+  const ids = [cm.svg(), cm.svg()].map((renderer) => {
+    renderer.clip({x: 0, y: 0, width: 10, height: 10});
+    return renderer.node().querySelector("clipPath").id;
+  });
+  assert.notStrictEqual(ids[0], ids[1]);
+});

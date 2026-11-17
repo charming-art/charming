@@ -62,9 +62,17 @@ function renderNode(renderer, node, index, context, path, scope, time, pick) {
     for (let c = 0; c < made.length; c++) renderNode(renderer, made[c], 0, context, `${path}/m${c}`, scope, time);
   }
   if (builtin) {
+    // A shape in a clipped context, such as a mark of cm.plane({clip: true}), is clipped to its
+    // shape, on renderers that clip.
+    const clip = bound?.clip && renderer.clip ? bound.clip : null;
+    if (clip) {
+      renderer.save();
+      renderer.clip(clip);
+    }
     renderer.begin?.({path: `${scope}${path}`, scope, index, I, value, group});
     render(renderer, I, value, options, group);
     renderer.end?.();
+    if (clip) renderer.restore();
   }
   if (!children.length) return;
   const rows = pick === undefined ? I : [pick];

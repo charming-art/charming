@@ -672,3 +672,35 @@ test("cm.plane draws a chart in a keyframe at the root as a chart at the root", 
   // The default margins of a chart, not the box of a glyph.
   assert.deepStrictEqual([context.frame.left, context.frame.right], [20, 180]);
 });
+
+test("cm.plane({clip: true}) clips marks to the frame, but not axes", () => {
+  const renderer = cm.svg({width: 200, height: 100});
+  cm.flow()
+    .renderer(renderer)
+    .data([0, 1])
+    .transform(cm.encode, {x: (d) => d, y: (d) => d})
+    .transform(cm.plane, {margin: 10, clip: true})
+    .add(cm.axis)
+    .add(cm.circle, {r: 3})
+    .render();
+  const node = renderer.node();
+  const rect = node.querySelector("clipPath > rect");
+  assert.deepStrictEqual(
+    ["x", "y", "width", "height"].map((name) => +rect.getAttribute(name)),
+    [10, 10, 180, 80],
+  );
+  for (const circle of node.querySelectorAll("circle")) assert.ok(circle.closest("[clip-path]"));
+  assert.ok(node.querySelector("line, text"));
+  for (const tick of node.querySelectorAll("line, text")) assert.ok(!tick.closest("[clip-path]"));
+});
+
+test("cm.plane({clip: true}) clips the marks of a nested chart to its cell", () => {
+  const [, [a, b]] = facets(columns, {y: "v"}, {clip: true});
+  assert.deepStrictEqual(a.clip, {x: 0, y: -50, width: 100, height: 100});
+  assert.deepStrictEqual(b.clip, a.clip);
+});
+
+test("cm.plane doesn't clip by default", () => {
+  const [, [a]] = facets(columns, {y: "v"});
+  assert.strictEqual(a.clip, undefined);
+});

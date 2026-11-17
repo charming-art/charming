@@ -394,3 +394,50 @@ test("a text that gains a format ticks with it from the start, and a new format 
   vi.advanceTimersByTime(80);
   assert.strictEqual(renderer.node().querySelector("text").textContent, "150 items");
 });
+
+// A transform that clips the shapes after it, like cm.plane({clip: true}).
+const clipped = (flow, data, clip) => data.map((context) => ({...context, clip}));
+
+function clippedRect(root, clip, attrs) {
+  root
+    .data([0])
+    .transform(cm.bind, {})
+    .transform(clipped, clip)
+    .append(cm.rect, {width: 10, height: 10, ...attrs});
+  root.render();
+}
+
+test("a clip interpolates its box, and a clip path switches at the end", () => {
+  const [root, renderer] = chart();
+  const box = () => attrs(renderer.node().querySelector("clipPath > rect"), "x", "width");
+  clippedRect(root, {x: 0, y: 0, width: 100, height: 100}, {key: "a"});
+  clippedRect(root, {x: 20, y: 0, width: 50, height: 100}, {key: "a"});
+  vi.advanceTimersByTime(80);
+  assert.deepStrictEqual(box(), [10, 75]);
+  const d = () => renderer.node().querySelector("clipPath > path").getAttribute("d");
+  clippedRect(root, {x: 0, y: 0, d: "M0,0L100,0L100,100Z"}, {key: "a"});
+  vi.advanceTimersByTime(160);
+  clippedRect(root, {x: 0, y: 0, d: "M0,0L50,0L50,50Z"}, {key: "a"});
+  vi.advanceTimersByTime(80);
+  assert.strictEqual(d(), "M0,0L100,0L100,100Z");
+  vi.advanceTimersByTime(80);
+  assert.strictEqual(d(), "M0,0L50,0L50,50Z");
+});
+
+test("a mark morphing into one of another type stays clipped", () => {
+  const [root, renderer] = chart();
+  const clip = {x: 0, y: 0, width: 100, height: 100};
+  root
+    .data([0])
+    .transform(cm.bind, {})
+    .transform(clipped, clip)
+    .append(cm.rect, {x: 0, y: 0, width: 40, height: 40, key: "a"});
+  root.render();
+  root.data([0]).transform(cm.bind, {}).transform(clipped, clip).append(cm.circle, {x: 150, y: 150, r: 20, key: "a"});
+  root.render();
+  vi.advanceTimersByTime(80);
+  const path = renderer.node().querySelector("path");
+  assert.ok(path.closest("[clip-path]"));
+  vi.advanceTimersByTime(80);
+  assert.ok(renderer.node().querySelector("circle").closest("[clip-path]"));
+});

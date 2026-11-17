@@ -15,6 +15,7 @@ import {canvas$rotate} from "./rotate.js";
 import {canvas$save} from "./save.js";
 import {canvas$restore} from "./restore.js";
 import {canvas$resize} from "./resize.js";
+import {canvas$clip} from "./clip.js";
 
 function Canvas() {
   Object.defineProperties(this, {
@@ -41,6 +42,7 @@ Object.defineProperties(Canvas.prototype, {
   save: {value: canvas$save},
   restore: {value: canvas$restore},
   resize: {value: canvas$resize},
+  clip: {value: canvas$clip},
 });
 
 export function canvas({width, height, dpi = null} = {}) {

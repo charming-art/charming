@@ -5,7 +5,8 @@ import {replay} from "./replay.js";
 // d3's bar chart race (https://observablehq.com/@d3/bar-chart-race), without its in-between
 // keyframes: the top 12 brands by value, one keyframe per year. Each year sorts its bands by value
 // with spreadY's sort, and the bars are keyed by name, so they slide to their new ranks, brands
-// entering the top 12 rise in and leaving ones fade out, and the value labels tick between years.
+// entering or leaving the top 12 slide in and out from below the frame, which clips them, and the
+// value labels tick between years.
 // The x axis rescales each year, as x is resolved per keyframe.
 export async function visTransitionBarChartRace() {
   const brands = await d3.csv("data/category-brands.csv", d3.autoType);
@@ -39,13 +40,13 @@ export async function visTransitionBarChartRace() {
       .data(([, rows]) => d3.sort(rows, (d) => -d.value).slice(0, n))
       .transform(cm.encode, {x: "value", y: "name", fill: "category", key: "name"})
       .transform(cm.spreadY, {padding: 0.1, sort: "-x"})
-      // The right margin leaves room for the value labels past the longest bar. Like d3's, the chart
-      // ends at the bottom of the SVG, so bars sliding in and out from below are hidden outside it.
+      // The right margin leaves room for the value labels past the longest bar. The marks are
+      // clipped to the frame, so bars and labels sliding in and out from below are hidden outside it.
       .transform(cm.plane, {
         marginTop: 30,
         marginLeft: 10,
         marginRight: 70,
-        marginBottom: 0,
+        clip: true,
         resolve: {x: "independent"},
       })
       .add(cm.axisX, {anchor: "top", grid: true, label: null})
