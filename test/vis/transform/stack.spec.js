@@ -265,3 +265,14 @@ test("cm.stackY resolves Plot's order names before channel names, like Plot", ()
   );
   assert.deepStrictEqual(named.y1, byValue.y1);
 });
+
+test("cm.stackY with an order leaves a constant fill unscaled", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [context] = root
+    .data(data)
+    .transform(cm.encode, {x: "state", y: "n", fill: "steelblue"})
+    .transform(cm.spreadX)
+    .transform(cm.stackY, {order: ["steelblue"]})
+    .transform(cm.plane)._values;
+  assert.deepStrictEqual(context.value.fill, ["steelblue", "steelblue", "steelblue"]);
+});
