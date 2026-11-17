@@ -106,3 +106,23 @@ test("cm.legend draws nothing in charts nested in a chart, nor without scales to
   assert.strictEqual(renderer.node().querySelectorAll("text").length, 0);
   assert.strictEqual(texts(legend({})).length, 0);
 });
+
+test("cm.legend in cm.polar stacks its legends right of the disc, from its top", () => {
+  const renderer = cm.svg({width: 400, height: 300});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {k: "a", v: 1},
+      {k: "b", v: 2},
+    ])
+    .transform(cm.encode, {x: "v", fill: "k"})
+    .transform(cm.stackX)
+    .transform(cm.polar, {margin: 20, marginRight: 120})
+    .add(cm.arc)
+    .add(cm.legend);
+  root.render();
+  // The disc is centered in the box from 20 to 280 and 20 to 280: radius 130, its right at 280.
+  const [title] = Array.from(renderer.node().querySelectorAll("text"));
+  assert.deepStrictEqual([+title.getAttribute("x"), +title.getAttribute("y")], [280 + 12, 20]);
+  assert.ok(rects(renderer.node()).every((r) => +r.getAttribute("x") < 400));
+});

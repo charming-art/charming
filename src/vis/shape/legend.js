@@ -157,16 +157,18 @@ function legendOf(key, scale, options, maxWidth) {
 // categorical colors, a ramp for continuous colors and opacities, and circles for radii, each under
 // its title. Like Vega-Lite's, they're in a column right of the frame, from its top, where the
 // margins of the chart leave the most room clear of the axes; the room is given to cm.plane, such
-// as marginRight: 140. The names of scales, such as {fill: {label: "Species"}}, take the options
+// as marginRight: 140. The frame of cm.polar is its disc, from its right and its top. The names of scales, such as {fill: {label: "Species"}}, take the options
 // of each legend, or false to skip it; the other options apply to all of them. Charts nested in a
 // chart, such as facets, have no legends yet.
 export function legend(flow, value, {scales = {}, frame, options = {}} = {}) {
   if (frame?.nested) return;
   const shared = Object.fromEntries(Object.entries(options).filter(([key]) => !keys.includes(key)));
   const {width} = flow.renderer()._props;
-  const x = (frame?.right ?? width) + 12;
+  const polar = frame?.type === "polar";
+  const right = polar ? frame.cx + frame.outerRadius : (frame?.right ?? width);
+  const x = right + 12;
   const maxWidth = Math.max(0, width - 3 - x);
-  let y = frame?.top ?? 3;
+  let y = polar ? frame.cy - frame.outerRadius : (frame?.top ?? 3);
   for (const key of keys) {
     const scale = scales[key];
     if (!scale || options[key] === false) continue;
