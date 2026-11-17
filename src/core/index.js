@@ -4,6 +4,7 @@ export {link} from "./shape/link.js";
 export {clear} from "./shape/clear.js";
 export {rect} from "./shape/rect.js";
 export {g} from "./shape/g.js";
+export {keyframe} from "./shape/keyframe.js";
 export {triangle} from "./shape/triangle.js";
 export {line} from "./shape/line.js";
 export {polygon} from "./shape/polygon.js";

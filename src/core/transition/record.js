@@ -51,14 +51,14 @@ export function recorder() {
   return renderer;
 }
 
-function identify({path, scope, index, I, value = {}, group}, row, n) {
+function identify({path, scope, I, value = {}, group}, row, n) {
   const r = row ?? I[0];
   const at = (key) => value[key]?.[r];
   const datum = row === null ? group : group[row];
   return {
     path,
     scope,
-    position: `${index}:${row ?? `g${n}`}`,
+    position: `${row ?? `g${n}`}`,
     key: at("key"),
     groupKey: at("groupKey"),
     datum: datum !== null && typeof datum === "object" ? datum : undefined,

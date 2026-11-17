@@ -659,3 +659,16 @@ test("cm.plane keeps each position on its own axis when x and y name the same sc
   assert.deepStrictEqual(context.value.x, [0, 100]);
   assert.deepStrictEqual(context.value.y, [100, 0]);
 });
+
+test("cm.plane draws a chart in a keyframe at the root as a chart at the root", () => {
+  const renderer = cm.svg({width: 200, height: 100});
+  const [context] = cm
+    .flow()
+    .renderer(renderer)
+    .append(cm.keyframe)
+    .data([0, 10])
+    .transform(cm.encode, {x: (d) => d})
+    .transform(cm.plane)._values;
+  // The default margins of a chart, not the box of a glyph.
+  assert.deepStrictEqual([context.frame.left, context.frame.right], [20, 180]);
+});

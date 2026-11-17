@@ -327,3 +327,29 @@ test("cm.axis keys date ticks by their time, so that ticks less than a second ap
   assert.strictEqual(+opacity("200"), 0.5);
   assert.strictEqual(+opacity("600"), 0.5);
 });
+
+test("cm.axis keys its ticks apart from the keys of marks, so that marks split from marks, not ticks", () => {
+  vi.useFakeTimers();
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow({transition: {duration: 160, ease: "linear"}}).renderer(renderer);
+  root
+    .data([{k: "a", v: 10}])
+    .transform(cm.encode, {x: "k", y: "v", key: "k"})
+    .transform(cm.spreadX)
+    .transform(cm.plane)
+    .add(cm.axis)
+    .add(cm.rect);
+  root.render();
+  root
+    .data([0, 1, 2])
+    .transform(cm.encode, {x: (d) => d, y: (d) => d})
+    .transform(cm.plane)
+    .add(cm.axis)
+    .add(cm.circle, {r: 3, groupKey: "a"});
+  root.render();
+  vi.advanceTimersByTime(80);
+  const count = (s) => renderer.node().querySelectorAll(s).length;
+  vi.useRealTimers();
+  // The bar splits into the points, through paths; it doesn't fade out on its own.
+  assert.deepStrictEqual([count("rect"), count("path")], [0, 3]);
+});
