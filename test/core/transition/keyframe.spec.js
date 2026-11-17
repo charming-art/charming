@@ -220,3 +220,20 @@ test("keyframes repeat forever with iterations Infinity, until a render stops th
   await root.finished();
   assert.deepStrictEqual(xs(renderer), [7]);
 });
+
+test("a mark drawn at every moment matches the same mark in a render after the keyframes", async () => {
+  const [root, renderer] = chart();
+  root.append(cm.rect, {x: 50, y: 0, width: 10, height: 10});
+  root
+    .data([0, 100])
+    .append(cm.keyframe)
+    .append(cm.circle, {x: (d) => d, y: 0, r: 5});
+  root.render();
+  vi.advanceTimersByTime(400);
+  await root.finished();
+  root.append(cm.rect, {x: 150, y: 0, width: 10, height: 10});
+  root.render();
+  vi.advanceTimersByTime(80);
+  // The rect moves halfway, rather than entering at its new place.
+  assert.deepStrictEqual(xs(renderer), [100]);
+});

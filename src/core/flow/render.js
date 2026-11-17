@@ -181,7 +181,9 @@ export function flow$render() {
   const transition = transitionOptions(context.transition);
   if (!transition) stopSequence(context.transitionState);
   const target = transition ? recorder() : renderer;
-  for (let i = 0; i < children.length; i++) renderNode(target, children[i], 0, context, `${i}`, "");
+  // The children are drawn as in the scenes of keyframes, with the same paths, so that a render
+  // after keyframes matches what they show.
+  renderChildren(target, children, () => 0, context, "", "");
   root._children = [];
   if (transition) animate(context.transitionState, renderer, target.recorded, transition);
   else if (renderer.render) renderer.render();
