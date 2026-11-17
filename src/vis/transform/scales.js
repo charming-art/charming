@@ -1,13 +1,53 @@
-import {InternMap, InternSet, max, min, sort} from "d3-array";
-import {scaleBand, scaleLinear, scalePoint, scaleSequential, scaleUtc} from "d3-scale";
+import {InternMap, InternSet, max, min, quantile, sort} from "d3-array";
+import {
+  scaleBand,
+  scaleLinear,
+  scaleLog,
+  scalePoint,
+  scalePow,
+  scaleSequential,
+  scaleSqrt,
+  scaleSymlog,
+  scaleUtc,
+} from "d3-scale";
 import * as chromatic from "d3-scale-chromatic";
 import {discrete, domainOf} from "../../core/transform/scale.js";
 import {isColor} from "../color.js";
 import {seriesOf} from "./series.js";
 import {schemeCategory} from "../scheme.js";
 
-// The scales shared by cm.plane and cm.polar.
+// The scales shared by cm.plane and cm.polar. Besides positions, they scale colors, radii and
+// opacities, such as r: "body_mass_g" or fillOpacity: "count".
 const colorKeys = ["fill", "stroke"];
+const opacityKeys = ["fillOpacity", "strokeOpacity"];
+export const scaledKeys = [...colorKeys, "r", ...opacityKeys];
+
+// The d3 scales of the continuous types that are named, like Plot's, such as {type: "log"}, with
+// their options: the exponent of pow, the base of log and the constant of symlog. Other types, such
+// as "linear", "ordinal" or a d3 scale, are as given.
+const continuous = {
+  log: ({base}) => (base === undefined ? scaleLog() : scaleLog().base(base)),
+  sqrt: () => scaleSqrt(),
+  pow: ({exponent}) => (exponent === undefined ? scalePow() : scalePow().exponent(exponent)),
+  symlog: ({constant}) => (constant === undefined ? scaleSymlog() : scaleSymlog().constant(constant)),
+};
+
+export function typeOf(type, options = {}) {
+  return typeof type === "string" && Object.hasOwn(continuous, type) ? continuous[type](options) : type;
+}
+
+// Whether a scale is logarithmic, which only maps values of one sign.
+function isLog(type) {
+  return typeof type?.base === "function";
+}
+
+// Like Plot's, the domain of a log scale is the extent of the positive values, or of the negative
+// values if none is positive, as zero and values of the other sign have no logarithm.
+function logDomain(V) {
+  const positive = [min(V, (v) => (v > 0 ? v : NaN)), max(V, (v) => (v > 0 ? v : NaN))];
+  if (positive[0] !== undefined) return positive;
+  return [min(V, (v) => (v < 0 ? v : NaN)) ?? -1, max(V, (v) => (v < 0 ? v : NaN)) ?? -1];
+}
 
 export function isNumeric(values) {
   return typeof values?.find((d) => d != null) === "number";
@@ -49,14 +89,40 @@ function interpolatorOf(scheme) {
   return interpolate;
 }
 
-// The scales of the hinted color channels: categorical by default, and sequential for numbers or
-// a linear type, like Plot, through the scheme's interpolator ("turbo" by default) or the range's
-// colors. Missing numbers have no color.
-export function colorScales(value, hints) {
+// Like Plot's, the range of a radius scale maps the first quartile of the positive values to 3px,
+// so that most dots are visible, and its maximum to at most 30px.
+function radiusRange(V, domain) {
+  const q = quantile(V, 0.25, (v) => (v > 0 ? v : NaN)) ?? 1;
+  const range = domain.map((d) => 3 * Math.sqrt(d / q));
+  const k = 30 / max(range);
+  return k < 1 ? range.map((r) => r * k) : range;
+}
+
+// The scales of the hinted channels besides positions. Colors are categorical by default, and
+// sequential for numbers or a linear type, like Plot, through the scheme's interpolator ("turbo"
+// by default) or the range's colors; missing numbers have no color. Radii and opacities are
+// numbers from 0: a radius by a square root, so that the area of a dot tracks its value, and an
+// opacity linearly to [0, 1]. Values that aren't numbers aren't scaled, and like Plot's, the type
+// "identity" leaves values as they are, such as radii already in pixels.
+export function channelScales(value, hints) {
   const scales = {};
+  for (const key of ["r", ...opacityKeys]) {
+    if (!(key in hints) || !(key in value)) continue;
+    const {type, domain, range, ...options} = hints[key];
+    if (type === "identity") continue;
+    const V = value[key];
+    if (type === undefined && !isNumeric(V)) continue;
+    const radius = key === "r";
+    const t = typeOf(type ?? (radius ? "sqrt" : "linear"), options);
+    // From 0, unless the scale is logarithmic, which has no logarithm of 0.
+    const d = domain ?? (isLog(t) ? logDomain(V) : [0, max(V) ?? 1]);
+    const r = range ?? (radius ? radiusRange(V, d) : [0, 1]);
+    scales[key] = {type: t, domain: d, range: r};
+  }
   for (const key of colorKeys) {
     if (!(key in hints) || !(key in value)) continue;
     const {type, domain, range, scheme = "turbo"} = hints[key];
+    if (type === "identity") continue;
     const V = value[key];
     if (type === undefined && domain === undefined && range === undefined && isIdentity(V)) continue;
     if (type === "linear" || (type === undefined && isNumeric(V))) {
@@ -74,7 +140,7 @@ export function colorScales(value, hints) {
   return scales;
 }
 
-// The color scales as descriptors of core cm.scale, which names the type of a scale "scale".
+// The scales as descriptors of core cm.scale, which names the type of a scale "scale".
 export function scaleDescriptors(scales) {
   return Object.fromEntries(Object.entries(scales).map(([key, {type, ...scale}]) => [key, {scale: type, ...scale}]));
 }
@@ -86,8 +152,9 @@ function isTemporal(values) {
 // The scale shared by position channels such as x and x1, with the domain inferred from all of them.
 // The type is the one given, if any; resolved is the type applied, for the record of the scale.
 export function positionScale(value, keys, {type, domain, range}) {
+  type = typeOf(type);
   const V = keys.filter((key) => key in value).flatMap((key) => Array.from(value[key]));
-  if (domain === undefined) domain = domainOf(type, V);
+  if (domain === undefined) domain = isLog(type) ? logDomain(V) : domainOf(type, V);
   // cm.fit maps discrete positions with a point scale, unless a d3 scale is given. Dates are
   // mapped linearly, but recorded as a UTC time scale for the ticks of axes.
   const resolved = typeof type === "function" ? type : discrete(type, V) ? "point" : isTemporal(V) ? "utc" : "linear";
@@ -193,7 +260,7 @@ export function withScaleOptions(context, scales, axes) {
     const {reverse, label} = options;
     hints[keys[0]] = {...hints[keys[0]], ...definedOptions({reverse, label})};
   }
-  for (const key of colorKeys) {
+  for (const key of scaledKeys) {
     if (scales[key] && key in hints) hints[key] = {...hints[key], ...definedOptions(scales[key])};
   }
   return {...context, hints};
@@ -204,16 +271,16 @@ export function withScaleOptions(context, scales, axes) {
 // that share the scale.
 export function positionOptions(hints, options = {}) {
   if (hints.some((hint) => hint.band !== undefined)) return {};
-  return definedOptions({type: options.type, domain: options.domain});
+  return definedOptions({type: typeOf(options.type, options), domain: options.domain});
 }
 
-// The hints of the colors of the contexts, for colorScales: for each color, the hint of the first
-// context with one, with the first domain of any, so that the options of the scale, which every
-// context with the color has, come first, then an order recorded by a transform in any context,
-// such as cm.stackY's, then inference.
-export function colorHints(data) {
+// The hints of the scaled channels of the contexts, for channelScales: for each channel, such as a
+// color, the hint of the first context with one, with the first domain of any, so that the options
+// of the scale, which every context with the channel has, come first, then an order recorded by a
+// transform in any context, such as cm.stackY's, then inference.
+export function channelHints(data) {
   const hints = {};
-  for (const key of colorKeys) {
+  for (const key of scaledKeys) {
     const hinted = data.map((context) => context.hints?.[key]).filter((hint) => hint !== undefined);
     if (!hinted.length) continue;
     const domain = hinted.find((hint) => hint.domain !== undefined)?.domain;

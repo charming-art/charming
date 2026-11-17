@@ -5,6 +5,9 @@ const field = (name) => (d) => d[name];
 
 const colorKeys = ["fill", "stroke"];
 
+// The channels that cm.plane and cm.polar scale besides positions, when they vary with the data.
+const scaledKeys = [...colorKeys, "r", "fillOpacity", "strokeOpacity"];
+
 // A channel can be a descriptor that names the scale it uses, such as {value: "v2", scale: "y"}.
 // The options of scales, such as their domains, are given to cm.plane and cm.polar by name, and
 // the orders of categories to the transforms that need them, such as cm.spreadX's domain.
@@ -28,12 +31,12 @@ export function encode(flow, data, options = {}) {
     const descriptor = scale === undefined ? {} : {scale};
     const channel = (channels[key] = maybeChannel(key, value));
     // The scale of a channel is resolved later, by cm.plane. A field names the channel, which
-    // labels its axis. A color is scaled only if it varies with the data, so a constant color
-    // such as "red" stays as it is.
+    // labels its axis. A color, radius or opacity is scaled only if it varies with the data, so a
+    // constant such as "red" or 3 stays as it is.
     const label = typeof value === "string" && typeof channel === "function" ? {label: value} : null;
     if (isDescriptor(option)) hints[key] = {...label, ...descriptor};
     else if (label) hints[key] = label;
-    else if (colorKeys.includes(key) && (typeof channel === "function" || Array.isArray(channel))) hints[key] = {};
+    else if (scaledKeys.includes(key) && (typeof channel === "function" || Array.isArray(channel))) hints[key] = {};
   }
   // The hints of the channels encoded again are replaced, and the others are kept.
   return bind(flow, data, channels).map((context) => {

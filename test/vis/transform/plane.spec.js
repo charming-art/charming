@@ -853,3 +853,122 @@ test("cm.plane doesn't apply the domain of scales to bands that share the scale 
   assert.deepStrictEqual(linear.value.y, unsetLinear.value.y);
   assert.strictEqual(bands.scales.y.type, "band");
 });
+
+function assertAllInDelta(actual, expected) {
+  assert.strictEqual(actual.length, expected.length);
+  actual.forEach((d, i) => assertInDelta(d, expected[i]));
+}
+
+test("cm.plane scales r by a square root from 0, with the first quartile of positive values at 3px, like Plot", () => {
+  const {r} = encoded([1, 4, 4, 16], {x: (d) => d, r: (d) => d});
+  // The first quartile is 3.25, so r is 3 · √(v / 3.25).
+  assertInDelta(r[0], 3 * Math.sqrt(1 / 3.25));
+  assertInDelta(r[3], 3 * Math.sqrt(16 / 3.25));
+  // The largest radius is at most 30px.
+  const {r: capped} = encoded([1, 1, 1, 10000], {x: (d) => d, r: (d) => d});
+  assertInDelta(capped[3], 30);
+});
+
+test("cm.plane takes the type, domain and range of r in scales, and leaves constant radii unscaled", () => {
+  const {r} = encoded([0, 25, 100], {x: (d) => d, r: (d) => d}, {scales: {r: {range: [0, 10]}}});
+  assertAllInDelta(r, [0, 5, 10]);
+  const {r: linear} = encoded(
+    [0, 25, 100],
+    {x: (d) => d, r: (d) => d},
+    {scales: {r: {type: "linear", range: [0, 10]}}},
+  );
+  assertAllInDelta(linear, [0, 2.5, 10]);
+  const {r: constant} = encoded([0, 1], {x: (d) => d, r: 3});
+  assert.deepStrictEqual(constant, [3, 3]);
+});
+
+test("cm.plane scales fillOpacity and strokeOpacity linearly from 0 to [0, 1]", () => {
+  const {fillOpacity, strokeOpacity} = encoded([0, 5, 10], {
+    x: (d) => d,
+    fillOpacity: (d) => d,
+    strokeOpacity: (d) => d * 2,
+  });
+  assertAllInDelta(fillOpacity, [0, 0.5, 1]);
+  assertAllInDelta(strokeOpacity, [0, 0.5, 1]);
+  const {fillOpacity: given} = encoded(
+    [0, 5, 10],
+    {x: (d) => d, fillOpacity: (d) => d},
+    {scales: {fillOpacity: {range: [0.2, 1]}}},
+  );
+  assertAllInDelta(given, [0.2, 0.6, 1]);
+  const {fillOpacity: constant} = encoded([0, 1], {x: (d) => d, fillOpacity: 0.5});
+  assert.deepStrictEqual(constant, [0.5, 0.5]);
+});
+
+test("cm.plane records the scales of r and opacities, with the labels of their fields", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [context] = root
+    .data([{v: 4, o: 2}])
+    .transform(cm.encode, {x: "v", r: "v", fillOpacity: "o"})
+    .transform(cm.plane)._values;
+  assert.deepStrictEqual(context.scales.r.domain, [0, 4]);
+  assert.strictEqual(context.scales.r.label, "v");
+  assert.deepStrictEqual(context.scales.fillOpacity.range, [0, 1]);
+});
+
+test("cm.plane takes named continuous types of positions, such as log", () => {
+  const {y} = encoded([1, 10, 1000], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "log"}}});
+  // y is up: 1 at the bottom, 1000 at the top, and 10 a third of the way, not in the middle as the
+  // categories of a point scale would be.
+  assertAllInDelta(y, [400, (400 * 2) / 3, 0]);
+});
+
+test("cm.plane leaves colors, radii and opacities as they are with the type identity", () => {
+  const options = {scales: {r: {type: "identity"}, fillOpacity: {type: "identity"}, fill: {type: "identity"}}};
+  const {r, fillOpacity, fill} = encoded(
+    [
+      {s: 2, o: 0.3, c: "a"},
+      {s: 8, o: 0.6, c: "b"},
+    ],
+    {x: "s", r: "s", fillOpacity: "o", fill: "c"},
+    options,
+  );
+  assert.deepStrictEqual(
+    [r, fillOpacity, fill],
+    [
+      [2, 8],
+      [0.3, 0.6],
+      ["a", "b"],
+    ],
+  );
+});
+
+test("cm.plane infers the domain of a log scale from the positive values, like Plot", () => {
+  // A log opacity or radius isn't from 0.
+  const {fillOpacity} = encoded(
+    [1, 10, 100],
+    {x: (d) => d, fillOpacity: (d) => d},
+    {scales: {fillOpacity: {type: "log"}}},
+  );
+  assertAllInDelta(fillOpacity, [0, 0.5, 1]);
+  const {r} = encoded([1, 10, 100], {x: (d) => d, r: (d) => d}, {scales: {r: {type: "log", range: [1, 10]}}});
+  assertAllInDelta(r, [1, 5.5, 10]);
+  // A log position skips zeros, rather than mapping every row to NaN.
+  const {y} = encoded([0, 1, 10, 100], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "log"}}});
+  assertAllInDelta(y.slice(1), [400, 200, 0]);
+  // Entirely negative values take their own extent.
+  const {y: negative} = encoded([-1, -10, -100], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "log"}}});
+  assert.ok(negative.every((v) => Number.isFinite(v)));
+});
+
+test("cm.plane applies the exponent of pow, the base of log and the constant of symlog", () => {
+  const {y} = encoded([0, 2, 4], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "pow", exponent: 2}}});
+  // 2 is 4/16 of the way up from the bottom, at 400 - 100.
+  assertAllInDelta(y, [400, 300, 0]);
+  const {r} = encoded([0, 2, 4], {x: (d) => d, r: (d) => d}, {scales: {r: {type: "pow", exponent: 2, range: [0, 16]}}});
+  assertAllInDelta(r, [0, 4, 16]);
+  const symlog = (constant) =>
+    encoded([-10, 1, 10], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "symlog", constant}}}).y[1];
+  assert.ok(Math.abs(symlog(1) - symlog(10)) > 1);
+  const root = cm.flow().renderer(cm.svg({width: 640, height: 400}));
+  const [context] = root
+    .data([1, 1000])
+    .transform(cm.encode, {x: (d) => d, y: (d) => d})
+    .transform(cm.plane, {scales: {y: {type: "log", base: 2}}})._values;
+  assert.strictEqual(context.scales.y.type.base(), 2);
+});
