@@ -49,6 +49,7 @@ export {visStackedBar} from "./vis-stacked-bar.js";
 export {visStackedBars} from "./vis-stacked-bars.js";
 export {visStackedColumn} from "./vis-stacked-column.js";
 export {visStackedWaffles} from "./vis-stacked-waffles.js";
+export {visStatePopulationChange} from "./vis-state-population-change.js";
 export {visTickRotateX} from "./vis-tick-rotate-x.js";
 export {visTickRotateY} from "./vis-tick-rotate-y.js";
 export {visTitanicMosaic} from "./vis-titanic-mosaic.js";
