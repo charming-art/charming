@@ -18,8 +18,8 @@ export const visUnitBasic = withSVG(async () => {
         .add(cm.axisX, {label: "pclass"})
         .append(cm.g)
         .data(([, rows]) => rows)
-        .transform(cm.encode, {fill: {value: (d) => (d.survived ? "Yes" : "No"), domain: ["Yes", "No"]}})
-        .transform(cm.plane)
+        .transform(cm.encode, {fill: (d) => (d.survived ? "Yes" : "No")})
+        .transform(cm.plane, {scales: {fill: {domain: ["Yes", "No"]}}})
         .transform(cm.pack)
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
         .add(cm.circle, cm.inset("7.5%"));

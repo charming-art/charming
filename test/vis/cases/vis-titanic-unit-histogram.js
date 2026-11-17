@@ -23,11 +23,11 @@ export const visTitanicUnitHistogram = withSVG(async () => {
         .transform(cm.encode, {
           x: decade,
           y: 1,
-          fill: {value: "survived", type: "ordinal", domain: [1, 0], range: ["#2b8cbe", "#ff8408"]},
+          fill: "survived",
         })
         .transform(cm.spreadX)
-        .transform(cm.stackY, {chunk: 3})
-        .transform(cm.plane)
+        .transform(cm.stackY, {chunk: 3, order: [1, 0]})
+        .transform(cm.plane, {scales: {fill: {type: "ordinal", range: ["#2b8cbe", "#ff8408"]}}})
         .add(cm.circle, {r: 2.5}) // centered in its cell
         .add(cm.axisX);
     },

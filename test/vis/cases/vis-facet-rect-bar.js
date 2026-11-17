@@ -10,8 +10,8 @@ export const visFacetRectBar = withSVG(async () => {
     (root) => {
       root
         .data(cells(calendar()))
-        .transform(cm.encode, {x: {value: "day", domain: days}, y: "week"})
-        .transform(cm.spreadX)
+        .transform(cm.encode, {x: "day", y: "week"})
+        .transform(cm.spreadX, {domain: days})
         .transform(cm.spreadY)
         .transform(cm.plane, {marginBottom: 50})
         .add(cm.axis, {x: {tickSize: 0, tickPadding: 24}, y: {tickSize: 0, tickPadding: 24}})

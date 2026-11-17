@@ -65,7 +65,7 @@ test("cm.text centers in a band bound by transforms, such as a column from sprea
       .data([{k: "A", v: 10}])
       .transform(cm.encode, {x: "k", y: "v"})
       .transform(cm.spreadX)
-      .transform(cm.plane, {margin: 0, domainY: [0, 10]})
+      .transform(cm.plane, {margin: 0, scales: {y: {domain: [0, 10]}}})
       .append(cm.text, {text: "A", ...options});
     root.render();
     const t = renderer.node().querySelector("text");

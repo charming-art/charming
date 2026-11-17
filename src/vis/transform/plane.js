@@ -19,6 +19,7 @@ import {
   scaleName,
   sharedDomain,
   withoutHints,
+  withScaleOptions,
   withSeries,
 } from "./scales.js";
 
@@ -42,6 +43,9 @@ function middle(value, keys, [start, end]) {
 // default margins of a chart. A renderer without a given size is resized, like Plot: 640 wide, with
 // a height that depends on y. The scales are resolved once for all the contexts, so that facets
 // compare; with resolve, a position can be inferred per context instead. Colors are always shared.
+// The options of scales are given by name in scales, like Plot's: the type, domain, reverse and
+// label of a position, such as {y: {domain: [0, 100]}} or a named {length: {type: "log"}}, and the
+// type, domain, range, scheme and label of a color, such as {fill: {scheme: "PiYG"}}.
 // In a nested flow, such as one chart per row of a parent mark, each context is drawn in the frame
 // of its parent row: the cell of a band, or a width × height box around a point. The resolved
 // scales are kept in context.scales, and the chart area in context.frame. With clip, the marks are
@@ -52,12 +56,7 @@ export function plane(
   flow,
   data,
   {
-    typeX,
-    typeY,
-    domainX,
-    domainY,
-    reverseX = false,
-    reverseY,
+    scales: options = {},
     width,
     height,
     margin,
@@ -75,7 +74,12 @@ export function plane(
   const renderer = flow.renderer();
   if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.plane.");
   const nested = isNested(flow);
-  data = data.map(withSeries);
+  data = data.map((context) =>
+    withScaleOptions(withSeries(context), options, [
+      [keysX, "x"],
+      [keysY, "y"],
+    ]),
+  );
 
   // The margins leave room for the axes of the positions encoded in any context, such as a layer
   // of branches. A position counts if it's encoded, or if a channel shares its scale, such as
@@ -91,9 +95,12 @@ export function plane(
   marginBottom ??= margin ?? (nested ? 0 : hasX ? 30 : 20);
   marginLeft ??= margin ?? (nested ? 0 : hasY ? 40 : 20);
 
-  // Values grow upward, but categories in bands go down from the top, like Plot's ordinal y. An
-  // independent y points its own way in each context.
-  const reverseOf = (hints) => reverseY ?? !axisHint(hints, keysY).band;
+  // Values grow upward, but categories in bands go down from the top, like Plot's ordinal y, unless
+  // the scale is reversed. An independent y points its own way in each context.
+  const reverseOf = (hints) => {
+    const {reverse, band} = axisHint(hints, keysY);
+    return reverse ?? !band;
+  };
 
   let frames;
   if (nested) {
@@ -107,9 +114,8 @@ export function plane(
   } else {
     const {auto, width: rendererWidth, height: rendererHeight} = renderer._props;
     width ??= auto?.width ? 640 : rendererWidth;
-    // The height uses the same scale and domain of y as fitting: the options, else the hints.
-    const sizeY = {...axisHint(firstHints, keysY), ...(typeY && {type: typeY}), ...(domainY && {domain: domainY})};
-    height ??= auto?.height ? autoHeight(first, firstY, sizeY) : rendererHeight;
+    // The height uses the same scale and domain of y as fitting.
+    height ??= auto?.height ? autoHeight(first, firstY, axisHint(firstHints, keysY)) : rendererHeight;
     renderer.resize?.(width, height);
     ({width, height} = renderer._props);
     const frame = {top: marginTop, right: width - marginRight, bottom: height - marginBottom, left: marginLeft};
@@ -118,21 +124,19 @@ export function plane(
 
   // The scales shared by the contexts: colors, and positions unless they're independent. A position
   // is shared with the contexts whose positions use the same scale: the axis, by default, or a name
-  // given to it, such as x: {value: "culmen_length_mm", scale: "length"}. The options apply to the
-  // scale named after the axis, and resolve takes any name, such as {x: "independent"}.
+  // given to it, such as x: {value: "culmen_length_mm", scale: "length"}. The options of scales and
+  // resolve take any name, such as {x: "independent"}.
   const colors = colorScales(merge(data, ["fill", "stroke"]), data[0]?.hints ?? {});
   const independent = (name) => resolution[name] === "independent";
-  const sharedOf = (keys, axis, type, domain) =>
+  const sharedOf = (keys, axis) =>
     new Map(
       Array.from(byScaleName(data, keys, axis), ([name, contexts]) => {
         if (independent(name)) return [name, null];
-        const own = name === axis;
-        const all = allKeysOf(contexts, keys, axis);
-        return [name, sharedScale(contexts, all, keys, own ? type : undefined, own ? domain : undefined)];
+        return [name, sharedScale(contexts, allKeysOf(contexts, keys, axis), keys, options[name])];
       }),
     );
-  const sharedX = sharedOf(keysX, "x", typeX, domainX);
-  const sharedY = sharedOf(keysY, "y", typeY, domainY);
+  const sharedX = sharedOf(keysX, "x");
+  const sharedY = sharedOf(keysY, "y");
   // The direction of a shared y comes from the first of its contexts with y.
   const firstHintsY = new Map(
     Array.from(byScaleName(data, keysY, "y"), ([name, contexts]) => [
@@ -149,27 +153,16 @@ export function plane(
     const frame = frames[j];
     const rangeX = [frame.left, frame.right];
     const rangeY = [frame.top, frame.bottom];
-    if (reverseX) rangeX.reverse();
     const nameX = scaleName(hints, keysX, "x");
     const nameY = scaleName(hints, keysY, "y");
-    if (reverseOf(independent(nameY) ? hints : firstHintsY.get(nameY))) rangeY.reverse();
-
-    // An independent position is inferred from its own context, with the options if it's the axis's.
     const hintX = axisHint(hints, keysX);
     const hintY = axisHint(hints, keysY);
-    const [ownX, ownY] = [nameX === "x", nameY === "y"];
-    const x =
-      sharedX.get(nameX) ||
-      positionScale(value, ownKeysX, {
-        type: (ownX ? typeX : undefined) ?? hintX.type,
-        domain: (ownX ? domainX : undefined) ?? hintX.domain,
-      });
-    const y =
-      sharedY.get(nameY) ||
-      positionScale(value, ownKeysY, {
-        type: (ownY ? typeY : undefined) ?? hintY.type,
-        domain: (ownY ? domainY : undefined) ?? hintY.domain,
-      });
+    if (hintX.reverse) rangeX.reverse();
+    if (reverseOf(independent(nameY) ? hints : firstHintsY.get(nameY))) rangeY.reverse();
+
+    // An independent position is inferred from its own context, with the options of its scale.
+    const x = sharedX.get(nameX) || positionScale(value, ownKeysX, {type: hintX.type, domain: hintX.domain});
+    const y = sharedY.get(nameY) || positionScale(value, ownKeysY, {type: hintY.type, domain: hintY.domain});
 
     // Colors are categorical by default, and positions are discrete points by default.
     const [colored] = scale(flow, [context], scaleDescriptors(colors));
@@ -201,10 +194,13 @@ export function plane(
   });
 }
 
-// The scale of a position shared by the contexts: its type and domain from the options, else from
-// the hints of the contexts, else inferred from the values of all of them.
-function sharedScale(data, all, keys, type, domain) {
+// The scale of a position shared by the contexts: its type and domain from the options of the
+// scale, unless it has bands, which come from their spread, else from the hints of the contexts,
+// else inferred from the values of all of them.
+function sharedScale(data, all, keys, options = {}) {
   const hints = data.map(({hints = {}}) => axisHint(hints, keys));
+  const band = hints.some((hint) => hint.band !== undefined);
+  let {type, domain} = band ? {} : options;
   type ??= hints[0]?.type;
   const values = merge(data, all);
   domain ??= sharedDomain(

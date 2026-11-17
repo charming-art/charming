@@ -20,6 +20,7 @@ import {
   scaleName,
   sharedDomain,
   withoutHints,
+  withScaleOptions,
   withSeries,
 } from "./scales.js";
 
@@ -41,15 +42,13 @@ function radial(type) {
 // independent, and a nested context is drawn in the frame of its parent row, such as a pie glyph
 // in a width × height box. The resolved scales are kept in context.scales, and the polar frame in
 // context.frame. With clip, the marks are clipped to the frame: its disc, ring or sector, unless a
-// mark gives its own clip option, as in cm.plane.
+// mark gives its own clip option, as in cm.plane. As in cm.plane, the options of scales are given by
+// name in scales, such as {y: {type: "linear"}} for the radius, and colors.
 export function polar(
   flow,
   data,
   {
-    typeX,
-    typeY,
-    domainX,
-    domainY,
+    scales: options = {},
     innerRadius = 0,
     startAngle = 0,
     endAngle = 2 * Math.PI,
@@ -70,7 +69,12 @@ export function polar(
   const renderer = flow.renderer();
   if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before cm.polar.");
   const nested = isNested(flow);
-  data = data.map(withSeries);
+  data = data.map((context) =>
+    withScaleOptions(withSeries(context), options, [
+      [keysX, "x"],
+      [keysY, "y"],
+    ]),
+  );
 
   // A nested chart has no margins by default: its parent leaves the room.
   margin ??= nested ? 0 : 40;
@@ -106,19 +110,26 @@ export function polar(
   // Like cm.plane, a position is shared by the name of its scale, the axis by default.
   const colors = colorScales(merge(data, ["fill", "stroke"]), firstHints);
   // The radius is radial by default, so that areas grow with values.
-  const radialY = (hints, own = true) => radial((own ? typeY : undefined) ?? axisHint(hints, keysY).type ?? "radial");
+  const radialY = (hints) => radial(axisHint(hints, keysY).type ?? "radial");
   const independent = (name) => resolution[name] === "independent";
-  const sharedOf = (keys, axis, typeOf, domain) =>
+  // The domain given in the options of a scale is kept as it is, unless the scale has bands.
+  const domainOf = (contexts, keys, name) => {
+    const band = contexts.some(({hints = {}}) => axisHint(hints, keys).band !== undefined);
+    return band ? undefined : options[name]?.domain;
+  };
+  const sharedOf = (keys, axis, typeOf) =>
     new Map(
       Array.from(byScaleName(data, keys, axis), ([name, contexts]) => {
         if (independent(name)) return [name, null];
-        const own = name === axis;
         const all = allKeysOf(contexts, keys, axis);
-        return [name, sharedScale(contexts, all, keys, typeOf(contexts[0].hints ?? {}, own), own ? domain : undefined)];
+        return [
+          name,
+          sharedScale(contexts, all, keys, typeOf(contexts[0].hints ?? {}), domainOf(contexts, keys, name)),
+        ];
       }),
     );
-  const sharedX = sharedOf(keysX, "x", (hints, own) => (own ? typeX : undefined), domainX);
-  const sharedY = sharedOf(keysY, "y", radialY, domainY);
+  const sharedX = sharedOf(keysX, "x", () => undefined);
+  const sharedY = sharedOf(keysY, "y", radialY);
 
   return data.map((context, j) => {
     const {value, hints = {}} = context;
@@ -133,19 +144,8 @@ export function polar(
     const hintY = axisHint(hints, keysY);
     const nameX = scaleName(hints, keysX, "x");
     const nameY = scaleName(hints, keysY, "y");
-    const [ownX, ownY] = [nameX === "x", nameY === "y"];
-    const x =
-      sharedX.get(nameX) ||
-      positionScale(value, ownKeysX, {
-        type: (ownX ? typeX : undefined) ?? hintX.type,
-        domain: (ownX ? domainX : undefined) ?? hintX.domain,
-      });
-    const y =
-      sharedY.get(nameY) ||
-      positionScale(value, ownKeysY, {
-        type: radialY(hints, ownY),
-        domain: (ownY ? domainY : undefined) ?? hintY.domain,
-      });
+    const x = sharedX.get(nameX) || positionScale(value, ownKeysX, {type: hintX.type, domain: hintX.domain});
+    const y = sharedY.get(nameY) || positionScale(value, ownKeysY, {type: radialY(hints), domain: hintY.domain});
 
     const [colored] = scale(flow, [context], scaleDescriptors(colors));
     const descriptors = {};

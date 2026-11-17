@@ -44,10 +44,10 @@ test("cm.unitY keeps the sign of the amount of each group", () => {
   assert.deepStrictEqual(value.y, [1, -1, -1]);
 });
 
-test("cm.unitY orders the units of each group by series, and keeps the hints", () => {
-  const context = units(counts, {x: "lake", y: "count", fill: {value: "species", domain: ["trout", "bass"]}}, cm.unitY);
+test("cm.unitY orders the units of each group by series, with order, and records it as their domain", () => {
+  const context = units(counts, {x: "lake", y: "count", fill: "species"}, cm.unitY, {order: ["trout", "bass"]});
   assert.deepStrictEqual(context.value.fill, ["trout", "trout", "bass", "bass", "bass", "bass"]);
-  assert.deepStrictEqual(context.hints.fill.domain, ["trout", "bass"]);
+  assert.deepStrictEqual(context.hints.fill, {label: "species", domain: ["trout", "bass"]});
 });
 
 test("cm.unitX mirrors cm.unitY", () => {

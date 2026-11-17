@@ -15,11 +15,15 @@ export const visRadialStackedBarD3 = withSVG(async () => {
         .transform(cm.encode, {
           x: "state",
           y: "population",
-          fill: {value: "age", domain: ages, range: d3.schemeSpectral[ages.length]},
+          fill: "age",
         })
         .transform(cm.spreadX)
-        .transform(cm.stackY)
-        .transform(cm.polar, {innerRadius: 180 / 454, margin: 10})
+        .transform(cm.stackY, {order: ages})
+        .transform(cm.polar, {
+          innerRadius: 180 / 454,
+          margin: 10,
+          scales: {fill: {range: d3.schemeSpectral[ages.length]}},
+        })
         .add(cm.arc)
         .add(cm.axis, {y: {ticks: 5, tickFormat: "s"}});
     },

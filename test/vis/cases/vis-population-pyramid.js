@@ -15,14 +15,17 @@ export const visPopulationPyramid = withSVG(async () => {
           x: (d) => d.population * (d.sex === "M" ? -1 : 1),
           y: "age",
           z: (d) => `${d.sex},${d.category}`,
-          fill: {
-            value: "category",
-            domain: ["ledig", "verheiratet", "geschieden", "verwitwet"],
-            range: ["#69AEBE", "#F1757A", "#F2B678", "#989D9E"],
-          },
+          fill: "category",
         })
         .transform(cm.stackX)
-        .transform(cm.plane)
+        .transform(cm.plane, {
+          scales: {
+            fill: {
+              domain: ["ledig", "verheiratet", "geschieden", "verwitwet"],
+              range: ["#69AEBE", "#F1757A", "#F2B678", "#989D9E"],
+            },
+          },
+        })
         .add(cm.axis, {
           x: {label: "← men · population (thousands) · women →", tickFormat: Math.abs},
           y: {grid: true},

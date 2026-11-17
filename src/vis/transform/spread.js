@@ -44,12 +44,13 @@ function categoriesOf(V, value, order) {
   });
 }
 
-// Places each category of the channel in a band of [0, 1] with a d3 band scale, ordered by the
-// domain of its hint, else by the sort option. The other position, such as y, gets a baseline of 0
-// if it's numeric and its y1 isn't bound, so that bars span from 0 to their values.
-function spreadCategories(context, padding, flex, order, [key, key1, other, other1]) {
+// Places each category of the channel in a band of [0, 1] with a d3 band scale, in the order of the
+// domain option, else by the sort option. The other position, such as y, gets a baseline of 0 if
+// it's numeric and its y1 isn't bound, so that bars span from 0 to their values.
+function spreadCategories(context, padding, flex, order, given, [key, key1, other, other1]) {
   const {[key]: V, [other]: O, [other1]: O1} = context.value;
-  const {label, scale: name, domain = categoriesOf(V, context.value, order)} = context.hints?.[key] ?? {};
+  const {label, scale: name} = context.hints?.[key] ?? {};
+  const domain = given ?? categoriesOf(V, context.value, order);
   // With flex, each category's band is proportional to the sum of the flex channel over its rows,
   // such as its number of rows, like G2's shareSize.
   const F = flex === undefined ? null : context.value[flex];
@@ -120,7 +121,7 @@ function spreadSlots(context, padding, chunk, [key, key1, other]) {
 
 function spread(
   data,
-  {padding = 0.1, paddingInner = padding, paddingOuter = padding, align = 0.5, chunk, flex, sort: order} = {},
+  {padding = 0.1, paddingInner = padding, paddingOuter = padding, align = 0.5, chunk, flex, sort: order, domain} = {},
   keys,
   name,
 ) {
@@ -128,7 +129,7 @@ function spread(
   const options = {paddingInner, paddingOuter, align};
   return data.map((context) => {
     if (chunk === undefined && !isSpread(context.hints?.[keys[0]]))
-      return spreadCategories(context, options, flex, order, keys);
+      return spreadCategories(context, options, flex, order, domain, keys);
     return spreadSlots(context, options, chunk ?? 1, keys);
   });
 }

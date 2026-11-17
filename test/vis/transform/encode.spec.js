@@ -44,11 +44,17 @@ function hints(data, options) {
   return cm.flow().data(data).transform(cm.encode, options)._values[0].hints;
 }
 
-test("cm.encode(options) binds the value of a descriptor and keeps its scale as a hint", () => {
-  const {fill} = values(data, {fill: {value: "letter", type: "ordinal", range: ["red", "blue"]}});
-  assert.deepStrictEqual(fill, ["A", "B"]);
+test("cm.encode(options) binds the value of a descriptor and keeps the name of its scale as a hint", () => {
+  const {x} = values(data, {x: {value: "frequency", scale: "length"}});
+  assert.deepStrictEqual(x, [0.08, 0.01]);
+  assert.deepStrictEqual(hints(data, {x: {value: "frequency", scale: "length"}}), {
+    x: {label: "frequency", scale: "length"},
+  });
+});
+
+test("cm.encode(options) keeps no options of scales in descriptors, which cm.plane takes", () => {
   assert.deepStrictEqual(hints(data, {fill: {value: "letter", type: "ordinal", range: ["red", "blue"]}}), {
-    fill: {label: "letter", type: "ordinal", range: ["red", "blue"]},
+    fill: {label: "letter"},
   });
 });
 
@@ -62,14 +68,13 @@ test("cm.encode(options) labels the channels encoded from fields", () => {
     x: {label: "letter"},
     y: {label: "frequency"},
   });
-  assert.deepStrictEqual(hints(data, {y: {value: "frequency", label: "Frequency"}}), {y: {label: "Frequency"}});
 });
 
 test("cm.encode(options) drops the hints of the channels it encodes again", () => {
   const [context] = cm
     .flow()
     .data(data)
-    .transform(cm.encode, {x: {value: "letter", domain: ["B", "A"]}, fill: "letter", y: "frequency"})
+    .transform(cm.encode, {x: {value: "letter", scale: "length"}, fill: "letter", y: "frequency"})
     .transform(cm.encode, {x: (d) => d.letter, fill: "red"})._values;
   assert.deepStrictEqual(context.hints, {y: {label: "frequency"}});
 });

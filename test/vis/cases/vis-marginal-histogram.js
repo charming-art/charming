@@ -35,13 +35,13 @@ export const visMarginalHistogram = withSVG(async () => {
     (root) => {
       const [scatter, top, right] = root
         .data(rows)
-        .transform(cm.encode, {y: {value: "row", domain: ["top", "main"]}, h: "h"})
-        .transform(cm.spreadY, {flex: "h", paddingInner: 0.05, paddingOuter: 0})
+        .transform(cm.encode, {y: "row", h: "h"})
+        .transform(cm.spreadY, {flex: "h", paddingInner: 0.05, paddingOuter: 0, domain: ["top", "main"]})
         .transform(cm.plane, {marginBottom: 30})
         .append(cm.g)
         .data((row) => row.cells)
-        .transform(cm.encode, {x: {value: "col", domain: ["main", "side"]}, w: "w"})
-        .transform(cm.spreadX, {flex: "w", paddingInner: 0.05, paddingOuter: 0})
+        .transform(cm.encode, {x: "col", w: "w"})
+        .transform(cm.spreadX, {flex: "w", paddingInner: 0.05, paddingOuter: 0, domain: ["main", "side"]})
         .transform(cm.plane)
         .append(cm.g)
         .branch(

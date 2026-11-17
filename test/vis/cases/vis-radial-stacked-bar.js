@@ -11,9 +11,9 @@ export const visRadialStackedBar = withSVG(async () => {
     (root) => {
       root
         .data(data)
-        .transform(cm.encode, {x: "state", y: "population", fill: {value: "age", domain: ages}})
+        .transform(cm.encode, {x: "state", y: "population", fill: "age"})
         .transform(cm.spreadX)
-        .transform(cm.stackY)
+        .transform(cm.stackY, {order: ages})
         .transform(cm.polar, {innerRadius: 0.4})
         .add(cm.axis, {y: {tickFormat: "s"}})
         .add(cm.arc);

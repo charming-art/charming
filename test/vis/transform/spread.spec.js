@@ -71,8 +71,8 @@ test("cm.spreadX hints cm.plane to keep the outer padding of the bands", () => {
   assertAllInDelta(x, ["C", "A", "B"].map(band));
 });
 
-test("cm.spreadX orders the bands by the domain of the x hint", () => {
-  const [{value, hints}] = contexts(data, {x: {value: "letter", domain: ["C", "A", "B"]}, y: "frequency"});
+test("cm.spreadX orders the bands by its domain option", () => {
+  const [{value, hints}] = contexts(data, {x: "letter", y: "frequency"}, {domain: ["C", "A", "B"]});
   const band = d3.scaleBand(["C", "A", "B"], [0, 1]).padding(0.1);
   assertAllInDelta(value.x, ["C", "A", "B"].map(band));
   assert.deepStrictEqual(hints.x, {
@@ -108,13 +108,8 @@ test("cm.spreadY adds a zero baseline for numeric x, and keeps a bound x1", () =
   assert.strictEqual(ordinal.x1, undefined);
 });
 
-test("cm.spreadY orders the bands by the domain of the y hint, and hints its band", () => {
-  const [{value, hints}] = contexts(
-    data,
-    {x: "frequency", y: {value: "letter", domain: ["C", "A", "B"]}},
-    undefined,
-    cm.spreadY,
-  );
+test("cm.spreadY orders the bands by its domain option, and hints its band", () => {
+  const [{value, hints}] = contexts(data, {x: "frequency", y: "letter"}, {domain: ["C", "A", "B"]}, cm.spreadY);
   const band = d3.scaleBand(["C", "A", "B"], [0, 1]).padding(0.1);
   assertAllInDelta(value.y, ["C", "A", "B"].map(band));
   assert.deepStrictEqual(hints.y, {
@@ -124,8 +119,8 @@ test("cm.spreadY orders the bands by the domain of the y hint, and hints its ban
   });
 });
 
-test("cm.spreadX ignores repeated categories in the domain of the x hint, like d3.scaleBand", () => {
-  const [{value, hints}] = contexts(data, {x: {value: "letter", domain: ["C", "C", "A", "B"]}, y: "frequency"});
+test("cm.spreadX ignores repeated categories in its domain, like d3.scaleBand", () => {
+  const [{value, hints}] = contexts(data, {x: "letter", y: "frequency"}, {domain: ["C", "C", "A", "B"]});
   const band = d3.scaleBand(["C", "A", "B"], [0, 1]).padding(0.1);
   assertAllInDelta(value.x, ["C", "A", "B"].map(band));
   assert.deepStrictEqual(hints.x.band.domain, ["C", "A", "B"]);
@@ -243,8 +238,10 @@ test("cm.spreadX with flex weighs dates in a given domain as categories", () => 
   const [{value}] = cm
     .flow()
     .data(data)
-    .transform(cm.encode, {x: {value: "k", domain: [date(2020), date(2021)]}, n: "n"})
-    .transform((flow, data) => cm.spreadX(flow, data, {flex: "n", padding: 0}))._values;
+    .transform(cm.encode, {x: "k", n: "n"})
+    .transform((flow, data) =>
+      cm.spreadX(flow, data, {flex: "n", padding: 0, domain: [date(2020), date(2021)]}),
+    )._values;
   assert.deepStrictEqual(value.x, [0, 0.25]);
   assert.deepStrictEqual(value.x1, [0.25, 1]);
 });
@@ -273,7 +270,7 @@ test("cm.plane records flex bands of a reversed range, so that axes label their 
     ])
     .transform(cm.encode, {x: "k", n: "n"})
     .transform(cm.spreadX, {flex: "n", padding: 0})
-    .transform(cm.plane, {margin: 0, reverseX: true})._values;
+    .transform(cm.plane, {margin: 0, scales: {x: {reverse: true}}})._values;
   assert.strictEqual(context.scales.x.apply("a"), 87.5);
   assert.strictEqual(context.scales.x.apply("b"), 37.5);
 });
@@ -328,8 +325,8 @@ test("cm.spreadX sorts its categories by the max of a channel, descending with a
   assert.deepStrictEqual(bands(contexts(fruits, {x: "k", y: "v"}, {sort: "-y"})), ["c", "a", "b"]);
 });
 
-test("cm.spreadX keeps the domain given in encode, whatever sort says", () => {
-  const given = contexts(fruits, {x: {value: "k", domain: ["c", "a", "b"]}, y: "v"}, {sort: "y"});
+test("cm.spreadX keeps its domain option, whatever sort says", () => {
+  const given = contexts(fruits, {x: "k", y: "v"}, {sort: "y", domain: ["c", "a", "b"]});
   assert.deepStrictEqual(bands(given), ["c", "a", "b"]);
 });
 

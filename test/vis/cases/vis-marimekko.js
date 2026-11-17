@@ -13,12 +13,12 @@ export const visMarimekko = withSVG(async () => {
       root
         .data(sales)
         .transform(cm.encode, {
-          x: {value: "market", domain: markets},
+          x: "market",
           y: "value",
           fill: "segment",
           n: "value",
         })
-        .transform(cm.spreadX, {flex: "n", padding: 0})
+        .transform(cm.spreadX, {flex: "n", padding: 0, domain: markets})
         .transform(cm.stackY, {offset: "normalize"})
         .transform(cm.plane, {marginTop: 10})
         .add(cm.rect, {fillOpacity: 0.5, stroke: "white"})

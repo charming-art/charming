@@ -5,8 +5,9 @@ const field = (name) => (d) => d[name];
 
 const colorKeys = ["fill", "stroke"];
 
-// A channel can be a descriptor such as {value: "genre", type: "ordinal"}: the type, domain and
-// range of its scale, and with scale, the name of a scale it shares, such as {value: "v2", scale: "y"}.
+// A channel can be a descriptor that names the scale it uses, such as {value: "v2", scale: "y"}.
+// The options of scales, such as their domains, are given to cm.plane and cm.polar by name, and
+// the orders of categories to the transforms that need them, such as cm.spreadX's domain.
 function isDescriptor(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value) && "value" in value;
 }
@@ -23,7 +24,8 @@ export function encode(flow, data, options = {}) {
   const hints = {};
   for (const key in options) {
     const option = options[key];
-    const {value, ...descriptor} = isDescriptor(option) ? option : {value: option};
+    const {value, scale} = isDescriptor(option) ? option : {value: option};
+    const descriptor = scale === undefined ? {} : {scale};
     const channel = (channels[key] = maybeChannel(key, value));
     // The scale of a channel is resolved later, by cm.plane. A field names the channel, which
     // labels its axis. A color is scaled only if it varies with the data, so a constant color

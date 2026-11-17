@@ -10,9 +10,9 @@ export const visStackedColumn = withSVG(async () => {
     (root) => {
       root
         .data(data)
-        .transform(cm.encode, {x: "state", y: "population", fill: {value: "age", domain: ages}})
+        .transform(cm.encode, {x: "state", y: "population", fill: "age"})
         .transform(cm.spreadX)
-        .transform(cm.stackY)
+        .transform(cm.stackY, {order: ages})
         .transform(cm.plane)
         .add(cm.rect)
         .add(cm.axis, {y: {tickFormat: "s"}});

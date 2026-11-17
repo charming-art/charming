@@ -19,17 +19,17 @@ export const visUnit2d = withSVG(async () => {
       root
         .data(cells)
         .transform(cm.encode, {
-          x: {value: ([c]) => c, domain: ["First", "Second", "Third", "Crew"]},
-          y: {value: ([, s]) => s, domain: ["Female", "Male"]},
+          x: ([c]) => c,
+          y: ([, s]) => s,
         })
-        .transform(cm.spreadX)
-        .transform(cm.spreadY)
+        .transform(cm.spreadX, {domain: ["First", "Second", "Third", "Crew"]})
+        .transform(cm.spreadY, {domain: ["Female", "Male"]})
         .transform(cm.plane, {marginLeft: 60})
         .add(cm.axis, {label: null})
         .append(cm.g)
         .data(([, , rows]) => rows)
-        .transform(cm.encode, {fill: {value: "Survived", domain: ["Yes", "No"]}})
-        .transform(cm.plane)
+        .transform(cm.encode, {fill: "Survived"})
+        .transform(cm.plane, {scales: {fill: {domain: ["Yes", "No"]}}})
         .transform(cm.pack)
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
         .add(cm.circle, cm.inset("7.5%"));

@@ -15,11 +15,11 @@ export const visSimpsonsRatings = withSVG(async () => {
         .transform(cm.encode, {
           x: "season",
           y: "number_in_season",
-          fill: {value: "imdb_rating", type: "linear", scheme: "PiYG"},
+          fill: "imdb_rating",
         })
         .transform(cm.spreadX, {padding: 0})
         .transform(cm.spreadY, {padding: 0})
-        .transform(cm.plane, {marginTop: 40, marginBottom: 10})
+        .transform(cm.plane, {marginTop: 40, marginBottom: 10, scales: {fill: {type: "linear", scheme: "PiYG"}}})
         .add(cm.axis, {x: {anchor: "top", label: "Season"}, y: {label: "Episode"}, grid: true})
         .add(cm.rect, cm.inset(0.5))
         .add(cm.text, {

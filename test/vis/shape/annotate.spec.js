@@ -15,7 +15,7 @@ function annotation(shape, options, {coordinate = cm.plane, selector} = {}) {
       {x: 10, y: 100},
     ])
     .transform(cm.encode, {x: "x", y: "y"})
-    .transform(coordinate, {margin: 0, ...(coordinate === cm.polar && {typeY: "linear"})})
+    .transform(coordinate, {margin: 0, ...(coordinate === cm.polar && {scales: {y: {type: "linear"}}})})
     .add(cm.annotate(shape), options);
   root.render();
   return Array.from(renderer.node().querySelectorAll(selector));
@@ -106,7 +106,7 @@ test("cm.annotate in polar uses a given angle or radius at both ends, like in a 
       {x: 10, y: 100},
     ])
     .transform(cm.encode, {x: "x", y: "y"})
-    .transform(cm.polar, {margin: 0, innerRadius: 0.5, typeY: "linear"});
+    .transform(cm.polar, {margin: 0, innerRadius: 0.5, scales: {y: {type: "linear"}}});
   flow.add(cm.annotate(cm.link), {x1: 0});
   flow.add(cm.annotate(cm.circle), {x: 0, y1: 100, r: 2});
   root.render();

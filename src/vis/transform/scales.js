@@ -179,6 +179,30 @@ export function axisHint(hints, keys) {
   );
 }
 
+// The scale options of cm.plane and cm.polar, by the name of the scale, such as {y: {domain: [0,
+// 100]}, length: {type: "log"}, fill: {scheme: "PiYG"}}, laid over the hints of a context, so that
+// they take precedence over what transforms recorded and over inference. A position's options go to
+// the first of its keys, which wins among them, and a color's to its channel. A band's domain comes
+// from its spread, so its type and domain options don't apply.
+export function withScaleOptions(context, scales, axes) {
+  const hints = {...context.hints};
+  for (const [keys, axis] of axes) {
+    const options = scales[scaleName(hints, keys, axis)];
+    if (!options) continue;
+    const {type, domain, reverse, label} = options;
+    const band = axisHint(hints, keys).band !== undefined;
+    hints[keys[0]] = {...hints[keys[0]], ...defined({...(!band && {type, domain}), reverse, label})};
+  }
+  for (const key of colorKeys) {
+    if (scales[key] && key in hints) hints[key] = {...hints[key], ...defined(scales[key])};
+  }
+  return {...context, hints};
+}
+
+function defined(options) {
+  return Object.fromEntries(Object.entries(options).filter(([, v]) => v !== undefined));
+}
+
 export function hasAny(value, keys) {
   return keys.some((key) => key in value);
 }

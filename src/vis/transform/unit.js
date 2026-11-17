@@ -1,18 +1,21 @@
 import {group, InternMap, range, sum} from "d3-array";
-import {seriesOf, seriesOrder} from "./series.js";
+import {seriesOf, seriesOrder, withSeriesOrder} from "./series.js";
 
 // Turns the rows into one row per unit, such as the squares of a waffle. The rows are grouped by
 // the other position, such as the band of x, and by series. The amount of a group is the sum of
 // the channel, such as a count in y, else its number of rows; it gets round(|amount| / unit)
 // units. Each unit takes the channels of the first row of its group, with the channel set to
 // ±unit, the amount it stands for; its datum is the rows of its group.
-function unit(data, {unit = 1} = {}, [key, key1, other], name) {
+// With order, the series are ordered as given, such as {order: ["Yes", "No"]}, which is recorded as
+// their domain, so that colors follow it; else as an earlier transform recorded them.
+function unit(data, {unit = 1, order} = {}, [key, key1, other], name) {
   if (!data) throw new Error(`No channels: call flow.transform(cm.encode, channels) before cm.${name}.`);
   return data.map((context) => {
     const {value, group: rows} = context;
     const V = value[key];
     const O = value[other];
-    const {Z, domain} = seriesOf(context);
+    const {key: series, Z, domain: hinted} = seriesOf(context);
+    const domain = order ?? hinted;
     // The groups go by the other position, in order of first appearance, then by series. Only the
     // rows of the index are counted, if an earlier transform selected some.
     const I = context.I ? Array.from(context.I) : range(rows.length);
@@ -45,7 +48,8 @@ function unit(data, {unit = 1} = {}, [key, key1, other], name) {
         newValue[key].push(v);
       }
     }
-    return {...context, I: range(newGroup.length), group: newGroup, value: newValue};
+    const hints = order && Z ? withSeriesOrder(context.hints ?? {}, series, order) : context.hints;
+    return {...context, I: range(newGroup.length), group: newGroup, value: newValue, ...(hints && {hints})};
   });
 }
 

@@ -15,25 +15,23 @@ export const visTitanicMosaic = withSVG(async () => {
     (root) => {
       root
         .data(d3.groups(passengers, (d) => d.pclass))
-        .transform(cm.encode, {y: {value: ([pclass]) => pclass, domain: [3, 2, 1]}, n})
-        .transform(cm.spreadY, {padding: 0.05, flex: "n"})
+        .transform(cm.encode, {y: ([pclass]) => pclass, n})
+        .transform(cm.spreadY, {padding: 0.05, flex: "n", domain: [3, 2, 1]})
         .transform(cm.plane, {margin: 10})
         .append(cm.g)
         .data(([, rows]) => d3.groups(rows, (d) => d.sex))
-        .transform(cm.encode, {y: {value: ([sex]) => sex, domain: ["male", "female"]}, n})
-        .transform(cm.spreadY, {padding: 0.06, flex: "n"})
+        .transform(cm.encode, {y: ([sex]) => sex, n})
+        .transform(cm.spreadY, {padding: 0.06, flex: "n", domain: ["male", "female"]})
         .transform(cm.plane)
         .append(cm.g)
         .data(([, rows]) => d3.groups(rows, (d) => d.survived))
-        .transform(cm.encode, {x: {value: ([s]) => s, domain: [1, 0]}, n})
-        .transform(cm.spreadX, {padding: 0.03, flex: "n"})
+        .transform(cm.encode, {x: ([s]) => s, n})
+        .transform(cm.spreadX, {padding: 0.03, flex: "n", domain: [1, 0]})
         .transform(cm.plane)
         .append(cm.g)
         .data(([, rows]) => rows)
-        .transform(cm.encode, {
-          fill: {value: "survived", type: "ordinal", domain: [1, 0], range: ["#2b8cbe", "#ff8408"]},
-        })
-        .transform(cm.plane)
+        .transform(cm.encode, {fill: "survived"})
+        .transform(cm.plane, {scales: {fill: {type: "ordinal", domain: [1, 0], range: ["#2b8cbe", "#ff8408"]}}})
         .transform(cm.pack)
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
         .add(cm.circle, cm.inset("7.5%"));
