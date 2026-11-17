@@ -191,3 +191,19 @@ test("cm.polar takes the domain of the angle in scales", () => {
   const {value} = polared([{v: 1}, {v: 2}], {x: "v"}, [], {scales: {x: {domain: [0, 4]}}});
   assertAllInDelta(value.x, [Math.PI / 2, Math.PI]);
 });
+
+test("cm.polar reverses the angle and the radius of reversed scales", () => {
+  const forward = polared([{v: 1}, {v: 3}], {x: "v"}, [], {scales: {x: {domain: [0, 4]}}});
+  const reversed = polared([{v: 1}, {v: 3}], {x: "v"}, [], {scales: {x: {domain: [0, 4], reverse: true}}});
+  assertAllInDelta(forward.value.x, [Math.PI / 2, (3 * Math.PI) / 2]);
+  assertAllInDelta(reversed.value.x, [(3 * Math.PI) / 2, Math.PI / 2]);
+  const radius = polared([{v: 1}, {v: 2}], {x: () => 0, y: "v"}, [], {
+    scales: {y: {type: "linear", domain: [0, 4], reverse: true}},
+  });
+  assertAllInDelta(radius.value.y, [75, 50]);
+  // A named radius is reversed too.
+  const named = polared([{v: 1}, {v: 2}], {x: () => 0, y: {value: "v", scale: "r"}}, [], {
+    scales: {r: {type: "linear", domain: [0, 4], reverse: true}},
+  });
+  assertAllInDelta(named.value.y, [75, 50]);
+});

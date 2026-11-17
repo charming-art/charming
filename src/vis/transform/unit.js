@@ -10,6 +10,10 @@ import {seriesOf, seriesOrder, withSeriesOrder} from "./series.js";
 // their domain, so that colors follow it; else as an earlier transform recorded them.
 function unit(data, {unit = 1, order} = {}, [key, key1, other], name) {
   if (!data) throw new Error(`No channels: call flow.transform(cm.encode, channels) before cm.${name}.`);
+  // Unlike cm.stackY's, the order is the series as given, not the name of an order.
+  if (order !== undefined && !Array.isArray(order)) {
+    throw new Error(`cm.${name} orders the series as an array, such as {order: ["a", "b"]}.`);
+  }
   return data.map((context) => {
     const {value, group: rows} = context;
     const V = value[key];

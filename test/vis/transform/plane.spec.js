@@ -800,3 +800,56 @@ test("cm.plane colors stacked series in the order of the stack, without repeatin
     .transform(cm.plane)._values;
   assert.deepStrictEqual(context.scales.fill.domain, ["Strategy", "Sports", "Action"]);
 });
+
+test("cm.plane takes the options and recorded domains of colors from any context with the color", () => {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [, second] = root
+    .branch(
+      (flow) => flow.data([0]).transform(cm.encode, {x: () => 0, y: () => 0}),
+      (flow) => flow.data([{age: "old"}]).transform(cm.encode, {x: () => 1, y: () => 1, fill: "age"}),
+    )
+    .transform(cm.plane, {scales: {fill: {domain: ["old"], range: ["red"]}}});
+  assert.deepStrictEqual(second._values[0].value.fill, ["red"]);
+  const rows = [
+    {k: "A", age: "a", n: 1},
+    {k: "A", age: "b", n: 2},
+  ];
+  const [, stacked] = cm
+    .flow()
+    .renderer(cm.svg({width: 100, height: 100}))
+    .branch(
+      (flow) => flow.data(rows).transform(cm.encode, {x: "k", y: "n", fill: "age"}).transform(cm.spreadX),
+      (flow) =>
+        flow
+          .data(rows)
+          .transform(cm.encode, {x: "k", y: "n", fill: "age"})
+          .transform(cm.spreadX)
+          .transform(cm.stackY, {order: ["b", "a"]}),
+    )
+    .transform(cm.plane);
+  assert.deepStrictEqual(stacked._values[0].scales.fill.domain, ["b", "a"]);
+});
+
+test("cm.plane doesn't apply the domain of scales to bands that share the scale with a linear position", () => {
+  const plane = (options) => {
+    const flows = cm
+      .flow()
+      .renderer(cm.svg({width: 200, height: 200}))
+      .branch(
+        (flow) =>
+          flow
+            .data(["a", "b"])
+            .transform(cm.encode, {x: 0, y: (d) => d})
+            .transform(cm.spreadY),
+        (flow) => flow.data([50]).transform(cm.encode, {x: 0, y: (d) => d}),
+      )
+      .transform(cm.plane, {margin: 0, ...options});
+    return Array.from(flows, (flow) => flow._values[0]);
+  };
+  const [bands, linear] = plane({scales: {y: {domain: [0, 100], type: "linear"}}});
+  const [unset, unsetLinear] = plane();
+  // The options come back through neither context: the scale is resolved as without them.
+  assert.deepStrictEqual(bands.value.y, unset.value.y);
+  assert.deepStrictEqual(linear.value.y, unsetLinear.value.y);
+  assert.strictEqual(bands.scales.y.type, "band");
+});

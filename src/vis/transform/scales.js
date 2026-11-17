@@ -181,22 +181,45 @@ export function axisHint(hints, keys) {
 
 // The scale options of cm.plane and cm.polar, by the name of the scale, such as {y: {domain: [0,
 // 100]}, length: {type: "log"}, fill: {scheme: "PiYG"}}, laid over the hints of a context, so that
-// they take precedence over what transforms recorded and over inference. A position's options go to
-// the first of its keys, which wins among them, and a color's to its channel. A band's domain comes
-// from its spread, so its type and domain options don't apply.
+// they take precedence over what transforms recorded and over inference. A position's reverse and
+// label go to the first of its keys, which wins among them, and a color's options to its channel.
+// The type and domain of a position are read with positionOptions instead, as whether they apply
+// depends on the other contexts of the scale: a band's domain comes from its spread.
 export function withScaleOptions(context, scales, axes) {
   const hints = {...context.hints};
   for (const [keys, axis] of axes) {
     const options = scales[scaleName(hints, keys, axis)];
     if (!options) continue;
-    const {type, domain, reverse, label} = options;
-    const band = axisHint(hints, keys).band !== undefined;
-    hints[keys[0]] = {...hints[keys[0]], ...defined({...(!band && {type, domain}), reverse, label})};
+    const {reverse, label} = options;
+    hints[keys[0]] = {...hints[keys[0]], ...defined({reverse, label})};
   }
   for (const key of colorKeys) {
     if (scales[key] && key in hints) hints[key] = {...hints[key], ...defined(scales[key])};
   }
   return {...context, hints};
+}
+
+// The type and domain of a position from the options of its scale, unless the scale has bands,
+// such as those of cm.spreadX, whose domain comes from their spread, given the hints of the contexts
+// that share the scale.
+export function positionOptions(hints, options = {}) {
+  if (hints.some((hint) => hint.band !== undefined)) return {};
+  return defined({type: options.type, domain: options.domain});
+}
+
+// The hints of the colors of the contexts, for colorScales: for each color, the hint of the first
+// context with one, with the first domain of any, so that the options of the scale, which every
+// context with the color has, come first, then an order recorded by a transform in any context,
+// such as cm.stackY's, then inference.
+export function colorHints(data) {
+  const hints = {};
+  for (const key of colorKeys) {
+    const hinted = data.map((context) => context.hints?.[key]).filter((hint) => hint !== undefined);
+    if (!hinted.length) continue;
+    const domain = hinted.find((hint) => hint.domain !== undefined)?.domain;
+    hints[key] = domain === undefined ? hinted[0] : {...hinted[0], domain};
+  }
+  return hints;
 }
 
 function defined(options) {

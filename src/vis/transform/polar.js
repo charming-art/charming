@@ -6,6 +6,7 @@ import {
   axisHint,
   byScaleName,
   callable,
+  colorHints,
   colorScales,
   hasAny,
   isNested,
@@ -14,6 +15,7 @@ import {
   merge,
   nestedFrames,
   positionRecord,
+  positionOptions,
   positionScale,
   resolve,
   scaleDescriptors,
@@ -103,33 +105,28 @@ export function polar(
     const r0 = innerRadius * outerRadius;
     return {type: "polar", cx: (l + r) / 2, cy: (t + b) / 2, innerRadius: r0, outerRadius, startAngle, endAngle};
   });
-  const rangeX = [startAngle, endAngle];
-
   // The scales shared by all the contexts: colors, and positions unless they're independent.
-  const {hints: firstHints = {}} = data[0] ?? {};
   // Like cm.plane, a position is shared by the name of its scale, the axis by default.
-  const colors = colorScales(merge(data, ["fill", "stroke"]), firstHints);
-  // The radius is radial by default, so that areas grow with values.
-  const radialY = (hints) => radial(axisHint(hints, keysY).type ?? "radial");
+  const colors = colorScales(merge(data, ["fill", "stroke"]), colorHints(data));
   const independent = (name) => resolution[name] === "independent";
-  // The domain given in the options of a scale is kept as it is, unless the scale has bands.
-  const domainOf = (contexts, keys, name) => {
-    const band = contexts.some(({hints = {}}) => axisHint(hints, keys).band !== undefined);
-    return band ? undefined : options[name]?.domain;
+  // The type and domain of a position: the options of its scale, unless it has bands, else its
+  // hint; the radius is radial by default, so that areas grow with values.
+  const positionOf = (hints, keys, name, fallback) => {
+    const own = positionOptions(hints, options[name]);
+    return {type: radial(own.type ?? hints[0]?.type ?? fallback), domain: own.domain};
   };
-  const sharedOf = (keys, axis, typeOf) =>
+  const sharedOf = (keys, axis, fallback) =>
     new Map(
       Array.from(byScaleName(data, keys, axis), ([name, contexts]) => {
         if (independent(name)) return [name, null];
         const all = allKeysOf(contexts, keys, axis);
-        return [
-          name,
-          sharedScale(contexts, all, keys, typeOf(contexts[0].hints ?? {}), domainOf(contexts, keys, name)),
-        ];
+        const hints = contexts.map(({hints = {}}) => axisHint(hints, keys));
+        const {type, domain} = positionOf(hints, keys, name, fallback);
+        return [name, sharedScale(contexts, all, keys, type, domain)];
       }),
     );
-  const sharedX = sharedOf(keysX, "x", () => undefined);
-  const sharedY = sharedOf(keysY, "y", radialY);
+  const sharedX = sharedOf(keysX, "x");
+  const sharedY = sharedOf(keysY, "y", "radial");
 
   return data.map((context, j) => {
     const {value, hints = {}} = context;
@@ -138,14 +135,17 @@ export function polar(
     const ownKeysY = keysOf(value, hints, keysY, "y");
     const frame = frames[j];
     const {cx, cy, innerRadius: r0, outerRadius} = frame;
-    const rangeY = [r0, outerRadius];
-
     const hintX = axisHint(hints, keysX);
     const hintY = axisHint(hints, keysY);
     const nameX = scaleName(hints, keysX, "x");
     const nameY = scaleName(hints, keysY, "y");
-    const x = sharedX.get(nameX) || positionScale(value, ownKeysX, {type: hintX.type, domain: hintX.domain});
-    const y = sharedY.get(nameY) || positionScale(value, ownKeysY, {type: radialY(hints), domain: hintY.domain});
+    // Reversed, the angles go counterclockwise, and large values sit near the center.
+    const rangeX = hintX.reverse ? [endAngle, startAngle] : [startAngle, endAngle];
+    const rangeY = hintY.reverse ? [outerRadius, r0] : [r0, outerRadius];
+    const ownX = positionOf([hintX], keysX, nameX);
+    const ownY = positionOf([hintY], keysY, nameY, "radial");
+    const x = sharedX.get(nameX) || positionScale(value, ownKeysX, {...ownX, domain: ownX.domain ?? hintX.domain});
+    const y = sharedY.get(nameY) || positionScale(value, ownKeysY, {...ownY, domain: ownY.domain ?? hintY.domain});
 
     const [colored] = scale(flow, [context], scaleDescriptors(colors));
     const descriptors = {};
@@ -167,8 +167,9 @@ export function polar(
     // stack, y is the outer radius and y1 the baseline.
     const newValue = {...scaled.value};
     const n = Object.values(value)[0]?.length ?? 0; // all channels have one value per row
-    if (!hasAny(value, ownKeysY)) [newValue[keysY[1]], newValue[keysY[0]]] = span(n, rangeY); // y outer, y1 inner
-    if (!hasAny(value, ownKeysX)) [newValue[keysX[0]], newValue[keysX[1]]] = span(n, rangeX);
+    // A missing position spans the frame whichever way its scale goes.
+    if (!hasAny(value, ownKeysY)) [newValue[keysY[1]], newValue[keysY[0]]] = span(n, [r0, outerRadius]); // y outer, y1 inner
+    if (!hasAny(value, ownKeysX)) [newValue[keysX[0]], newValue[keysX[1]]] = span(n, [startAngle, endAngle]);
     newValue.cx = Array.from({length: n}, () => cx);
     newValue.cy = Array.from({length: n}, () => cy);
     // As in cm.plane, the frame is kept as a clip shape, and the clip option is the default of marks.

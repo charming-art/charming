@@ -5,6 +5,7 @@ import {
   axisHint,
   byScaleName,
   callable,
+  colorHints,
   colorScales,
   hasAny,
   isNested,
@@ -13,6 +14,7 @@ import {
   merge,
   nestedFrames,
   positionRecord,
+  positionOptions,
   positionScale,
   resolve,
   scaleDescriptors,
@@ -115,7 +117,9 @@ export function plane(
     const {auto, width: rendererWidth, height: rendererHeight} = renderer._props;
     width ??= auto?.width ? 640 : rendererWidth;
     // The height uses the same scale and domain of y as fitting.
-    height ??= auto?.height ? autoHeight(first, firstY, axisHint(firstHints, keysY)) : rendererHeight;
+    const hintY = axisHint(firstHints, keysY);
+    const sizeY = {...hintY, ...positionOptions([hintY], options[scaleName(firstHints, keysY, "y")])};
+    height ??= auto?.height ? autoHeight(first, firstY, sizeY) : rendererHeight;
     renderer.resize?.(width, height);
     ({width, height} = renderer._props);
     const frame = {top: marginTop, right: width - marginRight, bottom: height - marginBottom, left: marginLeft};
@@ -126,7 +130,7 @@ export function plane(
   // is shared with the contexts whose positions use the same scale: the axis, by default, or a name
   // given to it, such as x: {value: "culmen_length_mm", scale: "length"}. The options of scales and
   // resolve take any name, such as {x: "independent"}.
-  const colors = colorScales(merge(data, ["fill", "stroke"]), data[0]?.hints ?? {});
+  const colors = colorScales(merge(data, ["fill", "stroke"]), colorHints(data));
   const independent = (name) => resolution[name] === "independent";
   const sharedOf = (keys, axis) =>
     new Map(
@@ -161,8 +165,10 @@ export function plane(
     if (reverseOf(independent(nameY) ? hints : firstHintsY.get(nameY))) rangeY.reverse();
 
     // An independent position is inferred from its own context, with the options of its scale.
-    const x = sharedX.get(nameX) || positionScale(value, ownKeysX, {type: hintX.type, domain: hintX.domain});
-    const y = sharedY.get(nameY) || positionScale(value, ownKeysY, {type: hintY.type, domain: hintY.domain});
+    const x =
+      sharedX.get(nameX) || positionScale(value, ownKeysX, {...hintX, ...positionOptions([hintX], options[nameX])});
+    const y =
+      sharedY.get(nameY) || positionScale(value, ownKeysY, {...hintY, ...positionOptions([hintY], options[nameY])});
 
     // Colors are categorical by default, and positions are discrete points by default.
     const [colored] = scale(flow, [context], scaleDescriptors(colors));
@@ -199,8 +205,7 @@ export function plane(
 // else inferred from the values of all of them.
 function sharedScale(data, all, keys, options = {}) {
   const hints = data.map(({hints = {}}) => axisHint(hints, keys));
-  const band = hints.some((hint) => hint.band !== undefined);
-  let {type, domain} = band ? {} : options;
+  let {type, domain} = positionOptions(hints, options);
   type ??= hints[0]?.type;
   const values = merge(data, all);
   domain ??= sharedDomain(

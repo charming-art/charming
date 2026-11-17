@@ -88,3 +88,10 @@ test("cm.unitY orders the groups by the first appearance of their position, as v
   const {value} = units(data, {x: "date"}, cm.unitY);
   assert.deepStrictEqual(value.x, [new Date(0), new Date(0), new Date(1)]);
 });
+
+test("cm.unitY takes the order of the series as an array, and throws an error otherwise", () => {
+  assert.throws(
+    () => units(counts, {x: "lake", y: "count", fill: "species"}, cm.unitY, {order: "value"}),
+    /cm.unitY orders the series as an array/,
+  );
+});
