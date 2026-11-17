@@ -17,6 +17,7 @@ export function canvas$text({
   fontWeight = "normal",
   rotate,
   paintOrder,
+  strokeJoin,
 }) {
   // Like SVG, a format writes the value, and a missing text is empty.
   if (typeof format === "function") text = format(text) ?? "";
@@ -26,6 +27,7 @@ export function canvas$text({
   context.save();
   if (stroke) context.strokeStyle = stroke;
   if (strokeWidth) context.lineWidth = strokeWidth;
+  if (strokeJoin) context.lineJoin = strokeJoin;
   if (fill) context.fillStyle = fill;
   if (textAlign) context.textAlign = textAlign;
   if (textBaseline) context.textBaseline = textBaseline;

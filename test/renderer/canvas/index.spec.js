@@ -73,3 +73,9 @@ test("canvas.text(options) strokes before it fills with paintOrder stroke, such 
   const [stroke1, fill1] = order(undefined);
   assert.ok(fill1 < stroke1);
 });
+
+test("canvas.text(options) joins its stroke with strokeJoin", () => {
+  const renderer = cm.canvas({width: 10, height: 10, dpi: 1});
+  renderer.text({text: "a", x: 0, y: 0, stroke: "white", strokeJoin: "round"});
+  assert.ok(`${renderer.node()}`.split("\n").includes("lineJoin, round"));
+});

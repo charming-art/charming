@@ -91,9 +91,26 @@ test("cm.label with contrast fills black or white, whichever contrasts more with
   assert.strictEqual(labels({contrast: true, fill: "red"}, {fill: "#08306b"})[0].fill, "red");
 });
 
+test("cm.label with contrast a color contrasts with it, such as a fill given only to the mark", () => {
+  assert.strictEqual(labels({contrast: "#08306b"}, {fill: undefined})[0].fill, "white");
+  assert.strictEqual(labels({contrast: "#fff5eb"}, {fill: undefined})[0].fill, "black");
+});
+
+test("cm.label with contrast sees a fill with an opacity over white, and keeps its fill for non-colors", () => {
+  // Dark navy at 0.2 paints light, so the label is black.
+  assert.strictEqual(labels({contrast: true}, {fill: "#08306b", fillOpacity: 0.2})[0].fill, "black");
+  assert.strictEqual(labels({contrast: true}, {fill: "rgba(8, 48, 107, 0.2)"})[0].fill, "black");
+  assert.strictEqual(labels({contrast: true}, {fill: "#08306b", fillOpacity: 1})[0].fill, "white");
+  assert.strictEqual(labels({contrast: true}, {fill: "currentColor"})[0].fill, "currentColor");
+  assert.strictEqual(labels({contrast: "none"}, {fill: undefined})[0].fill, "currentColor");
+});
+
 test("cm.label with halo paints a stroke under its fill, white by default, or of a given color and width", () => {
   const [white] = labels({halo: true});
-  assert.deepStrictEqual([white.stroke, white["stroke-width"], white["paint-order"]], ["white", 3, "stroke"]);
+  assert.deepStrictEqual(
+    [white.stroke, white["stroke-width"], white["paint-order"], white["stroke-linejoin"]],
+    ["white", 3, "stroke", "round"],
+  );
   const [black] = labels({halo: "black", haloWidth: 5});
   assert.deepStrictEqual([black.stroke, black["stroke-width"], black.fill], ["black", 5, "currentColor"]);
 });

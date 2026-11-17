@@ -25,6 +25,7 @@ export function svg$text({
   fontWeight = "normal",
   rotate,
   paintOrder,
+  strokeJoin,
   ...options
 }) {
   // A missing text is empty, as browsers would write undefined; a format writes the value, such as
@@ -46,6 +47,7 @@ export function svg$text({
     ...paint({fill: fill ?? (stroke ? "none" : undefined), stroke, ...options}),
     // With paintOrder "stroke", the stroke is painted under the fill, such as the halo of a label.
     "paint-order": paintOrder,
+    "stroke-linejoin": strokeJoin,
   });
   if (node.textContent !== content) node.textContent = content;
   return this;

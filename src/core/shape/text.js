@@ -42,6 +42,7 @@ export const text = define((renderer, I, value, options) => {
     fontWeight: FW = [],
     rotate: R = [],
     paintOrder: PO = [],
+    strokeJoin: SJ = [],
   } = value;
   const FT = formatsOf(FM);
   for (const i of I) {
@@ -62,6 +63,7 @@ export const text = define((renderer, I, value, options) => {
       fontWeight: FW[i],
       ...(R[i] && {rotate: R[i]}),
       ...(PO[i] && {paintOrder: PO[i]}),
+      ...(SJ[i] && {strokeJoin: SJ[i]}),
     });
   }
 });

@@ -44,9 +44,14 @@ function polarAnchor(position, [a0, a1, r0, r1], center, padding) {
 }
 
 // The fill, black or white, that contrasts more with a color, by the WCAG contrast ratio of their
-// relative luminances, such as for a label inside a bar of that color.
-function contrastOf(color) {
-  const {r, g, b} = rgb(color);
+// relative luminances, such as for a label inside a bar of that color. A color painted with an
+// opacity, or with an alpha of its own, is seen over white. A color that isn't one, such as
+// "currentColor", has no contrast, so the label keeps its fill.
+function contrastOf(color, opacity = 1) {
+  const c = rgb(color);
+  if (!(c.r >= 0)) return undefined;
+  const alpha = (c.opacity >= 0 ? c.opacity : 1) * (opacity >= 0 ? opacity : 1);
+  const [r, g, b] = [c.r, c.g, c.b].map((v) => alpha * v + (1 - alpha) * 255);
   const linear = (c) => ((c /= 255) <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
   const luminance = 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
   return (luminance + 0.05) / 0.05 > 1.05 / (luminance + 0.05) ? "black" : "white";
@@ -61,8 +66,10 @@ const paints = ["fill", "fillOpacity", "stroke", "strokeOpacity", "strokeWidth"]
 // a side or corner inside the box, such as "inside-right"; or outside it, such as "right" or
 // "top-left"; with padding from the edge. On a wedge of cm.polar, it's "center", "inside" or
 // "outside" its outer radius. Every option can vary by row, such as a position that flips sides
-// with the sign of a value; dx and dy nudge a label after it's placed. With contrast, the fill is
-// black or white by the mark's fill, and with halo, a stroke of haloWidth is painted under it.
+// with the sign of a value; dx and dy nudge a label after it's placed. With contrast true, the fill
+// is black or white by the fill of the mark bound to the flow, and its opacity; with contrast a
+// color, such as a fill given only to the mark, by that color. With halo, a stroke of haloWidth is
+// painted under it.
 export const label = define((renderer, I, value, options = {}) => {
   // Like cm.text, a position set in the options without its pair is a point, such as {x: (d) =>
   // d.x1} over a bar, rather than an edge of the box.
@@ -91,7 +98,10 @@ export const label = define((renderer, I, value, options = {}) => {
   const X1 = point("x", "x1") ? X : (value.x1 ?? X);
   const Y1 = point("y", "y1") ? Y : (value.y1 ?? Y);
   const own = Object.fromEntries(paints.map((key) => [key, key in options ? value[key] : []]));
+  // The paint of the mark labeled: its fill and opacity bound to the flow, unless the label gives
+  // its own; with contrast given a color, such as the fill given only to the mark, that color.
   const marked = value.fill ?? [];
+  const markedOpacity = ("fillOpacity" in options ? undefined : value.fillOpacity) ?? [];
   const FT = formatsOf(FM);
   const contrasts = new Map();
   for (const i of I) {
@@ -102,9 +112,11 @@ export const label = define((renderer, I, value, options = {}) => {
       ? polarAnchor(P[i], [x0, x1, y0, y1], {cx: CX[i], cy: CY[i]}, padding)
       : planeAnchor(P[i], [Math.min(x0, x1), Math.max(x0, x1), Math.min(y0, y1), Math.max(y0, y1)], padding);
     let fill = own.fill[i];
-    if (fill === undefined && C[i] && marked[i] != null) {
-      if (!contrasts.has(marked[i])) contrasts.set(marked[i], contrastOf(marked[i]));
-      fill = contrasts.get(marked[i]);
+    if (fill === undefined && C[i]) {
+      const [color, opacity] = C[i] === true ? [marked[i], markedOpacity[i]] : [C[i], 1];
+      const key = `${color} ${opacity}`;
+      if (color != null && !contrasts.has(key)) contrasts.set(key, contrastOf(color, opacity));
+      fill = contrasts.get(key);
     }
     const halo = H[i] === true ? "white" : H[i] || undefined;
     renderer.text({
@@ -117,7 +129,8 @@ export const label = define((renderer, I, value, options = {}) => {
       stroke: halo ?? own.stroke[i],
       strokeOpacity: own.strokeOpacity[i],
       strokeWidth: halo ? (HW[i] ?? 3) : own.strokeWidth[i],
-      ...(halo && {paintOrder: "stroke"}),
+      // A halo is painted under the fill, with round joins, so that sharp letters don't spike.
+      ...(halo && {paintOrder: "stroke", strokeJoin: "round"}),
       textAlign: TA[i] ?? anchor.textAlign,
       textBaseline: TB[i] ?? anchor.textBaseline,
       fontFamily: FF[i] ?? font.fontFamily,
