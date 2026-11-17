@@ -276,3 +276,43 @@ test("cm.stackY with an order leaves a constant fill unscaled", () => {
     .transform(cm.plane)._values;
   assert.deepStrictEqual(context.value.fill, ["steelblue", "steelblue", "steelblue"]);
 });
+
+// Three dates of two series, a and b, stacked a then b.
+const flows = [
+  {x: 0, s: "a", v: 1},
+  {x: 0, s: "b", v: 3},
+  {x: 1, s: "a", v: 4},
+  {x: 1, s: "b", v: 2},
+  {x: 2, s: "a", v: 2},
+  {x: 2, s: "b", v: 5},
+];
+
+test("cm.stackY with offset center centers each stack, then puts the lowest baseline at 0, like Plot", () => {
+  const {y, y1} = values(flows, {x: "x", y: "v", z: "s"}, stackYOf({offset: "center"}));
+  // The stacks are 4, 6 and 7 tall: centered on 0, then raised by 3.5, the half of the tallest.
+  assert.deepStrictEqual(y1, [1.5, 2.5, 0.5, 4.5, 0, 2]);
+  assert.deepStrictEqual(y, [2.5, 5.5, 4.5, 6.5, 2, 7]);
+  // Silhouette is its older name.
+  assert.deepStrictEqual(values(flows, {x: "x", y: "v", z: "s"}, stackYOf({offset: "silhouette"})).y1, y1);
+});
+
+test("cm.stackY with offset wiggle matches d3's stackOffsetWiggle, with the lowest baseline at 0", () => {
+  const {y1} = values(flows, {x: "x", y: "v", z: "s"}, stackYOf({offset: "wiggle"}));
+  const table = [0, 1, 2].map((x) => Object.fromEntries(flows.filter((d) => d.x === x).map((d) => [d.s, d.v])));
+  const [a, b] = d3.stack().keys(["a", "b"]).offset(d3.stackOffsetWiggle)(table);
+  const m = d3.min(a, (d) => d[0]);
+  assertAllInDelta(y1, [a[0][0] - m, b[0][0] - m, a[1][0] - m, b[1][0] - m, a[2][0] - m, b[2][0] - m]);
+});
+
+test("cm.stackY with center or wiggle lines up the middles of its contexts, like the facets of Plot", () => {
+  const [low, high] = cm
+    .flow()
+    .data([flows.slice(0, 2), flows.slice(2, 4)])
+    .transform(cm.encode, {x: () => 0})
+    .append(cm.g)
+    .data((d) => d)
+    .transform(cm.encode, {x: "x", y: "v", z: "s"})
+    .transform((flow, data) => cm.stackY(flow, data, {offset: "center"}))._values;
+  const middle = ({value: {y, y1}}) => (Math.min(...y1) + Math.max(...y)) / 2;
+  assert.strictEqual(middle(low), middle(high));
+});
