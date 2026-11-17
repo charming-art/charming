@@ -1,4 +1,4 @@
-import {cumsum, group, InternMap, InternSet, max, min, range, sum} from "d3-array";
+import {ascending, cumsum, group, InternMap, InternSet, max, min, range, sum} from "d3-array";
 import {scaleBand} from "d3-scale";
 import {orderOf, seriesOf, seriesOrder, withSeriesOrder} from "./series.js";
 
@@ -159,6 +159,7 @@ function centerContexts(stacked) {
 }
 
 // The offset of a stack by name, case-insensitive, with Plot's older names expand and silhouette.
+// Like Plot's, an unknown name is an error.
 function offsetOf(offset) {
   if (offset == null) return null;
   switch (`${offset}`.toLowerCase()) {
@@ -171,7 +172,7 @@ function offsetOf(offset) {
     case "wiggle":
       return wiggle;
   }
-  return null;
+  throw new Error(`Unknown offset: ${offset}.`);
 }
 
 // Splits the band of each row, such as [x, x1], among the series, so that they sit side by side.
@@ -208,8 +209,20 @@ function stack(data, {chunk, padding = 0.1, order, reverse = false, offset} = {}
     const O = value[other];
     const I = Array.from(V, (_, i) => i);
     const stacks = O ? Array.from(group(I, (i) => O[i]).values()) : [I];
-    // Like Plot, the input order is kept unless an order is given, or the series have a domain.
-    const compare = order != null ? orderOf(order, V, O, Z, value) : hinted && seriesOrder(Z, hinted);
+    // Wiggle shifts each stack from the one before it, so the stacks go in order along the other
+    // position, as d3's stackOffsetWiggle expects, whatever the order of the rows.
+    if (offsetBy === wiggle && O) stacks.sort((a, b) => ascending(O[a[0]], O[b[0]]));
+    // Like Plot, the input order is kept unless an order is given, or the series have a domain; with
+    // wiggle, the default order is inside-out, the other half of Byron and Wattenberg's streamgraph,
+    // which puts the series that peak first in the middle. An order given as null keeps the input.
+    const compare =
+      order != null
+        ? orderOf(order, V, O, Z, value)
+        : hinted
+          ? seriesOrder(Z, hinted)
+          : order === undefined && offsetBy === wiggle
+            ? orderOf("inside-out", V, O, Z, value)
+            : null;
     const arrange = (stack) => {
       if (compare) stack.sort(compare);
       if (reverse) stack.reverse();

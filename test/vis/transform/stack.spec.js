@@ -316,3 +316,30 @@ test("cm.stackY with center or wiggle lines up the middles of its contexts, like
   const middle = ({value: {y, y1}}) => (Math.min(...y1) + Math.max(...y)) / 2;
   assert.strictEqual(middle(low), middle(high));
 });
+
+test("cm.stackY with offset wiggle orders the series inside-out by default, like Plot, unless an order is given", () => {
+  const wiggle = (options) => ordered({offset: "wiggle", ...options}).y1;
+  // The same baselines as inside-out given explicitly, rather than the input order's.
+  assert.deepStrictEqual(wiggle(), wiggle({order: "inside-out"}));
+  assert.notDeepStrictEqual(wiggle(), wiggle({order: null}));
+  // An order given wins, and null keeps the input order.
+  assert.deepStrictEqual(wiggle({order: ["a", "b", "c"]}), wiggle({order: null}));
+});
+
+test("cm.stackY with offset wiggle stacks in order along x, whatever the order of the rows", () => {
+  const sorted = values(flows, {x: "x", y: "v", z: "s"}, stackYOf({offset: "wiggle"}));
+  const shuffled = [3, 0, 5, 1, 4, 2];
+  const {y1} = values(
+    shuffled.map((i) => flows[i]),
+    {x: "x", y: "v", z: "s"},
+    stackYOf({offset: "wiggle"}),
+  );
+  assertAllInDelta(
+    y1,
+    shuffled.map((i) => sorted.y1[i]),
+  );
+});
+
+test("cm.stackY throws an error for an unknown offset, like Plot", () => {
+  assert.throws(() => values(flows, {x: "x", y: "v", z: "s"}, stackYOf({offset: "wigle"})), /Unknown offset: wigle/);
+});
