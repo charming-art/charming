@@ -153,15 +153,16 @@ export function diff(prev, next, options) {
 // the screen.
 function shift(source, show, from, to, t) {
   if (from.type === to.type && plain(from) && plain(to)) {
-    return item(source, show, {...to.attrs, ...from.attrs}, to.attrs, [], [], t);
+    return item(source, show, {...to.attrs, ...from.attrs}, to.attrs, from.ops, to.ops, t);
   }
   return morph(source, show, from, to, t);
 }
 
-// Whether a primitive is drawn where its attributes say: not in a group that's moved or turned, and
-// not anchored at its center or turned itself.
+// Whether a primitive is drawn where its attributes say: not in a group that's moved or turned,
+// only maybe clipped, and not anchored at its center or turned itself.
 function plain({ops, attrs}) {
-  return !ops.length && !attrs.rotate && (attrs.anchor === undefined || attrs.anchor === "start");
+  const unmoved = ops.every(([op]) => op === "clip");
+  return unmoved && !attrs.rotate && (attrs.anchor === undefined || attrs.anchor === "start");
 }
 
 // The attributes of a primitive with the values of another where it has them, such as the box of a

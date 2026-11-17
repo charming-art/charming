@@ -148,3 +148,36 @@ test("cm.polar draws a nested chart in a width × height box around its parent p
   assertInDelta(Math.max(...a.value.x), 2 * Math.PI);
   assertInDelta(Math.max(...b.value.x), 2 * Math.PI);
 });
+
+test("cm.polar({clip: true}) clips marks to its disc, or its ring, around the center", () => {
+  const disc = polared([1, 2], {x: (d) => d}, [], {clip: true});
+  assert.strictEqual(disc.clip.x, 100);
+  assert.strictEqual(disc.clip.y, 100);
+  assert.strictEqual(disc.clip.d, d3.arc()({innerRadius: 0, outerRadius: 100, startAngle: 0, endAngle: 2 * Math.PI}));
+  const ring = polared([1, 2], {x: (d) => d}, [], {clip: true, innerRadius: 0.5});
+  assert.strictEqual(ring.clip.d, d3.arc()({innerRadius: 50, outerRadius: 100, startAngle: 0, endAngle: 2 * Math.PI}));
+  assert.strictEqual(polared([1, 2], {x: (d) => d}).clipped, false);
+});
+
+test("cm.polar({clip: true}) clips marks, but not axes", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  cm.flow()
+    .renderer(renderer)
+    .data([1, 2, 3])
+    .transform(cm.encode, {x: (d) => d, y: (d) => d})
+    .transform(cm.polar, {clip: true})
+    .add(cm.axis)
+    .add(cm.circle, {r: 3})
+    .add(cm.circle, {r: 300, clip: false})
+    .render();
+  const node = renderer.node();
+  assert.strictEqual(node.querySelector("clipPath > path").getAttribute("transform"), "translate(100,100)");
+  // A mark can opt out.
+  const big = Array.from(node.querySelectorAll("circle")).filter((circle) => +circle.getAttribute("r") === 300);
+  assert.strictEqual(big.length, 3);
+  for (const circle of big) assert.ok(!circle.closest("[clip-path]"));
+  for (const circle of node.querySelectorAll("circle")) {
+    if (+circle.getAttribute("r") === 3) assert.ok(circle.closest("[clip-path]"));
+  }
+  for (const text of node.querySelectorAll("text")) assert.ok(!text.closest("[clip-path]"));
+});

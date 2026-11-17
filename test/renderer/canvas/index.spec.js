@@ -45,3 +45,18 @@ test("canvas.text(options) rotates text around its position, in radians", () => 
   assert.ok(lines.includes("fillText, a, 0, 0"));
   assert.ok(at("translate, 5, 6") < at("rotate") && at("rotate") < at("fillText"));
 });
+
+test("canvas.clip(rect) clips to a rect, and canvas.clip(path) to a path at x and y", () => {
+  // jsdom has no Path2D, which browsers have.
+  const Path2D = globalThis.Path2D;
+  globalThis.Path2D = class {};
+  const renderer = cm.canvas({width: 10, height: 10, dpi: 1});
+  renderer.clip({x: 1, y: 2, width: 3, height: 4});
+  renderer.clip({x: 5, y: 6, d: "M0,0L1,1Z"});
+  globalThis.Path2D = Path2D;
+  const lines = `${renderer.node()}`.split("\n");
+  const at = (line) => lines.indexOf(line);
+  assert.ok(at("beginPath") < at("rect, 1, 2, 3, 4") && at("rect, 1, 2, 3, 4") < at("clip"));
+  assert.ok(at("translate, 5, 6") < at("translate, -5, -6"));
+  assert.strictEqual(lines.filter((line) => line.startsWith("clip")).length, 2);
+});

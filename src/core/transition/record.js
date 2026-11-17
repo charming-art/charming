@@ -6,7 +6,7 @@ const primitives = ["point", "circle", "rect", "line", "triangle", "path", "poly
 const timings = ["delay", "duration", "ease"];
 
 // A renderer that records what shapes draw rather than drawing it, for transitions: each primitive
-// keeps its type, its attributes and the translations and rotations it's drawn in. While a shape
+// keeps its type, its attributes and the translations, rotations and clips it's drawn in. While a shape
 // of the flow is drawn, between begin and end, its primitives also get their identity, their
 // states as they enter and exit, and their timing, from the channels of their rows.
 export function recorder() {
@@ -29,6 +29,10 @@ export function recorder() {
     },
     rotate(angle) {
       ops.push(["rotate", angle]);
+    },
+    // A clip is kept flat, so that its numbers interpolate: a rect, or a path at x and y.
+    clip({x = 0, y = 0, width, height, d}) {
+      ops.push(d === undefined ? ["clip", "rect", x, y, width, height] : ["clip", "path", x, y, d]);
     },
     begin(meta) {
       node = meta;

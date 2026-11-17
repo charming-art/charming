@@ -672,3 +672,81 @@ test("cm.plane draws a chart in a keyframe at the root as a chart at the root", 
   // The default margins of a chart, not the box of a glyph.
   assert.deepStrictEqual([context.frame.left, context.frame.right], [20, 180]);
 });
+
+test("cm.plane({clip: true}) clips marks to the frame, but not axes", () => {
+  const renderer = cm.svg({width: 200, height: 100});
+  cm.flow()
+    .renderer(renderer)
+    .data([0, 1])
+    .transform(cm.encode, {x: (d) => d, y: (d) => d})
+    .transform(cm.plane, {margin: 10, clip: true})
+    .add(cm.axis)
+    .add(cm.circle, {r: 3})
+    .render();
+  const node = renderer.node();
+  const rect = node.querySelector("clipPath > rect");
+  assert.deepStrictEqual(
+    ["x", "y", "width", "height"].map((name) => +rect.getAttribute(name)),
+    [10, 10, 180, 80],
+  );
+  for (const circle of node.querySelectorAll("circle")) assert.ok(circle.closest("[clip-path]"));
+  assert.ok(node.querySelector("line, text"));
+  for (const tick of node.querySelectorAll("line, text")) assert.ok(!tick.closest("[clip-path]"));
+});
+
+test("cm.plane({clip: true}) clips the marks of a nested chart to its cell", () => {
+  const [, [a, b]] = facets(columns, {y: "v"}, {clip: true});
+  assert.deepStrictEqual(a.clip, {x: 0, y: -50, width: 100, height: 100});
+  assert.deepStrictEqual(b.clip, a.clip);
+});
+
+test("cm.plane doesn't clip by default", () => {
+  const [renderer, [a]] = facets(columns, {y: "v"});
+  assert.strictEqual(a.clipped, false);
+  assert.strictEqual(renderer.node().querySelector("[clip-path]"), null);
+});
+
+// A clipped or unclipped plane with a rect and a text, each with its own options.
+function clipMarks(plane, rect, text) {
+  const renderer = cm.svg({width: 200, height: 100});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([0, 1])
+    .transform(cm.encode, {x: (d) => d, y: (d) => d})
+    .transform(cm.plane, {margin: 10, ...plane})
+    .add(cm.rect, {width: 5, height: 5, ...rect})
+    .add(cm.text, {text: "a", ...text});
+  root.render();
+  const node = renderer.node();
+  return ["rect", "text"].map((name) =>
+    Array.from(node.querySelectorAll(name))
+      .filter((element) => !element.closest("clipPath"))
+      .map((element) => !!element.closest("[clip-path]")),
+  );
+}
+
+test("a mark's clip option overrides the clip of its plane", () => {
+  assert.deepStrictEqual(clipMarks({clip: true}, {}, {clip: false}), [
+    [true, true],
+    [false, false],
+  ]);
+  assert.deepStrictEqual(clipMarks({}, {clip: true}, {}), [
+    [true, true],
+    [false, false],
+  ]);
+});
+
+test("cm.plane({clip: true}) also clips the marks appended to a clipped mark", () => {
+  const renderer = cm.svg({width: 200, height: 100});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([0, 1])
+    .transform(cm.encode, {x: (d) => d, y: (d) => d})
+    .transform(cm.plane, {margin: 10, clip: true})
+    .append(cm.g)
+    .append(cm.circle, {x: 0, y: 0, r: 300});
+  root.render();
+  const circles = renderer.node().querySelectorAll("circle");
+  assert.strictEqual(circles.length, 2);
+  for (const circle of circles) assert.ok(circle.closest("[clip-path]"));
+});

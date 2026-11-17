@@ -16,6 +16,7 @@ import {svg$rotate} from "./rotate.js";
 import {svg$save} from "./save.js";
 import {svg$restore} from "./restore.js";
 import {svg$resize} from "./resize.js";
+import {svg$clip} from "./clip.js";
 
 function SVG() {
   Object.defineProperties(this, {
@@ -24,6 +25,8 @@ function SVG() {
     _stack: {value: null, writable: true},
     _cursors: {value: null, writable: true},
     _props: {value: {}, writable: true},
+    _clips: {value: new Map(), writable: true},
+    _clipPrefix: {value: null, writable: true},
   });
 }
 
@@ -46,6 +49,7 @@ Object.defineProperties(SVG.prototype, {
   save: {value: svg$save},
   restore: {value: svg$restore},
   resize: {value: svg$resize},
+  clip: {value: svg$clip},
 });
 
 export function svg({width, height} = {}) {

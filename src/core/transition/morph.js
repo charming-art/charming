@@ -84,9 +84,33 @@ function fade(from, to) {
   return [from, to];
 }
 
-// A piece of a box as a rect, painted like a primitive.
+// The operations of a primitive up to its last clip, which what morphs from or into it keeps, so
+// that it stays clipped; none if they turn it, as a box on the screen then isn't a box in them.
+export function clipsOf({ops = []}) {
+  let i = ops.length;
+  while (i > 0 && ops[i - 1][0] !== "clip") i--;
+  const clips = ops.slice(0, i);
+  return clips.some(([op]) => op === "rotate") ? [] : clips;
+}
+
+// Points on the screen in the coordinates of operations without rotations.
+function localOf(points, ops) {
+  let dx = 0;
+  let dy = 0;
+  for (const [op, a, b] of ops) {
+    if (op === "translate") {
+      dx += a;
+      dy += b;
+    }
+  }
+  return dx || dy ? points.map(([x, y]) => [x - dx, y - dy]) : points;
+}
+
+// A piece of a box on the screen as a rect, painted and clipped like a primitive.
 export function piece([x, y, width, height], primitive) {
-  return {type: "rect", attrs: {x, y, width, height, ...paintOf(primitive)}, ops: []};
+  const ops = clipsOf(primitive);
+  const [[x0, y0]] = localOf([[x, y]], ops);
+  return {type: "rect", attrs: {x: x0, y: y0, width, height, ...paintOf(primitive)}, ops};
 }
 
 // Primitives in the order of their positions, top to bottom, then left to right, so that they take
@@ -118,6 +142,8 @@ export function morph(source, show, from, to, {delay, duration, ease}) {
   const A = resample(a.points, a.closed, n);
   const B = closed ? align(A, resample(b.points, b.closed, n)) : resample(b.points, b.closed, n);
   const paint = interpolateAttrs(...fade(paintOf(from), paintOf(to)));
+  // The path is drawn in the clip of the target, else of the source.
+  const clips = clipsOf(to).length ? clipsOf(to) : clipsOf(from);
   const local = (elapsed) =>
     duration > 0 ? Math.max(0, Math.min(1, (elapsed - delay) / duration)) : +(elapsed >= delay);
   return {
@@ -127,10 +153,11 @@ export function morph(source, show, from, to, {delay, duration, ease}) {
       if ((show === "until-end" && t >= 1) || (show === "at-end" && t < 1)) return null;
       if (t >= 1) return {...source, type: to.type, attrs: to.attrs, ops: to.ops};
       const e = ease(t);
-      const points = A.map(([x, y], i) => [x + (B[i][0] - x) * e, y + (B[i][1] - y) * e]);
+      const screen = A.map(([x, y], i) => [x + (B[i][0] - x) * e, y + (B[i][1] - y) * e]);
+      const points = localOf(screen, clips);
       // The points are kept, and whether they're closed, so that a render during the morph starts
       // from the shape as shown.
-      return {...source, type: "path", attrs: {...paint(e), d: pathOf(points, closed)}, ops: [], points, closed};
+      return {...source, type: "path", attrs: {...paint(e), d: pathOf(points, closed)}, ops: clips, points, closed};
     },
   };
 }

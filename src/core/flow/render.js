@@ -61,13 +61,22 @@ function renderNode(renderer, node, index, context, path, scope, time, pick) {
     node._children = children;
     for (let c = 0; c < made.length; c++) renderNode(renderer, made[c], 0, context, `${path}/m${c}`, scope, time);
   }
+  // A shape is clipped to the clip shape of its context, such as the frame of cm.plane, if its clip
+  // option says so, else if the context's does, such as cm.plane({clip: true}), on renderers that
+  // clip, with what's appended to it, such as the marks in a cm.g. Composites, such as axes, aren't
+  // clipped: the shapes they make are drawn without their context.
+  const clipped = builtin && renderer.clip && (options?.clip ?? bound?.clipped);
+  const clip = clipped && bound?.clip ? bound.clip : null;
+  if (clip) {
+    renderer.save();
+    renderer.clip(clip);
+  }
   if (builtin) {
     renderer.begin?.({path: `${scope}${path}`, scope, index, I, value, group});
     render(renderer, I, value, options, group);
     renderer.end?.();
   }
-  if (!children.length) return;
-  const rows = pick === undefined ? I : [pick];
+  const rows = children.length ? (pick === undefined ? I : [pick]) : [];
   for (let i = 0; i < rows.length; i++) {
     const k = rows[i];
     // A keyframe isn't a group in space: its rows are moments, which share one scope.
@@ -85,6 +94,7 @@ function renderNode(renderer, node, index, context, path, scope, time, pick) {
     renderChildren(renderer, children, (child) => childIndex(child, node, index, k), context, path, rowScope, time);
     if (translated) renderer.restore();
   }
+  if (clip) renderer.restore();
 }
 
 // Draws the children of a row. With keyframes, the keyframes among them form a sequence, the rows of

@@ -33,22 +33,27 @@ export function interpolateAttrs(from, to) {
   return (t) => Object.fromEntries(fns.map(([key, f]) => [key, f(t)]));
 }
 
-// Interpolates the translations and rotations of a primitive: the operations they share at the
-// start, such as the translation of a group, interpolate, and the ones added or removed after them,
-// such as a new rotation, jump at the end.
+// Interpolates the translations, rotations and clips of a primitive: the operations they share at
+// the start, such as the translation of a group, interpolate their numbers, and the ones added or
+// removed after them, such as a new rotation, jump at the end. Operations are shared if their other
+// arguments are the same, such as the type of a clip and its path.
 export function interpolateOps(from, to) {
   let shared = 0;
-  while (shared < from.length && shared < to.length && from[shared][0] === to[shared][0]) shared++;
+  while (shared < from.length && shared < to.length && sameOp(from[shared], to[shared])) shared++;
   return (t) => {
     if (t >= 1) return to;
     const ops = from.slice();
     for (let i = 0; i < shared; i++) {
       const a = from[i];
       const b = to[i];
-      ops[i] = a.map((v, j) => (j === 0 ? v : v + (b[j] - v) * t));
+      ops[i] = a.map((v, j) => (typeof v === "number" ? v + (b[j] - v) * t : v));
     }
     return ops;
   };
+}
+
+function sameOp(a, b) {
+  return a.length === b.length && a.every((v, j) => typeof v === "number" || v === b[j]);
 }
 
 // An easing function by name, such as "cubic-in-out" for d3's easeCubicInOut, or as given.
