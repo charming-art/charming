@@ -47,7 +47,7 @@
   <text x="37" y="85.81670397795777" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">22</text>
   <text x="37" y="55.7509213018772" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">24</text>
   <text x="37" y="25.68513862579662" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">26</text>
-  <text x="25" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ Avg. Temperature (°C)</text>
+  <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ Avg. Temperature (°C)</text>
   <line x1="594" y1="368.1106569580164" x2="600" y2="368.1106569580164" stroke="currentColor" stroke-width="1"></line>
   <line x1="594" y1="332.66578242156834" x2="600" y2="332.66578242156834" stroke="currentColor" stroke-width="1"></line>
   <line x1="594" y1="297.2209078851203" x2="600" y2="297.2209078851203" stroke="currentColor" stroke-width="1"></line>
@@ -68,7 +68,7 @@
   <text x="603" y="119.99653520288021" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">4.0</text>
   <text x="603" y="84.5516606664322" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">4.5</text>
   <text x="603" y="49.10678612998418" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">5.0</text>
-  <text x="621" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-after-edge" fill="currentColor">↑ Precipitation (inches)</text>
+  <text x="637" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-after-edge" fill="currentColor">↑ Precipitation (inches)</text>
   <path d="M46,292.834L96.71,268.313L144.149,230.326L194.86,190.746L243.934,126.466L294.645,79.804L343.719,25.709L394.43,24L445.14,86.957L494.215,170.158L544.925,250.828L594,293.355L594,366.556L544.925,345.861L494.215,275.971L445.14,230.759L394.43,194.514L343.719,203.11L294.645,232.475L243.934,272.006L194.86,320.894L144.149,343.497L96.71,355.584L46,376Z" fill="#85C5A6" fill-opacity="0.3"></path>
   <path d="M46,137.147C62.903,137.982,79.807,138.817,96.71,138.817C112.523,138.817,128.336,56.996,144.149,56.996C161.053,56.996,177.956,143.277,194.86,181.789C211.218,219.059,227.576,261.093,243.934,284.93C260.838,309.56,277.741,309.549,294.645,325.045C311.003,340.041,327.361,376,343.719,376C360.623,376,377.526,328.564,394.43,309.97C411.333,291.375,428.237,294.791,445.14,264.434C461.499,235.057,477.857,155.509,494.215,115.766C511.118,74.699,528.022,24,544.925,24C561.284,24,577.642,35.782,594,47.563" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke="#85A9C5" stroke-width="2"></path>
 </svg>

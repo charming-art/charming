@@ -78,7 +78,7 @@
   <text x="37" y="95.47472838923002" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.10</text>
   <text x="37" y="69.02220122815305" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.11</text>
   <text x="37" y="42.56967406707604" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.12</text>
-  <text x="13" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ frequency</text>
+  <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ frequency</text>
   <rect x="136.16858237547893" y="24" width="19.793103448275872" height="336"></rect>
   <rect x="466.0536398467433" y="120.44591402928671" width="19.793103448275815" height="239.5540859707133"></rect>
   <rect x="48.19923371647508" y="143.96221067548416" width="19.793103448275872" height="216.03778932451584"></rect>

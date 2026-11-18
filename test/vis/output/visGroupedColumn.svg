@@ -36,7 +36,7 @@
   <text x="37" y="99.7346222666326" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">4.5M</text>
   <text x="37" y="70.8162469629251" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">5.0M</text>
   <text x="37" y="41.8978716592176" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">5.5M</text>
-  <text x="13" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ population</text>
+  <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ population</text>
   <rect x="55.409836065573785" y="68.59340712683033" width="9.40983606557377" height="291.40659287316964" fill="#5470c6"></rect>
   <rect x="64.81967213114756" y="60.96427702770741" width="9.40983606557377" height="299.0357229722926" fill="#91cc75"></rect>
   <rect x="74.22950819672133" y="24" width="9.409836065573757" height="336" fill="#fac858"></rect>

@@ -33,7 +33,7 @@
   <text x="37" y="114.93695920889989" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">600</text>
   <text x="37" y="71.42645241038319" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">700</text>
   <text x="37" y="27.915945611866498" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">800</text>
-  <text x="19" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ Frequency</text>
+  <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ Frequency</text>
   <rect x="46.5" y="375.5648949320148" width="13.71794871794873" height="0.4351050679852051"></rect>
   <rect x="61.21794871794873" y="375.12978986402965" width="13.71794871794873" height="0.8702101359703533"></rect>
   <rect x="90.65384615384616" y="375.12978986402965" width="13.71794871794873" height="0.8702101359703533"></rect>

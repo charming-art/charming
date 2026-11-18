@@ -36,7 +36,7 @@
   <text x="37" y="137.8512396694215" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">10,000</text>
   <text x="37" y="93.42148760330576" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">12,000</text>
   <text x="37" y="48.991735537190074" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">14,000</text>
-  <text x="1" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ unemployed</text>
+  <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ unemployed</text>
   <text x="452" y="24" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" dominant-baseline="text-before-edge" fill="currentColor">industry</text>
   <rect x="452" y="39" width="10" height="10" fill="#5470c6"></rect>
   <rect x="452" y="53" width="10" height="10" fill="#91cc75"></rect>

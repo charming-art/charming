@@ -241,10 +241,10 @@ test("cm.axisY with anchor right labels the ticks right of the chart, aligned to
   // The right of the chart is at 594.
   assert.strictEqual(+tick.getAttribute("x"), 594 + 6 + 3);
   assert.strictEqual(tick.getAttribute("text-anchor"), "start");
-  // The title is level over the axis, ending at the far end of the tick labels, the widest 4
-  // characters of 6px, past the half of a label over the top, 24, by 6px, inside the chart.
+  // The title is level over the axis, ending 3px from the right edge of the chart, like Plot's, past
+  // the half of a label over the top, 24, by 6px, inside the chart.
   const title = find("↑ frequency");
-  assert.strictEqual(+title.getAttribute("x"), 594 + 6 + 3 + 24);
+  assert.strictEqual(+title.getAttribute("x"), 640 - 3);
   assert.strictEqual(+title.getAttribute("y"), 24 - 5 - 6);
   assert.strictEqual(title.getAttribute("text-anchor"), "end");
   assert.ok(+title.getAttribute("x") <= 640 && +title.getAttribute("y") - 10 >= 0);
@@ -449,11 +449,11 @@ test("cm.axis places its titles past its tick labels, by a constant gap, with la
       ]);
   };
   // The frame is from 40 to 160 and 40 to 60. Under x: the tick 6, the padding 3, a label 10 and the
-  // gap 6, at the right end of the continuous axis, like Plot. Over y: level, starting at the far end
-  // of its labels "0" and "1", 6px wide, past half a label and the gap, with its arrow up the axis.
+  // gap 6, at the right end of the continuous axis, like Plot. Over y: level, starting 3px from the
+  // left edge of the chart, like Plot's, past half a label and the gap, with its arrow up the axis.
   assert.deepStrictEqual(titles(), [
     ["X →", 160, 60 + 6 + 3 + 10 + 6, "end", null],
-    ["↑ Y", 40 - 6 - 3 - 6, 40 - 5 - 6, "start", null],
+    ["↑ Y", 3, 40 - 5 - 6, "start", null],
   ]);
   // At the left end or the middle of x. Like Plot's, y is turned beside its labels at the middle of
   // the axis with labelAnchor center, by the gap, its arrow pointing up, or level at its bottom.
@@ -465,7 +465,7 @@ test("cm.axis places its titles past its tick labels, by a constant gap, with la
   // At the bottom, under the tick labels of the axis of x at the bottom, in the row of its title.
   assert.deepStrictEqual(titles({y: {labelAnchor: "bottom"}, x: false})[0], [
     "↑ Y",
-    40 - 6 - 3 - 6,
+    3,
     60 + 6 + 3 + 10 + 6,
     "start",
     null,

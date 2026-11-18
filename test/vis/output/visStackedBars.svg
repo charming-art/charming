@@ -24,7 +24,7 @@
   <text x="37" y="119.99999999999999" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">120</text>
   <text x="37" y="79.99999999999999" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">140</text>
   <text x="37" y="40.000000000000014" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">160</text>
-  <text x="19" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ Frequency</text>
+  <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ Frequency</text>
   <rect x="434.8387096774194" y="255.99999999999997" width="166.64516129032256" height="104.00000000000003" fill="#5470c6"></rect>
   <rect x="64.51612903225808" y="272" width="166.6451612903226" height="88" fill="#5470c6"></rect>
   <rect x="64.51612903225808" y="24" width="166.6451612903226" height="248" fill="#fac858"></rect>

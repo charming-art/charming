@@ -26,7 +26,7 @@
   <text x="51" y="152.4923404822166" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">120</text>
   <text x="51" y="109.86545890502197" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">140</text>
   <text x="51" y="67.2385773278273" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">160</text>
-  <text x="33" y="29" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ y</text>
+  <text x="3" y="29" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ y</text>
   <g transform="translate(60,360)">
     <path d="M19.719,-3.339A20,20,0,0,0,0,-20L0,0Z" fill="#5470c6" stroke="white"></path>
     <path d="M-3.038,19.768A20,20,0,0,0,19.719,-3.339L0,0Z" fill="#73c0de" stroke="white"></path>

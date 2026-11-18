@@ -46,7 +46,7 @@
   <text x="37" y="70.34482758620692" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">66</text>
   <text x="37" y="47.17241379310346" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">68</text>
   <text x="37" y="24" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">70</text>
-  <text x="25" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ height</text>
+  <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ height</text>
   <circle cx="46" cy="360" r="3"></circle>
   <circle cx="264.66666666666663" cy="232.55172413793105" r="3"></circle>
   <circle cx="360.33333333333326" cy="267.3103448275862" r="3"></circle>

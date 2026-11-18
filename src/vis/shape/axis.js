@@ -148,22 +148,16 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
     ...rotateY,
   });
   // The title is part of the axis, a constant gap past what it draws. Like Plot's labelAnchor, it's
-  // level at the top of the axis, the default of a continuous scale, or at its bottom, starting at
-  // the far end of its tick labels on a left axis, or ending there on a right one, with an arrow
-  // along the axis; or turned to read along it at its middle, the default of a discrete scale, past
-  // its tick labels, else its tick marks, else the plot. The default margins of cm.plane leave room
-  // for it on the sides with axes.
+  // level at the top of the axis, the default of a continuous scale, or at its bottom, starting 3px
+  // from the left edge of the chart on a left axis, or ending 3px from its right edge on a right
+  // one, like Plot's, which aligns it with the edge of the margin, with an arrow along the axis; or
+  // turned to read along it at its middle, the default of a discrete scale, past its tick labels,
+  // else its tick marks, else the plot. The default margins of cm.plane leave room for it on the
+  // sides with axes.
   const {labelAnchor = scale.ticks ? "top" : "center"} = options;
   const turn = labelAnchor === "center";
   const label = labelOf(y, scale, "y", options, turn);
   if (label == null || frame?.nested) return;
-  const reach = reachOf(ticks.map(format), {
-    tickSize,
-    tickPadding,
-    radians: (tickRotate * Math.PI) / 180,
-    pad: padY,
-    across: acrossY,
-  });
   if (!turn) {
     // Over the top or under the bottom of the axis, past the half of a tick label that may reach
     // past it, or past the tick labels of an axis of x on that side, in the row of its title.
@@ -172,13 +166,20 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
     flow.datum(label).append(text, {
       ...font,
       text: label,
-      x: edge + k * reach,
+      x: isRight ? width - 3 : 3,
       y: isBottom ? bottom + past + titleGap : top - past - titleGap,
       textAlign: isRight ? "end" : "start",
       textBaseline: isBottom ? "top" : "bottom",
     });
     return;
   }
+  const reach = reachOf(ticks.map(format), {
+    tickSize,
+    tickPadding,
+    radians: (tickRotate * Math.PI) / 180,
+    pad: padY,
+    across: acrossY,
+  });
   flow.datum(label).append(text, {
     ...font,
     text: label,

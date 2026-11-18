@@ -42,7 +42,7 @@
   <text x="37" y="119.99999999999999" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">250k</text>
   <text x="37" y="72.00000000000001" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">300k</text>
   <text x="37" y="24" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">350k</text>
-  <text x="13" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ sold</text>
+  <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ sold</text>
   <rect x="493.84615384615375" y="96.00000000000001" width="56.769230769230774" height="264" fill="#9a60b4"></rect>
   <rect x="556.9230769230769" y="249.60000000000002" width="56.76923076923083" height="110.39999999999998" fill="#ea7ccc"></rect>
   <rect x="52.307692307692285" y="244.8" width="56.76923076923077" height="115.19999999999999" fill="#5470c6"></rect>

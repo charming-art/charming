@@ -66,7 +66,7 @@
   <text x="37" y="73.52380952380953" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">20.5</text>
   <text x="37" y="48.761904761904766" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">21.0</text>
   <text x="37" y="24" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">21.5</text>
-  <text x="13" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ culmen_depth_mm</text>
+  <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ culmen_depth_mm</text>
   <text x="522" y="24" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" dominant-baseline="text-before-edge" fill="currentColor">species</text>
   <rect x="522" y="39" width="10" height="10" fill="#5470c6"></rect>
   <rect x="522" y="53" width="10" height="10" fill="#91cc75"></rect>

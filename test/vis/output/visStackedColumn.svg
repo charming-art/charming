@@ -28,7 +28,7 @@
   <text x="37" y="142.68859021447756" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">25M</text>
   <text x="37" y="99.22630825737308" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">30M</text>
   <text x="37" y="55.7640263002686" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">35M</text>
-  <text x="19" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ population</text>
+  <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ population</text>
   <rect x="55.409836065573785" y="316.20364086640404" width="84.68852459016395" height="43.796359133595956" fill="#5470c6"></rect>
   <rect x="55.409836065573785" y="271.2606771951285" width="84.68852459016395" height="44.94296367127555" fill="#91cc75"></rect>
   <rect x="55.409836065573785" y="220.76224294970643" width="84.68852459016395" height="50.49843424542206" fill="#fac858"></rect>

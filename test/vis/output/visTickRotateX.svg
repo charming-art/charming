@@ -60,7 +60,7 @@
   <text x="37" y="112.26071103008206" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1,600</text>
   <text x="37" y="82.54329990884229" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1,800</text>
   <text x="37" y="52.82588878760255" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2,000</text>
-  <text x="7" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ unemployed</text>
+  <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ unemployed</text>
   <rect x="579.290780141844" y="29.943482224247937" width="36.638297872340445" height="320.05651777575207"></rect>
   <rect x="375.7446808510639" y="65.01002734731085" width="36.63829787234039" height="284.9899726526892"></rect>
   <rect x="335.03546099290776" y="81.9489516864175" width="36.63829787234039" height="268.0510483135825"></rect>
