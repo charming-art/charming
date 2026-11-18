@@ -11,7 +11,6 @@ export function visDotXAnnotate() {
     .transform(cm.encode, {x: (d) => d})
     .transform(cm.plane)
     .add(cm.circle, {r: 3, fill: "none", stroke: "currentColor", strokeWidth: 1.5})
-    .add(cm.axis)
     .add(cm.annotate(cm.link), {x: 174, stroke: "red"});
   root.render();
   return renderer.node();

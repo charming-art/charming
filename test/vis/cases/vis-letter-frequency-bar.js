@@ -11,8 +11,7 @@ export async function visLetterFrequencyBar() {
     .transform(cm.encode, {x: "frequency", y: "letter"})
     .transform(cm.spreadY)
     .transform(cm.plane)
-    .add(cm.rect)
-    .add(cm.axis);
+    .add(cm.rect);
   root.render();
   return renderer.node();
 }

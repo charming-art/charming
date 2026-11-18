@@ -26,11 +26,9 @@ export const visPieLabels = withSVG(async () => {
         .transform(cm.stackX)
         .transform(cm.polar, {
           innerRadius: 0.25,
-          scales: {
-            fill: {
-              domain: data.map((d) => d.id),
-              range: ["#e8c1a0", "#f47560", "#f1e15b", "#e8a838", "#61cdbb"],
-            },
+          fill: {
+            domain: data.map((d) => d.id),
+            range: ["#e8c1a0", "#f47560", "#f1e15b", "#e8a838", "#61cdbb"],
           },
         })
         .add(cm.arc, {cornerRadius: 4, stroke: "#fff", strokeWidth: 2})

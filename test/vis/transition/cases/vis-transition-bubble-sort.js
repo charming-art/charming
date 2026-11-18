@@ -35,8 +35,7 @@ export function visTransitionBubbleSort() {
         fill: (d) => (d.compared ? "compared" : "value"),
       })
       .transform(cm.spreadX, {sort: false})
-      .transform(cm.plane, {scales: {y: {domain: [0, 100]}, fill: {domain: ["value", "compared"]}}})
-      .add(cm.axis)
+      .transform(cm.plane, {y: {domain: [0, 100]}, fill: {domain: ["value", "compared"]}})
       .add(cm.rect);
   };
   return replay(renderer.node(), root, draw);

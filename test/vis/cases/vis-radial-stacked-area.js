@@ -14,7 +14,7 @@ export const visRadialStackedArea = withSVG(async () => {
         .data(data)
         .transform(cm.encode, {x: "date", y: "unemployed", fill: "industry"})
         .transform(cm.stackY)
-        .transform(cm.polar, {innerRadius: 0.3, scales: {y: {type: "linear"}}})
+        .transform(cm.polar, {innerRadius: 0.3, y: {type: "linear"}})
         .add(cm.areaRadial)
         .add(cm.axis, {x: {anchor: "outer", ticks: years}, y: {tickFormat: "s"}});
     },

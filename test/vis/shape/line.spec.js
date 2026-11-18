@@ -81,7 +81,7 @@ test("cm.lineRadial draws around the center, and follows the circle at one radiu
     {x: "x", y: "y"},
     {
       coordinate: cm.polar,
-      coordinateOptions: {endAngle: Math.PI, scales: {y: {type: "linear", domain: [0, 1]}}},
+      coordinateOptions: {endAngle: Math.PI, y: {type: "linear", domain: [0, 1]}},
       shape: cm.lineRadial,
     },
   );

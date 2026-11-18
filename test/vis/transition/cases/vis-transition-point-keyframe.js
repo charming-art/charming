@@ -18,14 +18,12 @@ export async function visTransitionPointKeyframe() {
       .transform(cm.groupX, {y: "mean"})
       .transform(cm.spreadX)
       .transform(cm.plane)
-      .add(cm.axis)
       .add(cm.rect);
     root
       .append(cm.keyframe)
       .data(people)
       .transform(cm.encode, {x: "height", y: "weight", fill: "gender", groupKey: "gender"})
       .transform(cm.plane)
-      .add(cm.axis)
       .add(cm.circle, {r: 3, fillOpacity: 0.7});
   };
   return replay(renderer.node(), root, draw);

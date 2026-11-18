@@ -15,9 +15,8 @@ export const visUnitPenguins = withSVG(async () => {
         .transform(cm.spreadX)
         .transform(cm.spreadY, {chunk: 10})
         .transform(cm.spreadX)
-        .transform(cm.plane)
-        .add(cm.rect)
-        .add(cm.axisX);
+        .transform(cm.plane, {y: {axis: null}})
+        .add(cm.rect);
     },
     {width: 640, height: 400},
   );

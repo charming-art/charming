@@ -14,8 +14,7 @@ export const visHistogram = withSVG(async () => {
         .transform(cm.encode, {x: "weight", fill: "sex"})
         .transform(cm.binX, {y: "count"})
         .transform(cm.stackY)
-        .transform(cm.plane)
-        .add(cm.axis, {y: {grid: true}})
+        .transform(cm.plane, {y: {grid: true}})
         .add(cm.rect, cm.insetX(0.5))
         .add(cm.annotate(cm.link), {y: 0});
     },

@@ -12,12 +12,7 @@ export const visScatterAxis = withSVG(() => {
   ];
   return renderFlow(
     (root) => {
-      root
-        .data(data)
-        .transform(cm.encode, {x: "weight", y: "height"})
-        .transform(cm.plane)
-        .add(cm.circle, {r: 3})
-        .add(cm.axis);
+      root.data(data).transform(cm.encode, {x: "weight", y: "height"}).transform(cm.plane).add(cm.circle, {r: 3});
     },
     {width: 640, height: 400},
   );

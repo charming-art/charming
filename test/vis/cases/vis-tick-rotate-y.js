@@ -17,9 +17,8 @@ export const visTickRotateY = withSVG(async () => {
         .data(counts)
         .transform(cm.encode, {x: ([, n]) => n, y: ([species]) => species})
         .transform(cm.spreadY)
-        .transform(cm.plane, {marginLeft: 30})
-        .add(cm.rect)
-        .add(cm.axis, {y: {tickRotate: -90, label: null}, x: {grid: true}});
+        .transform(cm.plane, {marginLeft: 30, y: {tickRotate: -90, label: null}, x: {grid: true}})
+        .add(cm.rect);
     },
     {width: 640, height: 300},
   );

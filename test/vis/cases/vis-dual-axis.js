@@ -25,19 +25,13 @@ export const visDualAxis = withSVG(async () => {
               .transform(cm.groupX, {y: "mean"}),
         )
         .transform(cm.plane, {
-          scales: {
-            x: {label: null},
-            temperature: {label: "Avg. Temperature (°C)"},
-            precipitation: {label: "Precipitation (inches)"},
-          },
+          x: {label: null, tickFormat: d3.utcFormat("%b")},
+          temperature: {label: "Avg. Temperature (°C)"},
+          precipitation: {label: "Precipitation (inches)", axis: "right"},
           marginRight: 40,
         });
-      temperature
-        .add(cm.axis, {x: {tickFormat: d3.utcFormat("%b")}})
-        .add(cm.areaY, {fill: "#85C5A6", fillOpacity: 0.3});
-      precipitation
-        .add(cm.axisY, {anchor: "right"})
-        .add(cm.lineY, {stroke: "#85A9C5", strokeWidth: 2, curve: "monotone-x"});
+      temperature.add(cm.areaY, {fill: "#85C5A6", fillOpacity: 0.3});
+      precipitation.add(cm.lineY, {stroke: "#85A9C5", strokeWidth: 2, curve: "monotone-x"});
     },
     {width: 640, height: 400},
   );

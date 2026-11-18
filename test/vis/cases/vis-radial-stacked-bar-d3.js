@@ -22,7 +22,7 @@ export const visRadialStackedBarD3 = withSVG(async () => {
         .transform(cm.polar, {
           innerRadius: 180 / 454,
           margin: 10,
-          scales: {fill: {range: d3.schemeSpectral[ages.length]}},
+          fill: {range: d3.schemeSpectral[ages.length]},
         })
         .add(cm.arc)
         .add(cm.axis, {y: {ticks: 5, tickFormat: "s"}});

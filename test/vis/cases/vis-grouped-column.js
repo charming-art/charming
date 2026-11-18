@@ -13,9 +13,8 @@ export const visGroupedColumn = withSVG(async () => {
         .transform(cm.encode, {x: "state", y: "population", fill: "age"})
         .transform(cm.spreadX)
         .transform(cm.stackX, {order: ages})
-        .transform(cm.plane)
-        .add(cm.rect)
-        .add(cm.axis, {y: {tickFormat: "s"}});
+        .transform(cm.plane, {y: {tickFormat: "s"}})
+        .add(cm.rect);
     },
     {width: 640, height: 400},
   );

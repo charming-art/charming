@@ -17,10 +17,10 @@ export const visConnectedScatterplot = withSVG(async () => {
           (flow) => flow.data(fifth).transform(cm.encode, {x: "miles", y: "gas", side: "side"}),
         )
         .transform(cm.plane, {
-          scales: {x: {label: "Miles driven (per person-year)"}, y: {label: "Cost of gasoline ($ per gallon)"}},
+          x: {label: "Miles driven (per person-year)", grid: true},
+          y: {label: "Cost of gasoline ($ per gallon)", grid: true},
         });
       line
-        .add(cm.axis, {grid: true})
         .add(cm.line, {stroke: "currentColor", strokeWidth: 2})
         .add(cm.circle, {r: 3, fill: "white", stroke: "currentColor", strokeWidth: 1.5});
       labels.add(cm.label, {text: (d) => d.datum.year, position: "side", padding: 6, halo: true, haloWidth: 4});

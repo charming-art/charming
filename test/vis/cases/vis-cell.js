@@ -13,8 +13,7 @@ export async function visCell() {
     .transform(cm.spreadX)
     .transform(cm.spreadY)
     .transform(cm.plane, {height: 640})
-    .add(cm.rect)
-    .add(cm.axis);
+    .add(cm.rect);
   root.render();
   return renderer.node();
 }

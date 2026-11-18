@@ -15,7 +15,6 @@ export const visStackedBars = withSVG(async () => {
         .transform(cm.spreadX)
         .transform(cm.stackY)
         .transform(cm.plane)
-        .add(cm.axis)
         .add(cm.rect);
     },
     {width: 640, height: 400},

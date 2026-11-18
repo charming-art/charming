@@ -52,16 +52,16 @@ test("cm.polar maps y to the radius with a radial scale by default, else with th
   assertAllInDelta(value.y, [100, 50]);
   assertAllInDelta(value.y1, [0, 0]);
   assert.strictEqual(scales.y.type(1), 50);
-  const named = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {scales: {y: {type: "radial"}}});
+  const named = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {y: {type: "radial"}});
   assertAllInDelta(named.value.y, [100, 50]);
-  const linear = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {scales: {y: {type: "linear"}}});
+  const linear = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {y: {type: "linear"}});
   assertAllInDelta(linear.value.y, [100, 25]);
 });
 
 test("cm.polar starts the radius at innerRadius, a fraction of the radius", () => {
   const {value, frame} = polared(letters, {x: "letter", y: "n"}, [cm.spreadX], {
     innerRadius: 0.5,
-    scales: {y: {type: "linear"}},
+    y: {type: "linear"},
   });
   assertAllInDelta(value.y1, [50, 50]);
   assertAllInDelta(value.y, [100, 62.5]);
@@ -119,7 +119,7 @@ test("cm.polar maps channels that share the radius, and records scales with appl
     {x: "B", y: 2, top: 3},
   ];
   const {value, scales} = polared(data, {x: "x", y: "y", top: {value: "top", scale: "y"}}, [cm.spreadX], {
-    scales: {y: {type: "linear"}},
+    y: {type: "linear"},
   });
   assert.deepStrictEqual(scales.y.domain, [0, 4]);
   assertAllInDelta(value.top, [100, 75]);
@@ -128,7 +128,7 @@ test("cm.polar maps channels that share the radius, and records scales with appl
 
 test("cm.polar takes the options of a named scale of the radius", () => {
   const {scales} = polared(letters, {x: "letter", y: {value: "n", scale: "r"}}, [cm.spreadX], {
-    scales: {r: {type: "linear"}},
+    r: {type: "linear"},
   });
   assert.strictEqual(scales.y.apply(2), 50);
 });
@@ -188,22 +188,22 @@ test("cm.polar({clip: true}) clips marks, but not axes", () => {
 });
 
 test("cm.polar takes the domain of the angle in scales", () => {
-  const {value} = polared([{v: 1}, {v: 2}], {x: "v"}, [], {scales: {x: {domain: [0, 4]}}});
+  const {value} = polared([{v: 1}, {v: 2}], {x: "v"}, [], {x: {domain: [0, 4]}});
   assertAllInDelta(value.x, [Math.PI / 2, Math.PI]);
 });
 
 test("cm.polar reverses the angle and the radius of reversed scales", () => {
-  const forward = polared([{v: 1}, {v: 3}], {x: "v"}, [], {scales: {x: {domain: [0, 4]}}});
-  const reversed = polared([{v: 1}, {v: 3}], {x: "v"}, [], {scales: {x: {domain: [0, 4], reverse: true}}});
+  const forward = polared([{v: 1}, {v: 3}], {x: "v"}, [], {x: {domain: [0, 4]}});
+  const reversed = polared([{v: 1}, {v: 3}], {x: "v"}, [], {x: {domain: [0, 4], reverse: true}});
   assertAllInDelta(forward.value.x, [Math.PI / 2, (3 * Math.PI) / 2]);
   assertAllInDelta(reversed.value.x, [(3 * Math.PI) / 2, Math.PI / 2]);
   const radius = polared([{v: 1}, {v: 2}], {x: () => 0, y: "v"}, [], {
-    scales: {y: {type: "linear", domain: [0, 4], reverse: true}},
+    y: {type: "linear", domain: [0, 4], reverse: true},
   });
   assertAllInDelta(radius.value.y, [75, 50]);
   // A named radius is reversed too.
   const named = polared([{v: 1}, {v: 2}], {x: () => 0, y: {value: "v", scale: "r"}}, [], {
-    scales: {r: {type: "linear", domain: [0, 4], reverse: true}},
+    r: {type: "linear", domain: [0, 4], reverse: true},
   });
   assertAllInDelta(named.value.y, [75, 50]);
 });

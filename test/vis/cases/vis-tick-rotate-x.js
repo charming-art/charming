@@ -13,9 +13,8 @@ export const visTickRotateX = withSVG(async () => {
         .data(january)
         .transform(cm.encode, {x: "industry", y: "unemployed"})
         .transform(cm.spreadX)
-        .transform(cm.plane, {marginBottom: 150})
-        .add(cm.rect)
-        .add(cm.axis, {x: {tickRotate: -45, label: null}, y: {grid: true}});
+        .transform(cm.plane, {marginBottom: 150, x: {tickRotate: -45, label: null}, y: {grid: true}})
+        .add(cm.rect);
     },
     {width: 640, height: 500},
   );

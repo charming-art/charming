@@ -24,10 +24,10 @@ export const visSimpsonsRatings = withSVG(async () => {
           marginTop: 40,
           marginBottom: 10,
           marginRight: 140,
-          scales: {fill: {type: "linear", scheme: "PiYG"}},
+          x: {axis: "top", label: "Season", grid: true},
+          y: {label: "Episode", grid: true},
+          fill: {type: "linear", scheme: "PiYG", label: "IMDb rating", legend: true},
         })
-        .add(cm.axis, {x: {anchor: "top", label: "Season"}, y: {label: "Episode"}, grid: true})
-        .add(cm.legend, {fill: {label: "IMDb rating"}})
         .add(cm.rect, cm.inset(0.5))
         .add(cm.label, {text: (d) => d.datum.imdb_rating.toFixed(1), fill: "black"});
     },

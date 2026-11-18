@@ -21,11 +21,8 @@ export const visGenreColumn = withSVG(() => {
         .data(data)
         .transform(cm.encode, {x: "genre", y: "sold", fill: "genre"})
         .transform(cm.spreadX)
-        .transform(cm.plane)
-        // The y axis is added before the bars, so that its grid lines are drawn behind them.
-        .add(cm.axisY, {grid: true, tickFormat: (d) => `${d}k`})
-        .add(cm.rect)
-        .add(cm.axisX);
+        .transform(cm.plane, {y: {grid: true, tickFormat: (d) => `${d}k`}})
+        .add(cm.rect);
     },
     {width: 640, height: 400},
   );

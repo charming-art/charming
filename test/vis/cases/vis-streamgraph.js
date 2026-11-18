@@ -14,8 +14,7 @@ export const visStreamgraph = withSVG(async () => {
         .transform(cm.encode, {x: "date", y: "unemployed", fill: "industry"})
         .transform(cm.stackY, {offset: "wiggle"})
         .transform(cm.plane, {marginLeft: 44})
-        .add(cm.areaY)
-        .add(cm.axis);
+        .add(cm.areaY);
     },
     {width: 640, height: 400},
   );

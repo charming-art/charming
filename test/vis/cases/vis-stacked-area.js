@@ -13,10 +13,8 @@ export const visStackedArea = withSVG(async () => {
         .data(data)
         .transform(cm.encode, {x: "date", y: "unemployed", fill: "industry"})
         .transform(cm.stackY)
-        .transform(cm.plane, {marginRight: 200})
-        .add(cm.areaY)
-        .add(cm.axis, {y: {grid: true}})
-        .add(cm.legend);
+        .transform(cm.plane, {marginRight: 200, y: {grid: true}, fill: {legend: true}})
+        .add(cm.areaY);
     },
     {width: 640, height: 400},
   );

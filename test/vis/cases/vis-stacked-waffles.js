@@ -20,8 +20,7 @@ export const visStackedWaffles = withSVG(async () => {
         .transform(cm.unitY, {unit: 10})
         .transform(cm.stackY, {chunk: 5})
         .transform(cm.plane)
-        .add(cm.rect)
-        .add(cm.axis);
+        .add(cm.rect);
     },
     {width: 640, height: 400},
   );

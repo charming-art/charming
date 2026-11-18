@@ -3,7 +3,7 @@ import {rect} from "../../core/shape/rect.js";
 import {text} from "../../core/shape/text.js";
 import {font} from "../font.js";
 import {scaleOf} from "../transform/scales.js";
-import {formatOf, ticksOf} from "./axisUtils.js";
+import {formatOf, replaced, ticksOf} from "./axisUtils.js";
 
 // The scales that have legends, in order: colors, then radii, then opacities.
 const keys = ["fill", "stroke", "r", "fillOpacity", "strokeOpacity"];
@@ -190,11 +190,22 @@ function legendOf(key, scale, options, maxWidth) {
 // categorical colors, a ramp for continuous colors and opacities, and circles for radii, each under
 // its title. Like Vega-Lite's, they're in a column right of the frame, from its top, where the
 // margins of the chart leave the most room clear of the axes; the room is given to cm.plane, such
-// as marginRight: 140. The frame of cm.polar is its disc, from its right and its top. The names of scales, such as {fill: {label: "Species"}}, take the options
-// of each legend, or false to skip it; the other options apply to all of them. Charts nested in a
-// chart, such as facets, have no legends yet.
-export function legend(flow, value, {scales = {}, frame, options = {}} = {}) {
+// as marginRight: 140. The frame of cm.polar is its disc, from its right and its top. The names of
+// scales, such as {fill: {label: "Species"}}, take the options of each legend, or false to skip it;
+// the other options apply to all of them. Like Plot's, a chart draws the legends of the scales
+// given legend: true, such as cm.plane({fill: {legend: true}}), whose options default to those of
+// the scale; a legend added explicitly to the chart replaces them. Charts nested in a chart, such
+// as facets, have no legends yet.
+export function legend(flow, value, {scales = {}, frame, guides, options = {}} = {}) {
   if (frame?.nested) return;
+  const legends = guides?.legends ?? {};
+  if (options.implicit) {
+    if (replaced(flow, [legend], ({guides: other}) => other.id === guides.id, guides)) return;
+    options = Object.fromEntries(keys.map((key) => [key, key in legends ? legends[key] : false]));
+  } else {
+    options = {...options};
+    for (const key in legends) if (options[key] !== false) options[key] = {...legends[key], ...options[key]};
+  }
   const shared = Object.fromEntries(Object.entries(options).filter(([key]) => !keys.includes(key)));
   const {width} = flow.renderer()._props;
   const polar = frame?.type === "polar";

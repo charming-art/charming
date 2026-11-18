@@ -134,7 +134,7 @@ test("cm.areaY goes through the edges of bands in order, even if the scale is re
     .transform(cm.encode, {x: "x", y: "y"})
     .transform(cm.spreadX)
     .transform(cm.stackY)
-    .transform(cm.plane, {margin: 0, scales: {x: {reverse: true}}})
+    .transform(cm.plane, {margin: 0, x: {reverse: true}})
     .add(cm.areaY);
   root.render();
   const [p] = renderer.node().querySelectorAll("path");
@@ -156,7 +156,7 @@ test("cm.areaRadial samples curves whose control points go past their ends", () 
     .data(data)
     .transform(cm.encode, {x: "x", y: "y"})
     .transform(cm.stackY)
-    .transform(cm.polar, {margin: 0, startAngle: 0, endAngle: 0.3, scales: {y: {type: "linear"}}})
+    .transform(cm.polar, {margin: 0, startAngle: 0, endAngle: 0.3, y: {type: "linear"}})
     .add(cm.areaRadial, {curve: "natural"});
   root.render();
   const [p] = renderer.node().querySelectorAll("path");

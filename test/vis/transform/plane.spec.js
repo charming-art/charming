@@ -26,7 +26,7 @@ test("cm.plane uses margin as the default of each side", () => {
 });
 
 test("cm.plane takes the domain and the direction of positions in scales", () => {
-  const {x, y} = values([0, 1], {x: (d) => d, y: (d) => d}, {scales: {x: {domain: [0, 2]}, y: {reverse: false}}});
+  const {x, y} = values([0, 1], {x: (d) => d, y: (d) => d}, {x: {domain: [0, 2]}, y: {reverse: false}});
   assert.deepStrictEqual(x, [40, 330]);
   assert.deepStrictEqual(y, [20, 370]);
 });
@@ -75,10 +75,10 @@ test("cm.plane takes the type, domain and range of colors in scales", () => {
   const {fill} = encoded(
     genres,
     {x: "genre", y: "sold", fill: "genre"},
-    {scales: {fill: {domain: ["Strategy", "Sports", "Action"], range: ["red", "green", "blue"]}}},
+    {fill: {domain: ["Strategy", "Sports", "Action"], range: ["red", "green", "blue"]}},
   );
   assert.deepStrictEqual(fill, ["green", "red", "blue"]);
-  const {fill: ordinal} = encoded(genres, {x: "genre", y: "sold", fill: "sold"}, {scales: {fill: {type: "ordinal"}}});
+  const {fill: ordinal} = encoded(genres, {x: "genre", y: "sold", fill: "sold"}, {fill: {type: "ordinal"}});
   assert.deepStrictEqual(ordinal, ["#fac858", "#5470c6", "#91cc75"]);
 });
 
@@ -89,20 +89,12 @@ test("cm.plane leaves constant colors unchanged, and maps numeric colors with tu
 });
 
 test("cm.plane maps linear colors with the interpolator of a scheme, case-insensitive", () => {
-  const {fill} = encoded(
-    genres,
-    {x: "genre", y: "sold", fill: "sold"},
-    {scales: {fill: {type: "linear", scheme: "piyg"}}},
-  );
+  const {fill} = encoded(genres, {x: "genre", y: "sold", fill: "sold"}, {fill: {type: "linear", scheme: "piyg"}});
   assert.deepStrictEqual(fill, [d3.interpolatePiYG(1), d3.interpolatePiYG(0), d3.interpolatePiYG(5 / 160)]);
 });
 
 test("cm.plane maps linear colors through the colors of a range", () => {
-  const {fill} = encoded(
-    genres,
-    {x: "genre", fill: "sold"},
-    {scales: {fill: {type: "linear", range: ["white", "red"]}}},
-  );
+  const {fill} = encoded(genres, {x: "genre", fill: "sold"}, {fill: {type: "linear", range: ["white", "red"]}});
   assert.deepStrictEqual(fill, ["rgb(255, 0, 0)", "rgb(255, 255, 255)", "rgb(255, 247, 247)"]);
 });
 
@@ -148,7 +140,7 @@ test("cm.plane uses the domain and type hinted for x and y, and the options of s
   const [hinted] = flow.transform(cm.plane, {margin: 0})._values;
   assert.deepStrictEqual(hinted.value.x, [0, 320]);
   assert.deepStrictEqual(hinted.value.y, [400, 0]);
-  const [explicit] = flow.transform(cm.plane, {margin: 0, scales: {x: {domain: [0, 1]}}})._values;
+  const [explicit] = flow.transform(cm.plane, {margin: 0, x: {domain: [0, 1]}})._values;
   assert.deepStrictEqual(explicit.value.x, [0, 640]);
 });
 
@@ -169,7 +161,7 @@ test("cm.plane records a copied d3 scale with its resolved domain and range", ()
   const [context] = root
     .data([0, 4])
     .transform(cm.bind, {x: (d) => d, y: (d) => d})
-    .transform(cm.plane, {margin: 0, scales: {y: {type: sqrt}}})._values;
+    .transform(cm.plane, {margin: 0, y: {type: sqrt}})._values;
   const {type, domain, range} = context.scales.y;
   assert.notStrictEqual(type, sqrt);
   assert.deepStrictEqual(type.domain(), [0, 4]);
@@ -196,7 +188,7 @@ test("cm.plane colors equal dates with the same color", () => {
     {x: "a", date: new Date(2020, 0, 1)},
     {x: "b", date: new Date(2020, 0, 1)},
   ];
-  const {fill} = encoded(data, {x: "x", y: 1, fill: "date"}, {scales: {fill: {type: "ordinal"}}});
+  const {fill} = encoded(data, {x: "x", y: 1, fill: "date"}, {fill: {type: "ordinal"}});
   assert.deepStrictEqual(fill, ["#5470c6", "#5470c6"]);
 });
 
@@ -205,7 +197,7 @@ test("cm.plane records categorical positions as a point scale", () => {
   const [context] = root
     .data(["a", "b", "c"])
     .transform(cm.bind, {x: (d) => d, y: 0})
-    .transform(cm.plane, {margin: 0, scales: {x: {type: "ordinal"}}})._values;
+    .transform(cm.plane, {margin: 0, x: {type: "ordinal"}})._values;
   assert.deepStrictEqual(context.value.x, [0, 320, 640]);
   assert.strictEqual(context.scales.x.type, "point");
 });
@@ -215,7 +207,7 @@ test("cm.plane applies the options of the scale of x to x1, which shares it", ()
   const [context] = root
     .data([1, 2])
     .transform(cm.encode, {x: 0, x1: (d) => d, y: 0})
-    .transform(cm.plane, {margin: 0, scales: {x: {domain: [0, 10]}}})._values;
+    .transform(cm.plane, {margin: 0, x: {domain: [0, 10]}})._values;
   assert.deepStrictEqual(context.value.x1, [64, 128]);
   assert.deepStrictEqual(context.scales.x.domain, [0, 10]);
 });
@@ -275,10 +267,10 @@ test("cm.plane centers y for a typed array x", () => {
 
 test("cm.plane sizes the chart with the type and domain of the scale of y", () => {
   const ordinal = cm.svg();
-  planed(ordinal, [1, 2], {x: (d) => d, y: (d) => d}, {scales: {y: {type: "ordinal"}}});
+  planed(ordinal, [1, 2], {x: (d) => d, y: (d) => d}, {y: {type: "ordinal"}});
   assert.strictEqual(ordinal._props.height, 2 * 20 + 60);
   const domain = cm.svg();
-  planed(domain, ["a", "b"], {x: 1, y: (d) => d}, {scales: {y: {domain: ["a", "b", "c", "d"]}}});
+  planed(domain, ["a", "b"], {x: 1, y: (d) => d}, {y: {domain: ["a", "b", "c", "d"]}});
   assert.strictEqual(domain._props.height, 4 * 20 + 60);
 });
 
@@ -295,7 +287,7 @@ test("cm.plane places the bands of cm.spreadY from the top, unless the scale of 
   assert.deepStrictEqual(context.scales.y.type, "band");
   assert.deepStrictEqual(context.scales.y.domain, ["A", "B"]);
   assert.deepStrictEqual(context.scales.y.range, [20, 370]);
-  const [reversed] = flow.transform(cm.plane, {scales: {y: {reverse: true}}})._values;
+  const [reversed] = flow.transform(cm.plane, {y: {reverse: true}})._values;
   assert.ok(reversed.value.y[1] > reversed.value.y[0]);
 });
 
@@ -624,7 +616,7 @@ test("cm.plane resolves a named scale independently, and applies the options of 
       (flow) => flow.data([0]).transform(cm.encode, {x: {value: () => 2, scale: "n"}}),
       (flow) => flow.data([0]).transform(cm.encode, {x: () => 3}),
     )
-    .transform(cm.plane, {resolve: {n: "independent"}, scales: {x: {domain: [0, 10]}}});
+    .transform(cm.plane, {resolve: {n: "independent"}, x: {domain: [0, 10]}});
   const domain = (flow) => flow._values[0].scales.x.domain;
   assert.deepStrictEqual(
     [domain(a), domain(b), domain(c)],
@@ -721,7 +713,7 @@ function clipMarks(plane, rect, text) {
   root
     .data([0, 1])
     .transform(cm.encode, {x: (d) => d, y: (d) => d})
-    .transform(cm.plane, {margin: 10, ...plane})
+    .transform(cm.plane, {margin: 10, x: {axis: null}, y: {axis: null}, ...plane})
     .add(cm.rect, {width: 5, height: 5, ...rect})
     .add(cm.text, {text: "a", ...text});
   root.render();
@@ -764,7 +756,7 @@ test("cm.plane takes the options of a named scale, such as its type and label", 
   const [context] = root
     .data([1, 10, 100])
     .transform(cm.encode, {x: {value: (d) => d, scale: "length"}, y: 0})
-    .transform(cm.plane, {margin: 0, scales: {length: {type: "log", label: "Length"}}})._values;
+    .transform(cm.plane, {margin: 0, length: {type: "log", label: "Length"}})._values;
   assert.deepStrictEqual(context.value.x, [0, 50, 100]);
   assert.strictEqual(context.scales.x.label, "Length");
 });
@@ -772,10 +764,10 @@ test("cm.plane takes the options of a named scale, such as its type and label", 
 test("cm.plane labels a scale with its label option, or none with null", () => {
   const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
   const flow = root.data(genres).transform(cm.encode, {x: "genre", y: "sold", fill: "genre"}).transform(cm.spreadX);
-  const [labeled] = flow.transform(cm.plane, {scales: {y: {label: "Sold"}, fill: {label: "Genre"}}})._values;
+  const [labeled] = flow.transform(cm.plane, {y: {label: "Sold"}, fill: {label: "Genre"}})._values;
   assert.strictEqual(labeled.scales.y.label, "Sold");
   assert.strictEqual(labeled.scales.fill.label, "Genre");
-  const [unlabeled] = flow.transform(cm.plane, {scales: {x: {label: null}}})._values;
+  const [unlabeled] = flow.transform(cm.plane, {x: {label: null}})._values;
   assert.strictEqual(unlabeled.scales.x.label, null);
 });
 
@@ -785,7 +777,7 @@ test("cm.plane keeps the bands of a spread, whose order is cm.spreadX's domain, 
     .data(genres)
     .transform(cm.encode, {x: "genre", y: "sold"})
     .transform(cm.spreadX, {domain: ["Strategy", "Sports", "Action"]})
-    .transform(cm.plane, {scales: {x: {domain: [0, 10], type: "linear"}}})._values;
+    .transform(cm.plane, {x: {domain: [0, 10], type: "linear"}})._values;
   assert.strictEqual(context.scales.x.type, "band");
   assert.deepStrictEqual(context.scales.x.domain, ["Strategy", "Sports", "Action"]);
 });
@@ -808,7 +800,7 @@ test("cm.plane takes the options and recorded domains of colors from any context
       (flow) => flow.data([0]).transform(cm.encode, {x: () => 0, y: () => 0}),
       (flow) => flow.data([{age: "old"}]).transform(cm.encode, {x: () => 1, y: () => 1, fill: "age"}),
     )
-    .transform(cm.plane, {scales: {fill: {domain: ["old"], range: ["red"]}}});
+    .transform(cm.plane, {fill: {domain: ["old"], range: ["red"]}});
   assert.deepStrictEqual(second._values[0].value.fill, ["red"]);
   const rows = [
     {k: "A", age: "a", n: 1},
@@ -846,7 +838,7 @@ test("cm.plane doesn't apply the domain of scales to bands that share the scale 
       .transform(cm.plane, {margin: 0, ...options});
     return Array.from(flows, (flow) => flow._values[0]);
   };
-  const [bands, linear] = plane({scales: {y: {domain: [0, 100], type: "linear"}}});
+  const [bands, linear] = plane({y: {domain: [0, 100], type: "linear"}});
   const [unset, unsetLinear] = plane();
   // The options come back through neither context: the scale is resolved as without them.
   assert.deepStrictEqual(bands.value.y, unset.value.y);
@@ -870,13 +862,9 @@ test("cm.plane scales r by a square root from 0, with the first quartile of posi
 });
 
 test("cm.plane takes the type, domain and range of r in scales, and leaves constant radii unscaled", () => {
-  const {r} = encoded([0, 25, 100], {x: (d) => d, r: (d) => d}, {scales: {r: {range: [0, 10]}}});
+  const {r} = encoded([0, 25, 100], {x: (d) => d, r: (d) => d}, {r: {range: [0, 10]}});
   assertAllInDelta(r, [0, 5, 10]);
-  const {r: linear} = encoded(
-    [0, 25, 100],
-    {x: (d) => d, r: (d) => d},
-    {scales: {r: {type: "linear", range: [0, 10]}}},
-  );
+  const {r: linear} = encoded([0, 25, 100], {x: (d) => d, r: (d) => d}, {r: {type: "linear", range: [0, 10]}});
   assertAllInDelta(linear, [0, 2.5, 10]);
   const {r: constant} = encoded([0, 1], {x: (d) => d, r: 3});
   assert.deepStrictEqual(constant, [3, 3]);
@@ -893,7 +881,7 @@ test("cm.plane scales fillOpacity and strokeOpacity linearly from 0 to [0, 1]", 
   const {fillOpacity: given} = encoded(
     [0, 5, 10],
     {x: (d) => d, fillOpacity: (d) => d},
-    {scales: {fillOpacity: {range: [0.2, 1]}}},
+    {fillOpacity: {range: [0.2, 1]}},
   );
   assertAllInDelta(given, [0.2, 0.6, 1]);
   const {fillOpacity: constant} = encoded([0, 1], {x: (d) => d, fillOpacity: 0.5});
@@ -912,14 +900,14 @@ test("cm.plane records the scales of r and opacities, with the labels of their f
 });
 
 test("cm.plane takes named continuous types of positions, such as log", () => {
-  const {y} = encoded([1, 10, 1000], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "log"}}});
+  const {y} = encoded([1, 10, 1000], {x: (d) => d, y: (d) => d}, {margin: 0, y: {type: "log"}});
   // y is up: 1 at the bottom, 1000 at the top, and 10 a third of the way, not in the middle as the
   // categories of a point scale would be.
   assertAllInDelta(y, [400, (400 * 2) / 3, 0]);
 });
 
 test("cm.plane leaves colors, radii and opacities as they are with the type identity", () => {
-  const options = {scales: {r: {type: "identity"}, fillOpacity: {type: "identity"}, fill: {type: "identity"}}};
+  const options = {r: {type: "identity"}, fillOpacity: {type: "identity"}, fill: {type: "identity"}};
   const {r, fillOpacity, fill} = encoded(
     [
       {s: 2, o: 0.3, c: "a"},
@@ -940,35 +928,51 @@ test("cm.plane leaves colors, radii and opacities as they are with the type iden
 
 test("cm.plane infers the domain of a log scale from the positive values, like Plot", () => {
   // A log opacity or radius isn't from 0.
-  const {fillOpacity} = encoded(
-    [1, 10, 100],
-    {x: (d) => d, fillOpacity: (d) => d},
-    {scales: {fillOpacity: {type: "log"}}},
-  );
+  const {fillOpacity} = encoded([1, 10, 100], {x: (d) => d, fillOpacity: (d) => d}, {fillOpacity: {type: "log"}});
   assertAllInDelta(fillOpacity, [0, 0.5, 1]);
-  const {r} = encoded([1, 10, 100], {x: (d) => d, r: (d) => d}, {scales: {r: {type: "log", range: [1, 10]}}});
+  const {r} = encoded([1, 10, 100], {x: (d) => d, r: (d) => d}, {r: {type: "log", range: [1, 10]}});
   assertAllInDelta(r, [1, 5.5, 10]);
   // A log position skips zeros, rather than mapping every row to NaN.
-  const {y} = encoded([0, 1, 10, 100], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "log"}}});
+  const {y} = encoded([0, 1, 10, 100], {x: (d) => d, y: (d) => d}, {margin: 0, y: {type: "log"}});
   assertAllInDelta(y.slice(1), [400, 200, 0]);
   // Entirely negative values take their own extent.
-  const {y: negative} = encoded([-1, -10, -100], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "log"}}});
+  const {y: negative} = encoded([-1, -10, -100], {x: (d) => d, y: (d) => d}, {margin: 0, y: {type: "log"}});
   assert.ok(negative.every((v) => Number.isFinite(v)));
 });
 
 test("cm.plane applies the exponent of pow, the base of log and the constant of symlog", () => {
-  const {y} = encoded([0, 2, 4], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "pow", exponent: 2}}});
+  const {y} = encoded([0, 2, 4], {x: (d) => d, y: (d) => d}, {margin: 0, y: {type: "pow", exponent: 2}});
   // 2 is 4/16 of the way up from the bottom, at 400 - 100.
   assertAllInDelta(y, [400, 300, 0]);
-  const {r} = encoded([0, 2, 4], {x: (d) => d, r: (d) => d}, {scales: {r: {type: "pow", exponent: 2, range: [0, 16]}}});
+  const {r} = encoded([0, 2, 4], {x: (d) => d, r: (d) => d}, {r: {type: "pow", exponent: 2, range: [0, 16]}});
   assertAllInDelta(r, [0, 4, 16]);
   const symlog = (constant) =>
-    encoded([-10, 1, 10], {x: (d) => d, y: (d) => d}, {margin: 0, scales: {y: {type: "symlog", constant}}}).y[1];
+    encoded([-10, 1, 10], {x: (d) => d, y: (d) => d}, {margin: 0, y: {type: "symlog", constant}}).y[1];
   assert.ok(Math.abs(symlog(1) - symlog(10)) > 1);
   const root = cm.flow().renderer(cm.svg({width: 640, height: 400}));
   const [context] = root
     .data([1, 1000])
     .transform(cm.encode, {x: (d) => d, y: (d) => d})
-    .transform(cm.plane, {scales: {y: {type: "log", base: 2}}})._values;
+    .transform(cm.plane, {y: {type: "log", base: 2}})._values;
   assert.strictEqual(context.scales.y.type.base(), 2);
+});
+
+test("cm.plane records the guides of its scales from their options, in context.guides", () => {
+  const flow = cm
+    .flow()
+    .renderer(cm.svg({width: 100, height: 100}))
+    .data([{v: 1, k: "a"}])
+    .transform(cm.encode, {x: "v", y: {value: "v", scale: "length"}, fill: "k"});
+  const [{guides}] = flow.transform(cm.plane, {
+    x: {axis: "both", grid: true, domain: [0, 2]},
+    length: {axis: "right", tickFormat: "d"},
+    fill: {legend: true, width: 100, scheme: "Set1"},
+  })._values;
+  assert.deepStrictEqual(guides.x, {name: "x", anchors: ["bottom", "top"], grid: true});
+  assert.deepStrictEqual(guides.y, {name: "length", anchors: ["right"], tickFormat: "d"});
+  assert.deepStrictEqual(guides.legends, {fill: {width: 100}});
+  // By default, axes at the bottom and the left, and no legends; null hides an axis.
+  const [defaults] = flow.transform(cm.plane, {length: {axis: null}})._values;
+  assert.deepStrictEqual([defaults.guides.x.anchors, defaults.guides.y.anchors], [["bottom"], []]);
+  assert.deepStrictEqual(defaults.guides.legends, {});
 });

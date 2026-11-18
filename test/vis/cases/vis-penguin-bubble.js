@@ -14,9 +14,13 @@ export const visPenguinBubble = withSVG(async () => {
       root
         .data(penguins)
         .transform(cm.encode, {x: "culmen_length_mm", y: "culmen_depth_mm", r: "body_mass_g", fill: "species"})
-        .transform(cm.plane, {marginRight: 130, scales: {r: {range: [0, 10]}}})
-        .add(cm.axis, {grid: true})
-        .add(cm.legend)
+        .transform(cm.plane, {
+          marginRight: 130,
+          x: {grid: true},
+          y: {grid: true},
+          fill: {legend: true},
+          r: {range: [0, 10], legend: true},
+        })
         .add(cm.circle, {fillOpacity: 0.5, stroke: "white", strokeWidth: 0.5});
     },
     {width: 640, height: 480},
