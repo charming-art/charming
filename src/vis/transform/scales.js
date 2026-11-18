@@ -510,7 +510,7 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
     // The origin of the coordinates of the parent row, in the root's.
     const origin = originOf(flow._parent, i);
     const {x: X = [], x1: X1, y: Y = [], y1: Y1} = value;
-    const {frame: parent, scales = {}} = context;
+    const {frame: parent, scales = {}, guides} = context;
     const tx = X[k] ?? 0;
     const ty = Y[k] ?? 0;
     if (parent?.type === "polar") {
@@ -527,7 +527,7 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
     const [left, right] = extent(X, X1, "x", width, [parent?.left, parent?.right]);
     const [top, bottom] = extent(Y, Y1, "y", height, [parent?.top, parent?.bottom]);
     // A cell of a grid has an extent, such as a band; a glyph at a point labels its own axes.
-    return {box: [left, right, top, bottom], tx, ty, cell: !!(X1 || Y1), parent, origin, scales};
+    return {box: [left, right, top, bottom], tx, ty, cell: !!(X1 || Y1), parent, origin, scales, guides};
   });
   // Facets in a grid: the bottom (or top) cell of each column labels x, and the left (or right)
   // cell of each row labels y, by the anchor of the axis, compared in the coordinates of the root,
@@ -578,9 +578,9 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
       const [ox, oy] = frame.origin;
       const {parent} = frame;
       const within = parent ? [parent.left + ox, parent.right + ox, parent.top + oy, parent.bottom + oy] : null;
-      const {scales, origin} = frame;
+      const {scales, origin, guides} = frame;
       Object.defineProperty(nested, "cell", {
-        value: {box: absolute(frame), x: ox + tx, y: oy + ty, within, scales, origin},
+        value: {box: absolute(frame), x: ox + tx, y: oy + ty, within, scales, origin, guides},
       });
     }
     return nested;
@@ -603,10 +603,12 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
 // frames, 3px under it, from the left of the grid, above the axes at the top, else on the right of
 // the grid, past its axes there, from the top of the topmost cells: where, in the coordinates of
 // the root, is returned with the frames, for the legends to draw once for the whole grid. The
-// positions of the parents follow the grid, so that their axes stay on the cells. A chart whose
+// positions of the parents follow the grid, so that their axes stay on the cells, and their axes
+// at the top and on the right, measured by outer, move in to the grid, past the axes of the cells,
+// when legends are on that side, so that the legends go past them, as at the root. A chart whose
 // data is shared by its cells, given as an array rather than a function, is drawn in one frame for
 // all of them, so it has no legends, and its parents keep their positions.
-export function gridFrames(boxes, {need, legends, shared}) {
+export function gridFrames(boxes, {need, legends, outer, shared}) {
   const cells = boxes.filter((frame) => frame.cell);
   if (!cells.length) return {frames: boxes};
   const B = cells.map(({cell}) => cell.box);
@@ -626,6 +628,16 @@ export function gridFrames(boxes, {need, legends, shared}) {
         bottom: Math.max(...W.map((w) => w[3])) - gb,
       }
     : {left: 0, right: 0, top: 0, bottom: 0};
+  // What the axes of the parents draw past their frames at the top and on the right, which the
+  // legends on those sides go past: the parents' axes move in to the grid, and the legends take
+  // the room they leave, plus 3px.
+  const reach = {top: 0, right: 0};
+  if (!shared && outer) {
+    for (const {cell} of cells) {
+      const {top, right} = outer(cell.scales ?? {}, cell.guides);
+      [reach.top, reach.right] = [Math.max(reach.top, top), Math.max(reach.right, right)];
+    }
+  }
   const sides = ["left", "right", "top", "bottom"];
   let reserve = {left: 0, right: 0, top: 0, bottom: 0};
   // The grid inside the room kept at its edges.
@@ -660,15 +672,20 @@ export function gridFrames(boxes, {need, legends, shared}) {
   let measured = measure(frames);
   for (let pass = 0; pass < 3; pass++) {
     const {need: n, legend} = measured;
+    // From the outside in: the legends, the axes of the parents, those of the cells, the cells.
     const room = {
       left: n.left ? n.left + 3 : 0,
       bottom: n.bottom ? n.bottom + 3 : 0,
       // The legends at the top include their gaps, 3px over them and 10 under them.
-      top: legend.top ? legend.top + n.top : n.top ? n.top + 3 : 0,
-      right: n.right || legend.right ? n.right + (legend.right ? 12 + legend.right : 0) + 3 : 0,
+      top: legend.top ? legend.top + reach.top + n.top : n.top ? n.top + 3 : 0,
+      right: n.right || legend.right ? n.right + (legend.right ? reach.right + 12 + legend.right : 0) + 3 : 0,
     };
+    const left = moved(legend, reach);
     const next = Object.fromEntries(
-      sides.map((side) => [side, Math.max(reserve[side], room[side] ? Math.max(0, room[side] - free[side]) : 0)]),
+      sides.map((side) => [
+        side,
+        Math.max(reserve[side], room[side] ? Math.max(0, room[side] - free[side] - left[side]) : 0),
+      ]),
     );
     if (sides.every((side) => Math.abs(next[side] - reserve[side]) < 1e-9)) break;
     reserve = next;
@@ -689,13 +706,41 @@ export function gridFrames(boxes, {need, legends, shared}) {
       if (ry) warp(ry, sy, nt + (oy - gt) * sy - oy);
     }
   }
+  // The axes of the parents at the top and on the right move in to the grid, past the axes of the
+  // cells, for the legends on those sides to go past them.
+  const [nl, nr, nt, nb] = inner();
+  const {need: n, legend} = measured;
+  const left = moved(legend, reach);
+  for (const {cell} of cells) {
+    const {x: rx, y: ry} = cell.scales ?? {};
+    const [ox, oy] = cell.origin;
+    if (rx && left.top) edge(rx, "top", nt - n.top - oy);
+    if (ry && left.right) edge(ry, "right", nr + n.right - ox);
+  }
   // The legends are drawn by the first cell with rows, less the origin of its coordinates.
   const index = boxes.findIndex((frame) => frame.cell && !frame.empty);
   if (index < 0) return {frames};
   const {x: ox, y: oy} = boxes[index].cell;
-  const [nl, nr, nt, nb] = inner();
-  const legendAt = {index, origin: [ox, oy], left: nl, top: gt - free.top + 3, x: nr + measured.need.right + 12};
-  return {frames, legendAt: {...legendAt, y0: nt, y1: nb}};
+  const top = gt - free.top - left.top + 3;
+  const x = nr + n.right + (left.right ? reach.right : 0) + 12;
+  return {frames, legendAt: {index, origin: [ox, oy], left: nl, top, x, y0: nt, y1: nb}};
+}
+
+// The room the axes of the parents leave past their frames, at the top and on the right, as they
+// move in to a grid with legends on that side: what they draw, plus 3px.
+function moved(legend, reach) {
+  return {
+    left: 0,
+    bottom: 0,
+    top: legend.top && reach.top ? reach.top + 3 : 0,
+    right: legend.right && reach.right ? reach.right + 3 : 0,
+  };
+}
+
+// Moves the edge of a recorded position scale where its axis is drawn on a side, such as the top
+// of a grid of cells rather than the top of the frame.
+function edge(record, side, value) {
+  Object.defineProperty(record, "edges", {value: {...record.edges, [side]: value}, configurable: true});
 }
 
 // Maps the positions of a recorded position scale linearly, by k * p + b, after it's applied, such

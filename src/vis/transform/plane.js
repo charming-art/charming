@@ -1,6 +1,6 @@
 import {InternSet} from "d3-array";
 import {discrete, point, scale} from "../../core/transform/scale.js";
-import {axisX, axisY, extentX, extentY} from "../shape/axis.js";
+import {axisX, axisY, extentX, extentY, outerReach} from "../shape/axis.js";
 import {labelOf, widthOf} from "../shape/axisUtils.js";
 import {legend, rightLegends, topLegends} from "../shape/legend.js";
 import {
@@ -334,6 +334,7 @@ export function plane(
     const grid = gridFrames(nestedFrames(flow, data, {width, height}), {
       need: auto ? need : null,
       legends,
+      outer: outerReach,
       shared: typeof flow._data !== "function",
     });
     frames = grid.frames.map((frame) => insetBy(frame, margins));

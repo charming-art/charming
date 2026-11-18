@@ -1,6 +1,6 @@
 import {scaleRadial} from "d3-scale";
 import {arc} from "d3-shape";
-import {axisX, axisY} from "../shape/axis.js";
+import {axisX, axisY, outerReach} from "../shape/axis.js";
 import {polarLabelBoxes} from "../shape/axisPolar.js";
 import {legend, rightLegends, topLegends} from "../shape/legend.js";
 import {point, scale} from "../../core/transform/scale.js";
@@ -155,6 +155,7 @@ export function polar(
     });
     const grid = gridFrames(nestedFrames(flow, data, {width, height}), {
       legends,
+      outer: outerReach,
       shared: typeof flow._data !== "function",
     });
     frames = grid.frames.map((box) => frameOf(box, margins));

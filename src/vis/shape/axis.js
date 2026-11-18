@@ -122,6 +122,14 @@ export function extentY(y, options = {}, side = "left") {
   return {reach, start, end};
 }
 
+// What the axes of a chart draw past its frame at the top and on the right, by the guides of its
+// context, for the legends of a grid of cells nested in it, which go past them.
+export function outerReach(scales, guides) {
+  const top = scales.x && guides?.x?.anchors?.includes("top") ? extentX(scales.x, guides.x, "top").reach : 0;
+  const right = scales.y && guides?.y?.anchors?.includes("right") ? extentY(scales.y, guides.y, "right").reach : 0;
+  return {top, right};
+}
+
 // The positions of an axis, following a grid of cells nested in its chart, if it was scaled to keep
 // room at its edges, such as for the legends of facets; see gridFrames.
 function warped(record, position) {
@@ -158,7 +166,8 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
   // An implicit axis draws its grid and the rest in two layers, under and over the shapes.
   if (layer === "grid" || (frame?.edges && !frame.edges[anchor])) return;
   const isTop = anchor === "top";
-  const [edge, k] = isTop ? [top, -1] : [bottom, 1];
+  // The edge may be moved in to a grid of cells nested in the chart, past their legends; see gridFrames.
+  const [edge, k] = isTop ? [x.edges?.top ?? top, -1] : [bottom, 1];
   flow.data(ticks).append(link, {key, x: X, x1: X, y: edge, y1: edge + k * tickSize, stroke});
   const [rotateX, padX] = rotatedX(tickRotate, isTop);
   const format = formatOf(scale, options, count);
@@ -221,7 +230,7 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
   // An implicit axis draws its grid and the rest in two layers, under and over the shapes.
   if (layer === "grid" || (frame?.edges && !frame.edges[anchor])) return;
   const isRight = anchor === "right";
-  const [edge, k] = isRight ? [right, 1] : [left, -1];
+  const [edge, k] = isRight ? [y.edges?.right ?? right, 1] : [left, -1];
   flow.data(ticks).append(link, {key, x: edge, x1: edge + k * tickSize, y: Y, y1: Y, stroke});
   const [rotateY, padY] = rotatedY(tickRotate, isRight);
   const format = formatOf(scale, options, count);
