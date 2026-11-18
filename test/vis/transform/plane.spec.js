@@ -1307,3 +1307,91 @@ test("cm.plane lays out side by side cells of a grid as one, sharing their room 
   // grid, so it moves by less.
   assert.ok(right.left - right0.left < left.left - left0.left - 1);
 });
+
+// The scales and values of a chart of x and y in a 100 × 100 frame, with the options of cm.plane.
+function scaled(data, channels, options) {
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  const [context] = root
+    .data(data)
+    .transform(cm.encode, channels)
+    .transform(cm.plane, {margin: 0, ...options})._values;
+  return context;
+}
+
+test("cm.plane transforms the values of a scale with transform, and its label says so with percent", () => {
+  const data = [{v: 0.1}, {v: 0.5}];
+  const {scales} = scaled(data, {x: "v", y: "v"}, {x: {transform: (d) => d * 10}});
+  assert.deepStrictEqual(scales.x.domain, [1, 5]);
+  const {scales: percent} = scaled(data, {x: "v", y: "v"}, {x: {percent: true}});
+  assert.deepStrictEqual(percent.x.domain, [10, 50]);
+  // Like Plot's, a label inferred from the field says it's a percentage; one given is kept.
+  assert.strictEqual(percent.x.label, "v (%)");
+  const {scales: labeled} = scaled(data, {x: "v", y: "v"}, {x: {percent: true, label: "Share"}});
+  assert.strictEqual(labeled.x.label, "Share");
+  // Colors too.
+  const {scales: colors} = scaled(data, {x: "v", y: "v", fill: "v"}, {fill: {percent: true}});
+  assert.deepStrictEqual(colors.fill.domain, [10, 50]);
+});
+
+test("cm.plane extends a continuous domain to zero with zero, and to round values with nice", () => {
+  const data = [{v: 3}, {v: 97}];
+  assert.deepStrictEqual(scaled(data, {x: "v", y: "v"}, {x: {zero: true}}).scales.x.domain, [0, 97]);
+  assert.deepStrictEqual(scaled(data, {x: "v", y: "v"}, {x: {nice: true}}).scales.x.domain, [0, 100]);
+  assert.deepStrictEqual(scaled([{v: 13}, {v: 47}], {x: "v", y: "v"}, {x: {nice: 2}}).scales.x.domain, [0, 60]);
+  // Negative values extend to zero from the other side.
+  assert.deepStrictEqual(scaled([{v: -5}, {v: -2}], {x: "v", y: "v"}, {x: {zero: true}}).scales.x.domain, [-5, 0]);
+  // A discrete scale is left as it is.
+  const {scales} = scaled([{k: "a"}, {k: "b"}], {x: "k", y: "k"}, {x: {zero: true, nice: true}});
+  assert.deepStrictEqual(scales.x.domain, ["a", "b"]);
+  // A radius from 0 is made round with nice.
+  const {scales: radii} = scaled(data, {x: "v", y: "v", r: "v"}, {r: {nice: true}});
+  assert.deepStrictEqual(radii.r.domain, [0, 100]);
+});
+
+test("cm.plane pins values past the domain of a scale to its ends with clamp", () => {
+  const data = [{v: -10}, {v: 5}, {v: 20}];
+  const {value, scales} = scaled(data, {x: "v", y: "v"}, {x: {domain: [0, 10], clamp: true}});
+  assert.deepStrictEqual(value.x, [0, 50, 100]);
+  // The recorded scale clamps too, such as for annotations in data units.
+  assert.strictEqual(scales.x.apply(20), 100);
+  // Without clamp, they're past the ends.
+  const {value: free} = scaled(data, {x: "v", y: "v"}, {x: {domain: [0, 10]}});
+  assert.deepStrictEqual(free.x, [-100, 50, 200]);
+});
+
+test("cm.plane leaves a log scale unextended to zero, and rounds continuous colors of other types", () => {
+  const data = [{v: 3}, {v: 97}];
+  // A log radius has no logarithm of 0, so zero doesn't extend it; nice rounds it to powers of 10.
+  const {scales} = scaled(
+    data,
+    {x: "v", y: "v", r: "v", fillOpacity: "v"},
+    {
+      r: {type: "log", zero: true},
+      fillOpacity: {type: "log", zero: true, nice: true},
+    },
+  );
+  assert.deepStrictEqual(scales.r.domain, [3, 97]);
+  assert.deepStrictEqual(scales.fillOpacity.domain, [1, 100]);
+  // A log color takes nice too.
+  const {scales: colors} = scaled(data, {x: "v", y: "v", fill: "v"}, {fill: {type: "log", nice: true}});
+  assert.deepStrictEqual(colors.fill.domain, [1, 100]);
+});
+
+test("cm.plane transforms only numbers and dates, and says percent only if it scaled them", () => {
+  // Categories have no arithmetic: percent leaves them, and their scales, as they are.
+  const categories = [{k: "a"}, {k: "b"}];
+  const {value, scales} = scaled(categories, {x: "k", y: "k", fill: "k"}, {x: {percent: true}, fill: {percent: true}});
+  assert.deepStrictEqual(scales.x.domain, ["a", "b"]);
+  assert.strictEqual(scales.x.label, "k");
+  assert.strictEqual(scales.fill.type, "ordinal");
+  assert.deepStrictEqual(value.fill, ["#5470c6", "#91cc75"]);
+  // A transform given with percent wins, and the label doesn't say percent.
+  const {scales: own} = scaled([{v: 1}, {v: 2}], {x: "v", y: "v"}, {x: {percent: true, transform: (d) => d * 2}});
+  assert.deepStrictEqual(own.x.domain, [2, 4]);
+  assert.strictEqual(own.x.label, "v");
+  // Dates are transformed too.
+  const day = 24 * 3600 * 1000;
+  const dates = [{d: new Date(Date.UTC(2000, 0, 1))}, {d: new Date(Date.UTC(2000, 0, 2))}];
+  const {scales: shifted} = scaled(dates, {x: "d", y: () => 1}, {x: {transform: (d) => new Date(+d + day)}});
+  assert.deepStrictEqual(shifted.x.domain, [new Date(Date.UTC(2000, 0, 2)), new Date(Date.UTC(2000, 0, 3))]);
+});

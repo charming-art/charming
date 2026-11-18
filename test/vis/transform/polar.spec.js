@@ -371,3 +371,19 @@ test("cm.polar keeps its outer labels clear of the rows of the titles of its axe
     assert.ok(top >= 3 + 10 + 6 - 1e-3 && bottom <= 300 - 3 - 10 - 6 + 1e-3, t.textContent);
   }
 });
+
+test("cm.polar takes the options of scales that change their values and domains, such as zero and nice", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const [context] = cm
+    .flow()
+    .renderer(renderer)
+    .data([{v: 3}, {v: 97}])
+    .transform(cm.encode, {x: "v", y: "v"})
+    .transform(cm.polar, {
+      margin: 0,
+      x: {nice: true},
+      y: {type: "linear", zero: true, transform: (d) => d / 10},
+    })._values;
+  assert.deepStrictEqual(context.scales.x.domain, [0, 100]);
+  assert.deepStrictEqual(context.scales.y.domain, [0, 9.7]);
+});
