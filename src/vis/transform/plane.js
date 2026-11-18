@@ -126,6 +126,39 @@ function measureSides(data, options, keysX, keysY, has, recordsOf, colors) {
   return extent;
 }
 
+// What the axes asked of a chart nested in a grid of cells, such as facets, draw past each cell,
+// given the records of the positions of each context in its cell: how far they reach across each
+// side, and how far their tick labels reach past the ends, as cm.axisX and cm.axisY draw them, on
+// any cell with rows. Nested charts draw no titles.
+function measureCells(data, options, keysX, keysY, has, recordsOf, frames) {
+  const room = {top: 0, right: 0, bottom: 0, left: 0};
+  data.forEach((context, j) => {
+    if (!frames[j].edges || frames[j].empty) return;
+    const hasX = has(context, keysX, "x");
+    const hasY = has(context, keysY, "y");
+    if (!hasX && !hasY) return;
+    const {nameX, nameY, recordX, recordY} = recordsOf(context, j);
+    const {x, y} = guidesOf(null, options, nameX, nameY, sidesOfPlane, {x: [], y: []});
+    if (hasX) {
+      for (const side of x.anchors) {
+        const {reach, start, end} = extentX(recordX, x, side);
+        room[side] = Math.max(room[side], reach);
+        room.left = Math.max(room.left, start);
+        room.right = Math.max(room.right, end);
+      }
+    }
+    if (hasY) {
+      for (const side of y.anchors) {
+        const {reach, start, end} = extentY(recordY, y, side);
+        room[side] = Math.max(room[side], reach);
+        room.top = Math.max(room.top, start);
+        room.bottom = Math.max(room.bottom, end);
+      }
+    }
+  });
+  return room;
+}
+
 // The sides of the axes of a plane: the first is the side of axis true, and both are "both".
 const sidesOfPlane = {
   x: {first: "bottom", both: ["bottom", "top"]},
@@ -249,18 +282,47 @@ export function plane(
 
   let frames, legendX;
   if (nested) {
-    // A nested chart has no margins by default: its parent's margins and bands leave the room.
-    marginTop ??= margin ?? 0;
-    marginRight ??= margin ?? 0;
-    marginBottom ??= margin ?? 0;
-    marginLeft ??= margin ?? 0;
-    frames = nestedFrames(flow, data, {width, height}).map((frame) => ({
-      ...frame,
-      top: frame.top + marginTop,
-      right: frame.right - marginRight,
-      bottom: frame.bottom - marginBottom,
-      left: frame.left + marginLeft,
-    }));
+    // A nested chart has no margins of its own by default: its parent's margins and bands leave the
+    // room. In a grid of cells, such as facets, the axes asked of it, such as x: {axis: "bottom"},
+    // fit inside the cells: every cell is inset by what they draw on each side, measured as the axes
+    // draw them on the cells along the edges, plus 3px, so that the cells stay aligned and share
+    // their scales. As the ticks depend on the size of the cells, they're measured again until they
+    // hold, up to three times, the insets only growing, as fewer ticks in narrower cells may need
+    // less room, such as "0" rather than "0.0", which would widen them again; a given margin stays.
+    const boxes = nestedFrames(flow, data, {width, height});
+    const given = {top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft};
+    const inset = (margins) =>
+      boxes.map((frame) => ({
+        ...frame,
+        top: frame.top + margins.top,
+        right: frame.right - margins.right,
+        bottom: frame.bottom - margins.bottom,
+        left: frame.left + margins.left,
+      }));
+    let margins = Object.fromEntries(Object.keys(given).map((side) => [side, given[side] ?? margin ?? 0]));
+    frames = inset(margins);
+    if (boxes.some((frame) => frame.edges) && Object.values(given).includes(undefined) && margin === undefined) {
+      for (let pass = 0; pass < 3; pass++) {
+        const room = measureCells(
+          data,
+          options,
+          keysX,
+          keysY,
+          has,
+          (context, j) => recordsOf(context, frames[j]),
+          frames,
+        );
+        const next = Object.fromEntries(
+          Object.keys(given).map((side) => [
+            side,
+            given[side] ?? Math.max(margins[side], room[side] ? room[side] + 3 : 0),
+          ]),
+        );
+        if (Object.keys(next).every((side) => next[side] === margins[side])) break;
+        margins = next;
+        frames = inset(margins);
+      }
+    }
   } else {
     // The margins that aren't given fit what's drawn on each side: the axes, their titles, the
     // ends of the tick labels past the plot, and the legends at the top and on the right, plus 3px,

@@ -1158,3 +1158,60 @@ test("cm.plane fits a title longer than its axis, turned beside y, or under x", 
   root.render();
   assertInside(renderer.node(), 200, +renderer.node().getAttribute("height"));
 });
+
+// The frames of the cells of a 2 × 2 grid, with the options of the plane nested in it.
+function cellFrames(options) {
+  const root = cm.flow().renderer(cm.svg({width: 400, height: 400}));
+  const values = root
+    .data(d3.cross(["a", "b"], ["1", "2"]))
+    .transform(cm.encode, {x: ([x]) => x, y: ([, y]) => y})
+    .transform(cm.spreadX)
+    .transform(cm.spreadY)
+    .transform(cm.plane, {x: {axis: null}, y: {axis: null}})
+    .append(cm.g)
+    .data(() => [{v: 0}, {v: 100}])
+    .transform(cm.encode, {x: "v", y: "v"})
+    .transform(cm.plane, options)._values;
+  return values.map(({frame}) => frame);
+}
+
+test("cm.plane insets every cell of a grid nested in it by what the axes asked of it draw, and 3px", () => {
+  const [plain] = cellFrames({});
+  const frames = cellFrames({x: {axis: "bottom"}, y: {axis: "left"}});
+  // Under x, its tick and padding, 9, and a label, 10; left of y, the same 9 and the widest label.
+  for (const frame of frames) {
+    assertInDelta(plain.bottom - frame.bottom, 3 + 6 + 3 + 10);
+    assert.ok(frame.left - plain.left >= 3 + 6 + 3 + widthOf("100") - 1e-6);
+    // Every cell is inset alike, so that they stay aligned.
+    for (const side of ["left", "right", "top", "bottom"]) assertInDelta(frame[side], frames[0][side]);
+  }
+  // A given margin comes first.
+  const [given] = cellFrames({x: {axis: "bottom"}, marginBottom: 5});
+  assert.strictEqual(plain.bottom - given.bottom, 5);
+  // Without axes asked, the cells keep their bands.
+  assert.deepStrictEqual(cellFrames({})[0], plain);
+});
+
+test("cm.plane keeps the axes asked of cells inside the grid of its parent", () => {
+  const renderer = cm.svg({width: 400, height: 400});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(d3.cross(["a", "b"], ["1", "2"]))
+    .transform(cm.encode, {x: ([x]) => x, y: ([, y]) => y})
+    .transform(cm.spreadX, {padding: 0})
+    .transform(cm.spreadY, {padding: 0})
+    .transform(cm.plane, {margin: 0, x: {axis: null}, y: {axis: null}})
+    .append(cm.g)
+    .data(() => [{v: 0}, {v: 100}])
+    .transform(cm.encode, {x: "v", y: "v"})
+    .transform(cm.plane, {x: {axis: "bottom"}, y: {axis: "left"}})
+    .add(cm.circle, {r: 2});
+  root.render();
+  // With no margins and no padding, the labels of the cells along the edges stay inside the chart.
+  for (const t of renderer.node().querySelectorAll("text")) {
+    const [tx, ty] = (t.parentNode.getAttribute("transform")?.match(/[-\d.]+/g) ?? [0, 0]).map(Number);
+    const x = tx + +t.getAttribute("x");
+    const y = ty + +t.getAttribute("y");
+    assert.ok(x >= 0 && x <= 400 && y >= 0 && y <= 400, t.textContent);
+  }
+});

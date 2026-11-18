@@ -37,7 +37,7 @@ export const visMarginalHistogram = withSVG(async () => {
         .data(rows)
         .transform(cm.encode, {y: "row", h: "h"})
         .transform(cm.spreadY, {flex: "h", paddingInner: 0.05, paddingOuter: 0, domain: ["top", "main"]})
-        .transform(cm.plane, {marginLeft: 30, marginBottom: 30, y: {axis: null}})
+        .transform(cm.plane, {y: {axis: null}})
         .append(cm.g)
         .data((row) => row.cells)
         .transform(cm.encode, {x: "col", w: "w"})
@@ -51,8 +51,8 @@ export const visMarginalHistogram = withSVG(async () => {
           (flow) =>
             flow.data(view("right")).transform(cm.encode, {y: depth}).transform(cm.binY, {x: "count", interval: 1}),
         )
-        .transform(cm.plane);
-      scatter.add(cm.axis).add(cm.circle, {r: 3, fill: "steelblue", fillOpacity: 0.6});
+        .transform(cm.plane, {length: {axis: "bottom"}, depth: {axis: "left"}});
+      scatter.add(cm.circle, {r: 3, fill: "steelblue", fillOpacity: 0.6});
       top.add(cm.rect, {fill: "steelblue"});
       right.add(cm.rect, {fill: "steelblue"});
     },

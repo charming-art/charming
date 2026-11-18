@@ -692,7 +692,7 @@ test("cm.plane draws no axes in charts nested in a chart, unless asked", () => {
     return Array.from(renderer.node().querySelectorAll("text"), (t) => t.textContent);
   };
   assert.deepStrictEqual(nested(), []);
-  assert.ok(nested({x: {axis: "bottom"}}).includes("0.0"));
+  assert.ok(nested({x: {axis: "bottom"}}).length > 0);
 });
 
 test("cm.polar draws its angle axis outside and inside its ring with axis both", () => {
