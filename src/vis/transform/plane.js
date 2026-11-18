@@ -284,9 +284,10 @@ export function plane(
   if (nested) {
     // A nested chart has no margins of its own by default: its parent's margins and bands leave the
     // room. In a grid of cells, such as facets, the axes asked of it, such as x: {axis: "bottom"},
-    // fit inside the cells: every cell is inset by what they draw on each side, measured as the axes
-    // draw them on the cells along the edges, plus 3px, so that the cells stay aligned and share
-    // their scales. As the ticks depend on the size of the cells, they're measured again until they
+    // fit around the cells: what they draw on each side, measured as the axes draw them on the cells
+    // along the edges, plus 3px, takes the room the cells already have first, such as the padding
+    // between bands, or to the edge of the parent's frame, and every cell is inset alike by what's
+    // left, so that the cells stay aligned and share their scales. As the ticks depend on the size of the cells, they're measured again until they
     // hold, up to three times, the insets only growing, as fewer ticks in narrower cells may need
     // less room, such as "0" rather than "0.0", which would widen them again; a given margin stays.
     const boxes = nestedFrames(flow, data, {width, height});
@@ -312,11 +313,13 @@ export function plane(
           (context, j) => recordsOf(context, frames[j]),
           frames,
         );
+        // The room the cells already have, such as the padding between bands, is used first.
         const next = Object.fromEntries(
-          Object.keys(given).map((side) => [
-            side,
-            given[side] ?? Math.max(margins[side], room[side] ? room[side] + 3 : 0),
-          ]),
+          Object.keys(given).map((side) => {
+            const free = Math.min(...boxes.filter((frame) => frame.room).map((frame) => frame.room[side]));
+            const need = room[side] ? Math.max(0, room[side] + 3 - free) : 0;
+            return [side, given[side] ?? Math.max(margins[side], need)];
+          }),
         );
         if (Object.keys(next).every((side) => next[side] === margins[side])) break;
         margins = next;

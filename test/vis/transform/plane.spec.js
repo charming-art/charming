@@ -1159,14 +1159,15 @@ test("cm.plane fits a title longer than its axis, turned beside y, or under x", 
   assertInside(renderer.node(), 200, +renderer.node().getAttribute("height"));
 });
 
-// The frames of the cells of a 2 × 2 grid, with the options of the plane nested in it.
-function cellFrames(options) {
+// The frames of the cells of a 2 × 2 grid, with the options of the plane nested in it, and of the
+// padding of its bands.
+function cellFrames(options, padding = 0.1) {
   const root = cm.flow().renderer(cm.svg({width: 400, height: 400}));
   const values = root
     .data(d3.cross(["a", "b"], ["1", "2"]))
     .transform(cm.encode, {x: ([x]) => x, y: ([, y]) => y})
-    .transform(cm.spreadX)
-    .transform(cm.spreadY)
+    .transform(cm.spreadX, {padding})
+    .transform(cm.spreadY, {padding})
     .transform(cm.plane, {x: {axis: null}, y: {axis: null}})
     .append(cm.g)
     .data(() => [{v: 0}, {v: 100}])
@@ -1175,16 +1176,25 @@ function cellFrames(options) {
   return values.map(({frame}) => frame);
 }
 
-test("cm.plane insets every cell of a grid nested in it by what the axes asked of it draw, and 3px", () => {
+test("cm.plane insets the cells of a grid nested in it by what the axes asked of it draw beyond their padding", () => {
+  // The root chart has no axes: its frame is from 20 to 380 across, and from 10 to 380 down. The
+  // bands leave a gap of a tenth of a step around each cell, which the labels take first.
+  const gapX = d3.scaleBand(["a", "b"], [20, 380]).padding(0.1).step() * 0.1;
+  const gapY = d3.scaleBand(["1", "2"], [10, 380]).padding(0.1).step() * 0.1;
   const [plain] = cellFrames({});
   const frames = cellFrames({x: {axis: "bottom"}, y: {axis: "left"}});
-  // Under x, its tick and padding, 9, and a label, 10; left of y, the same 9 and the widest label.
   for (const frame of frames) {
-    assertInDelta(plain.bottom - frame.bottom, 3 + 6 + 3 + 10);
-    assert.ok(frame.left - plain.left >= 3 + 6 + 3 + widthOf("100") - 1e-6);
+    // Under x, its tick and padding, 9, and a label, 10, and 3px; left of y, the same 9, the widest
+    // label and 3px.
+    assertInDelta(plain.bottom - frame.bottom, Math.max(0, 6 + 3 + 10 + 3 - gapY));
+    assertInDelta(frame.left - plain.left, Math.max(0, 6 + 3 + widthOf("100") + 3 - gapX));
     // Every cell is inset alike, so that they stay aligned.
     for (const side of ["left", "right", "top", "bottom"]) assertInDelta(frame[side], frames[0][side]);
   }
+  // Without padding, the cells are inset by all of it.
+  const [tight] = cellFrames({}, 0);
+  const [inset] = cellFrames({x: {axis: "bottom"}}, 0);
+  assertInDelta(tight.bottom - inset.bottom, 6 + 3 + 10 + 3);
   // A given margin comes first.
   const [given] = cellFrames({x: {axis: "bottom"}, marginBottom: 5});
   assert.strictEqual(plain.bottom - given.bottom, 5);

@@ -406,7 +406,8 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
     const [left, right] = extent(X, X1, "x", width, [parent?.left, parent?.right]);
     const [top, bottom] = extent(Y, Y1, "y", height, [parent?.top, parent?.bottom]);
     // A cell of a grid has an extent, such as a band; a glyph at a point labels its own axes.
-    return {box: [left, right, top, bottom], tx, ty, cell: !!(X1 || Y1)};
+    const within = parent ? [parent.left, parent.right, parent.top, parent.bottom] : null;
+    return {box: [left, right, top, bottom], tx, ty, cell: !!(X1 || Y1), within};
   });
   // Facets in a grid: the bottom (or top) cell of each column labels x, and the left (or right)
   // cell of each row labels y, by the anchor of the axis. Like Plot, cells without rows are
@@ -418,6 +419,27 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
   const isTop = ({box: [l, , t]}) => filled.every(({box}) => !same(box[0], l) || box[2] >= t - 1e-6);
   const isLeft = ({box: [l, , t]}) => filled.every(({box}) => !same(box[2], t) || box[0] >= l - 1e-6);
   const isRight = ({box: [, r, t]}) => filled.every(({box}) => !same(box[2], t) || box[1] <= r + 1e-6);
+  // The room around each cell of a grid, for the axes asked of it: on each side, the gap to the
+  // nearest cell along it, else to the edge of the parent's frame.
+  const roomOf = ({box: [l, r, t, b], within}) => {
+    const across = (a0, a1, b0, b1) => a0 < b1 - 1e-6 && b0 < a1 - 1e-6;
+    const gaps = {left: [], right: [], top: [], bottom: []};
+    for (const {box} of boxes) {
+      if (across(t, b, box[2], box[3])) {
+        if (box[1] <= l + 1e-6) gaps.left.push(l - box[1]);
+        if (box[0] >= r - 1e-6) gaps.right.push(box[0] - r);
+      }
+      if (across(l, r, box[0], box[1])) {
+        if (box[3] <= t + 1e-6) gaps.top.push(t - box[3]);
+        if (box[2] >= b - 1e-6) gaps.bottom.push(box[2] - b);
+      }
+    }
+    const [wl, wr, wt, wb] = within ?? [l, r, t, b];
+    const edge = {left: l - wl, right: wr - r, top: t - wt, bottom: wb - b};
+    return Object.fromEntries(
+      Object.keys(gaps).map((side) => [side, Math.max(0, gaps[side].length ? Math.min(...gaps[side]) : edge[side])]),
+    );
+  };
   return boxes.map((frame, j) => {
     const {
       box: [l, r, t, b],
@@ -425,7 +447,7 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
       ty,
       cell,
     } = frame;
-    return {
+    const nested = {
       left: l - tx,
       right: r - tx,
       top: t - ty,
@@ -436,6 +458,9 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
         edges: {top: isTop(frame), right: isRight(frame), bottom: isBottom(frame), left: isLeft(frame)},
       }),
     };
+    // The room around a cell is kept apart from its frame, for the margins of the chart nested in it.
+    if (cell) Object.defineProperty(nested, "room", {value: roomOf(frame)});
+    return nested;
   });
 }
 
