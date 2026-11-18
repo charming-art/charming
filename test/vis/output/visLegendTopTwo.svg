@@ -1,221 +1,221 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
-  <line x1="81.59003831417624" y1="360" x2="81.59003831417624" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="102.66283524904215" y1="360" x2="102.66283524904215" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="123.73563218390805" y1="360" x2="123.73563218390805" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="144.80842911877394" y1="360" x2="144.80842911877394" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="165.88122605363986" y1="360" x2="165.88122605363986" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="186.95402298850576" y1="360" x2="186.95402298850576" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="208.02681992337165" y1="360" x2="208.02681992337165" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="229.09961685823757" y1="360" x2="229.09961685823757" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="250.17241379310346" y1="360" x2="250.17241379310346" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="271.2452107279694" y1="360" x2="271.2452107279694" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="292.31800766283527" y1="360" x2="292.31800766283527" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="313.39080459770116" y1="360" x2="313.39080459770116" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="334.46360153256705" y1="360" x2="334.46360153256705" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="355.53639846743295" y1="360" x2="355.53639846743295" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="376.6091954022989" y1="360" x2="376.6091954022989" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="397.6819923371648" y1="360" x2="397.6819923371648" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="418.7547892720307" y1="360" x2="418.7547892720307" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="439.82758620689657" y1="360" x2="439.82758620689657" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="460.90038314176246" y1="360" x2="460.90038314176246" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="481.9731800766284" y1="360" x2="481.9731800766284" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="503.0459770114943" y1="360" x2="503.0459770114943" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="524.1187739463602" y1="360" x2="524.1187739463602" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="545.1915708812261" y1="360" x2="545.1915708812261" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="566.264367816092" y1="360" x2="566.264367816092" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="587.3371647509579" y1="360" x2="587.3371647509579" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="608.4099616858238" y1="360" x2="608.4099616858238" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <text x="81.59003831417624" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">A</text>
-  <text x="102.66283524904215" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">B</text>
-  <text x="123.73563218390805" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">C</text>
-  <text x="144.80842911877394" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">D</text>
-  <text x="165.88122605363986" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">E</text>
-  <text x="186.95402298850576" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">F</text>
-  <text x="208.02681992337165" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">G</text>
-  <text x="229.09961685823757" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">H</text>
-  <text x="250.17241379310346" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">I</text>
-  <text x="271.2452107279694" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">J</text>
-  <text x="292.31800766283527" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">K</text>
-  <text x="313.39080459770116" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">L</text>
-  <text x="334.46360153256705" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">M</text>
-  <text x="355.53639846743295" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">N</text>
-  <text x="376.6091954022989" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">O</text>
-  <text x="397.6819923371648" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">P</text>
-  <text x="418.7547892720307" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Q</text>
-  <text x="439.82758620689657" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">R</text>
-  <text x="460.90038314176246" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">S</text>
-  <text x="481.9731800766284" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">T</text>
-  <text x="503.0459770114943" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">U</text>
-  <text x="524.1187739463602" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">V</text>
-  <text x="545.1915708812261" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">W</text>
-  <text x="566.264367816092" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">X</text>
-  <text x="587.3371647509579" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Y</text>
-  <text x="608.4099616858238" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Z</text>
-  <text x="345" y="385" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">letter</text>
-  <line x1="70" y1="360" x2="64" y2="360" stroke="currentColor" stroke-width="1"></line>
-  <line x1="70" y1="321.7383089277279" x2="64" y2="321.7383089277279" stroke="currentColor" stroke-width="1"></line>
-  <line x1="70" y1="283.47661785545586" x2="64" y2="283.47661785545586" stroke="currentColor" stroke-width="1"></line>
-  <line x1="70" y1="245.21492678318378" x2="64" y2="245.21492678318378" stroke="currentColor" stroke-width="1"></line>
-  <line x1="70" y1="206.95323571091166" x2="64" y2="206.95323571091166" stroke="currentColor" stroke-width="1"></line>
-  <line x1="70" y1="168.69154463863958" x2="64" y2="168.69154463863958" stroke="currentColor" stroke-width="1"></line>
-  <line x1="70" y1="130.4298535663675" x2="64" y2="130.4298535663675" stroke="currentColor" stroke-width="1"></line>
-  <text x="61" y="360" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.00</text>
-  <text x="61" y="321.7383089277279" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.02</text>
-  <text x="61" y="283.47661785545586" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.04</text>
-  <text x="61" y="245.21492678318378" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.06</text>
-  <text x="61" y="206.95323571091166" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.08</text>
-  <text x="61" y="168.69154463863958" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.10</text>
-  <text x="61" y="130.4298535663675" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.12</text>
-  <text x="31" y="117" transform="rotate(-90,31,117)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-after-edge" fill="currentColor">frequency →</text>
-  <text x="70" y="3" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" dominant-baseline="text-before-edge" fill="currentColor">letter</text>
-  <rect x="70" y="18" width="10" height="10" fill="#5470c6"></rect>
-  <rect x="102" y="18" width="10" height="10" fill="#91cc75"></rect>
-  <rect x="134" y="18" width="10" height="10" fill="#fac858"></rect>
-  <rect x="166" y="18" width="10" height="10" fill="#ee6666"></rect>
-  <rect x="198" y="18" width="10" height="10" fill="#73c0de"></rect>
-  <rect x="230" y="18" width="10" height="10" fill="#3ba272"></rect>
-  <rect x="262" y="18" width="10" height="10" fill="#fc8452"></rect>
-  <rect x="294" y="18" width="10" height="10" fill="#9a60b4"></rect>
-  <rect x="326" y="18" width="10" height="10" fill="#ea7ccc"></rect>
-  <rect x="358" y="18" width="10" height="10" fill="#5470c6"></rect>
-  <rect x="390" y="18" width="10" height="10" fill="#91cc75"></rect>
-  <rect x="422" y="18" width="10" height="10" fill="#fac858"></rect>
-  <rect x="454" y="18" width="10" height="10" fill="#ee6666"></rect>
-  <rect x="486" y="18" width="10" height="10" fill="#73c0de"></rect>
-  <rect x="518" y="18" width="10" height="10" fill="#3ba272"></rect>
-  <rect x="550" y="18" width="10" height="10" fill="#fc8452"></rect>
-  <rect x="582" y="18" width="10" height="10" fill="#9a60b4"></rect>
-  <rect x="614" y="18" width="10" height="10" fill="#ea7ccc"></rect>
-  <rect x="70" y="32" width="10" height="10" fill="#5470c6"></rect>
-  <rect x="102" y="32" width="10" height="10" fill="#91cc75"></rect>
-  <rect x="134" y="32" width="10" height="10" fill="#fac858"></rect>
-  <rect x="166" y="32" width="10" height="10" fill="#ee6666"></rect>
-  <rect x="198" y="32" width="10" height="10" fill="#73c0de"></rect>
-  <rect x="230" y="32" width="10" height="10" fill="#3ba272"></rect>
-  <rect x="262" y="32" width="10" height="10" fill="#fc8452"></rect>
-  <rect x="294" y="32" width="10" height="10" fill="#9a60b4"></rect>
-  <text x="84" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">A</text>
-  <text x="116" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">B</text>
-  <text x="148" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">C</text>
-  <text x="180" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">D</text>
-  <text x="212" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">E</text>
-  <text x="244" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">F</text>
-  <text x="276" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">G</text>
-  <text x="308" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">H</text>
-  <text x="340" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">I</text>
-  <text x="372" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">J</text>
-  <text x="404" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">K</text>
-  <text x="436" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">L</text>
-  <text x="468" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">M</text>
-  <text x="500" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">N</text>
-  <text x="532" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">O</text>
-  <text x="564" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">P</text>
-  <text x="596" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Q</text>
-  <text x="628" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">R</text>
-  <text x="84" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">S</text>
-  <text x="116" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">T</text>
-  <text x="148" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">U</text>
-  <text x="180" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">V</text>
-  <text x="212" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">W</text>
-  <text x="244" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">X</text>
-  <text x="276" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Y</text>
-  <text x="308" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Z</text>
-  <text x="70" y="55" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" dominant-baseline="text-before-edge" fill="currentColor">frequency</text>
-  <rect x="70" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.30546875"></rect>
-  <rect x="73.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.31640625"></rect>
-  <rect x="77.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.32734375"></rect>
-  <rect x="81.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.33828125"></rect>
-  <rect x="85" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.34921874999999997"></rect>
-  <rect x="88.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.36015625"></rect>
-  <rect x="92.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.37109375"></rect>
-  <rect x="96.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.38203125"></rect>
-  <rect x="100" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.39296875"></rect>
-  <rect x="103.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.40390624999999997"></rect>
-  <rect x="107.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.41484375"></rect>
-  <rect x="111.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.42578125"></rect>
-  <rect x="115" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.43671875"></rect>
-  <rect x="118.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.44765625"></rect>
-  <rect x="122.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.45859375"></rect>
-  <rect x="126.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.46953124999999996"></rect>
-  <rect x="130" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.48046875"></rect>
-  <rect x="133.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.49140625"></rect>
-  <rect x="137.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.50234375"></rect>
-  <rect x="141.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.51328125"></rect>
-  <rect x="145" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.52421875"></rect>
-  <rect x="148.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.53515625"></rect>
-  <rect x="152.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.54609375"></rect>
-  <rect x="156.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.55703125"></rect>
-  <rect x="160" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.56796875"></rect>
-  <rect x="163.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.57890625"></rect>
-  <rect x="167.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.58984375"></rect>
-  <rect x="171.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.60078125"></rect>
-  <rect x="175" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.61171875"></rect>
-  <rect x="178.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.62265625"></rect>
-  <rect x="182.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.63359375"></rect>
-  <rect x="186.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.64453125"></rect>
-  <rect x="190" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.65546875"></rect>
-  <rect x="193.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.66640625"></rect>
-  <rect x="197.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.67734375"></rect>
-  <rect x="201.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.68828125"></rect>
-  <rect x="205" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.69921875"></rect>
-  <rect x="208.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.71015625"></rect>
-  <rect x="212.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.72109375"></rect>
-  <rect x="216.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.73203125"></rect>
-  <rect x="220" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.74296875"></rect>
-  <rect x="223.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.75390625"></rect>
-  <rect x="227.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.76484375"></rect>
-  <rect x="231.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.77578125"></rect>
-  <rect x="235" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.78671875"></rect>
-  <rect x="238.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.79765625"></rect>
-  <rect x="242.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.80859375"></rect>
-  <rect x="246.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.81953125"></rect>
-  <rect x="250" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.83046875"></rect>
-  <rect x="253.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.84140625"></rect>
-  <rect x="257.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.85234375"></rect>
-  <rect x="261.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.86328125"></rect>
-  <rect x="265" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.87421875"></rect>
-  <rect x="268.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.88515625"></rect>
-  <rect x="272.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.89609375"></rect>
-  <rect x="276.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.90703125"></rect>
-  <rect x="280" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.91796875"></rect>
-  <rect x="283.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.92890625"></rect>
-  <rect x="287.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.93984375"></rect>
-  <rect x="291.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.95078125"></rect>
-  <rect x="295" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.96171875"></rect>
-  <rect x="298.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.97265625"></rect>
-  <rect x="302.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.98359375"></rect>
-  <rect x="306.25" y="69" width="3.75" height="10" fill="currentColor" fill-opacity="0.9945312499999999"></rect>
-  <text x="70" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-before-edge" fill="currentColor">0.00</text>
-  <text x="107.78932451582429" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0.02</text>
-  <text x="145.57864903164858" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0.04</text>
-  <text x="183.36797354747284" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0.06</text>
-  <text x="221.15729806329713" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0.08</text>
-  <text x="258.9466225791214" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0.10</text>
-  <text x="296.7359470949457" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0.12</text>
-  <rect x="156.39846743295018" y="117" width="18.96551724137933" height="243" fill="#73c0de" fill-opacity="1"></rect>
-  <rect x="472.4904214559387" y="186.751062824752" width="18.965517241379246" height="173.248937175248" fill="#91cc75" fill-opacity="0.799071012438986"></rect>
-  <rect x="72.10727969348657" y="203.75838450637693" width="18.965517241379317" height="156.24161549362307" fill="#5470c6" fill-opacity="0.750078727759408"></rect>
-  <rect x="367.1264367816093" y="216.38474256022675" width="18.965517241379246" height="143.61525743977325" fill="#3ba272" fill-opacity="0.7137065029129271"></rect>
-  <rect x="240.6896551724138" y="226.73452999527632" width="18.96551724137933" height="133.26547000472368" fill="#ea7ccc" fill-opacity="0.6838923004251299"></rect>
-  <rect x="346.0536398467433" y="230.88592347661788" width="18.965517241379303" height="129.11407652338212" fill="#73c0de" fill-opacity="0.6719335537710596"></rect>
-  <rect x="451.41762452107287" y="238.95914029286726" width="18.965517241379303" height="121.04085970713274" fill="#5470c6" fill-opacity="0.6486773736419462"></rect>
-  <rect x="219.6168582375479" y="243.416627302787" width="18.96551724137933" height="116.58337269721301" fill="#9a60b4" fill-opacity="0.6358368760825067"></rect>
-  <rect x="430.34482758620686" y="245.46362777515353" width="18.965517241379303" height="114.53637222484647" fill="#ea7ccc" fill-opacity="0.6299401669028499"></rect>
-  <rect x="135.32567049808426" y="278.6365139348134" width="18.96551724137933" height="81.36348606518658" fill="#ee6666" fill-opacity="0.5343804125334592"></rect>
-  <rect x="303.9080459770115" y="282.9983467170524" width="18.965517241379303" height="77.00165328294759" fill="#fac858" fill-opacity="0.5218154621319477"></rect>
-  <rect x="114.25287356321839" y="306.77798771846955" width="18.965517241379317" height="53.22201228153045" fill="#fac858" fill-opacity="0.45331443867107546"></rect>
-  <rect x="493.5632183908046" y="307.2371280113368" width="18.965517241379246" height="52.76287198866322" fill="#fac858" fill-opacity="0.45199181231302155"></rect>
-  <rect x="324.9808429118774" y="313.97118564005666" width="18.965517241379303" height="46.02881435994334" fill="#ee6666" fill-opacity="0.43259329239489847"></rect>
-  <rect x="535.7088122605364" y="314.85120453471893" width="18.965517241379303" height="45.14879546528107" fill="#73c0de" fill-opacity="0.4300582585419619"></rect>
-  <rect x="177.47126436781608" y="316.22862541332074" width="18.96551724137933" height="43.77137458667926" fill="#3ba272" fill-opacity="0.4260903794678004"></rect>
-  <rect x="198.544061302682" y="321.45134624468585" width="18.965517241379303" height="38.54865375531415" fill="#fc8452" fill-opacity="0.41104550464493783"></rect>
-  <rect x="577.8544061302682" y="322.2357109116674" width="18.965517241379303" height="37.76428908833259" fill="#fc8452" fill-opacity="0.40878601794992914"></rect>
-  <rect x="388.1992337164751" y="323.0965989607936" width="18.965517241379303" height="36.903401039206415" fill="#fc8452" fill-opacity="0.40630609352857816"></rect>
-  <rect x="93.18007662835248" y="331.45677846008505" width="18.965517241379303" height="28.543221539914953" fill="#91cc75" fill-opacity="0.38222327192568095"></rect>
-  <rect x="514.6360153256705" y="341.2900330656589" width="18.965517241379416" height="18.709966934341082" fill="#ee6666" fill-opacity="0.35389702409069435"></rect>
-  <rect x="282.8352490421456" y="345.230987246103" width="18.965517241379303" height="14.769012753897016" fill="#91cc75" fill-opacity="0.34254448118406555"></rect>
-  <rect x="261.7624521072797" y="357.0729806329712" width="18.965517241379303" height="2.9270193670287767" fill="#5470c6" fill-opacity="0.30843174303259324"></rect>
-  <rect x="556.7816091954023" y="357.13037316957957" width="18.965517241379303" height="2.8696268304204295" fill="#3ba272" fill-opacity="0.3082664147378365"></rect>
-  <rect x="409.2720306513411" y="358.18256967406705" width="18.965517241379246" height="1.8174303259329463" fill="#9a60b4" fill-opacity="0.30523539600062977"></rect>
-  <rect x="598.9272030651341" y="358.58431743032594" width="18.965517241379303" height="1.4156825696740611" fill="#9a60b4" fill-opacity="0.3040780979373327"></rect>
+  <line x1="62.50095785440611" y1="362" x2="62.50095785440611" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="84.32088122605363" y1="362" x2="84.32088122605363" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="106.14080459770113" y1="362" x2="106.14080459770113" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="127.96072796934864" y1="362" x2="127.96072796934864" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="149.78065134099614" y1="362" x2="149.78065134099614" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="171.60057471264366" y1="362" x2="171.60057471264366" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="193.42049808429118" y1="362" x2="193.42049808429118" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="215.2404214559387" y1="362" x2="215.2404214559387" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="237.06034482758622" y1="362" x2="237.06034482758622" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="258.88026819923374" y1="362" x2="258.88026819923374" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="280.70019157088126" y1="362" x2="280.70019157088126" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="302.5201149425287" y1="362" x2="302.5201149425287" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="324.34003831417624" y1="362" x2="324.34003831417624" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="346.15996168582376" y1="362" x2="346.15996168582376" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="367.9798850574713" y1="362" x2="367.9798850574713" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="389.7998084291188" y1="362" x2="389.7998084291188" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="411.6197318007663" y1="362" x2="411.6197318007663" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="433.43965517241384" y1="362" x2="433.43965517241384" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="455.25957854406136" y1="362" x2="455.25957854406136" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="477.0795019157089" y1="362" x2="477.0795019157089" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="498.8994252873564" y1="362" x2="498.8994252873564" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="520.7193486590038" y1="362" x2="520.7193486590038" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="542.5392720306513" y1="362" x2="542.5392720306513" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="564.3591954022988" y1="362" x2="564.3591954022988" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="586.1791187739464" y1="362" x2="586.1791187739464" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="607.9990421455939" y1="362" x2="607.9990421455939" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <text x="62.50095785440611" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">A</text>
+  <text x="84.32088122605363" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">B</text>
+  <text x="106.14080459770113" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">C</text>
+  <text x="127.96072796934864" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">D</text>
+  <text x="149.78065134099614" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">E</text>
+  <text x="171.60057471264366" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">F</text>
+  <text x="193.42049808429118" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">G</text>
+  <text x="215.2404214559387" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">H</text>
+  <text x="237.06034482758622" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">I</text>
+  <text x="258.88026819923374" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">J</text>
+  <text x="280.70019157088126" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">K</text>
+  <text x="302.5201149425287" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">L</text>
+  <text x="324.34003831417624" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">M</text>
+  <text x="346.15996168582376" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">N</text>
+  <text x="367.9798850574713" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">O</text>
+  <text x="389.7998084291188" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">P</text>
+  <text x="411.6197318007663" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Q</text>
+  <text x="433.43965517241384" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">R</text>
+  <text x="455.25957854406136" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">S</text>
+  <text x="477.0795019157089" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">T</text>
+  <text x="498.8994252873564" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">U</text>
+  <text x="520.7193486590038" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">V</text>
+  <text x="542.5392720306513" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">W</text>
+  <text x="564.3591954022988" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">X</text>
+  <text x="586.1791187739464" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Y</text>
+  <text x="607.9990421455939" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Z</text>
+  <text x="335.25" y="387" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">letter</text>
+  <line x1="50.5" y1="362" x2="44.5" y2="362" stroke="currentColor" stroke-width="1"></line>
+  <line x1="50.5" y1="323.42339789009606" x2="44.5" y2="323.42339789009606" stroke="currentColor" stroke-width="1"></line>
+  <line x1="50.5" y1="284.8467957801921" x2="44.5" y2="284.8467957801921" stroke="currentColor" stroke-width="1"></line>
+  <line x1="50.5" y1="246.27019367028817" x2="44.5" y2="246.27019367028817" stroke="currentColor" stroke-width="1"></line>
+  <line x1="50.5" y1="207.6935915603842" x2="44.5" y2="207.6935915603842" stroke="currentColor" stroke-width="1"></line>
+  <line x1="50.5" y1="169.11698945048022" x2="44.5" y2="169.11698945048022" stroke="currentColor" stroke-width="1"></line>
+  <line x1="50.5" y1="130.54038734057627" x2="44.5" y2="130.54038734057627" stroke="currentColor" stroke-width="1"></line>
+  <text x="41.5" y="362" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.00</text>
+  <text x="41.5" y="323.42339789009606" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.02</text>
+  <text x="41.5" y="284.8467957801921" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.04</text>
+  <text x="41.5" y="246.27019367028817" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.06</text>
+  <text x="41.5" y="207.6935915603842" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.08</text>
+  <text x="41.5" y="169.11698945048022" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.10</text>
+  <text x="41.5" y="130.54038734057627" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.12</text>
+  <text x="13" y="117" transform="rotate(-90,13,117)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-after-edge" fill="currentColor">frequency →</text>
+  <text x="50.5" y="3" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" dominant-baseline="text-before-edge" fill="currentColor">letter</text>
+  <rect x="50.5" y="18" width="10" height="10" fill="#5470c6"></rect>
+  <rect x="83.4" y="18" width="10" height="10" fill="#91cc75"></rect>
+  <rect x="116.1" y="18" width="10" height="10" fill="#fac858"></rect>
+  <rect x="149.39999999999998" y="18" width="10" height="10" fill="#ee6666"></rect>
+  <rect x="182.79999999999998" y="18" width="10" height="10" fill="#73c0de"></rect>
+  <rect x="214.89999999999998" y="18" width="10" height="10" fill="#3ba272"></rect>
+  <rect x="246.7" y="18" width="10" height="10" fill="#fc8452"></rect>
+  <rect x="280.29999999999995" y="18" width="10" height="10" fill="#9a60b4"></rect>
+  <rect x="313.79999999999995" y="18" width="10" height="10" fill="#ea7ccc"></rect>
+  <rect x="342.59999999999997" y="18" width="10" height="10" fill="#5470c6"></rect>
+  <rect x="374.09999999999997" y="18" width="10" height="10" fill="#91cc75"></rect>
+  <rect x="406.79999999999995" y="18" width="10" height="10" fill="#fac858"></rect>
+  <rect x="438.59999999999997" y="18" width="10" height="10" fill="#ee6666"></rect>
+  <rect x="473.49999999999994" y="18" width="10" height="10" fill="#73c0de"></rect>
+  <rect x="506.99999999999994" y="18" width="10" height="10" fill="#3ba272"></rect>
+  <rect x="540.8" y="18" width="10" height="10" fill="#fc8452"></rect>
+  <rect x="573.3" y="18" width="10" height="10" fill="#9a60b4"></rect>
+  <rect x="607.0999999999999" y="18" width="10" height="10" fill="#ea7ccc"></rect>
+  <rect x="50.5" y="32" width="10" height="10" fill="#5470c6"></rect>
+  <rect x="83" y="32" width="10" height="10" fill="#91cc75"></rect>
+  <rect x="115.5" y="32" width="10" height="10" fill="#fac858"></rect>
+  <rect x="149" y="32" width="10" height="10" fill="#ee6666"></rect>
+  <rect x="181.9" y="32" width="10" height="10" fill="#73c0de"></rect>
+  <rect x="217.7" y="32" width="10" height="10" fill="#3ba272"></rect>
+  <rect x="250.6" y="32" width="10" height="10" fill="#fc8452"></rect>
+  <rect x="283.3" y="32" width="10" height="10" fill="#9a60b4"></rect>
+  <text x="64.5" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">A</text>
+  <text x="97.4" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">B</text>
+  <text x="130.1" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">C</text>
+  <text x="163.39999999999998" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">D</text>
+  <text x="196.79999999999998" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">E</text>
+  <text x="228.89999999999998" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">F</text>
+  <text x="260.7" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">G</text>
+  <text x="294.29999999999995" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">H</text>
+  <text x="327.79999999999995" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">I</text>
+  <text x="356.59999999999997" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">J</text>
+  <text x="388.09999999999997" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">K</text>
+  <text x="420.79999999999995" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">L</text>
+  <text x="452.59999999999997" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">M</text>
+  <text x="487.49999999999994" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">N</text>
+  <text x="521" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">O</text>
+  <text x="554.8" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">P</text>
+  <text x="587.3" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Q</text>
+  <text x="621.0999999999999" y="17" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">R</text>
+  <text x="64.5" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">S</text>
+  <text x="97" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">T</text>
+  <text x="129.5" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">U</text>
+  <text x="163" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">V</text>
+  <text x="195.9" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">W</text>
+  <text x="231.7" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">X</text>
+  <text x="264.6" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Y</text>
+  <text x="297.3" y="31" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Z</text>
+  <text x="50.5" y="55" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" dominant-baseline="text-before-edge" fill="currentColor">frequency</text>
+  <rect x="50.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.30546875"></rect>
+  <rect x="54.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.31640625"></rect>
+  <rect x="58" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.32734375"></rect>
+  <rect x="61.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.33828125"></rect>
+  <rect x="65.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.34921874999999997"></rect>
+  <rect x="69.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.36015625"></rect>
+  <rect x="73" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.37109375"></rect>
+  <rect x="76.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.38203125"></rect>
+  <rect x="80.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.39296875"></rect>
+  <rect x="84.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.40390624999999997"></rect>
+  <rect x="88" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.41484375"></rect>
+  <rect x="91.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.42578125"></rect>
+  <rect x="95.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.43671875"></rect>
+  <rect x="99.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.44765625"></rect>
+  <rect x="103" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.45859375"></rect>
+  <rect x="106.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.46953124999999996"></rect>
+  <rect x="110.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.48046875"></rect>
+  <rect x="114.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.49140625"></rect>
+  <rect x="118" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.50234375"></rect>
+  <rect x="121.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.51328125"></rect>
+  <rect x="125.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.52421875"></rect>
+  <rect x="129.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.53515625"></rect>
+  <rect x="133" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.54609375"></rect>
+  <rect x="136.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.55703125"></rect>
+  <rect x="140.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.56796875"></rect>
+  <rect x="144.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.57890625"></rect>
+  <rect x="148" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.58984375"></rect>
+  <rect x="151.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.60078125"></rect>
+  <rect x="155.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.61171875"></rect>
+  <rect x="159.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.62265625"></rect>
+  <rect x="163" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.63359375"></rect>
+  <rect x="166.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.64453125"></rect>
+  <rect x="170.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.65546875"></rect>
+  <rect x="174.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.66640625"></rect>
+  <rect x="178" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.67734375"></rect>
+  <rect x="181.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.68828125"></rect>
+  <rect x="185.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.69921875"></rect>
+  <rect x="189.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.71015625"></rect>
+  <rect x="193" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.72109375"></rect>
+  <rect x="196.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.73203125"></rect>
+  <rect x="200.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.74296875"></rect>
+  <rect x="204.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.75390625"></rect>
+  <rect x="208" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.76484375"></rect>
+  <rect x="211.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.77578125"></rect>
+  <rect x="215.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.78671875"></rect>
+  <rect x="219.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.79765625"></rect>
+  <rect x="223" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.80859375"></rect>
+  <rect x="226.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.81953125"></rect>
+  <rect x="230.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.83046875"></rect>
+  <rect x="234.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.84140625"></rect>
+  <rect x="238" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.85234375"></rect>
+  <rect x="241.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.86328125"></rect>
+  <rect x="245.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.87421875"></rect>
+  <rect x="249.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.88515625"></rect>
+  <rect x="253" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.89609375"></rect>
+  <rect x="256.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.90703125"></rect>
+  <rect x="260.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.91796875"></rect>
+  <rect x="264.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.92890625"></rect>
+  <rect x="268" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.93984375"></rect>
+  <rect x="271.75" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.95078125"></rect>
+  <rect x="275.5" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.96171875"></rect>
+  <rect x="279.25" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.97265625"></rect>
+  <rect x="283" y="69" width="4.75" height="10" fill="currentColor" fill-opacity="0.98359375"></rect>
+  <rect x="286.75" y="69" width="3.75" height="10" fill="currentColor" fill-opacity="0.9945312499999999"></rect>
+  <text x="50.5" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-before-edge" fill="currentColor">0.00</text>
+  <text x="88.28932451582429" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0.02</text>
+  <text x="126.07864903164857" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0.04</text>
+  <text x="163.86797354747284" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0.06</text>
+  <text x="201.65729806329713" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0.08</text>
+  <text x="239.44662257912142" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0.10</text>
+  <text x="277.2359470949457" y="83" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0.12</text>
+  <rect x="139.96168582375478" y="117" width="19.63793103448276" height="245" fill="#73c0de" fill-opacity="1"></rect>
+  <rect x="467.2605363984674" y="187.32514564635488" width="19.637931034482733" height="174.67485435364512" fill="#91cc75" fill-opacity="0.799071012438986"></rect>
+  <rect x="52.68199233716473" y="204.4724452842072" width="19.63793103448276" height="157.5275547157928" fill="#5470c6" fill-opacity="0.750078727759408"></rect>
+  <rect x="358.16091954022994" y="217.20272398047553" width="19.637931034482733" height="144.79727601952447" fill="#3ba272" fill-opacity="0.7137065029129271"></rect>
+  <rect x="227.24137931034483" y="227.63769485120451" width="19.63793103448276" height="134.36230514879549" fill="#ea7ccc" fill-opacity="0.6838923004251299"></rect>
+  <rect x="336.34099616858236" y="231.82325618012914" width="19.637931034482733" height="130.17674381987086" fill="#73c0de" fill-opacity="0.6719335537710596"></rect>
+  <rect x="445.44061302682" y="239.96291922531884" width="19.637931034482733" height="122.03708077468116" fill="#5470c6" fill-opacity="0.6486773736419462"></rect>
+  <rect x="205.42145593869733" y="244.45709337112268" width="19.63793103448276" height="117.54290662887732" fill="#9a60b4" fill-opacity="0.6358368760825067"></rect>
+  <rect x="423.6206896551724" y="246.52094158400251" width="19.637931034482733" height="115.47905841599749" fill="#ea7ccc" fill-opacity="0.6299401669028499"></rect>
+  <rect x="118.14176245210727" y="279.9668556132892" width="19.637931034482747" height="82.03314438671077" fill="#ee6666" fill-opacity="0.5343804125334592"></rect>
+  <rect x="292.7011494252874" y="284.3645882538183" width="19.637931034482733" height="77.63541174618172" fill="#fac858" fill-opacity="0.5218154621319477"></rect>
+  <rect x="96.32183908045977" y="308.3399464651236" width="19.63793103448276" height="53.6600535348764" fill="#fac858" fill-opacity="0.45331443867107546"></rect>
+  <rect x="489.08045977011494" y="308.80286569044245" width="19.637931034482733" height="53.197134309557555" fill="#fac858" fill-opacity="0.45199181231302155"></rect>
+  <rect x="314.5210727969349" y="315.59234766178554" width="19.637931034482733" height="46.40765233821446" fill="#ee6666" fill-opacity="0.43259329239489847"></rect>
+  <rect x="532.7203065134099" y="316.47960951031337" width="19.63793103448279" height="45.52039048968663" fill="#73c0de" fill-opacity="0.4300582585419619"></rect>
+  <rect x="161.7816091954023" y="317.8683671862699" width="19.63793103448276" height="44.13163281373011" fill="#3ba272" fill-opacity="0.4260903794678004"></rect>
+  <rect x="183.60153256704982" y="323.13407337427174" width="19.637931034482733" height="38.865926625728264" fill="#fc8452" fill-opacity="0.41104550464493783"></rect>
+  <rect x="576.3601532567051" y="323.9248937175248" width="19.637931034482676" height="38.07510628247519" fill="#fc8452" fill-opacity="0.40878601794992914"></rect>
+  <rect x="379.9808429118774" y="324.79286726499765" width="19.637931034482733" height="37.20713273500235" fill="#fc8452" fill-opacity="0.40630609352857816"></rect>
+  <rect x="74.50191570881225" y="333.2218548260117" width="19.63793103448276" height="28.77814517398832" fill="#91cc75" fill-opacity="0.38222327192568095"></rect>
+  <rect x="510.9003831417625" y="343.1360415682569" width="19.63793103448279" height="18.86395843174307" fill="#ee6666" fill-opacity="0.35389702409069435"></rect>
+  <rect x="270.88122605363986" y="347.1094315855771" width="19.637931034482733" height="14.890568414422887" fill="#91cc75" fill-opacity="0.34254448118406555"></rect>
+  <rect x="249.06130268199234" y="359.04888993859237" width="19.637931034482733" height="2.9511100614076327" fill="#5470c6" fill-opacity="0.30843174303259324"></rect>
+  <rect x="554.5402298850576" y="359.10675484175715" width="19.637931034482676" height="2.8932451582428484" fill="#3ba272" fill-opacity="0.3082664147378365"></rect>
+  <rect x="401.800766283525" y="360.16761139977956" width="19.637931034482733" height="1.8323886002204404" fill="#9a60b4" fill-opacity="0.30523539600062977"></rect>
+  <rect x="598.1800766283525" y="360.57266572193356" width="19.63793103448279" height="1.4273342780664393" fill="#9a60b4" fill-opacity="0.3040780979373327"></rect>
 </svg>

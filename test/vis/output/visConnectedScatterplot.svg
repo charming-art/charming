@@ -1,122 +1,122 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
-  <line x1="74.49693120527151" y1="24" x2="74.49693120527151" y2="440" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="164.5905634454191" y1="24" x2="164.5905634454191" y2="440" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="254.68419568556666" y1="24" x2="254.68419568556666" y2="440" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="344.7778279257142" y1="24" x2="344.7778279257142" y2="440" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="434.8714601658618" y1="24" x2="434.8714601658618" y2="440" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="524.9650924060094" y1="24" x2="524.9650924060094" y2="440" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="615.0587246461569" y1="24" x2="615.0587246461569" y2="440" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="74.49693120527151" y1="440" x2="74.49693120527151" y2="446" stroke="currentColor" stroke-width="1"></line>
-  <line x1="164.5905634454191" y1="440" x2="164.5905634454191" y2="446" stroke="currentColor" stroke-width="1"></line>
-  <line x1="254.68419568556666" y1="440" x2="254.68419568556666" y2="446" stroke="currentColor" stroke-width="1"></line>
-  <line x1="344.7778279257142" y1="440" x2="344.7778279257142" y2="446" stroke="currentColor" stroke-width="1"></line>
-  <line x1="434.8714601658618" y1="440" x2="434.8714601658618" y2="446" stroke="currentColor" stroke-width="1"></line>
-  <line x1="524.9650924060094" y1="440" x2="524.9650924060094" y2="446" stroke="currentColor" stroke-width="1"></line>
-  <line x1="615.0587246461569" y1="440" x2="615.0587246461569" y2="446" stroke="currentColor" stroke-width="1"></line>
-  <text x="74.49693120527151" y="449" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">4,000</text>
-  <text x="164.5905634454191" y="449" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">5,000</text>
-  <text x="254.68419568556666" y="449" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">6,000</text>
-  <text x="344.7778279257142" y="449" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">7,000</text>
-  <text x="434.8714601658618" y="449" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">8,000</text>
-  <text x="524.9650924060094" y="449" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">9,000</text>
-  <text x="615.0587246461569" y="449" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">10,000</text>
-  <text x="620" y="465" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-before-edge" fill="currentColor">Miles driven (per person-year) →</text>
-  <line x1="46" y1="437.41965076882985" x2="620" y2="437.41965076882985" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="394.05243679958295" x2="620" y2="394.05243679958295" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="350.6852228303362" x2="620" y2="350.6852228303362" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="307.31800886108937" x2="620" y2="307.31800886108937" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="263.9507948918426" x2="620" y2="263.9507948918426" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="220.5835809225958" x2="620" y2="220.5835809225958" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="177.2163669533489" x2="620" y2="177.2163669533489" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="133.84915298410218" x2="620" y2="133.84915298410218" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="90.48193901485534" x2="620" y2="90.48193901485534" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="47.1147250456085" x2="620" y2="47.1147250456085" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="437.41965076882985" x2="40" y2="437.41965076882985" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="394.05243679958295" x2="40" y2="394.05243679958295" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="350.6852228303362" x2="40" y2="350.6852228303362" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="307.31800886108937" x2="40" y2="307.31800886108937" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="263.9507948918426" x2="40" y2="263.9507948918426" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="220.5835809225958" x2="40" y2="220.5835809225958" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="177.2163669533489" x2="40" y2="177.2163669533489" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="133.84915298410218" x2="40" y2="133.84915298410218" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="90.48193901485534" x2="40" y2="90.48193901485534" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="47.1147250456085" x2="40" y2="47.1147250456085" stroke="currentColor" stroke-width="1"></line>
-  <text x="37" y="437.41965076882985" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1.4</text>
-  <text x="37" y="394.05243679958295" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1.6</text>
-  <text x="37" y="350.6852228303362" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1.8</text>
-  <text x="37" y="307.31800886108937" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2.0</text>
-  <text x="37" y="263.9507948918426" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2.2</text>
-  <text x="37" y="220.5835809225958" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2.4</text>
-  <text x="37" y="177.2163669533489" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2.6</text>
-  <text x="37" y="133.84915298410218" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2.8</text>
-  <text x="37" y="90.48193901485534" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">3.0</text>
-  <text x="37" y="47.1147250456085" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">3.2</text>
+  <line x1="57.29552781644819" y1="24" x2="57.29552781644819" y2="442" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="150.23009166556207" y1="24" x2="150.23009166556207" y2="442" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="243.16465551467599" y1="24" x2="243.16465551467599" y2="442" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="336.0992193637898" y1="24" x2="336.0992193637898" y2="442" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="429.03378321290376" y1="24" x2="429.03378321290376" y2="442" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="521.9683470620176" y1="24" x2="521.9683470620176" y2="442" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="614.9029109111316" y1="24" x2="614.9029109111316" y2="442" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="57.29552781644819" y1="442" x2="57.29552781644819" y2="448" stroke="currentColor" stroke-width="1"></line>
+  <line x1="150.23009166556207" y1="442" x2="150.23009166556207" y2="448" stroke="currentColor" stroke-width="1"></line>
+  <line x1="243.16465551467599" y1="442" x2="243.16465551467599" y2="448" stroke="currentColor" stroke-width="1"></line>
+  <line x1="336.0992193637898" y1="442" x2="336.0992193637898" y2="448" stroke="currentColor" stroke-width="1"></line>
+  <line x1="429.03378321290376" y1="442" x2="429.03378321290376" y2="448" stroke="currentColor" stroke-width="1"></line>
+  <line x1="521.9683470620176" y1="442" x2="521.9683470620176" y2="448" stroke="currentColor" stroke-width="1"></line>
+  <line x1="614.9029109111316" y1="442" x2="614.9029109111316" y2="448" stroke="currentColor" stroke-width="1"></line>
+  <text x="57.29552781644819" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">4,000</text>
+  <text x="150.23009166556207" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">5,000</text>
+  <text x="243.16465551467599" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">6,000</text>
+  <text x="336.0992193637898" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">7,000</text>
+  <text x="429.03378321290376" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">8,000</text>
+  <text x="521.9683470620176" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">9,000</text>
+  <text x="614.9029109111316" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">10,000</text>
+  <text x="620" y="467" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-before-edge" fill="currentColor">Miles driven (per person-year) →</text>
+  <line x1="27.9" y1="439.40724524368" x2="620" y2="439.40724524368" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="27.9" y1="395.8315350534271" x2="620" y2="395.8315350534271" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="27.9" y1="352.2558248631744" x2="620" y2="352.2558248631744" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="27.9" y1="308.68011467292155" x2="620" y2="308.68011467292155" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="27.9" y1="265.1044044826687" x2="620" y2="265.1044044826687" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="27.9" y1="221.52869429241596" x2="620" y2="221.52869429241596" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="27.9" y1="177.9529841021631" x2="620" y2="177.9529841021631" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="27.9" y1="134.37727391191035" x2="620" y2="134.37727391191035" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="27.9" y1="90.80156372165753" x2="620" y2="90.80156372165753" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="27.9" y1="47.225853531404695" x2="620" y2="47.225853531404695" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="27.9" y1="439.40724524368" x2="21.9" y2="439.40724524368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="27.9" y1="395.8315350534271" x2="21.9" y2="395.8315350534271" stroke="currentColor" stroke-width="1"></line>
+  <line x1="27.9" y1="352.2558248631744" x2="21.9" y2="352.2558248631744" stroke="currentColor" stroke-width="1"></line>
+  <line x1="27.9" y1="308.68011467292155" x2="21.9" y2="308.68011467292155" stroke="currentColor" stroke-width="1"></line>
+  <line x1="27.9" y1="265.1044044826687" x2="21.9" y2="265.1044044826687" stroke="currentColor" stroke-width="1"></line>
+  <line x1="27.9" y1="221.52869429241596" x2="21.9" y2="221.52869429241596" stroke="currentColor" stroke-width="1"></line>
+  <line x1="27.9" y1="177.9529841021631" x2="21.9" y2="177.9529841021631" stroke="currentColor" stroke-width="1"></line>
+  <line x1="27.9" y1="134.37727391191035" x2="21.9" y2="134.37727391191035" stroke="currentColor" stroke-width="1"></line>
+  <line x1="27.9" y1="90.80156372165753" x2="21.9" y2="90.80156372165753" stroke="currentColor" stroke-width="1"></line>
+  <line x1="27.9" y1="47.225853531404695" x2="21.9" y2="47.225853531404695" stroke="currentColor" stroke-width="1"></line>
+  <text x="18.9" y="439.40724524368" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1.4</text>
+  <text x="18.9" y="395.8315350534271" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1.6</text>
+  <text x="18.9" y="352.2558248631744" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1.8</text>
+  <text x="18.9" y="308.68011467292155" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2.0</text>
+  <text x="18.9" y="265.1044044826687" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2.2</text>
+  <text x="18.9" y="221.52869429241596" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2.4</text>
+  <text x="18.9" y="177.9529841021631" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2.6</text>
+  <text x="18.9" y="134.37727391191035" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2.8</text>
+  <text x="18.9" y="90.80156372165753" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">3.0</text>
+  <text x="18.9" y="47.225853531404695" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">3.2</text>
   <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ Cost of gasoline ($ per gallon)</text>
-  <path d="M46,224.2914777169664L49.51980505244775,220.01980714099554L54.39339306038887,252.26333072713064L66.57735857556003,240.55418295543393L69.28490646782028,249.68298149596038L73.07546991323937,252.54521761793063L82.55187852678704,260.524784988272L95.27735181853758,280.4953870211103L109.08584967281024,284.78874120406573L123.70660468727033,277.65483450612453L135.89056119307827,276.5056033359395L149.969808430959,276.78749022673964L168.92263466741755,279.93161323951L184.0849064678203,291.33719051342194L199.24716925885983,304.7593432369038L223.34433288686762,322.14959603857176L252.85660130875917,334.70440448266874L269.1018886623207,328.4378420641126L249.87829502352758,232.57461558509252L265.3113162075384,240.55418295543393L290.76226279103946,237.12817305186343L311.88112914317895,229.43049257232212L334.895277218028,257.70591608027104L322.71132071222,159.24065676309615L315.1301848120187,25.994891842585325L321.628296149698,26.276778733385434L330.02169821945,107.89387542350788L339.22734844002645,164.9434454000521L356.28490196313874,204.3208756841282L374.1547126464385,228.86671879072188L394.7320712219985,359.2502475892624L414.76792202097914,360.37779515246285L442.9264074873773,375.79483971853006L470.54338517719617,362.1124837112327L483.26886747830986,334.14063070106846L482.4566013087592,355.5423507948918L495.7235823770892,375.51295282773L510.8858451681287,394.6162105811832L516.5716993456203,397.4784467031535L537.961315081368,394.33432369038303L541.4811291431789,378.0716184519156L561.5169799421595,384.0562939796717L576.9500011261705,440L586.9679265256608,416.01793067500654L588.592449855399,330.15084701589785L586.6971681326894,358.10101641907744L597.2566013087592,385.79098253844154L601.859430923729,337.8485274954391L614.3141458225082,276.5056033359395L620,191.76606724003125L617.8339598843193,135.2802710450873L616.209436554581,101.60562939796715L603.4839632628305,24L583.7188618474579,225.44070888715137L578.3037750723005,175.78524889236385" fill="none" stroke="currentColor" stroke-width="2"></path>
-  <circle cx="46" cy="224.2914777169664" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="49.51980505244775" cy="220.01980714099554" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="54.39339306038887" cy="252.26333072713064" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="66.57735857556003" cy="240.55418295543393" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="69.28490646782028" cy="249.68298149596038" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="73.07546991323937" cy="252.54521761793063" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="82.55187852678704" cy="260.524784988272" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="95.27735181853758" cy="280.4953870211103" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="109.08584967281024" cy="284.78874120406573" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="123.70660468727033" cy="277.65483450612453" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="135.89056119307827" cy="276.5056033359395" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="149.969808430959" cy="276.78749022673964" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="168.92263466741755" cy="279.93161323951" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="184.0849064678203" cy="291.33719051342194" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="199.24716925885983" cy="304.7593432369038" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="223.34433288686762" cy="322.14959603857176" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="252.85660130875917" cy="334.70440448266874" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="269.1018886623207" cy="328.4378420641126" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="249.87829502352758" cy="232.57461558509252" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="265.3113162075384" cy="240.55418295543393" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="290.76226279103946" cy="237.12817305186343" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="311.88112914317895" cy="229.43049257232212" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="334.895277218028" cy="257.70591608027104" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="322.71132071222" cy="159.24065676309615" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="315.1301848120187" cy="25.994891842585325" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="321.628296149698" cy="26.276778733385434" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="330.02169821945" cy="107.89387542350788" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="339.22734844002645" cy="164.9434454000521" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="356.28490196313874" cy="204.3208756841282" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="374.1547126464385" cy="228.86671879072188" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="394.7320712219985" cy="359.2502475892624" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="414.76792202097914" cy="360.37779515246285" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="442.9264074873773" cy="375.79483971853006" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="470.54338517719617" cy="362.1124837112327" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="483.26886747830986" cy="334.14063070106846" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="482.4566013087592" cy="355.5423507948918" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="495.7235823770892" cy="375.51295282773" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="510.8858451681287" cy="394.6162105811832" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="516.5716993456203" cy="397.4784467031535" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="537.961315081368" cy="394.33432369038303" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="541.4811291431789" cy="378.0716184519156" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="561.5169799421595" cy="384.0562939796717" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="576.9500011261705" cy="440" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="586.9679265256608" cy="416.01793067500654" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="588.592449855399" cy="330.15084701589785" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="586.6971681326894" cy="358.10101641907744" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="597.2566013087592" cy="385.79098253844154" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="601.859430923729" cy="337.8485274954391" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="614.3141458225082" cy="276.5056033359395" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="620" cy="191.76606724003125" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="617.8339598843193" cy="135.2802710450873" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="616.209436554581" cy="101.60562939796715" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="603.4839632628305" cy="24" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="583.7188618474579" cy="225.44070888715137" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <circle cx="578.3037750723005" cy="175.78524889236385" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
-  <text x="75.28490646782028" y="249.68298149596038" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1960</text>
-  <text x="123.70660468727033" y="283.65483450612453" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1965</text>
-  <text x="205.24716925885983" y="304.7593432369038" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1970</text>
-  <text x="265.3113162075384" y="246.55418295543393" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1975</text>
-  <text x="309.1301848120187" y="25.994891842585325" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1980</text>
-  <text x="380.1547126464385" y="228.86671879072188" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1985</text>
-  <text x="483.26886747830986" y="328.14063070106846" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1990</text>
-  <text x="537.961315081368" y="400.33432369038303" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1995</text>
-  <text x="588.592449855399" y="324.15084701589785" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">2000</text>
-  <text x="614" y="191.76606724003125" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">2005</text>
-  <text x="572.3037750723005" y="175.78524889236385" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">2010</text>
+  <path d="M27.9,225.25441751368257L31.530795420826326,220.96221005994263L36.558062771875,253.36075058639568L49.12622650276845,241.59530883502737L51.91915177630033,250.76799583007556L55.829243441862424,253.6439927026322L65.6044726057676,261.66192337763874L78.73121953267614,281.72853792025023L92.97514214507135,286.0425332290853L108.05693490476091,278.8743289027886L120.625089342198,277.7195725827469L135.1482989058725,278.00281469898357L154.69876652713924,281.16205368777685L170.33915177630035,292.62246546781336L185.97952773200504,306.1091477716966L210.83654965559987,323.58300755798797L241.2794314197148,336.1981756580662L258.03698306090604,329.9014855355747L238.20720990144716,233.57737816002083L254.1268821018876,241.59530883502737L280.38037595570466,238.15282772999737L302.16518565448825,230.41813917122752L325.9050411860529,258.8295022152723L313.3368867486158,159.89085222830334L305.51669412403527,26.004482668751603L312.21971106312924,26.28772478498825L320.8777831284605,108.29721136304398L330.37371604763007,165.6210581183216L347.9691471295722,205.18780297107114L366.4024483588087,229.8516549387542L387.6286748615772,360.86202762574925L408.2963181683306,361.99499609069585L437.34272800222317,377.4861610633307L465.8305546401008,363.73802449830595L478.95731086046567,335.6316914255928L478.1194314197149,357.13630440448264L491.8047615426386,377.2029189470941L507.44513749834323,396.3980192859005L513.3102842901426,399.27401615845713L535.3743809402055,396.11477716966374L539.0051856544882,379.77388584831897L559.6728289612416,385.78733385457394L575.5925011616821,442L585.9263228150588,417.9026322647902L587.6020724031041,331.6227260880896L585.647026570323,359.7072713057076L596.5394314197149,387.53036226218404L601.2874025260278,339.35741464685947L614.1348532082005,277.7195725827469L620,192.57263487099294L617.7656579224833,135.81527234818867L616.089908334438,101.97873338545737L602.9631614075295,24L582.5748050520555,226.40917383372422L576.9889637984479,176.51498566588484" fill="none" stroke="currentColor" stroke-width="2"></path>
+  <circle cx="27.9" cy="225.25441751368257" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="31.530795420826326" cy="220.96221005994263" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="36.558062771875" cy="253.36075058639568" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="49.12622650276845" cy="241.59530883502737" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="51.91915177630033" cy="250.76799583007556" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="55.829243441862424" cy="253.6439927026322" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="65.6044726057676" cy="261.66192337763874" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="78.73121953267614" cy="281.72853792025023" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="92.97514214507135" cy="286.0425332290853" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="108.05693490476091" cy="278.8743289027886" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="120.625089342198" cy="277.7195725827469" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="135.1482989058725" cy="278.00281469898357" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="154.69876652713924" cy="281.16205368777685" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="170.33915177630035" cy="292.62246546781336" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="185.97952773200504" cy="306.1091477716966" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="210.83654965559987" cy="323.58300755798797" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="241.2794314197148" cy="336.1981756580662" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="258.03698306090604" cy="329.9014855355747" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="238.20720990144716" cy="233.57737816002083" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="254.1268821018876" cy="241.59530883502737" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="280.38037595570466" cy="238.15282772999737" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="302.16518565448825" cy="230.41813917122752" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="325.9050411860529" cy="258.8295022152723" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="313.3368867486158" cy="159.89085222830334" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="305.51669412403527" cy="26.004482668751603" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="312.21971106312924" cy="26.28772478498825" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="320.8777831284605" cy="108.29721136304398" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="330.37371604763007" cy="165.6210581183216" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="347.9691471295722" cy="205.18780297107114" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="366.4024483588087" cy="229.8516549387542" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="387.6286748615772" cy="360.86202762574925" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="408.2963181683306" cy="361.99499609069585" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="437.34272800222317" cy="377.4861610633307" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="465.8305546401008" cy="363.73802449830595" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="478.95731086046567" cy="335.6316914255928" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="478.1194314197149" cy="357.13630440448264" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="491.8047615426386" cy="377.2029189470941" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="507.44513749834323" cy="396.3980192859005" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="513.3102842901426" cy="399.27401615845713" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="535.3743809402055" cy="396.11477716966374" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="539.0051856544882" cy="379.77388584831897" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="559.6728289612416" cy="385.78733385457394" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="575.5925011616821" cy="442" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="585.9263228150588" cy="417.9026322647902" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="587.6020724031041" cy="331.6227260880896" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="585.647026570323" cy="359.7072713057076" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="596.5394314197149" cy="387.53036226218404" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="601.2874025260278" cy="339.35741464685947" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="614.1348532082005" cy="277.7195725827469" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="620" cy="192.57263487099294" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="617.7656579224833" cy="135.81527234818867" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="616.089908334438" cy="101.97873338545737" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="602.9631614075295" cy="24" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="582.5748050520555" cy="226.40917383372422" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <circle cx="576.9889637984479" cy="176.51498566588484" r="3" fill="white" stroke="currentColor" stroke-width="1.5"></circle>
+  <text x="57.91915177630033" y="250.76799583007556" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1960</text>
+  <text x="108.05693490476091" y="284.8743289027886" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1965</text>
+  <text x="191.97952773200504" y="306.1091477716966" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1970</text>
+  <text x="254.1268821018876" y="247.59530883502737" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1975</text>
+  <text x="299.51669412403527" y="26.004482668751603" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1980</text>
+  <text x="372.4024483588087" y="229.8516549387542" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1985</text>
+  <text x="478.95731086046567" y="329.6316914255928" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1990</text>
+  <text x="535.3743809402055" y="402.11477716966374" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">1995</text>
+  <text x="587.6020724031041" y="325.6227260880896" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">2000</text>
+  <text x="614" y="192.57263487099294" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">2005</text>
+  <text x="570.9889637984479" y="176.51498566588484" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor" stroke="white" stroke-width="4" paint-order="stroke" stroke-linejoin="round">2010</text>
 </svg>

@@ -20,7 +20,7 @@ export const visUnitNested = withSVG(async () => {
         .data(d3.groups(passengers, (d) => d.pclass))
         .transform(cm.encode, {y: ([pclass]) => pclass, n: ([, rows]) => rows.length})
         .transform(cm.spreadY, {padding: 0.05, flex: "n", domain: [1, 2, 3]})
-        .transform(cm.plane, {marginLeft: 85, marginBottom: 40, y: {label: "pclass", tickSize: 0, tickPadding: 50}})
+        .transform(cm.plane, {marginBottom: 40, y: {label: "pclass", tickSize: 0, tickPadding: 50}})
         .append(cm.g)
         .data(([, rows]) => d3.groups(rows, survival))
         .transform(cm.encode, {x: ([s]) => s, n: ([, rows]) => rows.length})

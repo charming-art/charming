@@ -12,7 +12,7 @@ export const visLegendRightWrap = withSVG(async () => {
         .data(alphabet)
         .transform(cm.encode, {x: "letter", y: "frequency", fill: "letter"})
         .transform(cm.spreadX)
-        .transform(cm.plane, {marginRight: 80, fill: {legend: "right"}})
+        .transform(cm.plane, {fill: {legend: "right"}})
         .add(cm.rect);
     },
     {width: 640, height: 400},

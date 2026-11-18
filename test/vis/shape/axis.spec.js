@@ -2,6 +2,7 @@ import assert from "node:assert";
 import * as d3 from "d3";
 import {test, vi} from "vitest";
 import * as cm from "../../../src/index.js";
+import {widthOf} from "../../../src/vis/shape/axisUtils.js";
 import {assertInDelta} from "../../helpers.js";
 
 const data = [
@@ -100,7 +101,8 @@ test("cm.axis rotates tick labels by tickRotate degrees, aligned to their ticks"
   assert.strictEqual(tick.getAttribute("dominant-baseline"), "text-after-edge");
 });
 
-// The tick labels of a column chart of letters, with options for its axes.
+// The tick labels of a column chart of letters, with options for its axes, in a plot from 46 to 594
+// and from 40 to 360.
 function rotated(options, plane) {
   const renderer = cm.svg({width: 640, height: 400});
   const root = cm.flow().renderer(renderer);
@@ -108,7 +110,7 @@ function rotated(options, plane) {
     .data(data)
     .transform(cm.encode, {x: "letter", y: "frequency"})
     .transform(cm.spreadX)
-    .transform(cm.plane, plane)
+    .transform(cm.plane, {marginTop: 40, marginRight: 46, marginBottom: 40, marginLeft: 46, ...plane})
     .add(cm.axis, options);
   root.render();
   const find = (text) => Array.from(renderer.node().querySelectorAll("text")).find((t) => t.textContent === text);
@@ -221,7 +223,6 @@ test("cm.axis draws no titles in charts nested in a polar chart, and labels each
 });
 
 test("cm.axisX with anchor top labels the ticks above the chart, and titles it at the top", () => {
-  // The axis of x at the top of the plane gives it a top margin of 40.
   const find = rotated({x: {anchor: "top"}, y: false}, {x: {axis: "top"}});
   const a = find("A");
   // The top of the chart is at 40; the tick is 6px and the padding 3px.
@@ -235,17 +236,16 @@ test("cm.axisX with anchor top labels the ticks above the chart, and titles it a
 });
 
 test("cm.axisY with anchor right labels the ticks right of the chart, aligned to their start", () => {
-  // The axis of y at the right of the plane gives it a right margin of 46, and a top one of 24.
   const find = rotated({x: false, y: {anchor: "right"}}, {y: {axis: "right"}});
   const tick = find("0.08");
   // The right of the chart is at 594.
   assert.strictEqual(+tick.getAttribute("x"), 594 + 6 + 3);
   assert.strictEqual(tick.getAttribute("text-anchor"), "start");
   // The title is level over the axis, ending 3px from the right edge of the chart, like Plot's, past
-  // the half of a label over the top, 24, by 6px, inside the chart.
+  // the half of a label over the top, 40, by 6px, inside the chart.
   const title = find("↑ frequency");
   assert.strictEqual(+title.getAttribute("x"), 640 - 3);
-  assert.strictEqual(+title.getAttribute("y"), 24 - 5 - 6);
+  assert.strictEqual(+title.getAttribute("y"), 40 - 5 - 6);
   assert.strictEqual(title.getAttribute("text-anchor"), "end");
   assert.ok(+title.getAttribute("x") <= 640 && +title.getAttribute("y") - 10 >= 0);
 });
@@ -448,7 +448,8 @@ test("cm.axis places its titles past its tick labels, by a constant gap, with la
         d.getAttribute("transform"),
       ]);
   };
-  // The frame is from 40 to 160 and 40 to 60. Under x: the tick 6, the padding 3, a label 10 and the
+  // The frame is from 40 to 160 and 40 to 60, its tick labels "0" and "1" measured like Plot's, by
+  // the widths of their characters. Under x: the tick 6, the padding 3, a label 10 and the
   // gap 6, at the right end of the continuous axis, like Plot. Over y: level, starting 3px from the
   // left edge of the chart, like Plot's, past half a label and the gap, with its arrow up the axis.
   assert.deepStrictEqual(titles(), [
@@ -460,7 +461,7 @@ test("cm.axis places its titles past its tick labels, by a constant gap, with la
   assert.deepStrictEqual(titles({x: {labelAnchor: "center"}, y: false})[0], ["X →", 100, 85, "middle", null]);
   assert.deepStrictEqual(titles({x: {labelAnchor: "left"}, y: {labelAnchor: "center"}}), [
     ["X →", 40, 85, "start", null],
-    ["Y →", 40 - 6 - 3 - 6 - 6, 50, "middle", "rotate(-90,19,50)"],
+    ["Y →", 40 - 6 - 3 - widthOf("0") - 6, 50, "middle", `rotate(-90,${40 - 6 - 3 - widthOf("0") - 6},50)`],
   ]);
   // At the bottom, under the tick labels of the axis of x at the bottom, in the row of its title.
   assert.deepStrictEqual(titles({y: {labelAnchor: "bottom"}, x: false})[0], [
@@ -740,9 +741,9 @@ test("cm.axisY puts its level title over an axis of x at the top, in the row of 
     .transform(cm.plane, {x: {axis: "top"}});
   root.render();
   const find = (t) => Array.from(renderer.node().querySelectorAll("text")).find((d) => d.textContent === t);
-  // The top margin holds the tick labels of x, 24, and a row of titles, 16.
+  // The top margin, 38, holds the tick labels of x, 6 + 3 + 10, a row of titles, 6 + 10, and 3px.
   const [title, titleX] = [find("↑ y"), find("x →")];
-  assert.strictEqual(+title.getAttribute("y"), 40 - 6 - 3 - 10 - 6);
+  assert.strictEqual(+title.getAttribute("y"), 38 - 6 - 3 - 10 - 6);
   assert.strictEqual(+title.getAttribute("y"), +titleX.getAttribute("y"));
   assert.ok(+title.getAttribute("y") - 10 >= 0);
 });

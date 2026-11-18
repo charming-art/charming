@@ -1,184 +1,184 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="800" viewBox="0 0 640 800">
-  <line x1="123.50533661895784" y1="760" x2="123.50533661895784" y2="766" stroke="currentColor" stroke-width="1"></line>
-  <line x1="209.34788624755657" y1="760" x2="209.34788624755657" y2="766" stroke="currentColor" stroke-width="1"></line>
-  <line x1="295.1904358761553" y1="760" x2="295.1904358761553" y2="766" stroke="currentColor" stroke-width="1"></line>
-  <line x1="381.032985504754" y1="760" x2="381.032985504754" y2="766" stroke="currentColor" stroke-width="1"></line>
-  <line x1="466.87553513335274" y1="760" x2="466.87553513335274" y2="766" stroke="currentColor" stroke-width="1"></line>
-  <line x1="552.7180847619514" y1="760" x2="552.7180847619514" y2="766" stroke="currentColor" stroke-width="1"></line>
-  <text x="123.50533661895784" y="769" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">−10</text>
-  <text x="209.34788624755657" y="769" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">−5</text>
-  <text x="295.1904358761553" y="769" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">+0</text>
-  <text x="381.032985504754" y="769" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">+5</text>
-  <text x="466.87553513335274" y="769" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">+10</text>
-  <text x="552.7180847619514" y="769" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">+15</text>
-  <text x="321" y="785" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">← decrease · Change in population, 2010–2019 (%) · increase →</text>
-  <line x1="123.50533661895784" y1="24" x2="123.50533661895784" y2="18" stroke="currentColor" stroke-width="1"></line>
-  <line x1="209.34788624755657" y1="24" x2="209.34788624755657" y2="18" stroke="currentColor" stroke-width="1"></line>
-  <line x1="295.1904358761553" y1="24" x2="295.1904358761553" y2="18" stroke="currentColor" stroke-width="1"></line>
-  <line x1="381.032985504754" y1="24" x2="381.032985504754" y2="18" stroke="currentColor" stroke-width="1"></line>
-  <line x1="466.87553513335274" y1="24" x2="466.87553513335274" y2="18" stroke="currentColor" stroke-width="1"></line>
-  <line x1="552.7180847619514" y1="24" x2="552.7180847619514" y2="18" stroke="currentColor" stroke-width="1"></line>
-  <text x="123.50533661895784" y="15" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">−10</text>
-  <text x="209.34788624755657" y="15" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">−5</text>
-  <text x="295.1904358761553" y="15" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">+0</text>
-  <text x="381.032985504754" y="15" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">+5</text>
-  <text x="466.87553513335274" y="15" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">+10</text>
-  <text x="552.7180847619514" y="15" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">+15</text>
-  <rect x="295.1904358761553" y="449.21305182341655" width="104.04466823880006" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="717.619961612284" width="262.88638832594444" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="689.3666026871401" width="244.39926534355487" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="110.17274472168909" width="6.685477197327657" height="12.714011516314784" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="138.42610364683304" width="13.463267579253795" height="12.714011516314798" fill="#a1d76a"></rect>
-  <rect x="273.9401324630928" y="53.666026871401186" width="21.250303413062454" height="12.714011516314784" fill="#e9a3c9"></rect>
-  <rect x="295.1904358761553" y="194.93282149712095" width="22.709184174210236" height="12.71401151631477" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="562.2264875239923" width="164.77433155003018" height="12.714011516314713" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="576.3531669865644" width="171.51453915601917" height="12.714011516314713" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="166.679462571977" width="17.92944794633371" height="12.714011516314798" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="152.55278310940503" width="17.632694073117705" height="12.714011516314798" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="491.59309021113245" width="114.69135341610746" height="12.71401151631477" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="618.7332053742801" width="227.31717437764297" height="12.71401151631494" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="646.9865642994241" width="238.16140900651072" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="463.33973128598853" width="105.37520922289121" height="12.71401151631477" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="505.7197696737044" width="131.76978573487816" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="378.57965451055657" width="65.77853133420058" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="251.43953934740884" width="42.570912827611835" height="12.714011516314798" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="406.8330134357006" width="80.92128154498761" height="12.71401151631477" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="237.31285988483688" width="40.890558415633336" height="12.71401151631477" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="703.4932821497121" width="249.04805323176078" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="477.46641074856046" width="108.66648683066978" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="604.6065259117082" width="194.25800152432186" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="279.69289827255284" width="44.34210135915828" height="12.714011516314713" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="265.5662188099808" width="43.71191582438911" height="12.71401151631477" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="307.9462571976968" width="50.76369052282047" height="12.714011516314713" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="590.4798464491363" width="173.27849979949673" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="420.9596928982725" width="94.10447092064948" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="290.95846980344965" y="81.91938579654514" width="4.231966072705632" height="12.714011516314784" fill="#e9a3c9"></rect>
-  <rect x="295.1904358761553" y="731.7466410748559" width="274.60385248998074" height="12.71401151631494" fill="#a1d76a"></rect>
-  <rect x="50" y="25.412667946257237" width="245.19043587615528" height="12.714011516314777" fill="#e9a3c9"></rect>
-  <rect x="295.1904358761553" y="364.45297504798464" width="61.26910870777118" height="12.71401151631477" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="675.2399232245681" width="241.33046220392959" height="12.71401151631494" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="350.32629558541265" width="60.001390334032806" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="96.04606525911713" width="5.121686499951693" height="12.714011516314784" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="223.1861804222649" width="36.22267370254667" height="12.714011516314741" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="209.05950095969294" width="31.390879506023964" height="12.714011516314741" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="435.0863723608445" width="101.58833219769775" height="12.71401151631477" fill="#a1d76a"></rect>
-  <rect x="238.73800584863343" y="39.539347408829215" width="56.45243002752184" height="12.714011516314777" fill="#e9a3c9"></rect>
-  <rect x="295.1904358761553" y="661.113243761996" width="240.47251638770132" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="392.7063339731286" width="70.13677598429848" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="336.1996161228407" width="56.39198293147945" height="12.714011516314713" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="180.80614203454897" width="20.486754039947243" height="12.714011516314798" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="519.8464491362764" width="137.71212820049186" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="124.29942418426106" width="11.08175122679512" height="12.71401151631477" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="533.9731285988485" width="144.98706003640893" height="12.714011516314713" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="548.0998080614204" width="148.61816933046777" height="12.714011516314713" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="632.8598848368522" width="228.38303687739966" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="322.07293666026874" width="51.52262018368543" height="12.71401151631477" fill="#a1d76a"></rect>
-  <rect x="295.1904358761553" y="745.8733205374281" width="296.8095641238447" height="12.714011516314827" fill="#a1d76a"></rect>
-  <rect x="290.3834583263606" y="67.79270633397317" width="4.806977549794681" height="12.71401151631477" fill="#e9a3c9"></rect>
-  <rect x="295.1904358761553" y="293.81957773512477" width="46.096358348606486" height="12.71401151631477" fill="#a1d76a"></rect>
-  <text x="286.1904358761553" y="455.57005758157396" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">California</text>
-  <text x="286.1904358761553" y="723.9769673704413" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Texas</text>
-  <text x="286.1904358761553" y="695.7236084452975" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Florida</text>
-  <text x="286.1904358761553" y="116.52975047984648" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">New York</text>
-  <text x="286.1904358761553" y="144.78310940499046" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Pennsylvania</text>
-  <text x="304.1904358761553" y="60.02303262955858" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">Illinois</text>
-  <text x="286.1904358761553" y="201.28982725527834" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Ohio</text>
-  <text x="286.1904358761553" y="568.5834932821497" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Georgia</text>
-  <text x="286.1904358761553" y="582.7101727447217" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">North Carolina</text>
-  <text x="286.1904358761553" y="173.03646833013443" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Michigan</text>
-  <text x="286.1904358761553" y="158.90978886756244" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">New Jersey</text>
-  <text x="286.1904358761553" y="497.9500959692898" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Virginia</text>
-  <text x="286.1904358761553" y="625.0902111324376" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Washington</text>
-  <text x="286.1904358761553" y="653.3435700575815" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Arizona</text>
-  <text x="286.1904358761553" y="469.69673704414595" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Massachusetts</text>
-  <text x="286.1904358761553" y="512.0767754318617" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Tennessee</text>
-  <text x="286.1904358761553" y="384.936660268714" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Indiana</text>
-  <text x="286.1904358761553" y="257.7965451055662" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Missouri</text>
-  <text x="286.1904358761553" y="413.190019193858" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Maryland</text>
-  <text x="286.1904358761553" y="243.66986564299427" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Wisconsin</text>
-  <text x="286.1904358761553" y="709.8502879078694" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Colorado</text>
-  <text x="286.1904358761553" y="483.8234165067179" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Minnesota</text>
-  <text x="286.1904358761553" y="610.9635316698657" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">South Carolina</text>
-  <text x="286.1904358761553" y="286.0499040307102" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Alabama</text>
-  <text x="286.1904358761553" y="271.92322456813815" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Louisiana</text>
-  <text x="286.1904358761553" y="314.30326295585417" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Kentucky</text>
-  <text x="286.1904358761553" y="596.8368522072938" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Oregon</text>
-  <text x="286.1904358761553" y="427.31669865642993" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Oklahoma</text>
-  <text x="304.1904358761553" y="88.27639155470254" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">Connecticut</text>
-  <text x="286.1904358761553" y="738.1036468330134" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Utah</text>
-  <text x="304.1904358761553" y="31.769673704414625" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">Puerto Rico</text>
-  <text x="286.1904358761553" y="370.809980806142" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Iowa</text>
-  <text x="286.1904358761553" y="681.5969289827256" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Nevada</text>
-  <text x="286.1904358761553" y="356.68330134357007" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Arkansas</text>
-  <text x="286.1904358761553" y="102.40307101727453" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Mississippi</text>
-  <text x="286.1904358761553" y="229.54318618042225" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Kansas</text>
-  <text x="286.1904358761553" y="215.41650671785033" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">New Mexico</text>
-  <text x="286.1904358761553" y="441.44337811900186" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Nebraska</text>
-  <text x="304.1904358761553" y="45.8963531669866" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">West Virginia</text>
-  <text x="286.1904358761553" y="667.4702495201534" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Idaho</text>
-  <text x="286.1904358761553" y="399.063339731286" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Hawaii</text>
-  <text x="286.1904358761553" y="342.5566218809981" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">New Hampshire</text>
-  <text x="286.1904358761553" y="187.16314779270635" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Maine</text>
-  <text x="286.1904358761553" y="526.2034548944339" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Montana</text>
-  <text x="286.1904358761553" y="130.65642994241844" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Rhode Island</text>
-  <text x="286.1904358761553" y="540.3301343570058" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Delaware</text>
-  <text x="286.1904358761553" y="554.4568138195777" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">South Dakota</text>
-  <text x="286.1904358761553" y="639.2168905950095" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">North Dakota</text>
-  <text x="286.1904358761553" y="328.4299424184261" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Alaska</text>
-  <text x="286.1904358761553" y="752.2303262955854" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">District of Columbia</text>
-  <text x="304.1904358761553" y="74.14971209213056" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">Vermont</text>
-  <text x="286.1904358761553" y="300.1765834932821" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Wyoming</text>
-  <text x="403.23510411495533" y="455.57005758157396" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+6.1%</text>
-  <text x="562.0768242020997" y="723.9769673704413" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+15.3%</text>
-  <text x="543.5897012197102" y="695.7236084452975" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+14.2%</text>
-  <text x="305.87591307348293" y="116.52975047984648" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+0.4%</text>
-  <text x="312.6537034554091" y="144.78310940499046" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+0.8%</text>
-  <text x="269.9401324630928" y="60.02303262955858" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">−1.2%</text>
-  <text x="321.8996200503655" y="201.28982725527834" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+1.3%</text>
-  <text x="463.96476742618546" y="568.5834932821497" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+9.6%</text>
-  <text x="470.70497503217445" y="582.7101727447217" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+10.0%</text>
-  <text x="317.119883822489" y="173.03646833013443" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+1.0%</text>
-  <text x="316.823129949273" y="158.90978886756244" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+1.0%</text>
-  <text x="413.88178929226274" y="497.9500959692898" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+6.7%</text>
-  <text x="526.5076102537982" y="625.0902111324376" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+13.2%</text>
-  <text x="537.351844882666" y="653.3435700575815" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+13.9%</text>
-  <text x="404.5656450990465" y="469.69673704414595" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+6.1%</text>
-  <text x="430.96022161103343" y="512.0767754318617" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+7.7%</text>
-  <text x="364.96896721035586" y="384.936660268714" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+3.8%</text>
-  <text x="341.7613487037671" y="257.7965451055662" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+2.5%</text>
-  <text x="380.1117174211429" y="413.190019193858" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+4.7%</text>
-  <text x="340.0809942917886" y="243.66986564299427" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+2.4%</text>
-  <text x="548.238489107916" y="709.8502879078694" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+14.5%</text>
-  <text x="407.85692270682506" y="483.8234165067179" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+6.3%</text>
-  <text x="493.44843740047713" y="610.9635316698657" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+11.3%</text>
-  <text x="343.53253723531355" y="286.0499040307102" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+2.6%</text>
-  <text x="342.9023517005444" y="271.92322456813815" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+2.5%</text>
-  <text x="349.95412639897575" y="314.30326295585417" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+3.0%</text>
-  <text x="472.468935675652" y="596.8368522072938" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+10.1%</text>
-  <text x="393.29490679680475" y="427.31669865642993" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+5.5%</text>
-  <text x="286.95846980344965" y="88.27639155470254" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">−0.2%</text>
-  <text x="573.794288366136" y="738.1036468330134" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+16.0%</text>
-  <text x="46" y="31.769673704414625" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">−14.3%</text>
-  <text x="360.45954458392646" y="370.809980806142" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+3.6%</text>
-  <text x="540.5208980800849" y="681.5969289827256" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+14.1%</text>
-  <text x="359.1918262101881" y="356.68330134357007" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+3.5%</text>
-  <text x="304.31212237610697" y="102.40307101727453" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+0.3%</text>
-  <text x="335.41310957870195" y="229.54318618042225" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+2.1%</text>
-  <text x="330.58131538217924" y="215.41650671785033" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+1.8%</text>
-  <text x="400.77876807385303" y="441.44337811900186" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+5.9%</text>
-  <text x="234.73800584863343" y="45.8963531669866" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">−3.3%</text>
-  <text x="539.6629522638566" y="667.4702495201534" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+14.0%</text>
-  <text x="369.32721186045376" y="399.063339731286" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+4.1%</text>
-  <text x="355.5824188076347" y="342.5566218809981" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+3.3%</text>
-  <text x="319.6771899161025" y="187.16314779270635" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+1.2%</text>
-  <text x="436.90256407664714" y="526.2034548944339" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+8.0%</text>
-  <text x="310.2721871029504" y="130.65642994241844" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+0.6%</text>
-  <text x="444.1774959125642" y="540.3301343570058" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+8.4%</text>
-  <text x="447.80860520662304" y="554.4568138195777" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+8.7%</text>
-  <text x="527.5734727535549" y="639.2168905950095" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+13.3%</text>
-  <text x="350.7130560598407" y="328.4299424184261" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+3.0%</text>
-  <text x="596" y="752.2303262955854" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+17.3%</text>
-  <text x="286.3834583263606" y="74.14971209213056" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">−0.3%</text>
-  <text x="345.28679422476176" y="300.1765834932821" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+2.7%</text>
-  <line x1="295.1904358761553" y1="24" x2="295.1904358761553" y2="760" stroke="#000" stroke-width="1"></line>
+  <line x1="123.50533661895784" y1="762" x2="123.50533661895784" y2="768" stroke="currentColor" stroke-width="1"></line>
+  <line x1="209.34788624755657" y1="762" x2="209.34788624755657" y2="768" stroke="currentColor" stroke-width="1"></line>
+  <line x1="295.1904358761553" y1="762" x2="295.1904358761553" y2="768" stroke="currentColor" stroke-width="1"></line>
+  <line x1="381.032985504754" y1="762" x2="381.032985504754" y2="768" stroke="currentColor" stroke-width="1"></line>
+  <line x1="466.87553513335274" y1="762" x2="466.87553513335274" y2="768" stroke="currentColor" stroke-width="1"></line>
+  <line x1="552.7180847619514" y1="762" x2="552.7180847619514" y2="768" stroke="currentColor" stroke-width="1"></line>
+  <text x="123.50533661895784" y="771" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">−10</text>
+  <text x="209.34788624755657" y="771" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">−5</text>
+  <text x="295.1904358761553" y="771" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">+0</text>
+  <text x="381.032985504754" y="771" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">+5</text>
+  <text x="466.87553513335274" y="771" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">+10</text>
+  <text x="552.7180847619514" y="771" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">+15</text>
+  <text x="321" y="787" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">← decrease · Change in population, 2010–2019 (%) · increase →</text>
+  <line x1="123.50533661895784" y1="22" x2="123.50533661895784" y2="16" stroke="currentColor" stroke-width="1"></line>
+  <line x1="209.34788624755657" y1="22" x2="209.34788624755657" y2="16" stroke="currentColor" stroke-width="1"></line>
+  <line x1="295.1904358761553" y1="22" x2="295.1904358761553" y2="16" stroke="currentColor" stroke-width="1"></line>
+  <line x1="381.032985504754" y1="22" x2="381.032985504754" y2="16" stroke="currentColor" stroke-width="1"></line>
+  <line x1="466.87553513335274" y1="22" x2="466.87553513335274" y2="16" stroke="currentColor" stroke-width="1"></line>
+  <line x1="552.7180847619514" y1="22" x2="552.7180847619514" y2="16" stroke="currentColor" stroke-width="1"></line>
+  <text x="123.50533661895784" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">−10</text>
+  <text x="209.34788624755657" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">−5</text>
+  <text x="295.1904358761553" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">+0</text>
+  <text x="381.032985504754" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">+5</text>
+  <text x="466.87553513335274" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">+10</text>
+  <text x="552.7180847619514" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">+15</text>
+  <rect x="295.1904358761553" y="449.5239923224568" width="104.04466823880006" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="719.3896353166986" width="262.88638832594444" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="690.9827255278311" width="244.39926534355487" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="108.6410748560461" width="6.685477197327657" height="12.783109404990384" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="137.04798464491364" width="13.463267579253795" height="12.783109404990427" fill="#a1d76a"></rect>
+  <rect x="273.9401324630928" y="51.82725527831097" width="21.250303413062454" height="12.783109404990412" fill="#e9a3c9"></rect>
+  <rect x="295.1904358761553" y="193.86180422264877" width="22.709184174210236" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="563.151631477927" width="164.77433155003018" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="577.3550863723608" width="171.51453915601917" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="165.45489443378125" width="17.92944794633371" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="151.25143953934744" width="17.632694073117705" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="492.13435700575815" width="114.69135341610746" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="619.9654510556621" width="227.31717437764297" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="648.3723608445297" width="238.16140900651072" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="463.72744721689065" width="105.37520922289121" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="506.3378119001919" width="131.76978573487816" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="378.50671785028794" width="65.77853133420058" height="12.783109404990341" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="250.6756238003839" width="42.570912827611835" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="406.9136276391555" width="80.92128154498761" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="236.47216890595013" width="40.890558415633336" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="705.1861804222649" width="249.04805323176078" height="12.783109404990341" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="477.9309021113244" width="108.66648683066978" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="605.7619961612285" width="194.25800152432186" height="12.783109404990341" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="279.0825335892515" width="44.34210135915828" height="12.783109404990341" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="264.8790786948177" width="43.71191582438911" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="307.48944337811906" width="50.76369052282047" height="12.783109404990341" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="591.5585412667947" width="173.27849979949673" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="421.1170825335892" width="94.10447092064948" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="290.95846980344965" y="80.23416506717854" width="4.231966072705632" height="12.783109404990412" fill="#e9a3c9"></rect>
+  <rect x="295.1904358761553" y="733.5930902111324" width="274.60385248998074" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="50" y="23.420345489443417" width="245.19043587615528" height="12.783109404990402" fill="#e9a3c9"></rect>
+  <rect x="295.1904358761553" y="364.30326295585417" width="61.26910870777118" height="12.783109404990341" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="676.7792706333973" width="241.33046220392959" height="12.783109404990341" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="350.09980806142033" width="60.001390334032806" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="94.43761996161233" width="5.121686499951693" height="12.783109404990412" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="222.26871401151632" width="36.22267370254667" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="208.06525911708258" width="31.390879506023964" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="435.320537428023" width="101.58833219769775" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="238.73800584863343" y="37.623800383877196" width="56.45243002752184" height="12.783109404990405" fill="#e9a3c9"></rect>
+  <rect x="295.1904358761553" y="662.5758157389635" width="240.47251638770132" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="392.7101727447217" width="70.13677598429848" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="335.89635316698656" width="56.39198293147945" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="179.658349328215" width="20.486754039947243" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="520.5412667946257" width="137.71212820049186" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="122.84452975047986" width="11.08175122679512" height="12.783109404990398" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="534.7447216890596" width="144.98706003640893" height="12.783109404990341" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="548.9481765834933" width="148.61816933046777" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="634.168905950096" width="228.38303687739966" height="12.783109404990341" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="321.6928982725528" width="51.52262018368543" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="295.1904358761553" y="747.7965451055662" width="296.8095641238447" height="12.783109404990455" fill="#a1d76a"></rect>
+  <rect x="290.3834583263606" y="66.03071017274476" width="4.806977549794681" height="12.783109404990398" fill="#e9a3c9"></rect>
+  <rect x="295.1904358761553" y="293.28598848368523" width="46.096358348606486" height="12.783109404990398" fill="#a1d76a"></rect>
+  <text x="286.1904358761553" y="455.91554702495205" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">California</text>
+  <text x="286.1904358761553" y="725.7811900191938" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Texas</text>
+  <text x="286.1904358761553" y="697.3742802303263" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Florida</text>
+  <text x="286.1904358761553" y="115.03262955854129" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">New York</text>
+  <text x="286.1904358761553" y="143.43953934740887" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Pennsylvania</text>
+  <text x="304.1904358761553" y="58.21880998080618" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">Illinois</text>
+  <text x="286.1904358761553" y="200.25335892514397" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Ohio</text>
+  <text x="286.1904358761553" y="569.5431861804223" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Georgia</text>
+  <text x="286.1904358761553" y="583.746641074856" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">North Carolina</text>
+  <text x="286.1904358761553" y="171.84644913627645" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Michigan</text>
+  <text x="286.1904358761553" y="157.64299424184264" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">New Jersey</text>
+  <text x="286.1904358761553" y="498.5259117082534" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Virginia</text>
+  <text x="286.1904358761553" y="626.3570057581574" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Washington</text>
+  <text x="286.1904358761553" y="654.7639155470249" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Arizona</text>
+  <text x="286.1904358761553" y="470.1190019193858" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Massachusetts</text>
+  <text x="286.1904358761553" y="512.7293666026872" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Tennessee</text>
+  <text x="286.1904358761553" y="384.8982725527831" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Indiana</text>
+  <text x="286.1904358761553" y="257.0671785028791" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Missouri</text>
+  <text x="286.1904358761553" y="413.3051823416507" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Maryland</text>
+  <text x="286.1904358761553" y="242.86372360844533" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Wisconsin</text>
+  <text x="286.1904358761553" y="711.57773512476" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Colorado</text>
+  <text x="286.1904358761553" y="484.3224568138196" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Minnesota</text>
+  <text x="286.1904358761553" y="612.1535508637237" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">South Carolina</text>
+  <text x="286.1904358761553" y="285.4740882917467" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Alabama</text>
+  <text x="286.1904358761553" y="271.27063339731285" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Louisiana</text>
+  <text x="286.1904358761553" y="313.88099808061423" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Kentucky</text>
+  <text x="286.1904358761553" y="597.9500959692899" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Oregon</text>
+  <text x="286.1904358761553" y="427.50863723608444" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Oklahoma</text>
+  <text x="304.1904358761553" y="86.62571976967374" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">Connecticut</text>
+  <text x="286.1904358761553" y="739.9846449136277" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Utah</text>
+  <text x="304.1904358761553" y="29.81190019193862" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">Puerto Rico</text>
+  <text x="286.1904358761553" y="370.69481765834934" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Iowa</text>
+  <text x="286.1904358761553" y="683.1708253358925" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Nevada</text>
+  <text x="286.1904358761553" y="356.49136276391556" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Arkansas</text>
+  <text x="286.1904358761553" y="100.82917466410754" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Mississippi</text>
+  <text x="286.1904358761553" y="228.66026871401152" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Kansas</text>
+  <text x="286.1904358761553" y="214.45681381957777" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">New Mexico</text>
+  <text x="286.1904358761553" y="441.7120921305182" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Nebraska</text>
+  <text x="304.1904358761553" y="44.015355086372395" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">West Virginia</text>
+  <text x="286.1904358761553" y="668.9673704414587" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Idaho</text>
+  <text x="286.1904358761553" y="399.10172744721694" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Hawaii</text>
+  <text x="286.1904358761553" y="342.2879078694817" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">New Hampshire</text>
+  <text x="286.1904358761553" y="186.0499040307102" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Maine</text>
+  <text x="286.1904358761553" y="526.9328214971209" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Montana</text>
+  <text x="286.1904358761553" y="129.23608445297506" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Rhode Island</text>
+  <text x="286.1904358761553" y="541.1362763915547" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Delaware</text>
+  <text x="286.1904358761553" y="555.3397312859885" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">South Dakota</text>
+  <text x="286.1904358761553" y="640.5604606525912" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">North Dakota</text>
+  <text x="286.1904358761553" y="328.084452975048" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Alaska</text>
+  <text x="286.1904358761553" y="754.1880998080615" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">District of Columbia</text>
+  <text x="304.1904358761553" y="72.42226487523996" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">Vermont</text>
+  <text x="286.1904358761553" y="299.6775431861804" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Wyoming</text>
+  <text x="403.23510411495533" y="455.91554702495205" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+6.1%</text>
+  <text x="562.0768242020997" y="725.7811900191938" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+15.3%</text>
+  <text x="543.5897012197102" y="697.3742802303263" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+14.2%</text>
+  <text x="305.87591307348293" y="115.03262955854129" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+0.4%</text>
+  <text x="312.6537034554091" y="143.43953934740887" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+0.8%</text>
+  <text x="269.9401324630928" y="58.21880998080618" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">−1.2%</text>
+  <text x="321.8996200503655" y="200.25335892514397" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+1.3%</text>
+  <text x="463.96476742618546" y="569.5431861804223" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+9.6%</text>
+  <text x="470.70497503217445" y="583.746641074856" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+10.0%</text>
+  <text x="317.119883822489" y="171.84644913627645" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+1.0%</text>
+  <text x="316.823129949273" y="157.64299424184264" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+1.0%</text>
+  <text x="413.88178929226274" y="498.5259117082534" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+6.7%</text>
+  <text x="526.5076102537982" y="626.3570057581574" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+13.2%</text>
+  <text x="537.351844882666" y="654.7639155470249" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+13.9%</text>
+  <text x="404.5656450990465" y="470.1190019193858" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+6.1%</text>
+  <text x="430.96022161103343" y="512.7293666026872" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+7.7%</text>
+  <text x="364.96896721035586" y="384.8982725527831" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+3.8%</text>
+  <text x="341.7613487037671" y="257.0671785028791" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+2.5%</text>
+  <text x="380.1117174211429" y="413.3051823416507" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+4.7%</text>
+  <text x="340.0809942917886" y="242.86372360844533" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+2.4%</text>
+  <text x="548.238489107916" y="711.57773512476" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+14.5%</text>
+  <text x="407.85692270682506" y="484.3224568138196" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+6.3%</text>
+  <text x="493.44843740047713" y="612.1535508637237" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+11.3%</text>
+  <text x="343.53253723531355" y="285.4740882917467" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+2.6%</text>
+  <text x="342.9023517005444" y="271.27063339731285" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+2.5%</text>
+  <text x="349.95412639897575" y="313.88099808061423" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+3.0%</text>
+  <text x="472.468935675652" y="597.9500959692899" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+10.1%</text>
+  <text x="393.29490679680475" y="427.50863723608444" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+5.5%</text>
+  <text x="286.95846980344965" y="86.62571976967374" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">−0.2%</text>
+  <text x="573.794288366136" y="739.9846449136277" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+16.0%</text>
+  <text x="46" y="29.81190019193862" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">−14.3%</text>
+  <text x="360.45954458392646" y="370.69481765834934" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+3.6%</text>
+  <text x="540.5208980800849" y="683.1708253358925" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+14.1%</text>
+  <text x="359.1918262101881" y="356.49136276391556" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+3.5%</text>
+  <text x="304.31212237610697" y="100.82917466410754" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+0.3%</text>
+  <text x="335.41310957870195" y="228.66026871401152" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+2.1%</text>
+  <text x="330.58131538217924" y="214.45681381957777" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+1.8%</text>
+  <text x="400.77876807385303" y="441.7120921305182" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+5.9%</text>
+  <text x="234.73800584863343" y="44.015355086372395" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">−3.3%</text>
+  <text x="539.6629522638566" y="668.9673704414587" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+14.0%</text>
+  <text x="369.32721186045376" y="399.10172744721694" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+4.1%</text>
+  <text x="355.5824188076347" y="342.2879078694817" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+3.3%</text>
+  <text x="319.6771899161025" y="186.0499040307102" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+1.2%</text>
+  <text x="436.90256407664714" y="526.9328214971209" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+8.0%</text>
+  <text x="310.2721871029504" y="129.23608445297506" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+0.6%</text>
+  <text x="444.1774959125642" y="541.1362763915547" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+8.4%</text>
+  <text x="447.80860520662304" y="555.3397312859885" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+8.7%</text>
+  <text x="527.5734727535549" y="640.5604606525912" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+13.3%</text>
+  <text x="350.7130560598407" y="328.084452975048" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+3.0%</text>
+  <text x="596" y="754.1880998080615" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+17.3%</text>
+  <text x="286.3834583263606" y="72.42226487523996" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">−0.3%</text>
+  <text x="345.28679422476176" y="299.6775431861804" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">+2.7%</text>
+  <line x1="295.1904358761553" y1="22" x2="295.1904358761553" y2="762" stroke="#000" stroke-width="1"></line>
 </svg>

@@ -1,78 +1,78 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="500" viewBox="0 0 640 500">
-  <line x1="68.3900709219858" y1="350" x2="68.3900709219858" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="109.09929078014181" y1="350" x2="109.09929078014181" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="149.80851063829786" y1="350" x2="149.80851063829786" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="190.5177304964539" y1="350" x2="190.5177304964539" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="231.22695035460993" y1="350" x2="231.22695035460993" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="271.93617021276594" y1="350" x2="271.93617021276594" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="312.64539007092196" y1="350" x2="312.64539007092196" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="353.35460992907804" y1="350" x2="353.35460992907804" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="394.06382978723406" y1="350" x2="394.06382978723406" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="434.7730496453901" y1="350" x2="434.7730496453901" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="475.4822695035461" y1="350" x2="475.4822695035461" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="516.1914893617021" y1="350" x2="516.1914893617021" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="556.9007092198582" y1="350" x2="556.9007092198582" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <line x1="597.6099290780141" y1="350" x2="597.6099290780141" y2="356" stroke="currentColor" stroke-width="1"></line>
-  <text x="68.3900709219858" y="361.8284271247462" transform="rotate(-45,68.3900709219858,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Agriculture</text>
-  <text x="109.09929078014181" y="361.8284271247462" transform="rotate(-45,109.09929078014181,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Business services</text>
-  <text x="149.80851063829786" y="361.8284271247462" transform="rotate(-45,149.80851063829786,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Construction</text>
-  <text x="190.5177304964539" y="361.8284271247462" transform="rotate(-45,190.5177304964539,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Education and Health</text>
-  <text x="231.22695035460993" y="361.8284271247462" transform="rotate(-45,231.22695035460993,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Finance</text>
-  <text x="271.93617021276594" y="361.8284271247462" transform="rotate(-45,271.93617021276594,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Government</text>
-  <text x="312.64539007092196" y="361.8284271247462" transform="rotate(-45,312.64539007092196,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Information</text>
-  <text x="353.35460992907804" y="361.8284271247462" transform="rotate(-45,353.35460992907804,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Leisure and hospitality</text>
-  <text x="394.06382978723406" y="361.8284271247462" transform="rotate(-45,394.06382978723406,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Manufacturing</text>
-  <text x="434.7730496453901" y="361.8284271247462" transform="rotate(-45,434.7730496453901,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Mining and Extraction</text>
-  <text x="475.4822695035461" y="361.8284271247462" transform="rotate(-45,475.4822695035461,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Other</text>
-  <text x="516.1914893617021" y="361.8284271247462" transform="rotate(-45,516.1914893617021,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Self-employed</text>
-  <text x="556.9007092198582" y="361.8284271247462" transform="rotate(-45,556.9007092198582,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Transportation and Utilities</text>
-  <text x="597.6099290780141" y="361.8284271247462" transform="rotate(-45,597.6099290780141,361.8284271247462)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Wholesale and Retail Trade</text>
-  <line x1="46" y1="350" x2="620" y2="350" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="320.2825888787603" x2="620" y2="320.2825888787603" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="290.56517775752053" x2="620" y2="290.56517775752053" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="260.84776663628077" x2="620" y2="260.84776663628077" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="231.13035551504103" x2="620" y2="231.13035551504103" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="201.41294439380124" x2="620" y2="201.41294439380124" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="171.69553327256153" x2="620" y2="171.69553327256153" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="141.9781221513218" x2="620" y2="141.9781221513218" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="112.26071103008206" x2="620" y2="112.26071103008206" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="82.54329990884229" x2="620" y2="82.54329990884229" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="52.82588878760255" x2="620" y2="52.82588878760255" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="46" y1="350" x2="40" y2="350" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="320.2825888787603" x2="40" y2="320.2825888787603" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="290.56517775752053" x2="40" y2="290.56517775752053" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="260.84776663628077" x2="40" y2="260.84776663628077" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="231.13035551504103" x2="40" y2="231.13035551504103" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="201.41294439380124" x2="40" y2="201.41294439380124" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="171.69553327256153" x2="40" y2="171.69553327256153" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="141.9781221513218" x2="40" y2="141.9781221513218" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="112.26071103008206" x2="40" y2="112.26071103008206" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="82.54329990884229" x2="40" y2="82.54329990884229" stroke="currentColor" stroke-width="1"></line>
-  <line x1="46" y1="52.82588878760255" x2="40" y2="52.82588878760255" stroke="currentColor" stroke-width="1"></line>
-  <text x="37" y="350" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0</text>
-  <text x="37" y="320.2825888787603" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">200</text>
-  <text x="37" y="290.56517775752053" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">400</text>
-  <text x="37" y="260.84776663628077" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">600</text>
-  <text x="37" y="231.13035551504103" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">800</text>
-  <text x="37" y="201.41294439380124" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1,000</text>
-  <text x="37" y="171.69553327256153" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1,200</text>
-  <text x="37" y="141.9781221513218" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1,400</text>
-  <text x="37" y="112.26071103008206" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1,600</text>
-  <text x="37" y="82.54329990884229" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1,800</text>
-  <text x="37" y="52.82588878760255" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2,000</text>
+  <line x1="63.10460992907804" y1="384.97454198112007" x2="63.10460992907804" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="104.20390070921988" y1="384.97454198112007" x2="104.20390070921988" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="145.30319148936172" y1="384.97454198112007" x2="145.30319148936172" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="186.40248226950357" y1="384.97454198112007" x2="186.40248226950357" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="227.5017730496454" y1="384.97454198112007" x2="227.5017730496454" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="268.6010638297872" y1="384.97454198112007" x2="268.6010638297872" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="309.7003546099291" y1="384.97454198112007" x2="309.7003546099291" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="350.79964539007096" y1="384.97454198112007" x2="350.79964539007096" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="391.8989361702128" y1="384.97454198112007" x2="391.8989361702128" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="432.9982269503546" y1="384.97454198112007" x2="432.9982269503546" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="474.09751773049646" y1="384.97454198112007" x2="474.09751773049646" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="515.1968085106383" y1="384.97454198112007" x2="515.1968085106383" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="556.2960992907801" y1="384.97454198112007" x2="556.2960992907801" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="597.3953900709218" y1="384.97454198112007" x2="597.3953900709218" y2="390.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <text x="63.10460992907804" y="396.8029691058663" transform="rotate(-45,63.10460992907804,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Agriculture</text>
+  <text x="104.20390070921988" y="396.8029691058663" transform="rotate(-45,104.20390070921988,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Business services</text>
+  <text x="145.30319148936172" y="396.8029691058663" transform="rotate(-45,145.30319148936172,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Construction</text>
+  <text x="186.40248226950357" y="396.8029691058663" transform="rotate(-45,186.40248226950357,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Education and Health</text>
+  <text x="227.5017730496454" y="396.8029691058663" transform="rotate(-45,227.5017730496454,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Finance</text>
+  <text x="268.6010638297872" y="396.8029691058663" transform="rotate(-45,268.6010638297872,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Government</text>
+  <text x="309.7003546099291" y="396.8029691058663" transform="rotate(-45,309.7003546099291,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Information</text>
+  <text x="350.79964539007096" y="396.8029691058663" transform="rotate(-45,350.79964539007096,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Leisure and hospitality</text>
+  <text x="391.8989361702128" y="396.8029691058663" transform="rotate(-45,391.8989361702128,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Manufacturing</text>
+  <text x="432.9982269503546" y="396.8029691058663" transform="rotate(-45,432.9982269503546,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Mining and Extraction</text>
+  <text x="474.09751773049646" y="396.8029691058663" transform="rotate(-45,474.09751773049646,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Other</text>
+  <text x="515.1968085106383" y="396.8029691058663" transform="rotate(-45,515.1968085106383,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Self-employed</text>
+  <text x="556.2960992907801" y="396.8029691058663" transform="rotate(-45,556.2960992907801,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Transportation and Utilities</text>
+  <text x="597.3953900709218" y="396.8029691058663" transform="rotate(-45,597.3953900709218,396.8029691058663)" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Wholesale and Retail Trade</text>
+  <line x1="40.5" y1="384.97454198112007" x2="620" y2="384.97454198112007" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40.5" y1="352.06893195549384" x2="620" y2="352.06893195549384" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40.5" y1="319.1633219298676" x2="620" y2="319.1633219298676" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40.5" y1="286.2577119042413" x2="620" y2="286.2577119042413" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40.5" y1="253.35210187861503" x2="620" y2="253.35210187861503" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40.5" y1="220.44649185298874" x2="620" y2="220.44649185298874" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40.5" y1="187.5408818273625" x2="620" y2="187.5408818273625" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40.5" y1="154.63527180173625" x2="620" y2="154.63527180173625" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40.5" y1="121.72966177611002" x2="620" y2="121.72966177611002" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40.5" y1="88.82405175048372" x2="620" y2="88.82405175048372" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40.5" y1="55.91844172485747" x2="620" y2="55.91844172485747" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="40.5" y1="384.97454198112007" x2="34.5" y2="384.97454198112007" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40.5" y1="352.06893195549384" x2="34.5" y2="352.06893195549384" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40.5" y1="319.1633219298676" x2="34.5" y2="319.1633219298676" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40.5" y1="286.2577119042413" x2="34.5" y2="286.2577119042413" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40.5" y1="253.35210187861503" x2="34.5" y2="253.35210187861503" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40.5" y1="220.44649185298874" x2="34.5" y2="220.44649185298874" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40.5" y1="187.5408818273625" x2="34.5" y2="187.5408818273625" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40.5" y1="154.63527180173625" x2="34.5" y2="154.63527180173625" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40.5" y1="121.72966177611002" x2="34.5" y2="121.72966177611002" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40.5" y1="88.82405175048372" x2="34.5" y2="88.82405175048372" stroke="currentColor" stroke-width="1"></line>
+  <line x1="40.5" y1="55.91844172485747" x2="34.5" y2="55.91844172485747" stroke="currentColor" stroke-width="1"></line>
+  <text x="31.5" y="384.97454198112007" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0</text>
+  <text x="31.5" y="352.06893195549384" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">200</text>
+  <text x="31.5" y="319.1633219298676" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">400</text>
+  <text x="31.5" y="286.2577119042413" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">600</text>
+  <text x="31.5" y="253.35210187861503" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">800</text>
+  <text x="31.5" y="220.44649185298874" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1,000</text>
+  <text x="31.5" y="187.5408818273625" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1,200</text>
+  <text x="31.5" y="154.63527180173625" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1,400</text>
+  <text x="31.5" y="121.72966177611002" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1,600</text>
+  <text x="31.5" y="88.82405175048372" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1,800</text>
+  <text x="31.5" y="55.91844172485747" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2,000</text>
   <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ unemployed</text>
-  <rect x="579.290780141844" y="29.943482224247937" width="36.638297872340445" height="320.05651777575207"></rect>
-  <rect x="375.7446808510639" y="65.01002734731085" width="36.63829787234039" height="284.9899726526892"></rect>
-  <rect x="335.03546099290776" y="81.9489516864175" width="36.63829787234039" height="268.0510483135825"></rect>
-  <rect x="90.7801418439716" y="110.18049225159524" width="36.63829787234043" height="239.81950774840476"></rect>
-  <rect x="131.48936170212764" y="24" width="36.63829787234042" height="326"></rect>
-  <rect x="172.19858156028369" y="175.41020966271648" width="36.63829787234039" height="174.58979033728352"></rect>
-  <rect x="253.61702127659572" y="209.1394712853236" width="36.63829787234039" height="140.8605287146764"></rect>
-  <rect x="212.9078014184397" y="257.4302643573382" width="36.63829787234042" height="92.56973564266178"></rect>
-  <rect x="497.8723404255319" y="241.53144940747495" width="36.63829787234033" height="108.46855059252505"></rect>
-  <rect x="457.16312056737587" y="259.510483135825" width="36.638297872340445" height="90.48951686417502"></rect>
-  <rect x="538.581560283688" y="252.37830446672746" width="36.63829787234033" height="97.62169553327254"></rect>
-  <rect x="294.32624113475174" y="303.4922515952598" width="36.6382978723405" height="46.5077484047402"></rect>
-  <rect x="50.07092198581558" y="302.7493163172288" width="36.63829787234044" height="47.25068368277118"></rect>
-  <rect x="416.4539007092198" y="339.8960802187785" width="36.638297872340445" height="10.10391978122152"></rect>
+  <rect x="578.9007092198582" y="30.58112200512524" width="36.98936170212778" height="354.39341997599485"></rect>
+  <rect x="373.404255319149" y="69.40974183536424" width="36.98936170212761" height="315.56480014575584"></rect>
+  <rect x="332.304964539007" y="88.1659395499712" width="36.98936170212767" height="296.80860243114887"></rect>
+  <rect x="85.709219858156" y="119.42626907431614" width="36.98936170212768" height="265.54827290680396"></rect>
+  <rect x="126.80851063829786" y="24" width="36.98936170212764" height="360.97454198112007"></rect>
+  <rect x="167.9078014184397" y="191.65408308056578" width="36.98936170212764" height="193.32045890055429"></rect>
+  <rect x="250.1063829787234" y="229.00195045965157" width="36.98936170212761" height="155.9725915214685"></rect>
+  <rect x="209.00709219858155" y="282.4735667512943" width="36.98936170212764" height="102.50097522982577"></rect>
+  <rect x="496.7021276595744" y="264.8690653875842" width="36.98936170212761" height="120.10547659353585"></rect>
+  <rect x="455.60283687943263" y="284.7769594530881" width="36.98936170212767" height="100.19758252803194"></rect>
+  <rect x="537.8014184397163" y="276.87961304693783" width="36.98936170212767" height="108.09492893418224"></rect>
+  <rect x="291.20567375886526" y="333.477262291015" width="36.989361702127724" height="51.497279690105074"></rect>
+  <rect x="44.60992907801416" y="332.6546220403743" width="36.98936170212765" height="52.31991994074576"></rect>
+  <rect x="414.5035460992907" y="373.78663457240714" width="36.98936170212767" height="11.187907408712931"></rect>
 </svg>

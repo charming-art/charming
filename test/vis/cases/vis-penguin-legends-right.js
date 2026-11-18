@@ -18,7 +18,6 @@ export const visPenguinLegendsRight = withSVG(async () => {
           r: "body_mass_g",
         })
         .transform(cm.plane, {
-          marginRight: 120,
           fill: {legend: "right"},
           r: {range: [0, 10], legend: "right"},
         })
