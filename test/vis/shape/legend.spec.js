@@ -387,3 +387,20 @@ test("cm.legend balances the columns of swatches on the right, like CSS's column
   );
   assert.deepStrictEqual(Array.from(columns.values()), [3, 2]);
 });
+
+test("cm.polar starts its legends at the top at its left margin, as its top margin measures them", () => {
+  // A wide chart, whose disc is centered far from the left: the swatches wrap at the width from the
+  // left margin, as measured, and stay over the disc.
+  const renderer = cm.svg({width: 640, height: 300});
+  const root = cm.flow().renderer(renderer);
+  const [context] = root
+    .data(d3.range(60).map((i) => ({k: `category${String(i).padStart(2, "0")}`, v: 1})))
+    .transform(cm.encode, {x: "v", fill: "k"})
+    .transform(cm.stackX)
+    .transform(cm.polar, {fill: {legend: true}})._values;
+  root.render();
+  const {cy, outerRadius} = context.frame;
+  const swatches = rects(renderer.node()).filter((r) => r.getAttribute("width") === "10");
+  assert.ok(swatches.every((r) => +r.getAttribute("x") >= 40));
+  assert.ok(swatches.every((r) => +r.getAttribute("y") + 10 <= cy - outerRadius));
+});

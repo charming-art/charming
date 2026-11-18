@@ -118,7 +118,9 @@ export function polar(
     const b = bottom - marginBottom;
     const outerRadius = Math.max(0, Math.min(r - l, b - t) / 2);
     const r0 = innerRadius * outerRadius;
+    // The left of the box inside the margins is kept for the legends at the top, which start there.
     const frame = {type: "polar", cx: (l + r) / 2, cy: (t + b) / 2, innerRadius: r0, outerRadius, startAngle, endAngle};
+    frame.left = l;
     // Like cm.plane's, a nested frame is marked, so that its axes leave titles to the outer chart.
     return nested ? {...frame, nested} : frame;
   });

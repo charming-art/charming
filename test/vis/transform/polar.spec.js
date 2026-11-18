@@ -88,6 +88,7 @@ test("cm.polar records the center in cx and cy, and its frame and scales", () =>
     outerRadius: 90,
     startAngle: 0,
     endAngle: 2 * Math.PI,
+    left: 10,
   });
   assert.deepStrictEqual(value.fill, ["#5470c6", "#91cc75"]);
   assert.deepStrictEqual(scales.fill.domain, ["A", "B"]);

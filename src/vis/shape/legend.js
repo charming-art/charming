@@ -399,16 +399,17 @@ export function topLegends(data, colors, options, maxWidth) {
 
 // Draws the legends of the scales recorded by cm.plane or cm.polar besides positions: swatches for
 // categorical colors, a ramp for continuous colors and opacities, and circles for radii, each under
-// its title. Like Plot's, they're at the top of the chart by default, horizontal, from the left of
-// the plot, 3px from the top, side by side while they fit the width, else in rows; with anchor
-// "right", they're vertical, right of the frame from its top, like Vega-Lite's, one under another
-// while they fit its height, else in columns, and swatches past its height in columns too. The frame of cm.polar is its disc. Like Plot's, a chart
-// draws the legends of the scales given legend: true, or a side, such as {fill: {legend: "right"}},
-// whose options default to those of the scale; the default margins of cm.plane leave room for those
-// at the top. A legend added explicitly to the chart replaces them, and takes their options and
-// sides; the names of scales, such as {fill: {label: "Species"}}, take the options of each legend,
-// or false to skip it, and the other options apply to all of them, such as anchor. Charts nested in
-// a chart, such as facets, have no legends yet.
+// its title. Like Plot's, they're at the top of the chart by default, horizontal, 3px from the top,
+// from the left of the plot, or the left margin of cm.polar, side by side while they fit the width,
+// else in rows; with anchor "right", they're vertical, right of the frame from its top, like
+// Vega-Lite's, one under another while they fit its height, else in columns, and swatches past its
+// height in balanced columns too. The frame of cm.polar is its disc. Like Plot's, a chart draws the
+// legends of the scales given legend: true, or a side, such as {fill: {legend: "right"}}, whose
+// options default to those of the scale; the default margins of cm.plane and cm.polar leave room
+// for those at the top. A legend added explicitly to the chart replaces them, and takes their
+// options and sides; the names of scales, such as {fill: {label: "Species"}}, take the options of
+// each legend, or false to skip it, and the other options apply to all of them, such as anchor.
+// Charts nested in a chart, such as facets, have no legends yet.
 export function legend(flow, value, {scales = {}, frame, guides, options = {}} = {}) {
   if (frame?.nested) return;
   const legends = guides?.legends ?? {};
@@ -428,7 +429,9 @@ export function legend(flow, value, {scales = {}, frame, guides, options = {}} =
   entries = entries.filter(([key]) => scales[key]);
   const {width} = flow.renderer()._props;
   const polar = frame?.type === "polar";
-  const left = polar ? frame.cx - frame.outerRadius : (frame?.left ?? 3);
+  // At the top, from the left of the plot, or of the box of a polar chart inside its margins, as
+  // the top margin measured them.
+  const left = frame?.left ?? 3;
   const right = polar ? frame.cx + frame.outerRadius : (frame?.right ?? width);
   const maxWidth = Math.max(0, width - 3 - left);
   const [rows] = rowsOf(topBlocks(entries, scales, maxWidth), maxWidth);
