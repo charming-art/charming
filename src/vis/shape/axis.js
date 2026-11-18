@@ -147,14 +147,14 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
     y: Y,
     ...rotateY,
   });
-  // The title is part of the axis, a constant gap past what it draws. Like Plot's, it's level over
-  // the top of the axis by default, starting at the far end of its tick labels on a left axis, or
-  // ending there on a right one, with an arrow up the axis. With labelAnchor "center" or "bottom",
-  // it's turned to read along the axis, bottom to top, past its tick labels, else its tick marks,
-  // else the plot, at the middle of the axis or starting at its bottom. The default margins of
-  // cm.plane leave room for it on the sides with axes.
-  const {labelAnchor = "top"} = options;
-  const turn = labelAnchor !== "top";
+  // The title is part of the axis, a constant gap past what it draws. Like Plot's labelAnchor, it's
+  // level at the top of the axis, the default of a continuous scale, or at its bottom, starting at
+  // the far end of its tick labels on a left axis, or ending there on a right one, with an arrow
+  // along the axis; or turned to read along it at its middle, the default of a discrete scale, past
+  // its tick labels, else its tick marks, else the plot. The default margins of cm.plane leave room
+  // for it on the sides with axes.
+  const {labelAnchor = scale.ticks ? "top" : "center"} = options;
+  const turn = labelAnchor === "center";
   const label = labelOf(y, scale, "y", options, turn);
   if (label == null || frame?.nested) return;
   const reach = reachOf(ticks.map(format), {
@@ -165,27 +165,27 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
     across: acrossY,
   });
   if (!turn) {
-    // Over the top of the axis, past the half of a tick label that may reach over it, or past the
-    // tick labels of an axis of x at the top, in the row of its title.
-    const over = guides?.x.anchors.includes("top") ? 6 + 3 + font.fontSize : font.fontSize / 2;
+    // Over the top or under the bottom of the axis, past the half of a tick label that may reach
+    // past it, or past the tick labels of an axis of x on that side, in the row of its title.
+    const isBottom = labelAnchor === "bottom";
+    const past = guides?.x.anchors.includes(isBottom ? "bottom" : "top") ? 6 + 3 + font.fontSize : font.fontSize / 2;
     flow.datum(label).append(text, {
       ...font,
       text: label,
       x: edge + k * reach,
-      y: top - over - titleGap,
+      y: isBottom ? bottom + past + titleGap : top - past - titleGap,
       textAlign: isRight ? "end" : "start",
-      textBaseline: "bottom",
+      textBaseline: isBottom ? "top" : "bottom",
     });
     return;
   }
-  const [labelY, textAlign] = labelAnchor === "bottom" ? [bottom, "start"] : [(top + bottom) / 2, "center"];
   flow.datum(label).append(text, {
     ...font,
     text: label,
     x: edge + k * (reach + titleGap),
-    y: labelY,
+    y: (top + bottom) / 2,
     rotate: -Math.PI / 2,
-    textAlign,
+    textAlign: "center",
     // Turned a quarter counterclockwise, the text sits left of its point, or right of it.
     textBaseline: isRight ? "top" : "bottom",
   });

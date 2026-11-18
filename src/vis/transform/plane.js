@@ -51,37 +51,43 @@ function middle(value, keys, [start, end]) {
 // positions encoded in any of its contexts, at the bottom and the left by default, and their
 // titles, on the first side of each axis. An axis of x takes its tick marks and labels, 6 + 3 + 10
 // and 5px to spare, and its title, 6 + 10; an axis of y, 6 + 3 and labels up to six characters
-// wide, such as 14,000, and its title turned beside them, 24, or level over the axis: 24 at the top,
-// or a row of 16 over an axis of x at the top, shared with its title.
-// Without an axis, a side keeps room for the ends of the tick labels of the other axis, such as
-// half a label of y over the frame.
+// wide, such as 14,000, and its title turned beside them at the middle, 24, or level at its top or
+// bottom: 24 over or under the frame, or a row of 16 past an axis of x on that side, shared with
+// its title. Without an axis, a side keeps room for the ends of the tick labels of the other axis,
+// such as half a label of y over the frame.
 function axisRoom(data, options, keysX, keysY, has) {
-  const room = {top: 0, right: 0, bottom: 0, left: 0, level: false, titledTop: false};
+  const room = {top: 0, right: 0, bottom: 0, left: 0};
+  const rows = {top: false, bottom: false};
   for (const context of data) {
     const {hints = {}} = context;
     const nameX = scaleName(hints, keysX, "x");
     const nameY = scaleName(hints, keysY, "y");
     const {x, y} = guidesOf(null, options, nameX, nameY, sidesOfPlane, {x: ["bottom"], y: ["left"]});
+    const hintY = axisHint(hints, keysY);
     const titledX = axisHint(hints, keysX).label != null;
-    const titledY = axisHint(hints, keysY).label != null;
-    const turned = (options[nameY]?.labelAnchor ?? "top") !== "top";
+    const titledY = hintY.label != null;
+    const V = keysY.filter((key) => key in context.value).flatMap((key) => Array.from(context.value[key]));
+    const discreteY = hintY.band !== undefined || discrete(options[nameY]?.type ?? hintY.type, V);
+    const labelAnchor = options[nameY]?.labelAnchor ?? (discreteY ? "center" : "top");
     if (has(context, keysX, "x")) {
       x.anchors.forEach((side, i) => {
         room[side] = Math.max(room[side], 24);
-        if (i === 0 && titledX) side === "top" ? (room.titledTop = true) : (room[side] = 40);
+        if (i === 0 && titledX) rows[side] = true;
       });
     }
     if (has(context, keysY, "y")) {
       y.anchors.forEach((side, i) => {
         const titled = i === 0 && titledY;
-        room[side] = Math.max(room[side], 46 + (titled && turned ? 24 : 0));
-        if (titled && !turned) room.level = true;
+        room[side] = Math.max(room[side], 46 + (titled && labelAnchor === "center" ? 24 : 0));
+        if (titled && labelAnchor !== "center") rows[labelAnchor] = true;
       });
     }
   }
-  // At the top, an axis of x and a level title of y share a row of titles, over its tick labels.
-  if (room.top) room.top += room.titledTop || room.level ? 16 : 0;
-  else room.top = room.level ? 24 : 0;
+  // At the top or the bottom, an axis of x and a level title of y share a row of titles, past its
+  // tick labels.
+  for (const side of ["top", "bottom"]) {
+    room[side] = room[side] ? room[side] + (rows[side] ? 16 : 0) : rows[side] ? 24 : 0;
+  }
   return room;
 }
 

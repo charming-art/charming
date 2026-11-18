@@ -286,11 +286,12 @@ test("cm.plane places the bands of cm.spreadY from the top, unless the scale of 
   const root = cm.flow().renderer(cm.svg({width: 640, height: 400}));
   const flow = root.data(data).transform(cm.encode, {x: "frequency", y: "letter"}).transform(cm.spreadY);
   const [context] = flow.transform(cm.plane)._values;
-  const band = d3.scaleBand(["A", "B"], [24, 360]).padding(0.1);
+  // Like Plot's, the title of a discrete y is turned at its middle, leaving the top to half a label.
+  const band = d3.scaleBand(["A", "B"], [10, 360]).padding(0.1);
   ["B", "A"].forEach((d, i) => assertInDelta(context.value.y[i], band(d)));
   assert.deepStrictEqual(context.scales.y.type, "band");
   assert.deepStrictEqual(context.scales.y.domain, ["A", "B"]);
-  assert.deepStrictEqual(context.scales.y.range, [24, 360]);
+  assert.deepStrictEqual(context.scales.y.range, [10, 360]);
   const [reversed] = flow.transform(cm.plane, {y: {reverse: true}})._values;
   assert.ok(reversed.value.y[1] > reversed.value.y[0]);
 });
@@ -998,6 +999,9 @@ test("cm.plane leaves the default margins of an axis on each side with one", () 
   assert.deepStrictEqual(frame({x: {axis: "both"}, y: {axis: "both"}}), [40, 46, 40, 46]);
   // A title turned beside y takes 24 more beside it, and none over it.
   assert.deepStrictEqual(frame({y: {labelAnchor: "center"}}), [10, 20, 40, 70]);
+  // A level title at the bottom shares the row of the title of x, or takes one under its labels.
+  assert.deepStrictEqual(frame({y: {labelAnchor: "bottom"}}), [10, 20, 40, 46]);
+  assert.deepStrictEqual(frame({x: {label: null}, y: {labelAnchor: "bottom"}}), [10, 20, 40, 46]);
   // An axis without a title takes the room of its tick labels.
   assert.deepStrictEqual(frame({x: {label: null}, y: {label: null}}), [10, 20, 24, 46]);
   assert.deepStrictEqual(frame({x: {axis: null}, y: {axis: null}}), [10, 20, 20, 20]);
@@ -1019,6 +1023,7 @@ test("cm.plane sizes an auto height with the top and bottom margins of its axes"
   assert.strictEqual(heightOf(dots, {x: "v"}, {x: {axis: "both"}}), 30 + 24 + 40);
   // With a categorical y, 20px per category plus 10.
   const bars = [{k: "a", v: 1}];
-  assert.strictEqual(heightOf(bars, {x: "v", y: "k"}), 20 + 10 + 24 + 40);
-  assert.strictEqual(heightOf(bars, {x: "v", y: "k"}, {x: {axis: "both"}}), 20 + 10 + 40 + 40);
+  // Its title is turned beside the axis, at the middle, leaving the top to half a label.
+  assert.strictEqual(heightOf(bars, {x: "v", y: "k"}), 20 + 10 + 10 + 40);
+  assert.strictEqual(heightOf(bars, {x: "v", y: "k"}, {x: {axis: "both"}}), 20 + 10 + 24 + 40);
 });

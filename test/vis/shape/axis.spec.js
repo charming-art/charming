@@ -455,19 +455,20 @@ test("cm.axis places its titles past its tick labels, by a constant gap, with la
     ["X →", 160, 60 + 6 + 3 + 10 + 6, "end", null],
     ["↑ Y", 40 - 6 - 3 - 6, 40 - 5 - 6, "start", null],
   ]);
-  // At the left end or the middle of x; with labelAnchor center or bottom, y is turned beside its
-  // labels, by the gap, at the middle or starting at the bottom of the axis, its arrow pointing up.
+  // At the left end or the middle of x. Like Plot's, y is turned beside its labels at the middle of
+  // the axis with labelAnchor center, by the gap, its arrow pointing up, or level at its bottom.
   assert.deepStrictEqual(titles({x: {labelAnchor: "center"}, y: false})[0], ["X →", 100, 85, "middle", null]);
   assert.deepStrictEqual(titles({x: {labelAnchor: "left"}, y: {labelAnchor: "center"}}), [
     ["X →", 40, 85, "start", null],
     ["Y →", 40 - 6 - 3 - 6 - 6, 50, "middle", "rotate(-90,19,50)"],
   ]);
+  // At the bottom, under the tick labels of the axis of x at the bottom, in the row of its title.
   assert.deepStrictEqual(titles({y: {labelAnchor: "bottom"}, x: false})[0], [
-    "Y →",
-    19,
-    60,
+    "↑ Y",
+    40 - 6 - 3 - 6,
+    60 + 6 + 3 + 10 + 6,
     "start",
-    "rotate(-90,19,60)",
+    null,
   ]);
   // Without tick labels, past the ticks; without both, past the axis itself.
   assert.deepStrictEqual(titles({x: {tickFormat: () => ""}, y: false})[0], ["X →", 160, 60 + 6 + 6, "end", null]);

@@ -1,32 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="480" height="300" viewBox="0 0 480 300">
-  <line x1="130" y1="24" x2="130" y2="260" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="262" y1="24" x2="262" y2="260" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="394" y1="24" x2="394" y2="260" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="130" y1="260" x2="130" y2="266" stroke="currentColor" stroke-width="1"></line>
-  <line x1="262" y1="260" x2="262" y2="266" stroke="currentColor" stroke-width="1"></line>
-  <line x1="394" y1="260" x2="394" y2="266" stroke="currentColor" stroke-width="1"></line>
-  <text x="130" y="269" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Adelie</text>
-  <text x="262" y="269" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Chinstrap</text>
-  <text x="394" y="269" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Gentoo</text>
-  <text x="262" y="285" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">species</text>
-  <line x1="64" y1="63.333333333333336" x2="460" y2="63.333333333333336" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="64" y1="142" x2="460" y2="142" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="64" y1="220.66666666666669" x2="460" y2="220.66666666666669" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="64" y1="63.333333333333336" x2="58" y2="63.333333333333336" stroke="currentColor" stroke-width="1"></line>
-  <line x1="64" y1="142" x2="58" y2="142" stroke="currentColor" stroke-width="1"></line>
-  <line x1="64" y1="220.66666666666669" x2="58" y2="220.66666666666669" stroke="currentColor" stroke-width="1"></line>
-  <text x="55" y="63.333333333333336" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Biscoe</text>
-  <text x="55" y="142" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Dream</text>
-  <text x="55" y="220.66666666666669" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Torgersen</text>
-  <text x="1" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">island</text>
-  <circle cx="130" cy="220.66666666666666" r="25.903045032109333" fill="steelblue" fill-opacity="0.8"></circle>
-  <circle cx="130" cy="63.33333333333333" r="23.827335887250825" fill="steelblue" fill-opacity="0.8"></circle>
-  <circle cx="130" cy="142" r="26.880860201289885" fill="steelblue" fill-opacity="0.8"></circle>
-  <circle cx="262" cy="142" r="29.621265247094186" fill="steelblue" fill-opacity="0.8"></circle>
-  <circle cx="394" cy="63.33333333333333" r="40" fill="steelblue" fill-opacity="0.8"></circle>
-  <text x="130" y="220.66666666666666" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="white">52</text>
-  <text x="130" y="63.33333333333333" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="white">44</text>
-  <text x="130" y="142" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="white">56</text>
-  <text x="262" y="142" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="white">68</text>
-  <text x="394" y="63.33333333333333" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="white">124</text>
+  <line x1="146.66666666666666" y1="10" x2="146.66666666666666" y2="260" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="272" y1="10" x2="272" y2="260" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="397.3333333333333" y1="10" x2="397.3333333333333" y2="260" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="146.66666666666666" y1="260" x2="146.66666666666666" y2="266" stroke="currentColor" stroke-width="1"></line>
+  <line x1="272" y1="260" x2="272" y2="266" stroke="currentColor" stroke-width="1"></line>
+  <line x1="397.3333333333333" y1="260" x2="397.3333333333333" y2="266" stroke="currentColor" stroke-width="1"></line>
+  <text x="146.66666666666666" y="269" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Adelie</text>
+  <text x="272" y="269" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Chinstrap</text>
+  <text x="397.3333333333333" y="269" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Gentoo</text>
+  <text x="272" y="285" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">species</text>
+  <line x1="84" y1="51.666666666666664" x2="460" y2="51.666666666666664" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="84" y1="135" x2="460" y2="135" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="84" y1="218.33333333333331" x2="460" y2="218.33333333333331" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="84" y1="51.666666666666664" x2="78" y2="51.666666666666664" stroke="currentColor" stroke-width="1"></line>
+  <line x1="84" y1="135" x2="78" y2="135" stroke="currentColor" stroke-width="1"></line>
+  <line x1="84" y1="218.33333333333331" x2="78" y2="218.33333333333331" stroke="currentColor" stroke-width="1"></line>
+  <text x="75" y="51.666666666666664" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Biscoe</text>
+  <text x="75" y="135" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Dream</text>
+  <text x="75" y="218.33333333333331" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Torgersen</text>
+  <text x="15" y="135" transform="rotate(-90,15,135)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">island</text>
+  <circle cx="146.66666666666666" cy="218.33333333333331" r="25.903045032109333" fill="steelblue" fill-opacity="0.8"></circle>
+  <circle cx="146.66666666666666" cy="51.666666666666664" r="23.827335887250825" fill="steelblue" fill-opacity="0.8"></circle>
+  <circle cx="146.66666666666666" cy="135" r="26.880860201289885" fill="steelblue" fill-opacity="0.8"></circle>
+  <circle cx="272" cy="135" r="29.621265247094186" fill="steelblue" fill-opacity="0.8"></circle>
+  <circle cx="397.3333333333333" cy="51.666666666666664" r="40" fill="steelblue" fill-opacity="0.8"></circle>
+  <text x="146.66666666666666" y="218.33333333333331" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="white">52</text>
+  <text x="146.66666666666666" y="51.666666666666664" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="white">44</text>
+  <text x="146.66666666666666" y="135" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="white">56</text>
+  <text x="272" y="135" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="white">68</text>
+  <text x="397.3333333333333" y="51.666666666666664" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="white">124</text>
 </svg>
