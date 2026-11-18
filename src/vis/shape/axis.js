@@ -88,11 +88,12 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
   const label = labelOf(x, scale, "x", options);
   if (label == null || frame?.nested) return;
   // The title is part of the axis: past the farthest of what it draws, its tick labels, else its
-  // tick marks, else the plot, by a constant gap, under a bottom axis or over a top one. Like the
-  // title of y, it's at the middle of the axis by default; with labelAnchor, it's at its left or
-  // right end. The default margins of cm.plane leave room for it on the sides with axes, with level
-  // tick labels; rotated tick labels, an axis added explicitly on another side, or one drawn by a
-  // nested chart need a margin given to it, such as marginBottom: 150 with tickRotate: -45.
+  // tick marks, else the plot, by a constant gap, under a bottom axis or over a top one. Like Plot's,
+  // it's at the right end of the axis by default, with its arrow, or at the middle of a discrete
+  // axis; with labelAnchor, it's at its left or right end, or its middle. The default margins of
+  // cm.plane leave room for it on the sides with axes, with level tick labels; rotated tick labels,
+  // an axis added explicitly on another side, or one drawn by a nested chart need a margin given to
+  // it, such as marginBottom: 150 with tickRotate: -45.
   const reach = reachOf(ticks.map(format), {
     tickSize,
     tickPadding,
@@ -100,7 +101,7 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
     pad: padX,
     across: acrossX,
   });
-  const {labelAnchor = "center"} = options;
+  const {labelAnchor = scale.ticks ? "right" : "center"} = options;
   const center = labelAnchor === "center";
   flow.datum(label).append(text, {
     ...font,
@@ -146,12 +147,15 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
     y: Y,
     ...rotateY,
   });
-  // The title is part of the axis: past the farthest of what it draws, its tick labels, else its
-  // tick marks, else the plot, by a constant gap, turned to read along the axis, bottom to top, left
-  // of a left axis or right of a right one. With labelAnchor, it's at the middle of the axis, the
-  // default, or ends at its top, or starts at its bottom. Its arrow, once turned, points up the
-  // axis. As for x, the default margins of cm.plane leave room for it on the sides with axes.
-  const label = labelOf(y, scale, "y", options, true);
+  // The title is part of the axis, a constant gap past what it draws. Like Plot's, it's level over
+  // the top of the axis by default, starting at the far end of its tick labels on a left axis, or
+  // ending there on a right one, with an arrow up the axis. With labelAnchor "center" or "bottom",
+  // it's turned to read along the axis, bottom to top, past its tick labels, else its tick marks,
+  // else the plot, at the middle of the axis or starting at its bottom. The default margins of
+  // cm.plane leave room for it on the sides with axes.
+  const {labelAnchor = "top"} = options;
+  const turn = labelAnchor !== "top";
+  const label = labelOf(y, scale, "y", options, turn);
   if (label == null || frame?.nested) return;
   const reach = reachOf(ticks.map(format), {
     tickSize,
@@ -160,13 +164,21 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
     pad: padY,
     across: acrossY,
   });
-  const {labelAnchor = "center"} = options;
-  const [labelY, textAlign] =
-    labelAnchor === "top"
-      ? [top, "end"]
-      : labelAnchor === "bottom"
-        ? [bottom, "start"]
-        : [(top + bottom) / 2, "center"];
+  if (!turn) {
+    // Over the top of the axis, past the half of a tick label that may reach over it, or past the
+    // tick labels of an axis of x at the top, in the row of its title.
+    const over = guides?.x.anchors.includes("top") ? 6 + 3 + font.fontSize : font.fontSize / 2;
+    flow.datum(label).append(text, {
+      ...font,
+      text: label,
+      x: edge + k * reach,
+      y: top - over - titleGap,
+      textAlign: isRight ? "end" : "start",
+      textBaseline: "bottom",
+    });
+    return;
+  }
+  const [labelY, textAlign] = labelAnchor === "bottom" ? [bottom, "start"] : [(top + bottom) / 2, "center"];
   flow.datum(label).append(text, {
     ...font,
     text: label,

@@ -47,19 +47,42 @@ function middle(value, keys, [start, end]) {
   return Array.from({length: n}, () => (start + end) / 2);
 }
 
-// The sides where a chart draws axes, such as bottom and left by default: the sides of the axes of
-// the positions encoded in any of its contexts.
-function axisSides(data, options, keysX, keysY, has) {
-  const sides = new Set();
+// The room of the components on each side of a chart, for its default margins: the axes of the
+// positions encoded in any of its contexts, at the bottom and the left by default, and their
+// titles, on the first side of each axis. An axis of x takes its tick marks and labels, 6 + 3 + 10
+// and 5px to spare, and its title, 6 + 10; an axis of y, 6 + 3 and labels up to six characters
+// wide, such as 14,000, and its title turned beside them, 24, or level over the axis: 24 at the top,
+// or a row of 16 over an axis of x at the top, shared with its title.
+// Without an axis, a side keeps room for the ends of the tick labels of the other axis, such as
+// half a label of y over the frame.
+function axisRoom(data, options, keysX, keysY, has) {
+  const room = {top: 0, right: 0, bottom: 0, left: 0, level: false, titledTop: false};
   for (const context of data) {
     const {hints = {}} = context;
     const nameX = scaleName(hints, keysX, "x");
     const nameY = scaleName(hints, keysY, "y");
     const {x, y} = guidesOf(null, options, nameX, nameY, sidesOfPlane, {x: ["bottom"], y: ["left"]});
-    if (has(context, keysX, "x")) for (const side of x.anchors) sides.add(side);
-    if (has(context, keysY, "y")) for (const side of y.anchors) sides.add(side);
+    const titledX = axisHint(hints, keysX).label != null;
+    const titledY = axisHint(hints, keysY).label != null;
+    const turned = (options[nameY]?.labelAnchor ?? "top") !== "top";
+    if (has(context, keysX, "x")) {
+      x.anchors.forEach((side, i) => {
+        room[side] = Math.max(room[side], 24);
+        if (i === 0 && titledX) side === "top" ? (room.titledTop = true) : (room[side] = 40);
+      });
+    }
+    if (has(context, keysY, "y")) {
+      y.anchors.forEach((side, i) => {
+        const titled = i === 0 && titledY;
+        room[side] = Math.max(room[side], 46 + (titled && turned ? 24 : 0));
+        if (titled && !turned) room.level = true;
+      });
+    }
   }
-  return sides;
+  // At the top, an axis of x and a level title of y share a row of titles, over its tick labels.
+  if (room.top) room.top += room.titledTop || room.level ? 16 : 0;
+  else room.top = room.level ? 24 : 0;
+  return room;
 }
 
 // The sides of the axes of a plane: the first is the side of axis true, and both are "both".
@@ -127,15 +150,12 @@ export function plane(
   const hasY = data.some((context) => has(context, keysY, "y"));
   const {value: first = {}, hints: firstHints = {}} = data.find((context) => has(context, keysY, "y")) ?? data[0] ?? {};
   const firstY = keysOf(first, firstHints, keysY, "y");
-  // The defaults hold the axes drawn on each side, with their titles past their tick labels: under
-  // or over x, 6 + 3 + 10 + 6 + 10 and 3px to spare; beside y, a title turned beside labels up to
-  // six characters wide, such as 14,000. A side without an axis keeps room for the ends of the tick
-  // labels of the other axis, such as half a label of y over the frame.
-  const sides = nested ? new Set() : axisSides(data, options, keysX, keysY, has);
-  marginTop ??= margin ?? (nested ? 0 : sides.has("top") ? 40 : hasY ? 10 : 0);
-  marginRight ??= margin ?? (nested ? 0 : sides.has("right") ? 64 : 20);
-  marginBottom ??= margin ?? (nested ? 0 : sides.has("bottom") ? 40 : 20);
-  marginLeft ??= margin ?? (nested ? 0 : sides.has("left") ? 64 : 20);
+  // The defaults hold the components on each side, such as an axis and its title.
+  const room = nested ? null : axisRoom(data, options, keysX, keysY, has);
+  marginTop ??= margin ?? (nested ? 0 : room.top || (hasY ? 10 : 0));
+  marginRight ??= margin ?? (nested ? 0 : room.right || 20);
+  marginBottom ??= margin ?? (nested ? 0 : room.bottom || 20);
+  marginLeft ??= margin ?? (nested ? 0 : room.left || 20);
 
   // Values grow upward, but categories in bands go down from the top, like Plot's ordinal y, unless
   // the scale is reversed. An independent y points its own way in each context.
