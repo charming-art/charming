@@ -55,14 +55,13 @@ function middle(value, keys, [start, end]) {
 // a label, else the tick labels of an axis of x on that side, 6 and 10, shared with its title. The
 // tick labels at the ends of an axis may also reach past the plot along it, such as half the last
 // label of x past its right. Under a legend at the top, the title of y at the top is turned.
-function measureSides(data, options, keysX, keysY, has, recordsOf) {
+function measureSides(data, options, keysX, keysY, has, recordsOf, colors) {
   const reach = {top: 0, right: 0, bottom: 0, left: 0};
   const over = {top: 0, right: 0, bottom: 0, left: 0};
   const rows = {top: false, bottom: false};
   const level = {top: false, bottom: false};
-  const topLegend = scaledKeys.some(
-    (key) => options[key]?.legend && options[key].legend !== "right" && data.some(({value}) => key in value),
-  );
+  // A legend at the top is drawn for a scale resolved, as the axes tell, not a color as it is.
+  const topLegend = scaledKeys.some((key) => options[key]?.legend && options[key].legend !== "right" && colors[key]);
   for (const context of data) {
     const hasX = has(context, keysX, "x");
     const hasY = has(context, keysY, "y");
@@ -75,7 +74,7 @@ function measureSides(data, options, keysX, keysY, has, recordsOf) {
         reach[side] = Math.max(reach[side], r);
         over.left = Math.max(over.left, start);
         over.right = Math.max(over.right, end);
-        if (i === 0 && recordX.label != null && x.label !== null) rows[side] = true;
+        if (i === 0 && recordX.label != null) rows[side] = true;
       });
     }
     if (hasY) {
@@ -261,7 +260,7 @@ export function plane(
         bottom: frameHeight - margins.bottom,
         left: margins.left,
       };
-      room = measureSides(data, options, keysX, keysY, has, (context) => recordsOf(context, frame));
+      room = measureSides(data, options, keysX, keysY, has, (context) => recordsOf(context, frame), colors);
       const legendsTop = topLegends(data, colors, options, width - 3 - margins.left);
       const legendsRight = rightLegends(data, colors, options, frame.bottom - frame.top);
       const fit = (side, extent) => Math.max(floors[side], extent ? extent + 3 : 0);
@@ -284,8 +283,9 @@ export function plane(
     renderer.resize?.(width, height);
     ({width, height} = renderer._props);
     frame = {top: marginTop, right: width - marginRight, bottom: height - marginBottom, left: marginLeft};
-    // The legends on the right start past the axes on the right of the plot.
-    legendX = frame.right + room.right + 12;
+    // The legends on the right start past the axes on the right of the plot, or past margin, which
+    // they add to, if it's given.
+    legendX = frame.right + (margin !== undefined && given.right === undefined ? margin : room.right) + 12;
     frames = data.map(() => frame);
   }
 

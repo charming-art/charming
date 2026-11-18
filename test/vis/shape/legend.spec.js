@@ -445,3 +445,37 @@ test("cm.plane adds the legends at the top to a uniform margin, like cm.polar, u
   // A given marginTop comes first.
   assert.strictEqual(frameOf({margin: 30, marginTop: 30})[0], 30);
 });
+
+test("cm.plane keeps the title of y level, with room, when a legend asked has no scale, such as colors as they are", () => {
+  const renderer = cm.svg({width: 400, height: 300});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {v: 1, c: "red"},
+      {v: 2, c: "blue"},
+    ])
+    .transform(cm.encode, {x: "v", y: "v", fill: "c"})
+    .transform(cm.plane, {fill: {legend: true}})
+    .add(cm.circle, {r: 2});
+  root.render();
+  const title = Array.from(renderer.node().querySelectorAll("text")).find((t) => t.textContent === "↑ v");
+  assert.strictEqual(title.getAttribute("transform"), null);
+  assert.ok(+title.getAttribute("y") - 10 >= 0);
+});
+
+test("cm.plane starts the legends on the right past a given margin, which they add to", () => {
+  const renderer = cm.svg({width: 400, height: 300});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {v: 1000, k: "aaaa"},
+      {v: 2000, k: "b"},
+    ])
+    .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+    .transform(cm.plane, {margin: 30, y: {axis: "right"}, fill: {legend: "right"}})
+    .add(cm.circle, {r: 2});
+  root.render();
+  // The legend ends 3px from the right of the chart.
+  const label = Array.from(renderer.node().querySelectorAll("text")).find((t) => t.textContent === "aaaa");
+  assertInDelta(+label.getAttribute("x") + widthOf("aaaa"), 400 - 3);
+});
