@@ -2,10 +2,11 @@ import * as cm from "../../../../src/index.js";
 import {intro} from "./intro.js";
 
 // Canis's Gantt chart (https://canisjs.github.io/canis-editor/index.html?exmp=gantt_1): the tasks of
-// an event plan, each bar wiping in from the left at its start time and lasting its duration, at
-// 600ms per unit, by the time scale that enterDelay and enterDuration share. With linear easing,
-// the bars' edges sweep across together, like the hand of a timeline. The labels wipe in with their
-// bars, for 300ms.
+// an event plan, each bar wiping in from the left at its start time and lasting its duration, by
+// the time scale that enterDelay and enterDuration share, which plays the plan in about 6s, like
+// G2's; {domain: [0, 1], range: [0, 600]} would play it at 600ms per unit, like Canis's. With
+// linear easing, the bars' edges sweep across together, like the hand of a timeline. The labels
+// wipe in with their bars, for 300ms.
 export function visTransitionGantt() {
   const tasks = [
     {event: "event planning", start: 1, end: 4},
@@ -28,7 +29,7 @@ export function visTransitionGantt() {
         marginRight: 120,
         x: {domain: [0, 18], label: null},
         y: {axis: null},
-        time: {domain: [0, 1], range: [0, 600]},
+        time: {range: [0, 6000]},
       })
       .add(cm.rect, {fill: "steelblue", appear: true, enter: {clipRight: 1}})
       .add(cm.label, {
