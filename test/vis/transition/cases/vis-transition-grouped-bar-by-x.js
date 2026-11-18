@@ -4,8 +4,8 @@ import {sales} from "./vis-transition-grouped-bar.js";
 
 // The grouped bar of visTransitionGroupedBar, year by year rather than fruit by fruit: with by: "x",
 // cm.stackEnter groups the bars by their year, so 2001's three bars wipe up together, then 2002's,
-// 200ms later. The bars are still laid out side by side by fruit, as only the timing is grouped by
-// x.
+// 200ms after 2001's end. The bars are still laid out side by side by fruit, as only the timing is
+// grouped by x.
 export function visTransitionGroupedBarByX() {
   const renderer = cm.svg({width: 640, height: 400});
   const root = cm.flow({transition: true}).renderer(renderer);

@@ -258,20 +258,22 @@ export function stackX(flow, data, options) {
 }
 
 // Stacks the rows along time, like G2's stackEnter: the groups of rows enter one after another, gap
-// milliseconds apart, and the rows of a group step milliseconds apart, in their order, each for
-// duration milliseconds, the flow's by default, or its own duration, such as an encoded
-// enterDuration in milliseconds. Unlike the other transforms, whose groups lay the rows out, its
-// groups only tell when they enter, so they come from the by option, the name of a channel, rather
-// than from z: by default the series (z, else fill, else stroke), such as the fruits of a grouped
-// bar chart, else "x" for its years, or null for one group. Like the stacks, the groups are in order
-// of first appearance, or of the domain of the series, or of order, an array of their values, and
-// reverse reverses it. Its delays are in milliseconds, added to an encoded delay in milliseconds,
-// and cm.plane and cm.polar leave them as they are. As it reads the channel of its groups as it is
-// when it's applied, it goes before the transforms that rewrite that channel, such as cm.stackX,
-// which splits the years of x among the series of grouped bars.
+// milliseconds apart, and the rows of a group step milliseconds apart, in their order, each for its
+// duration, encoded, such as enterDuration: "length", else duration milliseconds, the flow's by
+// default. Unlike the other transforms, whose groups lay the rows out, its groups only tell when
+// they enter, so they come from the by option, the name of a channel, rather than from z: by
+// default the series (z, else fill, else stroke), such as the fruits of a grouped bar chart, else
+// "x" for its years, or null for one group. Like the stacks, the groups are in order of first
+// appearance, or of the domain of the series, or of order, an array of their values, and reverse
+// reverses it. It reads the channel of its groups as it is when it's applied, so it goes before
+// the transforms that rewrite that channel, such as cm.stackX, which splits the years of x among
+// the series of grouped bars. It only arranges the rows, recording each row's group and its rank in
+// it with the delay's hint: cm.plane and cm.polar time them once they've scaled the encoded delays
+// and durations by their time scale, such as the starts and the lengths of tasks, adding the steps
+// and gaps in milliseconds.
 function stackTime(flow, data, {by, order, reverse = false, step = 0, gap = 0, duration} = {}, stage, name) {
   if (!data) throw new Error(`No channels: call flow.transform(cm.encode, channels) before cm.${name}.`);
-  const [delayKey, durationKey] = [`${stage}Delay`, `${stage}Duration`];
+  const delayKey = `${stage}Delay`;
   duration ??= (transitionOptions(flow._context?.transition) ?? transitionOptions(true)).duration;
   return data.map((context) => {
     const {value, hints = {}} = context;
@@ -281,35 +283,17 @@ function stackTime(flow, data, {by, order, reverse = false, step = 0, gap = 0, d
     const key = by === undefined ? series.key : by;
     const G = key == null ? null : value[key];
     const given = Array.isArray(order) ? order : key === series.key ? series.domain : hints[key]?.domain;
-    const groups = G ? Array.from(group(I, (i) => G[i])) : [[undefined, I]];
+    const groups = G ? Array.from(group(I, (i) => G[i]).values()) : [I];
     if (given) {
       const index = new InternMap(given.map((d, i) => [d, i]));
-      groups.sort(([a], [b]) => ascending(index.get(a) ?? Infinity, index.get(b) ?? Infinity));
+      groups.sort((a, b) => ascending(index.get(G[a[0]]) ?? Infinity, index.get(G[b[0]]) ?? Infinity));
     }
     if (reverse) groups.reverse();
-    const D0 = value[delayKey];
-    const D = Array.from(value[durationKey] ?? {length: n}, (d) => (Number.isFinite(d) ? d : duration));
-    const delays = new Array(n);
-    let start = 0;
-    for (const [, J] of groups) {
-      let end = start;
-      J.forEach((i, k) => {
-        delays[i] = start + k * step + (Number.isFinite(D0?.[i]) ? D0[i] : 0);
-        end = Math.max(end, delays[i] + D[i]);
-      });
-      start = end + gap;
-    }
-    // The timing is in milliseconds, so it isn't scaled.
-    const identity = {type: "identity"};
-    return {
-      ...context,
-      value: {...value, [delayKey]: delays, [durationKey]: D},
-      hints: {
-        ...hints,
-        [delayKey]: {...hints[delayKey], ...identity},
-        [durationKey]: {...hints[durationKey], ...identity},
-      },
-    };
+    const groupOf = new Array(n);
+    const rank = new Array(n);
+    groups.forEach((J, g) => J.forEach((i, k) => ([groupOf[i], rank[i]] = [g, k])));
+    const stack = {groups: groups.length, group: groupOf, rank, step, gap, duration};
+    return {...context, hints: {...hints, [delayKey]: {...hints[delayKey], stack}}};
   });
 }
 

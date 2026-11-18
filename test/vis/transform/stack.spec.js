@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import {test} from "vitest";
 import "../../install-canvas-mock.js";
 import * as cm from "../../../src/index.js";
-import {assertInDelta} from "../../helpers.js";
+import {assertInDelta, probe} from "../../helpers.js";
 
 function values(data, channels, ...transforms) {
   let flow = cm.flow().data(data).transform(cm.encode, channels);
@@ -344,15 +344,17 @@ test("cm.stackY throws an error for an unknown offset, like Plot", () => {
   assert.throws(() => values(flows, {x: "x", y: "v", z: "s"}, stackYOf({offset: "wigle"})), /Unknown offset: wigle/);
 });
 
-// The enter delays and durations of rows after cm.stackEnter, or cm.stackExit.
-function timing(data, channels, options, transform = cm.stackEnter, flowOptions) {
-  const [{value}] = cm
-    .flow(flowOptions)
-    .data(data)
-    .transform(cm.encode, channels)
-    .transform(transform, options)._values;
+// The enter delays and durations of rows after cm.stackEnter, or cm.stackExit, as cm.plane times
+// them, with the options of the plane; before, a transform such as an earlier stack.
+function timing(data, channels, options, transform = cm.stackEnter, {flow: flowOptions, plane = {}, before} = {}) {
+  const [shape, calls] = probe();
+  const root = cm.flow(flowOptions).renderer(cm.svg({width: 200, height: 200}));
+  let flow = root.data(data).transform(cm.encode, channels);
+  if (before) flow = flow.transform(...before);
+  flow.transform(transform, options).transform(cm.plane, plane).add(shape);
+  root.render();
   const stage = transform === cm.stackEnter ? "enter" : "exit";
-  return [value[`${stage}Delay`], value[`${stage}Duration`]];
+  return [calls[0][`${stage}Delay`], calls[0][`${stage}Duration`]];
 }
 
 const fruits = [
@@ -382,13 +384,10 @@ test("cm.stackEnter orders the groups by order, or the domain of the series from
   const [reversed] = timing(fruits, {fill: "fruit"}, {reverse: true, duration: 300});
   assert.deepStrictEqual(reversed, [300, 0, 300, 0]);
   // The order of an earlier stack is the domain of the series.
-  const [{value}] = cm
-    .flow()
-    .data(fruits)
-    .transform(cm.encode, {x: "year", y: () => 1, fill: "fruit"})
-    .transform(cm.stackY, {order: ["Orange", "Apple"]})
-    .transform(cm.stackEnter, {duration: 300})._values;
-  assert.deepStrictEqual(value.enterDelay, [300, 0, 300, 0]);
+  const [hinted] = timing(fruits, {x: "year", y: () => 1, fill: "fruit"}, {duration: 300}, cm.stackEnter, {
+    before: [cm.stackY, {order: ["Orange", "Apple"]}],
+  });
+  assert.deepStrictEqual(hinted, [300, 0, 300, 0]);
 });
 
 test("cm.stackEnter takes the durations of rows, and adds to their delays, in milliseconds", () => {
@@ -404,7 +403,7 @@ test("cm.stackEnter takes the durations of rows, and adds to their delays, in mi
 });
 
 test("cm.stackEnter lasts the flow's duration by default, else 750ms like transitions", () => {
-  const [, durations] = timing(fruits, {fill: "fruit"}, {}, cm.stackEnter, {transition: {duration: 400}});
+  const [, durations] = timing(fruits, {fill: "fruit"}, {}, cm.stackEnter, {flow: {transition: {duration: 400}}});
   assert.deepStrictEqual(durations, [400, 400, 400, 400]);
   const [, defaults] = timing(fruits, {fill: "fruit"}, {});
   assert.deepStrictEqual(defaults, [750, 750, 750, 750]);
@@ -414,4 +413,33 @@ test("cm.stackExit stacks the exits of rows along time", () => {
   const [delays, durations] = timing(fruits, {fill: "fruit"}, {duration: 300}, cm.stackExit);
   assert.deepStrictEqual(delays, [0, 300, 0, 300]);
   assert.deepStrictEqual(durations, [300, 300, 300, 300]);
+});
+
+test("cm.stackEnter steps and gaps in milliseconds, which the options of the time scale don't rescale", () => {
+  const plain = timing(fruits, {fill: "fruit"}, {by: null, step: 100, duration: 300});
+  for (const time of [
+    {range: [0, 1000]},
+    {type: "linear", range: [0, 1000]},
+    {range: [0, 1000], transform: (d) => d * 10},
+    {percent: true, range: [0, 1000]},
+  ]) {
+    assert.deepStrictEqual(
+      timing(fruits, {fill: "fruit"}, {by: null, step: 100, duration: 300}, cm.stackEnter, {plane: {time}}),
+      plain,
+    );
+  }
+});
+
+test("cm.stackEnter steps the encoded delays and durations once the time scale has scaled them", () => {
+  const tasks = [
+    {start: 1, length: 3},
+    {start: 3, length: 10},
+  ];
+  const channels = {enterDelay: "start", enterDuration: "length"};
+  const [delays, durations] = timing(tasks, channels, {by: null, step: 100}, cm.stackEnter, {
+    plane: {time: {range: [0, 1000]}},
+  });
+  // From 0 to 10 over 1000ms: the starts at 100 and 300, the second 100ms later by its rank.
+  assert.deepStrictEqual(delays, [100, 400]);
+  assert.deepStrictEqual(durations, [300, 1000]);
 });

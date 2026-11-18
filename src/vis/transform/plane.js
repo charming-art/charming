@@ -28,6 +28,7 @@ import {
   scaleOf,
   scaledKeys,
   sharedScale,
+  stackTimes,
   withoutHints,
   withScaleOptions,
   withSeries,
@@ -186,8 +187,12 @@ const sidesOfPlane = {
 // scales are given by name, like Plot's: the type, domain, reverse and label of a position, such as
 // {y: {domain: [0, 100]}} or a named {length: {type: "log"}}; the type, domain, range, scheme and
 // label of a color, such as {fill: {scheme: "PiYG"}}; and the type, domain, range and label of a
-// radius or an opacity, such as {r: {range: [0, 20]}}. The type "identity" leaves a color, radius
-// or opacity as it is. Like Plot's, any scale also takes transform, a function of its values, such
+// radius or an opacity, such as {r: {range: [0, 20]}}. The timings of transitions, such as
+// enterDelay: "start" and enterDuration: "length", share one scale, time, unless a timing names
+// another: {time: {range: [0, 3000]}} plays them from 0 to the largest in 3s, and {time: {domain:
+// [0, 1], range: [0, 600]}} at 600ms per unit; options given under the name of a timing, such as
+// {enterDelay: {range: [0, 3000]}}, are its scale's; without a range, timings are milliseconds.
+// The type "identity" leaves a color, radius or opacity as it is. Like Plot's, any scale also takes transform, a function of its values, such
 // as (d) => d / 1000, or percent, mapping proportions to percentages; and a continuous one zero, to
 // include 0 in its domain, but for log, nice, to round it, true or a count of ticks, a log scale
 // rounding to powers of its base, and clamp, to pin values past it to its ends. The other options
@@ -404,7 +409,9 @@ export function plane(
     const {x, y, rangeX, rangeY, nameX, nameY, ownKeysX, ownKeysY, recordX, recordY} = recordsOf(context, frame);
 
     // Colors are categorical by default, and positions are discrete points by default.
-    const [colored] = scale(flow, [context], scaleDescriptors(colors));
+    const [scaledColors] = scale(flow, [context], scaleDescriptors(colors));
+    // The rows arranged by cm.stackEnter are timed once their delays and durations are scaled.
+    const colored = {...scaledColors, value: stackTimes(scaledColors.value, hints)};
     const descriptors = {};
     for (const key of ownKeysX)
       if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX, clamp: x.clamp};

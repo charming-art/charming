@@ -28,6 +28,7 @@ import {
   scaleName,
   scaledKeys,
   sharedScale,
+  stackTimes,
   withoutHints,
   withScaleOptions,
   withSeries,
@@ -57,7 +58,8 @@ const sidesOfPolar = {x: {first: undefined, both: ["outer", "inner"]}, y: {first
 // context.frame. With clip, the marks are clipped to the frame: its disc, ring or sector, unless a
 // mark gives its own clip option, as in cm.plane. As in cm.plane, the options of scales are given by
 // name, such as {y: {type: "linear"}} for the radius, and colors, radii and opacities, with their
-// guides; unlike it, a polar chart draws no axes unless asked, such as {x: {axis: true}}.
+// guides, and the timings of transitions, which share one scale, time, such as {time: {range: [0,
+// 3000]}}; unlike it, a polar chart draws no axes unless asked, such as {x: {axis: true}}.
 export function polar(
   flow,
   data,
@@ -262,7 +264,9 @@ export function polar(
     const x = sharedX.get(nameX) || positionScale(value, ownKeysX, {...ownX, domain: ownX.domain ?? hintX.domain});
     const y = sharedY.get(nameY) || positionScale(value, ownKeysY, {...ownY, domain: ownY.domain ?? hintY.domain});
 
-    const [colored] = scale(flow, [context], scaleDescriptors(colors));
+    const [scaledColors] = scale(flow, [context], scaleDescriptors(colors));
+    // The rows arranged by cm.stackEnter are timed once their delays and durations are scaled.
+    const colored = {...scaledColors, value: stackTimes(scaledColors.value, hints)};
     const descriptors = {};
     for (const key of ownKeysX)
       if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX, clamp: x.clamp};

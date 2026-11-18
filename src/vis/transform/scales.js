@@ -155,7 +155,9 @@ export function channelScales(value, hints) {
     const hint = hints[keys[0]];
     const {type, domain, range, clamp} = hint;
     const t = typeOf(type ?? "linear", hint);
-    const d = adjustDomain(domain ?? [0, max(keys.flatMap((key) => Array.from(value[key]))) ?? 1], hint, t);
+    const V = keys.flatMap((key) => Array.from(value[key]));
+    // From 0, unless the scale is logarithmic, which has no logarithm of 0.
+    const d = adjustDomain(domain ?? (isLog(t) ? logDomain(V) : [0, max(V) ?? 1]), hint, t);
     for (const key of keys) scales[key] = {type: t, domain: d, range, ...(clamp && {clamp})};
   }
   for (const key of ["r", ...opacityKeys]) {
@@ -291,9 +293,14 @@ export function callable(record, options) {
 // share it by the axis, such as {value: "v2", scale: "y"}, or by the name of the context's scale.
 export function keysOf(value, hints, keys, axis) {
   const name = scaleName(hints, keys, axis);
-  // Positions choose their own scale, so only the other channels join one, even if names collide.
+  // Positions choose their own scale, so only the other channels join one, even if names collide;
+  // timings have scales of their own, such as time, even if named like a position.
   const shared = Object.keys(value).filter(
-    (key) => !positions.has(key) && !keys.includes(key) && (hints[key]?.scale === axis || hints[key]?.scale === name),
+    (key) =>
+      !positions.has(key) &&
+      !keys.includes(key) &&
+      !timingKeys.includes(key) &&
+      (hints[key]?.scale === axis || hints[key]?.scale === name),
   );
   return [...keys, ...shared];
 }
@@ -380,14 +387,28 @@ export function withScaleOptions(context, scales, axes) {
     };
   }
   for (const key of scaledKeys) {
-    // The timings share a scale, time by default, as a delay and a duration are times alike.
-    const options = scales[timingKeys.includes(key) ? (hints[key]?.scale ?? "time") : key];
+    // The timings share a scale, time by default, as a delay and a duration are times alike; options
+    // given under the name of a timing, such as enterDelay: {range: [0, 1000]}, are its scale's too.
+    const options = timingKeys.includes(key) ? timingOptions(scales, hints, timingScaleOf(hints, key)) : scales[key];
     if (!options) continue;
     const f = transformOf(options);
     if (f) transform(key, f);
     if (key in hints) hints[key] = {...hints[key], ...definedOptions(options)};
   }
   return {...context, value, hints};
+}
+
+// The name of the scale of a timing, such as enterDelay: time, unless it names another.
+function timingScaleOf(hints, key) {
+  return hints[key]?.scale ?? "time";
+}
+
+// The options of the scale of timings by its name, such as time: {range: [0, 3000]}, with those given
+// under the names of the timings it scales, such as enterDelay: {range: [0, 3000]}.
+function timingOptions(scales, hints, name) {
+  const keys = timingKeys.filter((key) => scales[key] && timingScaleOf(hints, key) === name);
+  if (!scales[name] && !keys.length) return undefined;
+  return Object.assign({}, scales[name], ...keys.map((key) => scales[key]));
 }
 
 // The type and domain of a position from the options of its scale, unless the scale has bands,
@@ -766,6 +787,36 @@ function moved(legend, reach) {
 // of a grid of cells rather than the top of the frame.
 function edge(record, side, value) {
   Object.defineProperty(record, "edges", {value: {...record.edges, [side]: value}, configurable: true});
+}
+
+// The timings of rows arranged by cm.stackEnter or cm.stackExit, once their encoded delays and
+// durations are scaled: each group starts gap milliseconds after the previous one ends, and the
+// rows of a group step milliseconds apart, each at its own delay past that, for its duration, else
+// the duration of the stack.
+export function stackTimes(value, hints) {
+  let timed = value;
+  for (const stage of ["appear", "enter", "exit"]) {
+    const [delayKey, durationKey] = [`${stage}Delay`, `${stage}Duration`];
+    const stack = hints[delayKey]?.stack;
+    if (!stack) continue;
+    const {groups, group: G, rank: K, step, gap, duration} = stack;
+    const D0 = value[delayKey];
+    const D = Array.from(G, (_, i) => (Number.isFinite(value[durationKey]?.[i]) ? value[durationKey][i] : duration));
+    const rows = Array.from({length: groups}, () => []);
+    G.forEach((g, i) => g !== undefined && rows[g].push(i));
+    const delays = new Array(G.length);
+    let start = 0;
+    for (const I of rows) {
+      let end = start;
+      for (const i of I) {
+        delays[i] = start + K[i] * step + (Number.isFinite(D0?.[i]) ? D0[i] : 0);
+        end = Math.max(end, delays[i] + D[i]);
+      }
+      start = end + gap;
+    }
+    timed = {...timed, [delayKey]: delays, [durationKey]: D};
+  }
+  return timed;
 }
 
 // Maps the positions of a recorded position scale linearly, by k * p + b, after it's applied, such

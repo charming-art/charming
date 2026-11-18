@@ -1640,3 +1640,24 @@ test("cm.plane leaves the timings of cm.stackEnter in milliseconds, even with a 
   );
   assert.deepStrictEqual(stepped.enterDelay, [0, 100]);
 });
+
+test("cm.plane takes the options of a timing's scale under the timing's name too", () => {
+  const channels = {x: "start", y: "length", enterDelay: "start", enterDuration: "length"};
+  const scaled = timings(tasks, channels, {enterDelay: {range: [0, 1000]}});
+  assert.deepStrictEqual(scaled.enterDelay, [100, 300]);
+  assert.deepStrictEqual(scaled.enterDuration, [300, 1000]);
+});
+
+test("cm.plane keeps a timing named like a position apart from it", () => {
+  const channels = {x: "start", y: "length", enterDelay: {value: "start", scale: "x"}};
+  const {enterDelay} = timings(tasks, channels, {x: {domain: [0, 10]}});
+  assert.deepStrictEqual(enterDelay, [1, 3]);
+});
+
+test("cm.plane gives a log time scale a domain without 0", () => {
+  const channels = {x: "start", y: "length", enterDelay: "start", enterDuration: "length"};
+  const {enterDelay, enterDuration} = timings(tasks, channels, {time: {type: "log", range: [1, 1000]}});
+  for (const t of [...enterDelay, ...enterDuration]) assert.ok(Number.isFinite(t), t);
+  assert.strictEqual(enterDelay[0], 1);
+  assert.strictEqual(enterDuration[1], 1000);
+});

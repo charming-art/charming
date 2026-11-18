@@ -22,7 +22,6 @@ export function visTransitionGroupedBar() {
     root
       .data(sales)
       .transform(cm.encode, {x: "category", y: "value", fill: "position"})
-      // Before the bands of x are split among the fruits, x is still the year.
       .transform(cm.stackEnter, {step: 100, gap: 200, duration: 300})
       .transform(cm.spreadX)
       .transform(cm.stackX)

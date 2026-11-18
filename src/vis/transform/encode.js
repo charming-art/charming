@@ -1,23 +1,10 @@
 import {bind} from "../../core/transform/bind.js";
 import {isColor} from "../color.js";
+import {scaledKeys} from "./scales.js";
 
 const field = (name) => (d) => d[name];
 
 const colorKeys = ["fill", "stroke"];
-
-// The channels that cm.plane and cm.polar scale besides positions, when they vary with the data.
-const scaledKeys = [
-  ...colorKeys,
-  "r",
-  "fillOpacity",
-  "strokeOpacity",
-  "appearDelay",
-  "appearDuration",
-  "enterDelay",
-  "enterDuration",
-  "exitDelay",
-  "exitDuration",
-];
 
 // A channel can be a descriptor that names the scale it uses, such as {value: "v2", scale: "y"}.
 // The options of scales, such as their domains, are given to cm.plane and cm.polar by name, and
