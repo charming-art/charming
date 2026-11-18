@@ -7,6 +7,8 @@ export {visDotX} from "./vis-dot-x.js";
 export {visDualAxis} from "./vis-dual-axis.js";
 export {visFacetCircle} from "./vis-facet-circle.js";
 export {visFacetRectBar} from "./vis-facet-rect-bar.js";
+export {visFacetLegend} from "./vis-facet-legend.js";
+export {visFacetLegendRight} from "./vis-facet-legend-right.js";
 export {visFacetRectPie} from "./vis-facet-rect-pie.js";
 export {visGenreColumn} from "./vis-genre-column.js";
 export {visGroupedBar} from "./vis-grouped-bar.js";

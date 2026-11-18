@@ -1210,6 +1210,203 @@ test("cm.plane keeps room for the axes asked of a grid nested in it at its edges
   }
 });
 
+// The position of an element in the chart: its attributes, translated by its groups.
+function absolute(element, x = "x", y = "y") {
+  let [px, py] = [+element.getAttribute(x), +element.getAttribute(y)];
+  for (let node = element.parentNode; node?.getAttribute; node = node.parentNode) {
+    const [tx, ty] = (node.getAttribute("transform")?.match(/^translate\(([-\d.e]+),([-\d.e]+)\)$/) ?? [])
+      .slice(1)
+      .map(Number);
+    if (tx !== undefined) [px, py] = [px + tx, py + ty];
+  }
+  return [px, py];
+}
+
+// Renders a grid of cells a and b, across, under a parent with an axis of x at the bottom, each
+// cell a chart of k colored by k, with its frame drawn as a rect, and its options.
+function legendGrid(options, parent = (flow) => flow) {
+  const renderer = cm.svg({width: 400, height: 300});
+  const root = cm.flow().renderer(renderer);
+  parent(
+    root
+      .data(["a", "b"])
+      .transform(cm.encode, {x: (d) => d})
+      .transform(cm.spreadX, {padding: 0})
+      .transform(cm.plane, {x: {label: null}}),
+  )
+    .append(cm.g)
+    .data(() => [
+      {v: 0, k: "one"},
+      {v: 1, k: "two"},
+    ])
+    .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+    .transform(cm.plane, options)
+    .add(cm.annotate(cm.rect), {fill: "none", stroke: "black"});
+  root.render();
+  const node = renderer.node();
+  const cells = Array.from(node.querySelectorAll("rect[stroke=black]"), (r) => {
+    const [x, y] = absolute(r);
+    return {left: x, top: y, right: x + +r.getAttribute("width"), bottom: y + +r.getAttribute("height")};
+  });
+  const text = (content) => Array.from(node.querySelectorAll("text")).filter((t) => t.textContent === content);
+  return {node, cells, text};
+}
+
+test("cm.plane keeps room for the legends of a nested grid over its topmost cells, drawn once", () => {
+  const {cells: plain} = legendGrid({});
+  const {cells, text} = legendGrid({fill: {legend: true}});
+  // The legend is drawn once, 3px under the top of the parent's frame, at 0 without y, from the
+  // left of the grid, at 20.
+  const [title] = text("k");
+  assert.strictEqual(text("k").length, 1);
+  assert.deepStrictEqual(absolute(title), [20, 3]);
+  // The cells start under it: a title of 14, a row of swatches of 14, and a gap of 10.
+  for (const cell of cells) assertInDelta(cell.top, 3 + 14 + 14 + 10);
+  assert.deepStrictEqual(
+    cells.map(({left, right, bottom}) => [left, right, bottom]),
+    plain.map(({left, right, bottom}) => [left, right, bottom]),
+  );
+});
+
+test("cm.plane keeps room for the legends of a nested grid on its right, and its parent's axes follow the cells", () => {
+  const {cells, text} = legendGrid({fill: {legend: "right"}});
+  // The legend is drawn once, 12px right of the grid, from the top of its cells, ending within the
+  // chart.
+  const [title] = text("k");
+  assert.strictEqual(text("k").length, 1);
+  const [x0, y0] = absolute(title);
+  assertInDelta(x0, cells[1].right + 12);
+  assertInDelta(y0, cells[1].top);
+  const swatch = (label) => 10 + 4 + widthOf(label);
+  assertInDelta(400 - 20 - cells[1].right, 12 + swatch("one") + 3);
+  // The cells are scaled into the rest, and the labels of the parent's axis stay at their middles.
+  assertInDelta(cells[0].right - cells[0].left, cells[1].right - cells[1].left);
+  for (const [i, label] of ["a", "b"].entries()) {
+    const [x] = absolute(text(label)[0]);
+    assertInDelta(x, (cells[i].left + cells[i].right) / 2);
+  }
+  // Without a legend, the cells are the bands of the parent.
+  const {cells: plain} = legendGrid({});
+  assertInDelta(plain[1].right, 380);
+});
+
+test("cm.plane draws the legends of a nested grid past the axes of its parent, which move in to the cells", () => {
+  // A grid of cells a and b across and 1 and 2 down, under a parent with axes at the top and on the
+  // right, each cell a chart colored by k, with its frame drawn as a rect.
+  const render = (legend, label = null) => {
+    const renderer = cm.svg({width: 400, height: 300});
+    const root = cm.flow().renderer(renderer);
+    root
+      .data(d3.cross(["a", "b"], ["1", "2"]))
+      .transform(cm.encode, {x: ([x]) => x, y: ([, y]) => y})
+      .transform(cm.spreadX, {padding: 0})
+      .transform(cm.spreadY, {padding: 0})
+      .transform(cm.plane, {x: {axis: "top", label}, y: {axis: "right", label: null}})
+      .append(cm.g)
+      .data(() => [{v: 0, k: "one"}])
+      .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+      .transform(cm.plane, {fill: {legend}})
+      .add(cm.annotate(cm.rect), {fill: "none", stroke: "black"});
+    root.render();
+    const node = renderer.node();
+    const rects = Array.from(node.querySelectorAll("rect[stroke=black]"), (r) => {
+      const [x, y] = absolute(r);
+      return [x, y, x + +r.getAttribute("width"), y + +r.getAttribute("height")];
+    });
+    const grid = [
+      Math.min(...rects.map((r) => r[0])),
+      Math.min(...rects.map((r) => r[1])),
+      Math.max(...rects.map((r) => r[2])),
+      Math.max(...rects.map((r) => r[3])),
+    ];
+    const at = (label) => absolute(Array.from(node.querySelectorAll("text")).find((t) => t.textContent === label));
+    return {grid, at};
+  };
+  // At the top, the legend starts 3px from the top of the chart, where the labels of x were, which
+  // now hang over the cells, past its title, its swatches and a gap of 10.
+  const top = render(true);
+  assertInDelta(top.at("k")[1], 3);
+  const [, y] = top.at("a");
+  assertInDelta(y, top.grid[1] - 6 - 3);
+  assert.ok(y - 10 >= 3 + 14 + 14 + 10 - 1e-6);
+  // On the right, the labels of y sit right of the cells, and the legend right of them, ending
+  // within the chart.
+  const right = render("right");
+  const [x] = right.at("1");
+  assertInDelta(x, right.grid[2] + 6 + 3);
+  const [lx] = right.at("k");
+  assertInDelta(lx, x + Math.max(widthOf("1"), widthOf("2")) + 12);
+  assert.ok(right.at("one")[0] + widthOf("one") <= 400 - 3 + 1e-6);
+  // With a title, the legend stays at the top, and the title of x comes under its gap of 10, over
+  // the labels.
+  const titled = render(true, "island");
+  assertInDelta(titled.at("k")[1], 3);
+  const [, titleY] = titled.at("island");
+  assert.ok(titleY - 10 >= titled.at("one")[1] + 10 + 10 - 1e-6);
+  assert.ok(titleY <= titled.at("a")[1] - 10 - 6 + 1e-6);
+});
+
+test("cm.plane draws the legends of a nested grid over the level title of y of its parent", () => {
+  const renderer = cm.svg({width: 400, height: 300});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(["a", "b"])
+    .transform(cm.encode, {x: (d) => d, y: 0, y1: 10})
+    .transform(cm.spreadX, {padding: 0})
+    .transform(cm.plane, {y: {label: "value"}})
+    .append(cm.g)
+    .data(() => [{v: 0, k: "one"}])
+    .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+    .transform(cm.plane, {fill: {legend: true}});
+  root.render();
+  const at = (label) =>
+    absolute(Array.from(renderer.node().querySelectorAll("text")).find((t) => t.textContent === label));
+  // The legend is at the top, then the title of y, ending 6px over half a label over the cells,
+  // where the top tick of y follows them.
+  assertInDelta(at("k")[1], 3);
+  const [, title] = at("↑ value");
+  assert.ok(title - 10 >= at("one")[1] + 10 + 10 - 1e-6);
+  assertInDelta(title, at("10")[1] - 5 - 6);
+});
+
+test("cm.plane keeps the title of a continuous axis of a parent at the end of the scaled grid, and inverts through it", () => {
+  const renderer = cm.svg({width: 400, height: 300});
+  const root = cm.flow().renderer(renderer);
+  const parent = root
+    .data([
+      {x: 0, x1: 5},
+      {x: 5, x1: 10},
+    ])
+    .transform(cm.encode, {x: "x", x1: "x1"})
+    .transform(cm.plane, {x: {label: "v"}});
+  parent
+    .append(cm.g)
+    .data(() => [{v: 0, k: "one"}])
+    .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+    .transform(cm.plane, {fill: {legend: "right"}})
+    .add(cm.annotate(cm.rect), {fill: "none", stroke: "black"});
+  root.render();
+  const node = renderer.node();
+  const right = Math.max(
+    ...Array.from(node.querySelectorAll("rect[stroke=black]"), (r) => absolute(r)[0] + +r.getAttribute("width")),
+  );
+  // The title of x ends at the right of the grid, where the last tick is, rather than at the frame.
+  const title = Array.from(node.querySelectorAll("text")).find((t) => t.textContent === "v →");
+  assertInDelta(absolute(title)[0], right);
+  const [x] = parent._values.map(({scales}) => scales.x);
+  assertInDelta(x.apply(10), right);
+  assertInDelta(x.invert(x.apply(3)), 3);
+});
+
+test("cm.plane maps the annotations of a parent through the scaled grid of its cells", () => {
+  const {cells, node} = legendGrid({fill: {legend: "right"}}, (flow) =>
+    flow.add(cm.annotate(cm.link), {x: "b", stroke: "red"}),
+  );
+  const [rule] = node.querySelectorAll("line[stroke=red]");
+  const [x] = absolute(rule, "x1", "y1");
+  assertInDelta(x, (cells[1].left + cells[1].right) / 2);
+});
+
 test("cm.plane keeps the axes asked of cells inside the grid of its parent", () => {
   const renderer = cm.svg({width: 400, height: 400});
   const root = cm.flow().renderer(renderer);

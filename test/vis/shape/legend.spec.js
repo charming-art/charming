@@ -231,22 +231,48 @@ test("cm.plane gives room to the legends at the top, and turns the title of y un
   assertInDelta(400 - right.right, widthOf("4") / 2 + 12 + Math.max(swatch("a"), swatch("b")) + 3);
 });
 
-test("cm.legend draws nothing in charts nested in a chart, nor without scales to show", () => {
+test("cm.legend draws nothing in charts nested at points, such as glyphs, nor without scales to show", () => {
   const renderer = cm.svg({width: 200, height: 100});
   const root = cm.flow().renderer(renderer);
   root
-    .data(["A", "B"])
-    .transform(cm.encode, {x: (d) => d})
-    .transform(cm.spreadX)
-    .transform(cm.plane, {x: {axis: null}})
+    .data([1, 2])
+    .transform(cm.encode, {x: (d) => d, y: (d) => d})
+    .transform(cm.plane, {x: {axis: null}, y: {axis: null}})
     .append(cm.g)
     .data([{k: "a"}])
     .transform(cm.encode, {fill: "k"})
-    .transform(cm.plane)
+    .transform(cm.plane, {width: 20, height: 20})
     .add(cm.legend);
   root.render();
   assert.strictEqual(renderer.node().querySelectorAll("text").length, 0);
   assert.strictEqual(texts(legend({})).length, 0);
+});
+
+test("cm.legend draws the legends of a grid of cells once, in cm.plane and cm.polar, unless its data is shared", () => {
+  const rows = [
+    {k: "a", v: 1},
+    {k: "b", v: 2},
+  ];
+  for (const [coordinate, channels, data, expected] of [
+    [cm.plane, {x: "v", y: "v"}, () => rows, ["k", "a", "b"]],
+    [cm.polar, {x: "v"}, () => rows, ["k", "a", "b"]],
+    // Shared by the cells, the data is drawn in one frame for all of them, which has no legends.
+    [cm.plane, {x: "v", y: "v"}, rows, []],
+  ]) {
+    const renderer = cm.svg({width: 400, height: 200});
+    const root = cm.flow().renderer(renderer);
+    root
+      .data(["A", "B", "C"])
+      .transform(cm.encode, {x: (d) => d})
+      .transform(cm.spreadX)
+      .transform(cm.plane, {x: {axis: null}})
+      .append(cm.g)
+      .data(data)
+      .transform(cm.encode, {...channels, fill: "k"})
+      .transform(coordinate, {fill: {legend: true}});
+    root.render();
+    assert.deepStrictEqual(texts(renderer.node()), expected);
+  }
 });
 
 test("cm.legend in cm.polar stacks its legends right of the disc, from its top", () => {

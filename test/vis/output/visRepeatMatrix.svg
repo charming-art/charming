@@ -5681,20 +5681,20 @@
     <text x="61.34657598499066" y="170.65853658536582" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">4,000</text>
     <text x="147.53513133208259" y="170.65853658536582" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">6,000</text>
   </g>
-  <line x1="147.0609756097561" y1="763" x2="147.0609756097561" y2="763" stroke="currentColor" stroke-width="1"></line>
-  <line x1="325.3536585365854" y1="763" x2="325.3536585365854" y2="763" stroke="currentColor" stroke-width="1"></line>
-  <line x1="503.6463414634147" y1="763" x2="503.6463414634147" y2="763" stroke="currentColor" stroke-width="1"></line>
-  <line x1="681.939024390244" y1="763" x2="681.939024390244" y2="763" stroke="currentColor" stroke-width="1"></line>
-  <text x="147.0609756097561" y="787" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">culmen_length_mm</text>
-  <text x="325.3536585365854" y="787" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">culmen_depth_mm</text>
-  <text x="503.6463414634147" y="787" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">flipper_length_mm</text>
-  <text x="681.939024390244" y="787" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">body_mass_g</text>
-  <line x1="49.00000000000001" y1="111.01219512195118" x2="49.00000000000001" y2="111.01219512195118" stroke="currentColor" stroke-width="1"></line>
-  <line x1="49.00000000000001" y1="294.67073170731703" x2="49.00000000000001" y2="294.67073170731703" stroke="currentColor" stroke-width="1"></line>
-  <line x1="49.00000000000001" y1="478.32926829268297" x2="49.00000000000001" y2="478.32926829268297" stroke="currentColor" stroke-width="1"></line>
-  <line x1="49.00000000000001" y1="661.9878048780487" x2="49.00000000000001" y2="661.9878048780487" stroke="currentColor" stroke-width="1"></line>
-  <text x="13.000000000000007" y="111.01219512195118" transform="rotate(-90,13.000000000000007,111.01219512195118)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">culmen_length_mm</text>
-  <text x="13.000000000000007" y="294.67073170731703" transform="rotate(-90,13.000000000000007,294.67073170731703)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">culmen_depth_mm</text>
-  <text x="13.000000000000007" y="478.32926829268297" transform="rotate(-90,13.000000000000007,478.32926829268297)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">flipper_length_mm</text>
-  <text x="13.000000000000007" y="661.9878048780487" transform="rotate(-90,13.000000000000007,661.9878048780487)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">body_mass_g</text>
+  <line x1="167.46969981238277" y1="763" x2="167.46969981238277" y2="763" stroke="currentColor" stroke-width="1"></line>
+  <line x1="339.8468105065666" y1="763" x2="339.8468105065666" y2="763" stroke="currentColor" stroke-width="1"></line>
+  <line x1="512.2239212007505" y1="763" x2="512.2239212007505" y2="763" stroke="currentColor" stroke-width="1"></line>
+  <line x1="684.6010318949344" y1="763" x2="684.6010318949344" y2="763" stroke="currentColor" stroke-width="1"></line>
+  <text x="167.46969981238277" y="787" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">culmen_length_mm</text>
+  <text x="339.8468105065666" y="787" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">culmen_depth_mm</text>
+  <text x="512.2239212007505" y="787" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">flipper_length_mm</text>
+  <text x="684.6010318949344" y="787" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">body_mass_g</text>
+  <line x1="49.00000000000001" y1="110.59287054409002" x2="49.00000000000001" y2="110.59287054409002" stroke="currentColor" stroke-width="1"></line>
+  <line x1="49.00000000000001" y1="293.31957473420886" x2="49.00000000000001" y2="293.31957473420886" stroke="currentColor" stroke-width="1"></line>
+  <line x1="49.00000000000001" y1="476.04627892432774" x2="49.00000000000001" y2="476.04627892432774" stroke="currentColor" stroke-width="1"></line>
+  <line x1="49.00000000000001" y1="658.7729831144463" x2="49.00000000000001" y2="658.7729831144463" stroke="currentColor" stroke-width="1"></line>
+  <text x="13.000000000000007" y="110.59287054409002" transform="rotate(-90,13.000000000000007,110.59287054409002)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">culmen_length_mm</text>
+  <text x="13.000000000000007" y="293.31957473420886" transform="rotate(-90,13.000000000000007,293.31957473420886)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">culmen_depth_mm</text>
+  <text x="13.000000000000007" y="476.04627892432774" transform="rotate(-90,13.000000000000007,476.04627892432774)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">flipper_length_mm</text>
+  <text x="13.000000000000007" y="658.7729831144463" transform="rotate(-90,13.000000000000007,658.7729831144463)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">body_mass_g</text>
 </svg>

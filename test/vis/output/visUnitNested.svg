@@ -1373,16 +1373,16 @@
       <text x="22.017073170731734" y="-62.37188591204561" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">female</text>
       <text x="22.017073170731734" y="88.15226542235789" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">male</text>
     </g>
-    <line x1="-197.83879734424988" y1="302.98090145148973" x2="-197.83879734424988" y2="308.98090145148973" stroke="currentColor" stroke-width="1"></line>
-    <line x1="67.81973924111591" y1="302.98090145148973" x2="67.81973924111591" y2="308.98090145148973" stroke="currentColor" stroke-width="1"></line>
-    <text x="-197.83879734424988" y="311.98090145148973" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Yes</text>
-    <text x="67.81973924111591" y="311.98090145148973" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">No</text>
+    <line x1="-170.48474729886712" y1="302.98090145148973" x2="-170.48474729886712" y2="308.98090145148973" stroke="currentColor" stroke-width="1"></line>
+    <line x1="79.2675979168927" y1="302.98090145148973" x2="79.2675979168927" y2="308.98090145148973" stroke="currentColor" stroke-width="1"></line>
+    <text x="-170.48474729886712" y="311.98090145148973" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Yes</text>
+    <text x="79.2675979168927" y="311.98090145148973" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">No</text>
   </g>
-  <line x1="75.4" y1="89.02597402597401" x2="75.4" y2="89.02597402597401" stroke="currentColor" stroke-width="1"></line>
-  <line x1="75.4" y1="226.53552330022913" x2="75.4" y2="226.53552330022913" stroke="currentColor" stroke-width="1"></line>
-  <line x1="75.4" y1="452.50954927425505" x2="75.4" y2="452.50954927425505" stroke="currentColor" stroke-width="1"></line>
-  <text x="25.400000000000006" y="89.02597402597401" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1</text>
-  <text x="25.400000000000006" y="226.53552330022913" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2</text>
-  <text x="25.400000000000006" y="452.50954927425505" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">3</text>
-  <text x="13.000000000000007" y="315" transform="rotate(-90,13.000000000000007,315)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">pclass</text>
+  <line x1="75.4" y1="87.62205591019149" x2="75.4" y2="87.62205591019149" stroke="currentColor" stroke-width="1"></line>
+  <line x1="75.4" y1="222.3348007924279" x2="75.4" y2="222.3348007924279" stroke="currentColor" stroke-width="1"></line>
+  <line x1="75.4" y1="443.7127448822364" x2="75.4" y2="443.7127448822364" stroke="currentColor" stroke-width="1"></line>
+  <text x="25.400000000000006" y="87.62205591019149" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1</text>
+  <text x="25.400000000000006" y="222.3348007924279" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2</text>
+  <text x="25.400000000000006" y="443.7127448822364" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">3</text>
+  <text x="13.000000000000007" y="309.00000000000006" transform="rotate(-90,13.000000000000007,309.00000000000006)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">pclass</text>
 </svg>

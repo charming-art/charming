@@ -122,6 +122,46 @@ export function extentY(y, options = {}, side = "left") {
   return {reach, start, end};
 }
 
+// What the axes of a chart draw past its frame at the top and on the right, by the guides of its
+// context, with their titles, for the legends of a grid of cells nested in it, which go past them.
+// Like Plot's, only the first side of an axis has a title: a title of x over a top axis, a level
+// title of y at the top, in the row of the title of x, and a title of y turned past a right axis.
+// A nested chart draws no titles.
+export function outerReach(scales, guides, frame) {
+  const {x, y} = scales;
+  const titled = (record, axis, options, turned) =>
+    !frame?.nested && labelOf(record, scaleOf(record), axis, options, turned) != null;
+  const anchorsX = (x && guides?.x?.anchors) || [];
+  const anchorsY = (y && guides?.y?.anchors) || [];
+  const reachX = anchorsX.includes("top") ? extentX(x, guides.x, "top").reach : 0;
+  let top = reachX;
+  if (anchorsX[0] === "top" && titled(x, "x", guides.x)) top += titleGap + font.fontSize;
+  let right = anchorsY.includes("right") ? extentY(y, guides.y, "right").reach : 0;
+  if (anchorsY.length) {
+    const {labelAnchor = scaleOf(y).ticks ? "top" : "center"} = guides.y;
+    const turned = labelAnchor === "center" || (labelAnchor === "top" && hasTopLegend(guides, scales));
+    if (turned && anchorsY[0] === "right" && titled(y, "y", guides.y, true)) right += titleGap + font.fontSize;
+    if (!turned && labelAnchor === "top" && titled(y, "y", guides.y)) {
+      const past = reachX || font.fontSize / 2;
+      top = Math.max(top, past + titleGap + font.fontSize);
+    }
+  }
+  return {top, right};
+}
+
+// The positions of an axis, following a grid of cells nested in its chart, if it was scaled to keep
+// room at its edges, such as for the legends of facets; see gridFrames.
+function warped(record, position) {
+  const {warp} = record;
+  return warp ? (d) => warp(position(d)) : position;
+}
+
+// The range of a recorded position scale, following a grid of cells nested in its chart, if it was
+// scaled; see gridFrames.
+function rangeOf({range, warp}) {
+  return warp ? range.map(warp) : range;
+}
+
 function extentOf(range) {
   return [Math.min(...range), Math.max(...range)];
 }
@@ -139,11 +179,12 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
   const {tickSize = 6, tickPadding = 3, tickRotate = 0, grid = false, anchor = "bottom", layer} = options;
   const {height} = flow.renderer()._props;
   const scale = scaleOf(x);
-  const [left, right] = extentOf(x.range);
-  const [top, bottom] = frame ? [frame.top, frame.bottom] : y ? extentOf(y.range) : [0, height];
+  // Its range, its ticks and its title follow a grid nested in the chart, if it was scaled.
+  const [left, right] = extentOf(rangeOf(x));
+  const [top, bottom] = frame ? [frame.top, frame.bottom] : y ? extentOf(rangeOf(y)) : [0, height];
   const count = countOf(options, right - left, 80);
   const ticks = ticksOf(scale, options, count);
-  const X = positionOf(scale);
+  const X = warped(x, positionOf(scale));
   const stroke = "currentColor";
   if (grid && layer !== "axis")
     flow.data(ticks).append(link, {key, x: X, x1: X, y: top, y1: bottom, stroke, strokeOpacity: 0.1});
@@ -151,7 +192,8 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
   // An implicit axis draws its grid and the rest in two layers, under and over the shapes.
   if (layer === "grid" || (frame?.edges && !frame.edges[anchor])) return;
   const isTop = anchor === "top";
-  const [edge, k] = isTop ? [top, -1] : [bottom, 1];
+  // The edge may be moved in to a grid of cells nested in the chart, past their legends; see gridFrames.
+  const [edge, k] = isTop ? [x.edges?.top ?? top, -1] : [bottom, 1];
   flow.data(ticks).append(link, {key, x: X, x1: X, y: edge, y1: edge + k * tickSize, stroke});
   const [rotateX, padX] = rotatedX(tickRotate, isTop);
   const format = formatOf(scale, options, count);
@@ -202,11 +244,11 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
   const {tickSize = 6, tickPadding = 3, tickRotate = 0, grid = false, anchor = "left", layer} = options;
   const {width} = flow.renderer()._props;
   const scale = scaleOf(y);
-  const [left, right] = frame ? [frame.left, frame.right] : x ? extentOf(x.range) : [0, width];
-  const [top, bottom] = extentOf(y.range);
+  const [left, right] = frame ? [frame.left, frame.right] : x ? extentOf(rangeOf(x)) : [0, width];
+  const [top, bottom] = extentOf(rangeOf(y));
   const count = countOf(options, bottom - top, 35);
   const ticks = ticksOf(scale, options, count);
-  const Y = positionOf(scale);
+  const Y = warped(y, positionOf(scale));
   const stroke = "currentColor";
   if (grid && layer !== "axis")
     flow.data(ticks).append(link, {key, x: left, x1: right, y: Y, y1: Y, stroke, strokeOpacity: 0.1});
@@ -214,7 +256,7 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
   // An implicit axis draws its grid and the rest in two layers, under and over the shapes.
   if (layer === "grid" || (frame?.edges && !frame.edges[anchor])) return;
   const isRight = anchor === "right";
-  const [edge, k] = isRight ? [right, 1] : [left, -1];
+  const [edge, k] = isRight ? [y.edges?.right ?? right, 1] : [left, -1];
   flow.data(ticks).append(link, {key, x: edge, x1: edge + k * tickSize, y: Y, y1: Y, stroke});
   const [rotateY, padY] = rotatedY(tickRotate, isRight);
   const format = formatOf(scale, options, count);
@@ -247,7 +289,8 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
       ...font,
       text: label,
       x: isRight ? width - 3 : 3,
-      y: isBottom ? bottom + past + titleGap : top - past - titleGap,
+      // At the top, in the row of the title of x, which may move in to a grid nested in the chart.
+      y: isBottom ? bottom + past + titleGap : (x?.edges?.top ?? top) - past - titleGap,
       textAlign: isRight ? "end" : "start",
       textBaseline: isBottom ? "top" : "bottom",
     });
