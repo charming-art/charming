@@ -1,7 +1,8 @@
 import {scaleRadial} from "d3-scale";
 import {arc} from "d3-shape";
 import {axisX, axisY} from "../shape/axis.js";
-import {legend, topLegends} from "../shape/legend.js";
+import {polarLabelBoxes} from "../shape/axisPolar.js";
+import {legend, rightLegends, topLegends} from "../shape/legend.js";
 import {point, scale} from "../../core/transform/scale.js";
 import {
   allKeysOf,
@@ -89,43 +90,11 @@ export function polar(
     ]),
   );
 
-  // A nested chart has no margins by default: its parent leaves the room. The colors are resolved
-  // before the frame, so that the legends at the top, measured from the left of the chart, are given
-  // room over the margin.
+  // The scales shared by all the contexts: colors, and positions unless they're independent,
+  // resolved before the frame, as they don't depend on it, so that what the axes and legends draw
+  // can be measured for the margins. Like cm.plane, a position is shared by the name of its scale,
+  // the axis by default.
   const colors = channelScales(merge(data, scaledKeys), channelHints(data));
-  if (!nested) width ??= renderer._props.auto?.width ? 640 : renderer._props.width;
-  const legendRoom = nested ? 0 : topLegends(data, colors, options, width - 3 - (marginLeft ?? margin ?? 40));
-  margin ??= nested ? 0 : 40;
-  marginTop ??= margin + legendRoom;
-  marginRight ??= margin;
-  marginBottom ??= margin;
-  marginLeft ??= margin;
-
-  let boxes;
-  if (nested) {
-    boxes = nestedFrames(flow, data, {width, height});
-  } else {
-    const {auto, height: rendererHeight} = renderer._props;
-    height ??= auto?.height ? 640 : rendererHeight;
-    renderer.resize?.(width, height);
-    ({width, height} = renderer._props);
-    boxes = data.map(() => ({left: 0, right: width, top: 0, bottom: height}));
-  }
-  const frames = boxes.map(({left, right, top, bottom, nested}) => {
-    const l = left + marginLeft;
-    const r = right - marginRight;
-    const t = top + marginTop;
-    const b = bottom - marginBottom;
-    const outerRadius = Math.max(0, Math.min(r - l, b - t) / 2);
-    const r0 = innerRadius * outerRadius;
-    // The left of the box inside the margins is kept for the legends at the top, which start there.
-    const frame = {type: "polar", cx: (l + r) / 2, cy: (t + b) / 2, innerRadius: r0, outerRadius, startAngle, endAngle};
-    frame.left = l;
-    // Like cm.plane's, a nested frame is marked, so that its axes leave titles to the outer chart.
-    return nested ? {...frame, nested} : frame;
-  });
-  // The scales shared by all the contexts: colors, and positions unless they're independent.
-  // Like cm.plane, a position is shared by the name of its scale, the axis by default.
   const independent = (name) => resolution[name] === "independent";
   // The type and domain of a position: the options of its scale, unless it has bands, else its
   // hint; the radius is radial by default, so that areas grow with values.
@@ -145,6 +114,87 @@ export function polar(
     );
   const sharedX = sharedOf(keysX, "x");
   const sharedY = sharedOf(keysY, "y", "radial");
+
+  // The angles of a context, recorded for its axis: they don't depend on the frame.
+  const angleRecordOf = ({value, hints = {}}) => {
+    const hintX = axisHint(hints, keysX);
+    const nameX = scaleName(hints, keysX, "x");
+    const rangeX = hintX.reverse ? [endAngle, startAngle] : [startAngle, endAngle];
+    const ownX = positionOf([hintX], keysX, nameX);
+    const ownKeysX = keysOf(value, hints, keysX, "x");
+    const x = sharedX.get(nameX) || positionScale(value, ownKeysX, {...ownX, domain: ownX.domain ?? hintX.domain});
+    return {nameX, recordX: callable(labeled(positionRecord(x, rangeX, hintX), hintX))};
+  };
+
+  // The polar frame of a box inside margins: a disc, or a ring, centered in it.
+  const frameOf = ({left, right, top, bottom, nested}, {top: mt, right: mr, bottom: mb, left: ml}) => {
+    const l = left + ml;
+    const r = right - mr;
+    const t = top + mt;
+    const b = bottom - mb;
+    const outerRadius = Math.max(0, Math.min(r - l, b - t) / 2);
+    const r0 = innerRadius * outerRadius;
+    // The left of the box inside the margins is kept for the legends at the top, which start there.
+    const frame = {type: "polar", cx: (l + r) / 2, cy: (t + b) / 2, innerRadius: r0, outerRadius, startAngle, endAngle};
+    frame.left = l;
+    // Like cm.plane's, a nested frame is marked, so that its axes leave titles to the outer chart.
+    return nested ? {...frame, nested} : frame;
+  };
+
+  let frames;
+  if (nested) {
+    // A nested chart has no margins by default: its parent leaves the room.
+    const margins = {top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft};
+    for (const side in margins) margins[side] ??= margin ?? 0;
+    frames = nestedFrames(flow, data, {width, height}).map((box) => frameOf(box, margins));
+  } else {
+    // The margins that aren't given are 40, like the default margin, and grow to fit what's drawn
+    // past the disc: the tick labels of an angle axis on the outer ring, and the legends on the
+    // right, 3px from the edges of the chart, and the legends at the top, over the margin unless
+    // marginTop is given. As the disc shrinks and moves with the margins, each growth takes in about
+    // half of what's past the edge, so they grow until it's under a thousandth of a pixel, up to 30
+    // times; a given margin, or margin for every side, stays as it is.
+    const {auto, width: rendererWidth, height: rendererHeight} = renderer._props;
+    width ??= auto?.width ? 640 : rendererWidth;
+    height ??= auto?.height ? 640 : rendererHeight;
+    renderer.resize?.(width, height);
+    ({width, height} = renderer._props);
+    const box = {left: 0, right: width, top: 0, bottom: height};
+    const given = {top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft};
+    const margins = {};
+    for (const side in given) margins[side] = given[side] ?? margin ?? 40;
+    const legendRoom = given.top === undefined ? topLegends(data, colors, options, width - 3 - margins.left) : 0;
+    margins.top += legendRoom;
+    for (let pass = 0; pass < 30; pass++) {
+      const frame = frameOf(box, margins);
+      const boxes = [];
+      for (const context of data) {
+        if (!hasAny(context.value, keysOf(context.value, context.hints ?? {}, keysX, "x"))) continue;
+        const {nameX, recordX} = angleRecordOf(context);
+        const {x: guide} = guidesOf(null, options, nameX, "y", sidesOfPolar, {x: [], y: []});
+        const {anchors, ...axis} = guide;
+        for (const anchor of anchors) boxes.push(...polarLabelBoxes(frame, recordX, {...axis, anchor}));
+      }
+      const legendWidth = rightLegends(data, colors, options, 2 * frame.outerRadius);
+      if (legendWidth) {
+        const x0 = frame.cx + frame.outerRadius + 12;
+        boxes.push([x0, frame.cy - frame.outerRadius, x0 + legendWidth, frame.cy - frame.outerRadius]);
+      }
+      const over = {
+        left: Math.max(0, ...boxes.map(([x0]) => 3 - x0)),
+        right: Math.max(0, ...boxes.map(([, , x1]) => x1 - (width - 3))),
+        top: Math.max(0, ...boxes.map(([, y0]) => legendRoom + 3 - y0)),
+        bottom: Math.max(0, ...boxes.map(([, , , y1]) => y1 - (height - 3))),
+      };
+      let grown = false;
+      for (const side in over) {
+        if (over[side] > 1e-3 && given[side] === undefined && margin === undefined)
+          [margins[side], grown] = [margins[side] + over[side], true];
+      }
+      if (!grown) break;
+    }
+    frames = data.map(() => frameOf(box, margins));
+  }
 
   // The id of the chart's guides, which tells them apart from the guides of other charts.
   const id = {};

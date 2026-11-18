@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import {test} from "vitest";
 import "../../install-canvas-mock.js";
 import * as cm from "../../../src/index.js";
+import {widthOf} from "../../../src/vis/shape/axisUtils.js";
 import {assertInDelta} from "../../helpers.js";
 
 // A 200 × 200 renderer with a margin of 0: the center is (100, 100) and the radius is 100.
@@ -207,4 +208,67 @@ test("cm.polar reverses the angle and the radius of reversed scales", () => {
     r: {type: "linear", domain: [0, 4], reverse: true},
   });
   assertAllInDelta(named.value.y, [75, 50]);
+});
+
+// The frame of a polar chart of the given angles, with the options of cm.polar, and the boxes of its
+// texts, measured like Plot's.
+function polarLayout(options, labels = ["a", "b", "c", "d"], size = 400) {
+  const renderer = cm.svg({width: size, height: size});
+  const root = cm.flow().renderer(renderer);
+  const [context] = root
+    .data(labels.map((k) => ({k, v: 1})))
+    .transform(cm.encode, {x: "k", y: "v"})
+    .transform(cm.spreadX)
+    .transform(cm.polar, options)._values;
+  root.render();
+  return [context.frame, Array.from(renderer.node().querySelectorAll("text"))];
+}
+
+test("cm.polar keeps its default margin of 40 without what's drawn past its disc", () => {
+  const [frame] = polarLayout({});
+  assert.deepStrictEqual([frame.cx, frame.cy, frame.outerRadius], [200, 200, 160]);
+});
+
+test("cm.polar grows its margins so that the tick labels of an outer angle axis fit, 3px from the edges", () => {
+  const long = ["a long label", "another long label", "a third long label", "the last long label"];
+  const [frame, texts] = polarLayout({x: {axis: "outer"}}, long);
+  assert.ok(frame.outerRadius < 160);
+  for (const t of texts) {
+    const x = +t.getAttribute("x");
+    const w = widthOf(t.textContent);
+    const anchor = t.getAttribute("text-anchor") ?? "start";
+    const x0 = anchor === "end" ? x - w : anchor === "middle" ? x - w / 2 : x;
+    assert.ok(x0 >= 3 - 0.01 && x0 + w <= 400 - 3 + 0.01, t.textContent);
+  }
+  // The labels of an inner axis are in the hole, so the margins stay as they are.
+  const [inner] = polarLayout({innerRadius: 0.5, x: {axis: "inner"}}, long);
+  assert.strictEqual(inner.outerRadius, 160);
+});
+
+test("cm.polar keeps a given margin as it is", () => {
+  const long = ["a long label", "another long label", "a third long label", "the last long label"];
+  const [frame] = polarLayout({margin: 20, x: {axis: "outer"}}, long);
+  assert.strictEqual(frame.outerRadius, 180);
+  const [left] = polarLayout({marginLeft: 20, marginRight: 20, x: {axis: "outer"}}, long);
+  assert.strictEqual(left.cx, 200);
+});
+
+test("cm.polar grows its right margin so that its legends on the right fit", () => {
+  const renderer = cm.svg({width: 400, height: 400});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {k: "a category with a long name", v: 1},
+      {k: "b", v: 2},
+    ])
+    .transform(cm.encode, {x: "v", fill: "k"})
+    .transform(cm.stackX)
+    .transform(cm.polar, {fill: {legend: "right"}})
+    .add(cm.arc);
+  root.render();
+  const label = Array.from(renderer.node().querySelectorAll("text")).find((t) =>
+    t.textContent.startsWith("a category"),
+  );
+  assert.strictEqual(label.textContent, "a category with a long name");
+  assert.ok(+label.getAttribute("x") + widthOf(label.textContent) <= 400 - 3 + 1e-6);
 });

@@ -15,8 +15,7 @@ export const visPolarWaffle = withSVG(async () => {
         .transform(cm.spreadX)
         .transform(cm.unitY)
         .transform(cm.stackY, {chunk: 10})
-        .transform(cm.polar, {innerRadius: 0.2, margin: 48})
-        .add(cm.axis, {x: {anchor: "outer"}})
+        .transform(cm.polar, {innerRadius: 0.2, x: {axis: "outer"}})
         .add(cm.arc);
     },
     {width: 640, height: 640},
