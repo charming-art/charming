@@ -175,6 +175,17 @@ function opsOf(a, b) {
   return a.ops.length === b.ops.length ? b.ops : a.ops;
 }
 
+// The items of the first render, when nothing is shown yet: like Vue's appear and G2's enter, the
+// primitives with their own enter state, such as {clipTop: 1}, or enter timing, enter from it, or
+// fade in; the others are drawn as they are, so that marks without them don't fade in.
+export function appear(next, options) {
+  return next.map((q) => {
+    const own = (o = {}) => Object.values(o).some((v) => v !== undefined);
+    if (!own(q.enter) && !own(q.timing?.enter)) return {end: 0, at: () => q};
+    return item(q, "always", {...q.attrs, ...state(q.enter)}, q.attrs, q.ops, q.ops, timing(q, "enter", options));
+  });
+}
+
 // The attributes of a state, without the ones the row doesn't give, else a fade.
 function state(attrs = {}) {
   const defined = Object.fromEntries(Object.entries(attrs).filter(([, v]) => v !== undefined));

@@ -1,4 +1,5 @@
-import {diff} from "./diff.js";
+import {drawPrimitive} from "../inset.js";
+import {appear, diff} from "./diff.js";
 
 const defaults = {delay: 0, duration: 750, ease: "cubic-in-out"};
 
@@ -19,8 +20,9 @@ function unschedule(id) {
 }
 
 // Animates from what the renderer shows to the primitives drawn by a render: matched primitives
-// update, and the others enter, exit, split or merge. The first render after transitions are on is
-// drawn as it is. A render during an animation starts from the primitives as they are shown then.
+// update, and the others enter, exit, split or merge. On the first render after transitions are
+// on, the primitives with their own enter state or timing enter, and the others are drawn as they
+// are. A render during an animation starts from the primitives as they are shown then.
 // Once it ends, or is stopped by another, onend is called, such as to play the next keyframe.
 export function animate(state, renderer, next, options, onend) {
   // A render that isn't a moment of keyframes stops their sequence.
@@ -32,7 +34,7 @@ export function animate(state, renderer, next, options, onend) {
   const start = Date.now();
   const prev = state.shown?.(start);
   state.stop?.();
-  const items = prev ? diff(prev, next, options) : next.map((p) => ({end: 0, at: () => p}));
+  const items = prev ? diff(prev, next, options) : appear(next, options);
   // The end of the last item, in a loop rather than spread into Math.max, for large scenes.
   let end = 0;
   for (const item of items) if (item.end > end) end = item.end;
@@ -65,7 +67,7 @@ function draw(renderer, primitives) {
   for (const {type, attrs, ops} of primitives) {
     // A primitive drawn without translations or rotations isn't put in a group of its own.
     if (!ops.length) {
-      renderer[type](attrs);
+      drawPrimitive(renderer, type, attrs);
       continue;
     }
     renderer.save();
@@ -73,7 +75,7 @@ function draw(renderer, primitives) {
       if (op === "clip") renderer.clip?.(clipOf(args));
       else renderer[op](...args);
     }
-    renderer[type](attrs);
+    drawPrimitive(renderer, type, attrs);
     renderer.restore();
   }
   renderer.render?.();

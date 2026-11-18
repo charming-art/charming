@@ -1,6 +1,7 @@
 import {Flow} from "./index.js";
 import {animate, play, stopSequence, transitionOptions} from "../transition/index.js";
 import {recorder} from "../transition/record.js";
+import {withInsets} from "../inset.js";
 
 // The first row of each group of a node, across all its groups: the groups of a child flow, such
 // as flow.data((d) => d.children), are numbered across the rows of all the parent's groups.
@@ -73,7 +74,8 @@ function renderNode(renderer, node, index, context, path, scope, time, pick) {
   }
   if (builtin) {
     renderer.begin?.({path: `${scope}${path}`, scope, index, I, value, group});
-    render(renderer, I, value, options, group);
+    // Its rows may clip what they draw to their boxes, by fractions from each side.
+    render(withInsets(renderer, I, value), I, value, options, group);
     renderer.end?.();
   }
   const rows = children.length ? (pick === undefined ? I : [pick]) : [];

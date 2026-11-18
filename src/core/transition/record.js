@@ -1,5 +1,5 @@
 // The primitives that shapes draw.
-const primitives = ["point", "circle", "rect", "line", "triangle", "path", "polygon", "text", "clear"];
+const primitives = ["point", "circle", "rect", "line", "triangle", "path", "polygon", "text", "arc", "clear"];
 
 // The channels of the timing of a stage: delay, duration and ease, for updates, and enterDelay or
 // exitDuration, for enters and exits.

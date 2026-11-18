@@ -7,6 +7,7 @@ import {svg$line} from "./line.js";
 import {svg$triangle} from "./triangle.js";
 import {svg$translate} from "./translate.js";
 import {svg$path} from "./path.js";
+import {svg$arc} from "./arc.js";
 import {svg$polygon} from "./polygon.js";
 import {svg$text} from "./text.js";
 import {svg$clear} from "./clear.js";
@@ -39,6 +40,7 @@ Object.defineProperties(SVG.prototype, {
   line: {value: svg$line},
   triangle: {value: svg$triangle},
   path: {value: svg$path},
+  arc: {value: svg$arc},
   polygon: {value: svg$polygon},
   text: {value: svg$text},
   clear: {value: svg$clear},
