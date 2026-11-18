@@ -17,8 +17,6 @@ export const visRepeatMatrix = withSVG(async () => {
         .transform(cm.spreadX, {domain: fields})
         .transform(cm.spreadY, {domain: fields})
         .transform(cm.plane, {
-          marginLeft: 60,
-          marginBottom: 60,
           x: {label: null, tickSize: 0, tickPadding: 24},
           y: {label: null, tickSize: 0, tickPadding: 36, tickRotate: -90},
         })
@@ -29,8 +27,11 @@ export const visRepeatMatrix = withSVG(async () => {
             .filter((d) => Number.isFinite(d.x) && Number.isFinite(d.y)),
         )
         .transform(cm.encode, {x: "x", y: "y", fill: "species"})
-        .transform(cm.plane, {resolve: {x: "independent", y: "independent"}})
-        .add(cm.axis, {grid: true})
+        .transform(cm.plane, {
+          resolve: {x: "independent", y: "independent"},
+          x: {axis: "bottom", grid: true},
+          y: {axis: "left", grid: true},
+        })
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
         .add(cm.circle, {r: 1.5});
     },

@@ -126,6 +126,51 @@ function measureSides(data, options, keysX, keysY, has, recordsOf, colors) {
   return extent;
 }
 
+// A frame inset by margins.
+function insetBy(frame, {top, right, bottom, left}) {
+  return {
+    ...frame,
+    top: frame.top + top,
+    right: frame.right - right,
+    bottom: frame.bottom - bottom,
+    left: frame.left + left,
+  };
+}
+
+// What the axes asked of a chart nested in a grid of cells, such as facets, draw past each cell,
+// given the records of the positions of each context in its cell: for each context, how far they
+// reach past each side, across the axis or along it, as cm.axisX and cm.axisY draw them, on the
+// sides along the edges of the grid, where they're drawn. Nested charts draw no titles.
+function measureCells(data, options, keysX, keysY, has, recordsOf, frames) {
+  return data.map((context, j) => {
+    const room = {top: 0, right: 0, bottom: 0, left: 0};
+    const {edges, empty} = frames[j];
+    if (!edges || empty) return room;
+    const hasX = has(context, keysX, "x");
+    const hasY = has(context, keysY, "y");
+    if (!hasX && !hasY) return room;
+    const {nameX, nameY, recordX, recordY} = recordsOf(context, j);
+    const {x, y} = guidesOf(null, options, nameX, nameY, sidesOfPlane, {x: [], y: []});
+    if (hasX) {
+      for (const side of x.anchors.filter((side) => edges[side])) {
+        const {reach, start, end} = extentX(recordX, x, side);
+        room[side] = Math.max(room[side], reach);
+        if (edges.left) room.left = Math.max(room.left, start);
+        if (edges.right) room.right = Math.max(room.right, end);
+      }
+    }
+    if (hasY) {
+      for (const side of y.anchors.filter((side) => edges[side])) {
+        const {reach, start, end} = extentY(recordY, y, side);
+        room[side] = Math.max(room[side], reach);
+        if (edges.top) room.top = Math.max(room.top, start);
+        if (edges.bottom) room.bottom = Math.max(room.bottom, end);
+      }
+    }
+    return room;
+  });
+}
+
 // The sides of the axes of a plane: the first is the side of axis true, and both are "both".
 const sidesOfPlane = {
   x: {first: "bottom", both: ["bottom", "top"]},
@@ -249,18 +294,90 @@ export function plane(
 
   let frames, legendX;
   if (nested) {
-    // A nested chart has no margins by default: its parent's margins and bands leave the room.
-    marginTop ??= margin ?? 0;
-    marginRight ??= margin ?? 0;
-    marginBottom ??= margin ?? 0;
-    marginLeft ??= margin ?? 0;
-    frames = nestedFrames(flow, data, {width, height}).map((frame) => ({
-      ...frame,
-      top: frame.top + marginTop,
-      right: frame.right - marginRight,
-      bottom: frame.bottom - marginBottom,
-      left: frame.left + marginLeft,
-    }));
+    // A nested chart has no margins of its own by default: its parent's margins and bands leave the
+    // room. In a grid of cells, such as facets, the axes asked of it, such as x: {axis: "bottom"},
+    // are drawn on the cells along the edges of the grid, so their room is kept at those edges: on
+    // each side, what they draw, measured as the axes draw them, plus 3px, past the room the grid
+    // already has to the edge of the parent's frame, such as the outer padding of its bands. The
+    // cells and the gaps between them are scaled into what's left, keeping their proportions, such
+    // as the widths of flex bands, and the padding between them. As the ticks depend on the size of
+    // the cells, they're measured again until they hold, up to three times, the room only growing,
+    // as fewer ticks in narrower cells may need less, such as "0" rather than "0.0". A given margin
+    // insets every cell instead.
+    const boxes = nestedFrames(flow, data, {width, height});
+    const given = {top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft};
+    const margins = Object.fromEntries(Object.keys(given).map((side) => [side, given[side] ?? margin ?? 0]));
+    // The cells form one grid, in the coordinates of the root, even if drawn under different
+    // parents, such as the rows of a marginal histogram, so that its rows and columns stay aligned.
+    const cells = boxes.filter((frame) => frame.cell);
+    const B = cells.map(({cell}) => cell.box);
+    const W = cells.map(({cell}) => cell.within).filter((w) => w);
+    const bounds = [
+      Math.min(...B.map((b) => b[0])),
+      Math.max(...B.map((b) => b[1])),
+      Math.min(...B.map((b) => b[2])),
+      Math.max(...B.map((b) => b[3])),
+    ];
+    // The room the grid already has to the edges of its parents, such as their outer padding.
+    const free = W.length
+      ? {
+          left: bounds[0] - Math.min(...W.map((w) => w[0])),
+          right: Math.max(...W.map((w) => w[1])) - bounds[1],
+          top: bounds[2] - Math.min(...W.map((w) => w[2])),
+          bottom: Math.max(...W.map((w) => w[3])) - bounds[3],
+        }
+      : {left: 0, right: 0, top: 0, bottom: 0};
+    const sides = ["left", "right", "top", "bottom"];
+    let reserve = Object.fromEntries(sides.map((side) => [side, 0]));
+    // The frames of the cells, the grid scaled into its bounds less the room kept at its edges, and
+    // inset by the margins given.
+    const layout = () => {
+      const kept = sides.every((side) => !reserve[side]);
+      const [gl, gr, gt, gb] = bounds;
+      const [nl, nr, nt, nb] = [gl + reserve.left, gr - reserve.right, gt + reserve.top, gb - reserve.bottom];
+      const sx = gr > gl ? (nr - nl) / (gr - gl) : 1;
+      const sy = gb > gt ? (nb - nt) / (gb - gt) : 1;
+      return boxes.map((frame) => {
+        if (!frame.cell || kept) return insetBy(frame, margins);
+        const {
+          box: [l, r, t, b],
+          x,
+          y,
+        } = frame.cell;
+        const scaled = {
+          ...frame,
+          left: nl + (l - gl) * sx - x,
+          right: nl + (r - gl) * sx - x,
+          top: nt + (t - gt) * sy - y,
+          bottom: nt + (b - gt) * sy - y,
+        };
+        return insetBy(scaled, margins);
+      });
+    };
+    frames = layout();
+    if (cells.length && Object.values(given).includes(undefined) && margin === undefined) {
+      for (let pass = 0; pass < 3; pass++) {
+        const rooms = measureCells(
+          data,
+          options,
+          keysX,
+          keysY,
+          has,
+          (context, j) => recordsOf(context, frames[j]),
+          frames,
+        );
+        const next = Object.fromEntries(
+          sides.map((side) => {
+            if (given[side] !== undefined) return [side, 0];
+            const need = Math.max(0, ...rooms.map((room) => room[side]));
+            return [side, Math.max(reserve[side], need ? Math.max(0, need + 3 - free[side]) : 0)];
+          }),
+        );
+        if (sides.every((side) => Math.abs(next[side] - reserve[side]) < 1e-9)) break;
+        reserve = next;
+        frames = layout();
+      }
+    }
   } else {
     // The margins that aren't given fit what's drawn on each side: the axes, their titles, the
     // ends of the tick labels past the plot, and the legends at the top and on the right, plus 3px,

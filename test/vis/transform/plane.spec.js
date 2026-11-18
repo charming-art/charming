@@ -1158,3 +1158,152 @@ test("cm.plane fits a title longer than its axis, turned beside y, or under x", 
   root.render();
   assertInside(renderer.node(), 200, +renderer.node().getAttribute("height"));
 });
+
+// The frames of the cells of a 2 × 2 grid, a1, a2, b1 and b2, with the options of the plane nested
+// in it, and of the padding of its bands.
+function cellFrames(options, padding = 0.1) {
+  const root = cm.flow().renderer(cm.svg({width: 400, height: 400}));
+  const values = root
+    .data(d3.cross(["a", "b"], ["1", "2"]))
+    .transform(cm.encode, {x: ([x]) => x, y: ([, y]) => y})
+    .transform(cm.spreadX, {padding})
+    .transform(cm.spreadY, {padding})
+    .transform(cm.plane, {x: {axis: null}, y: {axis: null}})
+    .append(cm.g)
+    .data(() => [{v: 0}, {v: 100}])
+    .transform(cm.encode, {x: "v", y: "v"})
+    .transform(cm.plane, options)._values;
+  return values.map(({frame}) => frame);
+}
+
+test("cm.plane keeps room for the axes asked of a grid nested in it at its edges, and scales its cells", () => {
+  // The root chart has no axes: its frame is from 20 to 380 across, and from 10 to 380 down. The
+  // cells are a1, a2, b1 and b2; a2 is at the bottom left, where the axes are drawn.
+  const x = d3.scaleBand(["a", "b"], [20, 380]).padding(0.1);
+  const y = d3.scaleBand(["1", "2"], [10, 380]).padding(0.1);
+  const plain = cellFrames({});
+  const frames = cellFrames({x: {axis: "bottom"}, y: {axis: "left"}});
+  // Left of the grid, what y draws, 9, the widest label and 3px, past the outer padding; under it,
+  // what x draws, 9, a label 10 and 3px, past the outer padding.
+  const left = Math.max(0, 6 + 3 + widthOf("100") + 3 - (x("a") - 20));
+  const bottom = Math.max(0, 6 + 3 + 10 + 3 - (380 - y("2") - y.bandwidth()));
+  assertInDelta(frames[1].left - plain[1].left, left);
+  assertInDelta(plain[1].bottom - frames[1].bottom, bottom);
+  // The cells are scaled alike into the rest, keeping their proportions and the gaps between them.
+  const sx = (frames[0].right - frames[0].left) / (plain[0].right - plain[0].left);
+  const sy = (frames[0].bottom - frames[0].top) / (plain[0].bottom - plain[0].top);
+  assertInDelta(sx, (360 - (x("a") - 20) * 2 - left) / (360 - (x("a") - 20) * 2));
+  assertInDelta(sy, (370 - (y("1") - 10) * 2 - bottom) / (370 - (y("1") - 10) * 2));
+  for (const frame of frames) {
+    assertInDelta(frame.right - frame.left, frames[0].right - frames[0].left);
+    assertInDelta(frame.bottom - frame.top, frames[0].bottom - frames[0].top);
+  }
+  // A given margin insets every cell instead.
+  const [given] = cellFrames({x: {axis: "bottom"}, marginBottom: 5});
+  assert.strictEqual(plain[0].bottom - given.bottom, 5);
+  // Without axes asked, the cells keep their bands.
+  // Relative to the point of its cell, the start of its band, a cell is its band.
+  for (const frame of plain) {
+    assert.deepStrictEqual([frame.left, frame.top], [0, 0]);
+    assertInDelta(frame.right, x.bandwidth());
+    assertInDelta(frame.bottom, y.bandwidth());
+  }
+});
+
+test("cm.plane keeps the axes asked of cells inside the grid of its parent", () => {
+  const renderer = cm.svg({width: 400, height: 400});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(d3.cross(["a", "b"], ["1", "2"]))
+    .transform(cm.encode, {x: ([x]) => x, y: ([, y]) => y})
+    .transform(cm.spreadX, {padding: 0})
+    .transform(cm.spreadY, {padding: 0})
+    .transform(cm.plane, {margin: 0, x: {axis: null}, y: {axis: null}})
+    .append(cm.g)
+    .data(() => [{v: 0}, {v: 100}])
+    .transform(cm.encode, {x: "v", y: "v"})
+    .transform(cm.plane, {x: {axis: "bottom"}, y: {axis: "left"}})
+    .add(cm.circle, {r: 2});
+  root.render();
+  // With no margins and no padding, the labels of the cells along the edges stay inside the chart,
+  // with their glyphs: a label ending at its point runs left of it, and one hanging from its
+  // point runs down from it.
+  for (const t of renderer.node().querySelectorAll("text")) {
+    const [tx, ty] = (t.parentNode.getAttribute("transform")?.match(/[-\d.]+/g) ?? [0, 0]).map(Number);
+    const w = widthOf(t.textContent);
+    const anchor = t.getAttribute("text-anchor");
+    const baseline = t.getAttribute("dominant-baseline");
+    const x0 = tx + +t.getAttribute("x") - (anchor === "end" ? w : anchor === "middle" ? w / 2 : 0);
+    const y0 = ty + +t.getAttribute("y") - (baseline === "central" ? 5 : baseline === "text-before-edge" ? 0 : 10);
+    assert.ok(x0 >= -1e-6 && x0 + w <= 400 + 1e-6 && y0 >= -1e-6 && y0 + 10 <= 400 + 1e-6, t.textContent);
+  }
+});
+
+test("cm.plane lays out the cells of a grid drawn under different parents as one, such as a marginal histogram", () => {
+  // A short top row over a tall main row, each with one cell under its own parent.
+  const rows = [
+    {row: "top", h: 1, cells: [{view: "top", col: "main"}]},
+    {row: "main", h: 3, cells: [{view: "scatter", col: "main"}]},
+  ];
+  const view = (name) => (cell) => (cell.view === name ? [{v: 0}, {v: 100}] : []);
+  const chart = (options) => {
+    const root = cm.flow().renderer(cm.svg({width: 400, height: 400}));
+    const [scatter, top] = root
+      .data(rows)
+      .transform(cm.encode, {y: "row", h: "h"})
+      .transform(cm.spreadY, {flex: "h", padding: 0, domain: ["top", "main"]})
+      .transform(cm.plane, {y: {axis: null}})
+      .append(cm.g)
+      .data((row) => row.cells)
+      .transform(cm.encode, {x: "col"})
+      .transform(cm.spreadX, {padding: 0})
+      .transform(cm.plane)
+      .append(cm.g)
+      .branch(
+        (flow) => flow.data(view("scatter")).transform(cm.encode, {x: "v", y: "v"}),
+        (flow) => flow.data(view("top")).transform(cm.encode, {x: "v"}),
+      )
+      .transform(cm.plane, options);
+    const frameOf = (flow) => flow._values.find((context) => !context.frame.empty).frame;
+    return [frameOf(scatter), frameOf(top)];
+  };
+  const [s0, t0] = chart({});
+  const [s, t] = chart({x: {axis: "bottom"}, y: {axis: "left"}});
+  // The scatter keeps room for its axes, and the top row, stacked over it, the same left and right.
+  assert.ok(s.left > s0.left);
+  assertInDelta(t.left, s.left);
+  assertInDelta(t.right, s.right);
+  // The rows are scaled alike, keeping their proportions: the top row is a third of the scatter.
+  assertInDelta((t.bottom - t.top) / (s.bottom - s.top), (t0.bottom - t0.top) / (s0.bottom - s0.top));
+});
+
+test("cm.plane lays out side by side cells of a grid as one, sharing their room only as one grid", () => {
+  // Two columns, each the parent of its own cell, of equal widths; only the left labels y, as the
+  // left edge.
+  const chart = (options) => {
+    const root = cm.flow().renderer(cm.svg({width: 400, height: 200}));
+    return root
+      .data(["a", "b"])
+      .transform(cm.encode, {x: (d) => d})
+      .transform(cm.spreadX, {padding: 0})
+      .transform(cm.plane, {margin: 0, x: {axis: null}})
+      .append(cm.g)
+      .data(() => [{k: "cell"}])
+      .transform(cm.encode, {y: "k"})
+      .transform(cm.spreadY, {padding: 0})
+      .transform(cm.plane)
+      .append(cm.g)
+      .data(() => [{v: 0}, {v: 100}])
+      .transform(cm.encode, {x: "v", y: "v"})
+      .transform(cm.plane, options)
+      ._values.map(({frame}) => frame);
+  };
+  const [left0, right0] = chart({});
+  const [left, right] = chart({y: {axis: "left"}});
+  // The room is kept once, left of the grid: the columns stay as wide as each other.
+  assertInDelta(left.right - left.left, right.right - right.left);
+  assertInDelta(left.left - left0.left, 3 + 6 + 3 + widthOf("100"));
+  // The right column, which draws no labels, isn't inset by their room: it's only scaled with the
+  // grid, so it moves by less.
+  assert.ok(right.left - right0.left < left.left - left0.left - 1);
+});

@@ -13,14 +13,13 @@ export const visFacetRectBar = withSVG(async () => {
         .transform(cm.encode, {x: "day", y: "week"})
         .transform(cm.spreadX, {domain: days})
         .transform(cm.spreadY)
-        .transform(cm.plane, {marginBottom: 50, x: {tickSize: 0, tickPadding: 24}, y: {tickSize: 0, tickPadding: 24}})
+        .transform(cm.plane, {x: {tickSize: 0, tickPadding: 24}, y: {tickSize: 0, tickPadding: 24}})
         .append(cm.g)
         .data((cell) => cell.rows)
         .transform(cm.encode, {x: "activity", y: "value", fill: "activity"})
         .transform(cm.spreadX)
-        .transform(cm.plane)
-        .add(cm.rect)
-        .add(cm.axis);
+        .transform(cm.plane, {x: {axis: "bottom"}, y: {axis: "left"}})
+        .add(cm.rect);
     },
     {width: 800, height: 600},
   );
