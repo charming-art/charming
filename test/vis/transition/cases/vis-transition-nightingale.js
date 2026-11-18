@@ -14,8 +14,8 @@ export async function visTransitionNightingale() {
       .data(data)
       .transform(cm.encode, {x: "Month", y: "Death", fill: "Type"})
       .transform(cm.spreadX, {sort: false})
-      .transform(cm.stackY)
-      .transform(cm.stackEnter, {step: 200, duration: 600})
+      .transform(cm.stackY, {reverse: true})
+      .transform(cm.stackEnter, {step: 200, duration: 600, reverse: true})
       .transform(cm.polar, {
         x: {axis: true},
         fill: {
