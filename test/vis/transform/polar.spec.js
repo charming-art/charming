@@ -272,3 +272,56 @@ test("cm.polar grows its right margin so that its legends on the right fit", () 
   assert.strictEqual(label.textContent, "a category with a long name");
   assert.ok(+label.getAttribute("x") + widthOf(label.textContent) <= 400 - 3 + 1e-6);
 });
+
+test("cm.polar keeps its legends at the top clear of its outer labels as its left margin grows", () => {
+  const renderer = cm.svg({width: 400, height: 400});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(d3.range(24).map((i) => ({k: `a rather long category ${i}`, v: 1})))
+    .transform(cm.encode, {x: "k", y: "v", fill: "k"})
+    .transform(cm.spreadX)
+    .transform(cm.polar, {x: {axis: "outer"}, fill: {legend: true}})
+    .add(cm.arc);
+  root.render();
+  const node = renderer.node();
+  const swatches = Array.from(node.querySelectorAll("rect")).filter((r) => r.getAttribute("width") === "10");
+  const bottom = Math.max(...swatches.map((r) => +r.getAttribute("y") + 10));
+  // The tick labels of the angles, rather than the labels of the swatches beside them, sit under the
+  // legend.
+  const ofSwatch = (t) =>
+    swatches.some(
+      (r) =>
+        Math.abs(+r.getAttribute("x") + 14 - +t.getAttribute("x")) < 1e-6 &&
+        Math.abs(+r.getAttribute("y") - 1 - +t.getAttribute("y")) < 1e-6,
+    );
+  const ticks = Array.from(node.querySelectorAll("text")).filter(
+    (t) => t.textContent.startsWith("a rather") && !ofSwatch(t),
+  );
+  assert.ok(ticks.length > 0);
+  for (const t of ticks) {
+    const y = +t.getAttribute("y");
+    const baseline = t.getAttribute("dominant-baseline");
+    const top = baseline === "text-before-edge" ? y : baseline === "central" ? y - 5 : y - 10;
+    assert.ok(top >= bottom - 1e-6, t.textContent);
+  }
+});
+
+test("cm.polar adds its legends on the right to a given margin, like cm.plane", () => {
+  const renderer = cm.svg({width: 400, height: 400});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {k: "a category with a long name", v: 1},
+      {k: "b", v: 2},
+    ])
+    .transform(cm.encode, {x: "v", fill: "k"})
+    .transform(cm.stackX)
+    .transform(cm.polar, {margin: 20, fill: {legend: "right"}})
+    .add(cm.arc);
+  root.render();
+  const label = Array.from(renderer.node().querySelectorAll("text")).find((t) =>
+    t.textContent.startsWith("a category"),
+  );
+  assert.strictEqual(label.textContent, "a category with a long name");
+  assert.ok(+label.getAttribute("x") + widthOf(label.textContent) <= 400 - 3 + 0.01);
+});

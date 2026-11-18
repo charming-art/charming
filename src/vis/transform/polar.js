@@ -161,10 +161,12 @@ export function polar(
     ({width, height} = renderer._props);
     const box = {left: 0, right: width, top: 0, bottom: height};
     const given = {top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft};
-    const margins = {};
-    for (const side in given) margins[side] = given[side] ?? margin ?? 40;
-    const legendRoom = given.top === undefined ? topLegends(data, colors, options, width - 3 - margins.left) : 0;
-    margins.top += legendRoom;
+    const base = {};
+    for (const side in given) base[side] = given[side] ?? margin ?? 40;
+    // The legends at the top start at the left margin, so they're measured again as it grows.
+    const legendsAt = (left) => (given.top === undefined ? topLegends(data, colors, options, width - 3 - left) : 0);
+    let legendRoom = legendsAt(base.left);
+    const margins = {...base, top: base.top + legendRoom};
     for (let pass = 0; pass < 30; pass++) {
       const frame = frameOf(box, margins);
       const boxes = [];
@@ -175,22 +177,30 @@ export function polar(
         const {anchors, ...axis} = guide;
         for (const anchor of anchors) boxes.push(...polarLabelBoxes(frame, recordX, {...axis, anchor}));
       }
+      // The legends on the right add to margin, like cm.plane's, unless marginRight is given.
       const legendWidth = rightLegends(data, colors, options, 2 * frame.outerRadius);
+      const legends = [];
       if (legendWidth) {
         const x0 = frame.cx + frame.outerRadius + 12;
-        boxes.push([x0, frame.cy - frame.outerRadius, x0 + legendWidth, frame.cy - frame.outerRadius]);
+        legends.push([x0, frame.cy - frame.outerRadius, x0 + legendWidth, frame.cy - frame.outerRadius]);
       }
-      const over = {
+      const pastOf = (boxes) => ({
         left: Math.max(0, ...boxes.map(([x0]) => 3 - x0)),
         right: Math.max(0, ...boxes.map(([, , x1]) => x1 - (width - 3))),
         top: Math.max(0, ...boxes.map(([, y0]) => legendRoom + 3 - y0)),
         bottom: Math.max(0, ...boxes.map(([, , , y1]) => y1 - (height - 3))),
-      };
+      });
+      const past = pastOf(boxes);
+      const pastLegends = pastOf(legends);
       let grown = false;
-      for (const side in over) {
-        if (over[side] > 1e-3 && given[side] === undefined && margin === undefined)
-          [margins[side], grown] = [margins[side] + over[side], true];
+      for (const side in past) {
+        if (given[side] !== undefined) continue;
+        const over = Math.max(margin === undefined ? past[side] : 0, pastLegends[side]);
+        if (over > 1e-3) [margins[side], grown] = [margins[side] + over, true];
       }
+      // As the left margin grows, the legends at the top may wrap into more rows.
+      const room = legendsAt(margins.left);
+      if (room !== legendRoom) [margins.top, legendRoom, grown] = [margins.top + room - legendRoom, room, true];
       if (!grown) break;
     }
     frames = data.map(() => frameOf(box, margins));
