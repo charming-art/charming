@@ -2,6 +2,7 @@ export {visTransitionBarChartRace} from "./vis-transition-bar-chart-race.js";
 export {visTransitionBubbleSort} from "./vis-transition-bubble-sort.js";
 export {visTransitionGantt} from "./vis-transition-gantt.js";
 export {visTransitionGroupedBar} from "./vis-transition-grouped-bar.js";
+export {visTransitionGroupedBarByX} from "./vis-transition-grouped-bar-by-x.js";
 export {visTransitionNightingale} from "./vis-transition-nightingale.js";
 export {visTransitionPointKeyframe} from "./vis-transition-point-keyframe.js";
 export {visTransitionWheel} from "./vis-transition-wheel.js";

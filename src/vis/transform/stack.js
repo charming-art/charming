@@ -266,7 +266,9 @@ export function stackX(flow, data, options) {
 // bar chart, else "x" for its years, or null for one group. Like the stacks, the groups are in order
 // of first appearance, or of the domain of the series, or of order, an array of their values, and
 // reverse reverses it. Its delays are in milliseconds, added to an encoded delay in milliseconds,
-// and cm.plane and cm.polar leave them as they are.
+// and cm.plane and cm.polar leave them as they are. As it reads the channel of its groups as it is
+// when it's applied, it goes before the transforms that rewrite that channel, such as cm.stackX,
+// which splits the years of x among the series of grouped bars.
 function stackTime(flow, data, {by, order, reverse = false, step = 0, gap = 0, duration} = {}, stage, name) {
   if (!data) throw new Error(`No channels: call flow.transform(cm.encode, channels) before cm.${name}.`);
   const [delayKey, durationKey] = [`${stage}Delay`, `${stage}Duration`];
