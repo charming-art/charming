@@ -6,7 +6,7 @@ import {renderFlow, withSVG} from "../../helpers.js";
 // body mass and colored by its species. Like Plot's r scale, the radius is a square root of the
 // mass from 0, so that a dot's area tracks it; its range is widened from Plot's default, which
 // would make these masses 3 to 4px, so that the differences show. Legends of the species and the
-// masses are in a column right of the chart.
+// masses are stacked at the top, like Plot's, which turns the title of y beside its axis.
 export const visPenguinBubble = withSVG(async () => {
   const penguins = await d3.csv("data/penguins.csv", d3.autoType);
   return renderFlow(
@@ -15,7 +15,6 @@ export const visPenguinBubble = withSVG(async () => {
         .data(penguins)
         .transform(cm.encode, {x: "culmen_length_mm", y: "culmen_depth_mm", r: "body_mass_g", fill: "species"})
         .transform(cm.plane, {
-          marginRight: 130,
           x: {grid: true},
           y: {grid: true},
           fill: {legend: true},

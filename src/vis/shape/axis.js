@@ -46,6 +46,24 @@ function rotatedY(degrees, right) {
   return [{textAlign: "center", textBaseline, rotate: radians}, 4 * Math.cos(radians)];
 }
 
+// How far the axis of x on a side reaches, with the options of its guide, as cm.axisX measures it,
+// such as for a level title of y in the row of its title.
+function reachX(x, options, side) {
+  const {tickSize = 6, tickPadding = 3, tickRotate = 0} = options;
+  const scale = scaleOf(x);
+  const [left, right] = extentOf(x.range);
+  const count = countOf(options, right - left, 80);
+  const format = formatOf(scale, options, count);
+  const [, pad] = rotatedX(tickRotate, side === "top");
+  return reachOf(ticksOf(scale, options, count).map(format), {
+    tickSize,
+    tickPadding,
+    radians: (tickRotate * Math.PI) / 180,
+    pad,
+    across: acrossX,
+  });
+}
+
 function extentOf(range) {
   return [Math.min(...range), Math.max(...range)];
 }
@@ -88,11 +106,12 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
   const label = labelOf(x, scale, "x", options);
   if (label == null || frame?.nested) return;
   // The title is part of the axis: past the farthest of what it draws, its tick labels, else its
-  // tick marks, else the plot, by a constant gap, under a bottom axis or over a top one. Like the
-  // title of y, it's at the middle of the axis by default; with labelAnchor, it's at its left or
-  // right end. The default margins of cm.plane leave room for it on the sides with axes, with level
-  // tick labels; rotated tick labels, an axis added explicitly on another side, or one drawn by a
-  // nested chart need a margin given to it, such as marginBottom: 150 with tickRotate: -45.
+  // tick marks, else the plot, by a constant gap, under a bottom axis or over a top one. Like Plot's,
+  // it's at the right end of the axis by default, with its arrow, or at the middle of a discrete
+  // axis; with labelAnchor, it's at its left or right end, or its middle. The default margins of
+  // cm.plane leave room for it on the sides with axes, with level tick labels; rotated tick labels,
+  // an axis added explicitly on another side, or one drawn by a nested chart need a margin given to
+  // it, such as marginBottom: 150 with tickRotate: -45.
   const reach = reachOf(ticks.map(format), {
     tickSize,
     tickPadding,
@@ -100,7 +119,7 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
     pad: padX,
     across: acrossX,
   });
-  const {labelAnchor = "center"} = options;
+  const {labelAnchor = scale.ticks ? "right" : "center"} = options;
   const center = labelAnchor === "center";
   flow.datum(label).append(text, {
     ...font,
@@ -146,13 +165,34 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
     y: Y,
     ...rotateY,
   });
-  // The title is part of the axis: past the farthest of what it draws, its tick labels, else its
-  // tick marks, else the plot, by a constant gap, turned to read along the axis, bottom to top, left
-  // of a left axis or right of a right one. With labelAnchor, it's at the middle of the axis, the
-  // default, or ends at its top, or starts at its bottom. Its arrow, once turned, points up the
-  // axis. As for x, the default margins of cm.plane leave room for it on the sides with axes.
-  const label = labelOf(y, scale, "y", options, true);
+  // The title is part of the axis, a constant gap past what it draws. Like Plot's labelAnchor, it's
+  // level at the top of the axis, the default of a continuous scale, or at its bottom, starting 3px
+  // from the left edge of the chart on a left axis, or ending 3px from its right edge on a right
+  // one, like Plot's, which aligns it with the edge of the margin, with an arrow along the axis; or
+  // turned to read along it at its middle, the default of a discrete scale, past its tick labels,
+  // else its tick marks, else the plot. The default margins of cm.plane leave room for it on the
+  // sides with axes. Under a legend at the top of the chart, a title at the top is turned too,
+  // ending at the top of the axis, so that it leaves the top to the legend.
+  const {labelAnchor = scale.ticks ? "top" : "center"} = options;
+  const turn = labelAnchor === "center" || (labelAnchor === "top" && hasTopLegend(guides, scales));
+  const label = labelOf(y, scale, "y", options, turn);
   if (label == null || frame?.nested) return;
+  if (!turn) {
+    // Over the top or under the bottom of the axis, past the half of a tick label that may reach
+    // past it, or past the tick labels of an axis of x on that side, in the row of its title.
+    const isBottom = labelAnchor === "bottom";
+    const side = isBottom ? "bottom" : "top";
+    const past = x && guides?.x?.anchors?.includes(side) ? reachX(x, guides.x, side) : font.fontSize / 2;
+    flow.datum(label).append(text, {
+      ...font,
+      text: label,
+      x: isRight ? width - 3 : 3,
+      y: isBottom ? bottom + past + titleGap : top - past - titleGap,
+      textAlign: isRight ? "end" : "start",
+      textBaseline: isBottom ? "top" : "bottom",
+    });
+    return;
+  }
   const reach = reachOf(ticks.map(format), {
     tickSize,
     tickPadding,
@@ -160,13 +200,7 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
     pad: padY,
     across: acrossY,
   });
-  const {labelAnchor = "center"} = options;
-  const [labelY, textAlign] =
-    labelAnchor === "top"
-      ? [top, "end"]
-      : labelAnchor === "bottom"
-        ? [bottom, "start"]
-        : [(top + bottom) / 2, "center"];
+  const [labelY, textAlign] = labelAnchor === "top" ? [top, "end"] : [(top + bottom) / 2, "center"];
   flow.datum(label).append(text, {
     ...font,
     text: label,
@@ -177,6 +211,11 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
     // Turned a quarter counterclockwise, the text sits left of its point, or right of it.
     textBaseline: isRight ? "top" : "bottom",
   });
+}
+
+// Whether a chart draws a legend at its top, from its guides, for a scale it has.
+function hasTopLegend(guides, scales) {
+  return Object.entries(guides?.legends ?? {}).some(([key, {anchor}]) => anchor !== "right" && scales[key]);
 }
 
 // Draws both axes. The options x and y are the options of each axis, or false to skip it; the

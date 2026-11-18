@@ -26,7 +26,7 @@ function texts(options) {
 test("cm.axis draws both axes with their labels", () => {
   const T = texts();
   assert.ok(T.includes("A") && T.includes("letter"));
-  assert.ok(T.includes("0.08") && T.includes("frequency →"));
+  assert.ok(T.includes("0.08") && T.includes("↑ frequency"));
 });
 
 test("cm.axis skips an axis set to false", () => {
@@ -132,9 +132,9 @@ test("cm.axisX turns tick labels rotated by less than 10° around their center, 
 
 test("cm.axisY pads steep tick labels by 4·cos θ, like Plot", () => {
   const find = rotated({y: {tickRotate: -70}});
-  assertInDelta(+find("0.08").getAttribute("x"), 64 - 6 - 3 - 4 * Math.cos((70 * Math.PI) / 180));
+  assertInDelta(+find("0.08").getAttribute("x"), 46 - 6 - 3 - 4 * Math.cos((70 * Math.PI) / 180));
   const upright = rotated({y: {tickRotate: -90}})("0.08");
-  assertInDelta(+upright.getAttribute("x"), 64 - 6 - 3);
+  assertInDelta(+upright.getAttribute("x"), 46 - 6 - 3);
 });
 
 test("cm.axis labels facets only along the bottom of each column and the left of each row", () => {
@@ -235,18 +235,19 @@ test("cm.axisX with anchor top labels the ticks above the chart, and titles it a
 });
 
 test("cm.axisY with anchor right labels the ticks right of the chart, aligned to their start", () => {
-  // The axis of y at the right of the plane gives it a right margin of 64.
+  // The axis of y at the right of the plane gives it a right margin of 46, and a top one of 24.
   const find = rotated({x: false, y: {anchor: "right"}}, {y: {axis: "right"}});
   const tick = find("0.08");
-  // The right of the chart is at 576.
-  assert.strictEqual(+tick.getAttribute("x"), 576 + 6 + 3);
+  // The right of the chart is at 594.
+  assert.strictEqual(+tick.getAttribute("x"), 594 + 6 + 3);
   assert.strictEqual(tick.getAttribute("text-anchor"), "start");
-  // The title is turned right of the tick labels, the widest 4 characters of 6px, 6px past them,
-  // and hangs 10px right of that, inside the chart.
-  const title = find("frequency →");
-  assert.strictEqual(+title.getAttribute("x"), 576 + 6 + 3 + 24 + 6);
-  assert.ok(+title.getAttribute("x") + 10 <= 640);
-  assert.strictEqual(title.getAttribute("dominant-baseline"), "text-before-edge");
+  // The title is level over the axis, ending 3px from the right edge of the chart, like Plot's, past
+  // the half of a label over the top, 24, by 6px, inside the chart.
+  const title = find("↑ frequency");
+  assert.strictEqual(+title.getAttribute("x"), 640 - 3);
+  assert.strictEqual(+title.getAttribute("y"), 24 - 5 - 6);
+  assert.strictEqual(title.getAttribute("text-anchor"), "end");
+  assert.ok(+title.getAttribute("x") <= 640 && +title.getAttribute("y") - 10 >= 0);
 });
 
 // The positions of the cells of a 2 × 2 grid whose tick labels have the given anchor, with options
@@ -448,32 +449,34 @@ test("cm.axis places its titles past its tick labels, by a constant gap, with la
       ]);
   };
   // The frame is from 40 to 160 and 40 to 60. Under x: the tick 6, the padding 3, a label 10 and the
-  // gap 6, at the right end of the axis. Left of y, beside its labels "0" and "1", 6px wide: turned,
-  // centered on the axis, its arrow pointing up once turned.
+  // gap 6, at the right end of the continuous axis, like Plot. Over y: level, starting 3px from the
+  // left edge of the chart, like Plot's, past half a label and the gap, with its arrow up the axis.
   assert.deepStrictEqual(titles(), [
-    ["X →", 100, 60 + 6 + 3 + 10 + 6, "middle", null],
+    ["X →", 160, 60 + 6 + 3 + 10 + 6, "end", null],
+    ["↑ Y", 3, 40 - 5 - 6, "start", null],
+  ]);
+  // At the left end or the middle of x. Like Plot's, y is turned beside its labels at the middle of
+  // the axis with labelAnchor center, by the gap, its arrow pointing up, or level at its bottom.
+  assert.deepStrictEqual(titles({x: {labelAnchor: "center"}, y: false})[0], ["X →", 100, 85, "middle", null]);
+  assert.deepStrictEqual(titles({x: {labelAnchor: "left"}, y: {labelAnchor: "center"}}), [
+    ["X →", 40, 85, "start", null],
     ["Y →", 40 - 6 - 3 - 6 - 6, 50, "middle", "rotate(-90,19,50)"],
   ]);
-  // At the left or right end of x; at the top or the bottom of y, still turned.
-  assert.deepStrictEqual(titles({x: {labelAnchor: "right"}, y: false})[0], ["X →", 160, 85, "end", null]);
-  assert.deepStrictEqual(titles({x: {labelAnchor: "left"}, y: {labelAnchor: "top"}}), [
-    ["X →", 40, 85, "start", null],
-    ["Y →", 19, 40, "end", "rotate(-90,19,40)"],
-  ]);
+  // At the bottom, under the tick labels of the axis of x at the bottom, in the row of its title.
   assert.deepStrictEqual(titles({y: {labelAnchor: "bottom"}, x: false})[0], [
-    "Y →",
-    19,
-    60,
+    "↑ Y",
+    3,
+    60 + 6 + 3 + 10 + 6,
     "start",
-    "rotate(-90,19,60)",
+    null,
   ]);
   // Without tick labels, past the ticks; without both, past the axis itself.
-  assert.deepStrictEqual(titles({x: {tickFormat: () => ""}, y: false})[0], ["X →", 100, 60 + 6 + 6, "middle", null]);
+  assert.deepStrictEqual(titles({x: {tickFormat: () => ""}, y: false})[0], ["X →", 160, 60 + 6 + 6, "end", null]);
   assert.deepStrictEqual(titles({x: {tickFormat: () => "", tickSize: 0}, y: false})[0], [
     "X →",
-    100,
+    160,
     60 + 6,
-    "middle",
+    "end",
     null,
   ]);
 });
@@ -502,7 +505,7 @@ test("cm.plane draws the axes of its positions by default, at the bottom and the
     T,
     implicit({}, (flow) => flow.add(cm.axis)),
   );
-  assert.ok(T.includes("x →") && T.includes("y →"));
+  assert.ok(T.includes("x →") && T.includes("↑ y"));
 });
 
 test("cm.plane hides an axis with axis null", () => {
@@ -542,7 +545,7 @@ test("cm.plane passes the options of a position to its axis, such as a tick form
 
 test("an axis added explicitly replaces the implicit axis of its kind", () => {
   const x = implicit({}, (flow) => flow.add(cm.axisX, {label: "X"}));
-  assert.ok(x.includes("X") && !x.includes("x →") && x.includes("y →"));
+  assert.ok(x.includes("X") && !x.includes("x →") && x.includes("↑ y"));
   // cm.axis replaces both, even the axis it skips.
   assert.deepStrictEqual(
     implicit({}, (flow) => flow.add(cm.axis, {x: false, y: false})),
@@ -572,8 +575,8 @@ test("cm.plane draws the axes of a layer of branches once per scale", () => {
   const T = Array.from(renderer.node().querySelectorAll("text"), (t) => t.textContent);
   // One x axis for both layers, and an axis of y per scale, each on its side.
   assert.strictEqual(T.filter((d) => d === "x →").length, 1, T);
-  assert.strictEqual(T.filter((d) => d === "A →").length, 1, T);
-  assert.strictEqual(T.filter((d) => d === "B →").length, 1, T);
+  assert.strictEqual(T.filter((d) => d === "↑ A").length, 1, T);
+  assert.strictEqual(T.filter((d) => d === "↑ B").length, 1, T);
   const ten = Array.from(renderer.node().querySelectorAll("text")).find((t) => t.textContent === "10");
   assert.strictEqual(ten.getAttribute("text-anchor"), "start");
 });
@@ -621,7 +624,7 @@ test("cm.plane draws an axis in a later layer if an earlier layer has no scale f
   root.render();
   const T = Array.from(renderer.node().querySelectorAll("text"), (t) => t.textContent);
   assert.strictEqual(T.filter((d) => d === "x →").length, 1);
-  assert.strictEqual(T.filter((d) => d === "y →").length, 1);
+  assert.strictEqual(T.filter((d) => d === "↑ y").length, 1);
 });
 
 test("an explicit axis replaces the implicit ones only in the cells where it draws", () => {
@@ -723,4 +726,60 @@ test("cm.polar draws no axes unless asked", () => {
     implicit({}, (flow) => flow.add(cm.axisX), {coordinate: cm.polar}),
   );
   assert.ok(T.length > 0);
+});
+
+test("cm.axisY puts its level title over an axis of x at the top, in the row of the title of x", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {x: 0, y: 0},
+      {x: 1, y: 1},
+    ])
+    .transform(cm.encode, {x: "x", y: "y"})
+    .transform(cm.plane, {x: {axis: "top"}});
+  root.render();
+  const find = (t) => Array.from(renderer.node().querySelectorAll("text")).find((d) => d.textContent === t);
+  // The top margin holds the tick labels of x, 24, and a row of titles, 16.
+  const [title, titleX] = [find("↑ y"), find("x →")];
+  assert.strictEqual(+title.getAttribute("y"), 40 - 6 - 3 - 10 - 6);
+  assert.strictEqual(+title.getAttribute("y"), +titleX.getAttribute("y"));
+  assert.ok(+title.getAttribute("y") - 10 >= 0);
+});
+
+test("cm.axisY puts its level title in the row of the title of x, past the ticks of x as they're drawn", () => {
+  const rowOf = (x, plane = {}) => {
+    const renderer = cm.svg({width: 200, height: 200});
+    const root = cm.flow().renderer(renderer);
+    root
+      .data([
+        {x: 0, y: 0},
+        {x: 1, y: 1},
+      ])
+      .transform(cm.encode, {x: "x", y: "y"})
+      .transform(cm.plane, {x, ...plane});
+    root.render();
+    const find = (t) => Array.from(renderer.node().querySelectorAll("text")).find((d) => d.textContent === t);
+    return [+find("↑ y").getAttribute("y"), +find("x →").getAttribute("y")];
+  };
+  // Without tick labels, rotated tick labels, or longer ticks, the titles still share a row.
+  const [a, b] = rowOf({axis: "top", tickFormat: () => ""});
+  assert.strictEqual(a, b);
+  const [c, d] = rowOf({axis: "top", tickSize: 20}, {marginTop: 60});
+  assert.strictEqual(c, d);
+  const [e, f] = rowOf({axis: "top", tickRotate: -45}, {marginTop: 80});
+  assertInDelta(e, f);
+});
+
+test("cm.axisY places its level title when the guides of its context have no axis of x", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([{y: 0}, {y: 1}])
+    .transform(cm.encode, {y: "y"})
+    .transform(cm.plane)
+    .transform((_, data) => data.map(({guides, ...d}) => ({...d, guides: {...guides, x: undefined}})))
+    .add(cm.axisY);
+  root.render();
+  assert.ok(Array.from(renderer.node().querySelectorAll("text")).some((t) => t.textContent === "↑ y"));
 });

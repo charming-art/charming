@@ -13,7 +13,7 @@
   <text x="401.5950244056054" y="529" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">8%</text>
   <text x="494.4937805070068" y="529" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">10%</text>
   <text x="587.3925366084081" y="529" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">12%</text>
-  <text x="325" y="545" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Frequency →</text>
+  <text x="620" y="545" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-before-edge" fill="currentColor">Frequency →</text>
   <line x1="30" y1="20.747126436781592" x2="24" y2="20.747126436781592" stroke="currentColor" stroke-width="1"></line>
   <line x1="30" y1="40.28735632183906" x2="24" y2="40.28735632183906" stroke="currentColor" stroke-width="1"></line>
   <line x1="30" y1="59.82758620689654" x2="24" y2="59.82758620689654" stroke="currentColor" stroke-width="1"></line>

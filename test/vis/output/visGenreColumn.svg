@@ -1,55 +1,55 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
-  <line x1="97.60439560439559" y1="360" x2="97.60439560439559" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="158.7032967032967" y1="360" x2="158.7032967032967" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="219.8021978021978" y1="360" x2="219.8021978021978" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="280.9010989010989" y1="360" x2="280.9010989010989" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="342.00000000000006" y1="360" x2="342.00000000000006" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="403.09890109890114" y1="360" x2="403.09890109890114" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="464.1978021978022" y1="360" x2="464.1978021978022" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="525.2967032967033" y1="360" x2="525.2967032967033" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <line x1="586.3956043956044" y1="360" x2="586.3956043956044" y2="366" stroke="currentColor" stroke-width="1"></line>
-  <text x="97.60439560439559" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Action</text>
-  <text x="158.7032967032967" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Fighting</text>
-  <text x="219.8021978021978" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Other</text>
-  <text x="280.9010989010989" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Puzzle</text>
-  <text x="342.00000000000006" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">RPG</text>
-  <text x="403.09890109890114" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Racing</text>
-  <text x="464.1978021978022" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Shooter</text>
-  <text x="525.2967032967033" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Sports</text>
-  <text x="586.3956043956044" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Strategy</text>
-  <text x="342" y="385" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">genre</text>
-  <line x1="64" y1="360" x2="620" y2="360" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="64" y1="310.00000000000006" x2="620" y2="310.00000000000006" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="64" y1="260" x2="620" y2="260" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="64" y1="209.99999999999997" x2="620" y2="209.99999999999997" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="64" y1="160.00000000000003" x2="620" y2="160.00000000000003" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="64" y1="109.99999999999999" x2="620" y2="109.99999999999999" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="64" y1="60.000000000000014" x2="620" y2="60.000000000000014" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="64" y1="10" x2="620" y2="10" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
-  <line x1="64" y1="360" x2="58" y2="360" stroke="currentColor" stroke-width="1"></line>
-  <line x1="64" y1="310.00000000000006" x2="58" y2="310.00000000000006" stroke="currentColor" stroke-width="1"></line>
-  <line x1="64" y1="260" x2="58" y2="260" stroke="currentColor" stroke-width="1"></line>
-  <line x1="64" y1="209.99999999999997" x2="58" y2="209.99999999999997" stroke="currentColor" stroke-width="1"></line>
-  <line x1="64" y1="160.00000000000003" x2="58" y2="160.00000000000003" stroke="currentColor" stroke-width="1"></line>
-  <line x1="64" y1="109.99999999999999" x2="58" y2="109.99999999999999" stroke="currentColor" stroke-width="1"></line>
-  <line x1="64" y1="60.000000000000014" x2="58" y2="60.000000000000014" stroke="currentColor" stroke-width="1"></line>
-  <line x1="64" y1="10" x2="58" y2="10" stroke="currentColor" stroke-width="1"></line>
-  <text x="55" y="360" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0k</text>
-  <text x="55" y="310.00000000000006" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">50k</text>
-  <text x="55" y="260" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">100k</text>
-  <text x="55" y="209.99999999999997" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">150k</text>
-  <text x="55" y="160.00000000000003" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">200k</text>
-  <text x="55" y="109.99999999999999" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">250k</text>
-  <text x="55" y="60.000000000000014" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">300k</text>
-  <text x="55" y="10" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">350k</text>
-  <text x="25" y="185" transform="rotate(-90,25,185)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">sold →</text>
-  <rect x="497.8021978021977" y="85.00000000000001" width="54.98901098901092" height="275" fill="#9a60b4"></rect>
-  <rect x="558.9010989010989" y="245" width="54.989010989011035" height="115" fill="#ea7ccc"></rect>
-  <rect x="70.10989010989009" y="240" width="54.98901098901099" height="120" fill="#5470c6"></rect>
-  <rect x="436.70329670329664" y="10" width="54.989010989011035" height="350" fill="#fc8452"></rect>
-  <rect x="192.30769230769226" y="209.99999999999997" width="54.98901098901098" height="150.00000000000003" fill="#fac858"></rect>
-  <rect x="375.6043956043956" y="180.00000000000003" width="54.98901098901092" height="179.99999999999997" fill="#3ba272"></rect>
-  <rect x="253.4065934065934" y="300" width="54.98901098901092" height="60" fill="#ee6666"></rect>
-  <rect x="314.5054945054945" y="60.000000000000014" width="54.98901098901098" height="300" fill="#73c0de"></rect>
-  <rect x="131.20879120879118" y="270" width="54.98901098901098" height="90" fill="#91cc75"></rect>
+  <line x1="80.69230769230765" y1="360" x2="80.69230769230765" y2="366" stroke="currentColor" stroke-width="1"></line>
+  <line x1="143.76923076923072" y1="360" x2="143.76923076923072" y2="366" stroke="currentColor" stroke-width="1"></line>
+  <line x1="206.8461538461538" y1="360" x2="206.8461538461538" y2="366" stroke="currentColor" stroke-width="1"></line>
+  <line x1="269.9230769230769" y1="360" x2="269.9230769230769" y2="366" stroke="currentColor" stroke-width="1"></line>
+  <line x1="333" y1="360" x2="333" y2="366" stroke="currentColor" stroke-width="1"></line>
+  <line x1="396.0769230769231" y1="360" x2="396.0769230769231" y2="366" stroke="currentColor" stroke-width="1"></line>
+  <line x1="459.1538461538461" y1="360" x2="459.1538461538461" y2="366" stroke="currentColor" stroke-width="1"></line>
+  <line x1="522.2307692307692" y1="360" x2="522.2307692307692" y2="366" stroke="currentColor" stroke-width="1"></line>
+  <line x1="585.3076923076923" y1="360" x2="585.3076923076923" y2="366" stroke="currentColor" stroke-width="1"></line>
+  <text x="80.69230769230765" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Action</text>
+  <text x="143.76923076923072" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Fighting</text>
+  <text x="206.8461538461538" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Other</text>
+  <text x="269.9230769230769" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Puzzle</text>
+  <text x="333" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">RPG</text>
+  <text x="396.0769230769231" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Racing</text>
+  <text x="459.1538461538461" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Shooter</text>
+  <text x="522.2307692307692" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Sports</text>
+  <text x="585.3076923076923" y="369" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Strategy</text>
+  <text x="333" y="385" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">genre</text>
+  <line x1="46" y1="360" x2="620" y2="360" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="46" y1="312.00000000000006" x2="620" y2="312.00000000000006" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="46" y1="264" x2="620" y2="264" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="46" y1="215.99999999999997" x2="620" y2="215.99999999999997" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="46" y1="168.00000000000003" x2="620" y2="168.00000000000003" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="46" y1="119.99999999999999" x2="620" y2="119.99999999999999" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="46" y1="72.00000000000001" x2="620" y2="72.00000000000001" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="46" y1="24" x2="620" y2="24" stroke="currentColor" stroke-opacity="0.1" stroke-width="1"></line>
+  <line x1="46" y1="360" x2="40" y2="360" stroke="currentColor" stroke-width="1"></line>
+  <line x1="46" y1="312.00000000000006" x2="40" y2="312.00000000000006" stroke="currentColor" stroke-width="1"></line>
+  <line x1="46" y1="264" x2="40" y2="264" stroke="currentColor" stroke-width="1"></line>
+  <line x1="46" y1="215.99999999999997" x2="40" y2="215.99999999999997" stroke="currentColor" stroke-width="1"></line>
+  <line x1="46" y1="168.00000000000003" x2="40" y2="168.00000000000003" stroke="currentColor" stroke-width="1"></line>
+  <line x1="46" y1="119.99999999999999" x2="40" y2="119.99999999999999" stroke="currentColor" stroke-width="1"></line>
+  <line x1="46" y1="72.00000000000001" x2="40" y2="72.00000000000001" stroke="currentColor" stroke-width="1"></line>
+  <line x1="46" y1="24" x2="40" y2="24" stroke="currentColor" stroke-width="1"></line>
+  <text x="37" y="360" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0k</text>
+  <text x="37" y="312.00000000000006" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">50k</text>
+  <text x="37" y="264" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">100k</text>
+  <text x="37" y="215.99999999999997" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">150k</text>
+  <text x="37" y="168.00000000000003" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">200k</text>
+  <text x="37" y="119.99999999999999" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">250k</text>
+  <text x="37" y="72.00000000000001" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">300k</text>
+  <text x="37" y="24" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">350k</text>
+  <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ sold</text>
+  <rect x="493.84615384615375" y="96.00000000000001" width="56.769230769230774" height="264" fill="#9a60b4"></rect>
+  <rect x="556.9230769230769" y="249.60000000000002" width="56.76923076923083" height="110.39999999999998" fill="#ea7ccc"></rect>
+  <rect x="52.307692307692285" y="244.8" width="56.76923076923077" height="115.19999999999999" fill="#5470c6"></rect>
+  <rect x="430.7692307692307" y="24" width="56.76923076923083" height="336" fill="#fc8452"></rect>
+  <rect x="178.46153846153842" y="215.99999999999997" width="56.769230769230774" height="144.00000000000003" fill="#fac858"></rect>
+  <rect x="367.6923076923077" y="187.20000000000005" width="56.769230769230774" height="172.79999999999995" fill="#3ba272"></rect>
+  <rect x="241.53846153846152" y="302.4" width="56.769230769230745" height="57.60000000000002" fill="#ee6666"></rect>
+  <rect x="304.6153846153846" y="72.00000000000001" width="56.769230769230774" height="288" fill="#73c0de"></rect>
+  <rect x="115.38461538461536" y="273.6" width="56.769230769230774" height="86.39999999999998" fill="#91cc75"></rect>
 </svg>
