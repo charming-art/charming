@@ -18,32 +18,6 @@
   </g>
   <g transform="translate(200,85.89743589743588)">
     <g transform="translate(-180,147.05128205128204)">
-      <line x1="100.77142857142854" y1="125.05128205128204" x2="100.77142857142854" y2="131.05128205128204" stroke="currentColor" stroke-width="1"></line>
-      <line x1="195.98571428571424" y1="125.05128205128204" x2="195.98571428571424" y2="131.05128205128204" stroke="currentColor" stroke-width="1"></line>
-      <line x1="291.19999999999993" y1="125.05128205128204" x2="291.19999999999993" y2="131.05128205128204" stroke="currentColor" stroke-width="1"></line>
-      <text x="100.77142857142854" y="134.05128205128204" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">40</text>
-      <text x="195.98571428571424" y="134.05128205128204" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">50</text>
-      <text x="291.19999999999993" y="134.05128205128204" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">60</text>
-      <line x1="24.599999999999994" y1="125.05128205128204" x2="18.599999999999994" y2="125.05128205128204" stroke="currentColor" stroke-width="1"></line>
-      <line x1="24.599999999999994" y1="95.7065527065527" x2="18.599999999999994" y2="95.7065527065527" stroke="currentColor" stroke-width="1"></line>
-      <line x1="24.599999999999994" y1="66.36182336182335" x2="18.599999999999994" y2="66.36182336182335" stroke="currentColor" stroke-width="1"></line>
-      <line x1="24.599999999999994" y1="37.01709401709403" x2="18.599999999999994" y2="37.01709401709403" stroke="currentColor" stroke-width="1"></line>
-      <line x1="24.599999999999994" y1="7.672364672364672" x2="18.599999999999994" y2="7.672364672364672" stroke="currentColor" stroke-width="1"></line>
-      <line x1="24.599999999999994" y1="-21.67236467236468" x2="18.599999999999994" y2="-21.67236467236468" stroke="currentColor" stroke-width="1"></line>
-      <line x1="24.599999999999994" y1="-51.017094017094" x2="18.599999999999994" y2="-51.017094017094" stroke="currentColor" stroke-width="1"></line>
-      <line x1="24.599999999999994" y1="-80.36182336182335" x2="18.599999999999994" y2="-80.36182336182335" stroke="currentColor" stroke-width="1"></line>
-      <line x1="24.599999999999994" y1="-109.7065527065527" x2="18.599999999999994" y2="-109.7065527065527" stroke="currentColor" stroke-width="1"></line>
-      <line x1="24.599999999999994" y1="-139.05128205128204" x2="18.599999999999994" y2="-139.05128205128204" stroke="currentColor" stroke-width="1"></line>
-      <text x="15.599999999999994" y="125.05128205128204" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">13</text>
-      <text x="15.599999999999994" y="95.7065527065527" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">14</text>
-      <text x="15.599999999999994" y="66.36182336182335" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">15</text>
-      <text x="15.599999999999994" y="37.01709401709403" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">16</text>
-      <text x="15.599999999999994" y="7.672364672364672" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">17</text>
-      <text x="15.599999999999994" y="-21.67236467236468" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">18</text>
-      <text x="15.599999999999994" y="-51.017094017094" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">19</text>
-      <text x="15.599999999999994" y="-80.36182336182335" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">20</text>
-      <text x="15.599999999999994" y="-109.7065527065527" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">21</text>
-      <text x="15.599999999999994" y="-139.05128205128204" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">22</text>
       <circle cx="92.20214285714285" cy="-42.21367521367521" r="3" fill="steelblue" fill-opacity="0.6"></circle>
       <circle cx="96.01071428571427" cy="-4.065527065527014" r="3" fill="steelblue" fill-opacity="0.6"></circle>
       <circle cx="103.6278571428571" cy="-21.67236467236468" r="3" fill="steelblue" fill-opacity="0.6"></circle>
@@ -388,6 +362,32 @@
       <circle cx="199.79428571428568" cy="45.82051282051284" r="3" fill="steelblue" fill-opacity="0.6"></circle>
       <circle cx="150.28285714285715" cy="72.23076923076921" r="3" fill="steelblue" fill-opacity="0.6"></circle>
       <circle cx="195.03357142857138" cy="34.08262108262104" r="3" fill="steelblue" fill-opacity="0.6"></circle>
+      <line x1="100.77142857142854" y1="125.05128205128204" x2="100.77142857142854" y2="131.05128205128204" stroke="currentColor" stroke-width="1"></line>
+      <line x1="195.98571428571424" y1="125.05128205128204" x2="195.98571428571424" y2="131.05128205128204" stroke="currentColor" stroke-width="1"></line>
+      <line x1="291.19999999999993" y1="125.05128205128204" x2="291.19999999999993" y2="131.05128205128204" stroke="currentColor" stroke-width="1"></line>
+      <text x="100.77142857142854" y="134.05128205128204" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">40</text>
+      <text x="195.98571428571424" y="134.05128205128204" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">50</text>
+      <text x="291.19999999999993" y="134.05128205128204" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">60</text>
+      <line x1="24.599999999999994" y1="125.05128205128204" x2="18.599999999999994" y2="125.05128205128204" stroke="currentColor" stroke-width="1"></line>
+      <line x1="24.599999999999994" y1="95.7065527065527" x2="18.599999999999994" y2="95.7065527065527" stroke="currentColor" stroke-width="1"></line>
+      <line x1="24.599999999999994" y1="66.36182336182335" x2="18.599999999999994" y2="66.36182336182335" stroke="currentColor" stroke-width="1"></line>
+      <line x1="24.599999999999994" y1="37.01709401709403" x2="18.599999999999994" y2="37.01709401709403" stroke="currentColor" stroke-width="1"></line>
+      <line x1="24.599999999999994" y1="7.672364672364672" x2="18.599999999999994" y2="7.672364672364672" stroke="currentColor" stroke-width="1"></line>
+      <line x1="24.599999999999994" y1="-21.67236467236468" x2="18.599999999999994" y2="-21.67236467236468" stroke="currentColor" stroke-width="1"></line>
+      <line x1="24.599999999999994" y1="-51.017094017094" x2="18.599999999999994" y2="-51.017094017094" stroke="currentColor" stroke-width="1"></line>
+      <line x1="24.599999999999994" y1="-80.36182336182335" x2="18.599999999999994" y2="-80.36182336182335" stroke="currentColor" stroke-width="1"></line>
+      <line x1="24.599999999999994" y1="-109.7065527065527" x2="18.599999999999994" y2="-109.7065527065527" stroke="currentColor" stroke-width="1"></line>
+      <line x1="24.599999999999994" y1="-139.05128205128204" x2="18.599999999999994" y2="-139.05128205128204" stroke="currentColor" stroke-width="1"></line>
+      <text x="15.599999999999994" y="125.05128205128204" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">13</text>
+      <text x="15.599999999999994" y="95.7065527065527" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">14</text>
+      <text x="15.599999999999994" y="66.36182336182335" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">15</text>
+      <text x="15.599999999999994" y="37.01709401709403" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">16</text>
+      <text x="15.599999999999994" y="7.672364672364672" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">17</text>
+      <text x="15.599999999999994" y="-21.67236467236468" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">18</text>
+      <text x="15.599999999999994" y="-51.017094017094" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">19</text>
+      <text x="15.599999999999994" y="-80.36182336182335" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">20</text>
+      <text x="15.599999999999994" y="-109.7065527065527" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">21</text>
+      <text x="15.599999999999994" y="-139.05128205128204" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">22</text>
     </g>
     <g transform="translate(115.38461538461536,147.05128205128204)">
       <rect x="4.415384615384625" y="95.7065527065527" width="18.059999999999995" height="29.344729344729345" fill="steelblue"></rect>
