@@ -141,7 +141,7 @@ export function polar(
     return nested ? {...frame, nested} : frame;
   };
 
-  let frames;
+  let frames, legendX;
   if (nested) {
     // A nested chart has no margins by default: its parent leaves the room.
     const margins = {top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft};
@@ -167,7 +167,20 @@ export function polar(
     const legendsAt = (left) => (given.top === undefined ? topLegends(data, colors, options, width - 3 - left) : 0);
     let legendRoom = legendsAt(base.left);
     const margins = {...base, top: base.top + legendRoom};
-    for (let pass = 0; pass < 30; pass++) {
+    // The titles of the axes asked, given by labels, sit in the corners, the angle's at the bottom
+    // and the radius's at the top, so the outer labels keep clear of their rows.
+    const titled = {x: false, y: false};
+    for (const {hints = {}} of data) {
+      const nameX = scaleName(hints, keysX, "x");
+      const nameY = scaleName(hints, keysY, "y");
+      const {x, y} = guidesOf(null, options, nameX, nameY, sidesOfPolar, {x: [], y: []});
+      if (x.anchors.length && options[nameX]?.label != null) titled.x = true;
+      if (y.anchors.length && options[nameY]?.label != null) titled.y = true;
+    }
+    // What's drawn past the disc for margins: the tick labels of the outer angle axes, and the
+    // legends on the right, like cm.plane's, past those labels, or right of a given margin, which
+    // they add to, ending 3px from the right of the chart.
+    const layoutAt = (margins) => {
       const frame = frameOf(box, margins);
       const boxes = [];
       for (const context of data) {
@@ -177,32 +190,41 @@ export function polar(
         const {anchors, ...axis} = guide;
         for (const anchor of anchors) boxes.push(...polarLabelBoxes(frame, recordX, {...axis, anchor}));
       }
-      // The legends on the right add to margin, like cm.plane's, unless marginRight is given.
       const legendWidth = rightLegends(data, colors, options, 2 * frame.outerRadius);
-      const legends = [];
-      if (legendWidth) {
-        const x0 = frame.cx + frame.outerRadius + 12;
-        legends.push([x0, frame.cy - frame.outerRadius, x0 + legendWidth, frame.cy - frame.outerRadius]);
-      }
-      const pastOf = (boxes) => ({
-        left: Math.max(0, ...boxes.map(([x0]) => 3 - x0)),
-        right: Math.max(0, ...boxes.map(([, , x1]) => x1 - (width - 3))),
-        top: Math.max(0, ...boxes.map(([, y0]) => legendRoom + 3 - y0)),
-        bottom: Math.max(0, ...boxes.map(([, , , y1]) => y1 - (height - 3))),
-      });
-      const past = pastOf(boxes);
-      const pastLegends = pastOf(legends);
+      const reach = Math.max(0, ...boxes.map(([, , x1]) => x1 - (frame.cx + frame.outerRadius)));
+      const legendX =
+        margin !== undefined && given.right === undefined
+          ? width - 3 - legendWidth
+          : frame.cx + frame.outerRadius + reach + 12;
+      return {boxes, legendWidth, legendX};
+    };
+    for (let pass = 0; pass < 30; pass++) {
+      const layout = layoutAt(margins);
+      const {boxes, legendWidth} = layout;
+      legendX = layout.legendX;
       let grown = false;
-      for (const side in past) {
-        if (given[side] !== undefined) continue;
-        const over = Math.max(margin === undefined ? past[side] : 0, pastLegends[side]);
-        if (over > 1e-3) [margins[side], grown] = [margins[side] + over, true];
+      const grow = (side, over) => {
+        if (given[side] === undefined && over > 1e-3) [margins[side], grown] = [margins[side] + over, true];
+      };
+      if (margin === undefined) {
+        const top = legendRoom + 3 + (titled.y ? 10 + 6 : 0);
+        const bottom = height - 3 - (titled.x ? 10 + 6 : 0);
+        grow("left", Math.max(0, ...boxes.map(([x0]) => 3 - x0)));
+        grow("top", Math.max(0, ...boxes.map(([, y0]) => top - y0)));
+        grow("bottom", Math.max(0, ...boxes.map(([, , , y1]) => y1 - bottom)));
+        const right = Math.max(...boxes.map(([, , x1]) => x1), legendWidth ? legendX + legendWidth : -Infinity);
+        grow("right", right - (width - 3));
+      } else if (given.right === undefined) {
+        // A given margin holds the disc and its labels; the legends on the right add to it.
+        const next = margin + (legendWidth ? 12 + legendWidth + 3 : 0);
+        if (next !== margins.right) [margins.right, grown] = [next, true];
       }
       // As the left margin grows, the legends at the top may wrap into more rows.
       const room = legendsAt(margins.left);
       if (room !== legendRoom) [margins.top, legendRoom, grown] = [margins.top + room - legendRoom, room, true];
       if (!grown) break;
     }
+    legendX = layoutAt(margins).legendX;
     frames = data.map(() => frameOf(box, margins));
   }
 
@@ -260,6 +282,7 @@ export function polar(
     // Unlike cm.plane, cm.polar draws axes only when asked, such as {x: {axis: true}}, as pies and
     // donuts have none.
     const guides = guidesOf(id, options, nameX, nameY, sidesOfPolar, {x: [], y: []});
+    if (legendX !== undefined) guides.legendX = legendX;
     return {...withoutHints(scaled), value: newValue, scales, frame, titles, clip: shape, clipped: clip, guides};
   });
 }

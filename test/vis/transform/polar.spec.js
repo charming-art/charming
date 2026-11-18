@@ -309,19 +309,65 @@ test("cm.polar keeps its legends at the top clear of its outer labels as its lef
 test("cm.polar adds its legends on the right to a given margin, like cm.plane", () => {
   const renderer = cm.svg({width: 400, height: 400});
   const root = cm.flow().renderer(renderer);
-  root
+  const [context] = root
     .data([
       {k: "a category with a long name", v: 1},
       {k: "b", v: 2},
     ])
     .transform(cm.encode, {x: "v", fill: "k"})
     .transform(cm.stackX)
-    .transform(cm.polar, {margin: 20, fill: {legend: "right"}})
-    .add(cm.arc);
+    .transform(cm.polar, {margin: 20, fill: {legend: "right"}})._values;
+  root.add(cm.arc);
   root.render();
+  const {cx, outerRadius} = context.frame;
+  const legendWidth = 10 + 4 + widthOf("a category with a long name");
+  // The right margin is 20, then 12, the legend and 3px, and the disc, held by the width, touches it.
+  assertInDelta(cx + outerRadius, 400 - (20 + 12 + legendWidth + 3));
+  // The legend starts 20 + 12 past the disc, and ends 3px from the right of the chart.
+  const swatch = Array.from(renderer.node().querySelectorAll("rect")).find((r) => r.getAttribute("width") === "10");
+  assertInDelta(+swatch.getAttribute("x"), cx + outerRadius + 20 + 12);
   const label = Array.from(renderer.node().querySelectorAll("text")).find((t) =>
     t.textContent.startsWith("a category"),
   );
-  assert.strictEqual(label.textContent, "a category with a long name");
-  assert.ok(+label.getAttribute("x") + widthOf(label.textContent) <= 400 - 3 + 0.01);
+  assertInDelta(+label.getAttribute("x") + widthOf(label.textContent), 400 - 3);
+});
+
+test("cm.polar starts its legends on the right past its outer labels", () => {
+  const renderer = cm.svg({width: 500, height: 400});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(["north", "a long label at three o'clock", "south", "west"].map((k) => ({k, v: 1})))
+    .transform(cm.encode, {x: "k", y: "v", fill: "k"})
+    .transform(cm.spreadX, {align: 0, paddingOuter: 0, paddingInner: 0})
+    .transform(cm.polar, {x: {axis: "outer"}, fill: {legend: "right"}})
+    .add(cm.arc);
+  root.render();
+  const node = renderer.node();
+  const swatches = Array.from(node.querySelectorAll("rect")).filter((r) => r.getAttribute("width") === "10");
+  const ticks = Array.from(node.querySelectorAll("text")).filter(
+    (t) => t.getAttribute("text-anchor") === "start" && !t.getAttribute("dominant-baseline")?.includes("before"),
+  );
+  const end = Math.max(...ticks.map((t) => +t.getAttribute("x") + widthOf(t.textContent)));
+  for (const r of swatches) assert.ok(+r.getAttribute("x") >= end + 12 - 1e-6);
+});
+
+test("cm.polar keeps its outer labels clear of the rows of the titles of its axes", () => {
+  const renderer = cm.svg({width: 300, height: 300});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(d3.range(12).map((i) => ({k: `label ${i}`, v: i + 1})))
+    .transform(cm.encode, {x: "k", y: "v"})
+    .transform(cm.spreadX)
+    .transform(cm.polar, {x: {axis: "outer", label: "Angle"}, y: {axis: true, label: "Radius"}})
+    .add(cm.arc);
+  root.render();
+  const texts = Array.from(renderer.node().querySelectorAll("text")).filter((t) => t.textContent.startsWith("label"));
+  for (const t of texts) {
+    const y = +t.getAttribute("y");
+    const baseline = t.getAttribute("dominant-baseline");
+    const [top, bottom] =
+      baseline === "text-before-edge" ? [y, y + 10] : baseline === "central" ? [y - 5, y + 5] : [y - 10, y];
+    // Under the radius's title, 3 + 10, and over the angle's, 300 - 3 - 10, by a gap of 6.
+    assert.ok(top >= 3 + 10 + 6 - 1e-3 && bottom <= 300 - 3 - 10 - 6 + 1e-3, t.textContent);
+  }
 });
