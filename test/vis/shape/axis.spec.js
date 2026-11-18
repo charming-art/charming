@@ -746,3 +746,40 @@ test("cm.axisY puts its level title over an axis of x at the top, in the row of 
   assert.strictEqual(+title.getAttribute("y"), +titleX.getAttribute("y"));
   assert.ok(+title.getAttribute("y") - 10 >= 0);
 });
+
+test("cm.axisY puts its level title in the row of the title of x, past the ticks of x as they're drawn", () => {
+  const rowOf = (x, plane = {}) => {
+    const renderer = cm.svg({width: 200, height: 200});
+    const root = cm.flow().renderer(renderer);
+    root
+      .data([
+        {x: 0, y: 0},
+        {x: 1, y: 1},
+      ])
+      .transform(cm.encode, {x: "x", y: "y"})
+      .transform(cm.plane, {x, ...plane});
+    root.render();
+    const find = (t) => Array.from(renderer.node().querySelectorAll("text")).find((d) => d.textContent === t);
+    return [+find("↑ y").getAttribute("y"), +find("x →").getAttribute("y")];
+  };
+  // Without tick labels, rotated tick labels, or longer ticks, the titles still share a row.
+  const [a, b] = rowOf({axis: "top", tickFormat: () => ""});
+  assert.strictEqual(a, b);
+  const [c, d] = rowOf({axis: "top", tickSize: 20}, {marginTop: 60});
+  assert.strictEqual(c, d);
+  const [e, f] = rowOf({axis: "top", tickRotate: -45}, {marginTop: 80});
+  assertInDelta(e, f);
+});
+
+test("cm.axisY places its level title when the guides of its context have no axis of x", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([{y: 0}, {y: 1}])
+    .transform(cm.encode, {y: "y"})
+    .transform(cm.plane)
+    .transform((_, data) => data.map(({guides, ...d}) => ({...d, guides: {...guides, x: undefined}})))
+    .add(cm.axisY);
+  root.render();
+  assert.ok(Array.from(renderer.node().querySelectorAll("text")).some((t) => t.textContent === "↑ y"));
+});

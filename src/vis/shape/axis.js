@@ -46,6 +46,24 @@ function rotatedY(degrees, right) {
   return [{textAlign: "center", textBaseline, rotate: radians}, 4 * Math.cos(radians)];
 }
 
+// How far the axis of x on a side reaches, with the options of its guide, as cm.axisX measures it,
+// such as for a level title of y in the row of its title.
+function reachX(x, options, side) {
+  const {tickSize = 6, tickPadding = 3, tickRotate = 0} = options;
+  const scale = scaleOf(x);
+  const [left, right] = extentOf(x.range);
+  const count = countOf(options, right - left, 80);
+  const format = formatOf(scale, options, count);
+  const [, pad] = rotatedX(tickRotate, side === "top");
+  return reachOf(ticksOf(scale, options, count).map(format), {
+    tickSize,
+    tickPadding,
+    radians: (tickRotate * Math.PI) / 180,
+    pad,
+    across: acrossX,
+  });
+}
+
 function extentOf(range) {
   return [Math.min(...range), Math.max(...range)];
 }
@@ -163,7 +181,8 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
     // Over the top or under the bottom of the axis, past the half of a tick label that may reach
     // past it, or past the tick labels of an axis of x on that side, in the row of its title.
     const isBottom = labelAnchor === "bottom";
-    const past = guides?.x.anchors.includes(isBottom ? "bottom" : "top") ? 6 + 3 + font.fontSize : font.fontSize / 2;
+    const side = isBottom ? "bottom" : "top";
+    const past = x && guides?.x?.anchors?.includes(side) ? reachX(x, guides.x, side) : font.fontSize / 2;
     flow.datum(label).append(text, {
       ...font,
       text: label,
