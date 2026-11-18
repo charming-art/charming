@@ -3,7 +3,7 @@ import * as d3 from "d3";
 import {test} from "vitest";
 import "../../install-canvas-mock.js";
 import * as cm from "../../../src/index.js";
-import {assertInDelta} from "../../helpers.js";
+import {assertInDelta, probe} from "../../helpers.js";
 
 function values(data, channels, ...transforms) {
   let flow = cm.flow().data(data).transform(cm.encode, channels);
@@ -342,4 +342,104 @@ test("cm.stackY with offset wiggle stacks in order along x, whatever the order o
 
 test("cm.stackY throws an error for an unknown offset, like Plot", () => {
   assert.throws(() => values(flows, {x: "x", y: "v", z: "s"}, stackYOf({offset: "wigle"})), /Unknown offset: wigle/);
+});
+
+// The enter delays and durations of rows after cm.stackEnter, or cm.stackExit, as cm.plane times
+// them, with the options of the plane; before, a transform such as an earlier stack.
+function timing(data, channels, options, transform = cm.stackEnter, {flow: flowOptions, plane = {}, before} = {}) {
+  const [shape, calls] = probe();
+  const root = cm.flow(flowOptions).renderer(cm.svg({width: 200, height: 200}));
+  let flow = root.data(data).transform(cm.encode, channels);
+  if (before) flow = flow.transform(...before);
+  flow.transform(transform, options).transform(cm.plane, plane).add(shape);
+  root.render();
+  const stage = transform === cm.stackEnter ? "enter" : "exit";
+  return [calls[0][`${stage}Delay`], calls[0][`${stage}Duration`]];
+}
+
+const fruits = [
+  {year: 2001, fruit: "Apple"},
+  {year: 2001, fruit: "Orange"},
+  {year: 2002, fruit: "Apple"},
+  {year: 2002, fruit: "Orange"},
+];
+
+test("cm.stackEnter enters the series one after another, gap apart, and their rows step apart", () => {
+  const [delays, durations] = timing(fruits, {x: "year", fill: "fruit"}, {step: 100, gap: 200, duration: 300});
+  // Apple's rows at 0 and 100, ending at 400; Orange's from 600, at 600 and 700.
+  assert.deepStrictEqual(delays, [0, 600, 100, 700]);
+  assert.deepStrictEqual(durations, [300, 300, 300, 300]);
+});
+
+test("cm.stackEnter groups by the channel given with by, or puts every row in one group with null", () => {
+  const [byX] = timing(fruits, {x: "year", fill: "fruit"}, {by: "x", step: 100, gap: 200, duration: 300});
+  assert.deepStrictEqual(byX, [0, 100, 600, 700]);
+  const [all] = timing(fruits, {x: "year", fill: "fruit"}, {by: null, step: 100, duration: 300});
+  assert.deepStrictEqual(all, [0, 100, 200, 300]);
+});
+
+test("cm.stackEnter orders the groups by order, or the domain of the series from an earlier stack, and reverse", () => {
+  const [ordered] = timing(fruits, {fill: "fruit"}, {order: ["Orange", "Apple"], duration: 300});
+  assert.deepStrictEqual(ordered, [300, 0, 300, 0]);
+  const [reversed] = timing(fruits, {fill: "fruit"}, {reverse: true, duration: 300});
+  assert.deepStrictEqual(reversed, [300, 0, 300, 0]);
+  // The order of an earlier stack is the domain of the series.
+  const [hinted] = timing(fruits, {x: "year", y: () => 1, fill: "fruit"}, {duration: 300}, cm.stackEnter, {
+    before: [cm.stackY, {order: ["Orange", "Apple"]}],
+  });
+  assert.deepStrictEqual(hinted, [300, 0, 300, 0]);
+});
+
+test("cm.stackEnter takes the durations of rows, and adds to their delays, in milliseconds", () => {
+  const data = [
+    {fruit: "Apple", d: 100, t: 50},
+    {fruit: "Apple", d: 500, t: 0},
+    {fruit: "Orange", d: 100, t: 0},
+  ];
+  const [delays, durations] = timing(data, {fill: "fruit", enterDuration: "d", enterDelay: "t"}, {step: 100});
+  // Apple ends with its second row, at 100 + 500; Orange starts there.
+  assert.deepStrictEqual(durations, [100, 500, 100]);
+  assert.deepStrictEqual(delays, [50, 100, 600]);
+});
+
+test("cm.stackEnter lasts the flow's duration by default, else 750ms like transitions", () => {
+  const [, durations] = timing(fruits, {fill: "fruit"}, {}, cm.stackEnter, {flow: {transition: {duration: 400}}});
+  assert.deepStrictEqual(durations, [400, 400, 400, 400]);
+  const [, defaults] = timing(fruits, {fill: "fruit"}, {});
+  assert.deepStrictEqual(defaults, [750, 750, 750, 750]);
+});
+
+test("cm.stackExit stacks the exits of rows along time", () => {
+  const [delays, durations] = timing(fruits, {fill: "fruit"}, {duration: 300}, cm.stackExit);
+  assert.deepStrictEqual(delays, [0, 300, 0, 300]);
+  assert.deepStrictEqual(durations, [300, 300, 300, 300]);
+});
+
+test("cm.stackEnter steps and gaps in milliseconds, which the options of the time scale don't rescale", () => {
+  const plain = timing(fruits, {fill: "fruit"}, {by: null, step: 100, duration: 300});
+  for (const time of [
+    {range: [0, 1000]},
+    {type: "linear", range: [0, 1000]},
+    {range: [0, 1000], transform: (d) => d * 10},
+    {percent: true, range: [0, 1000]},
+  ]) {
+    assert.deepStrictEqual(
+      timing(fruits, {fill: "fruit"}, {by: null, step: 100, duration: 300}, cm.stackEnter, {plane: {time}}),
+      plain,
+    );
+  }
+});
+
+test("cm.stackEnter steps the encoded delays and durations once the time scale has scaled them", () => {
+  const tasks = [
+    {start: 1, length: 3},
+    {start: 3, length: 10},
+  ];
+  const channels = {enterDelay: "start", enterDuration: "length"};
+  const [delays, durations] = timing(tasks, channels, {by: null, step: 100}, cm.stackEnter, {
+    plane: {time: {range: [0, 1000]}},
+  });
+  // From 0 to 10 over 1000ms: the starts at 100 and 300, the second 100ms later by its rank.
+  assert.deepStrictEqual(delays, [100, 400]);
+  assert.deepStrictEqual(durations, [300, 1000]);
 });
