@@ -1,4 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
+  <rect x="429.6129032258065" y="257.38095238095235" width="171.34838709677416" height="104.61904761904765" fill="#5470c6"></rect>
+  <rect x="48.838709677419374" y="273.4761904761905" width="171.34838709677422" height="88.52380952380952" fill="#5470c6"></rect>
+  <rect x="48.838709677419374" y="24" width="171.34838709677422" height="249.47619047619048" fill="#fac858"></rect>
+  <rect x="239.2258064516129" y="249.33333333333337" width="171.34838709677425" height="112.66666666666663" fill="#5470c6"></rect>
+  <rect x="239.2258064516129" y="112.52380952380952" width="171.34838709677425" height="136.80952380952385" fill="#91cc75"></rect>
   <line x1="134.5129032258065" y1="362" x2="134.5129032258065" y2="368" stroke="currentColor" stroke-width="1"></line>
   <line x1="324.90000000000003" y1="362" x2="324.90000000000003" y2="368" stroke="currentColor" stroke-width="1"></line>
   <line x1="515.2870967741936" y1="362" x2="515.2870967741936" y2="368" stroke="currentColor" stroke-width="1"></line>
@@ -25,9 +30,4 @@
   <text x="20.8" y="80.33333333333331" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">140</text>
   <text x="20.8" y="40.095238095238116" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">160</text>
   <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ Frequency</text>
-  <rect x="429.6129032258065" y="257.38095238095235" width="171.34838709677416" height="104.61904761904765" fill="#5470c6"></rect>
-  <rect x="48.838709677419374" y="273.4761904761905" width="171.34838709677422" height="88.52380952380952" fill="#5470c6"></rect>
-  <rect x="48.838709677419374" y="24" width="171.34838709677422" height="249.47619047619048" fill="#fac858"></rect>
-  <rect x="239.2258064516129" y="249.33333333333337" width="171.34838709677425" height="112.66666666666663" fill="#5470c6"></rect>
-  <rect x="239.2258064516129" y="112.52380952380952" width="171.34838709677425" height="136.80952380952385" fill="#91cc75"></rect>
 </svg>

@@ -784,3 +784,61 @@ test("cm.axisY places its level title when the guides of its context have no axi
   root.render();
   assert.ok(Array.from(renderer.node().querySelectorAll("text")).some((t) => t.textContent === "↑ y"));
 });
+
+test("cm.plane draws the grid of its axes under the shapes added to it, and their ticks and labels over them", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {x: 0, y: 0},
+      {x: 1, y: 1},
+    ])
+    .transform(cm.encode, {x: "x", y: "y"})
+    .transform(cm.plane, {y: {grid: true}})
+    .add(cm.circle, {r: 3});
+  root.render();
+  const children = Array.from(renderer.node().children);
+  const index = (predicate) => children.findIndex(predicate);
+  const lastIndex = (predicate) => children.length - 1 - children.slice().reverse().findIndex(predicate);
+  const grid = lastIndex((d) => d.tagName === "line" && d.getAttribute("stroke-opacity") === "0.1");
+  const circle = index((d) => d.tagName === "circle");
+  const label = index((d) => d.tagName === "text");
+  assert.ok(grid < circle && circle < label);
+  // An axis added explicitly draws its grid and the rest where it's added.
+  const explicit = cm.svg({width: 200, height: 200});
+  const root2 = cm.flow().renderer(explicit);
+  root2
+    .data([
+      {x: 0, y: 0},
+      {x: 1, y: 1},
+    ])
+    .transform(cm.encode, {x: "x", y: "y"})
+    .transform(cm.plane)
+    .add(cm.circle, {r: 3})
+    .add(cm.axis, {y: {grid: true}});
+  root2.render();
+  const kids = Array.from(explicit.node().children);
+  assert.ok(
+    kids.findIndex((d) => d.tagName === "circle") < kids.findIndex((d) => d.getAttribute("stroke-opacity") === "0.1"),
+  );
+});
+
+test("cm.polar draws the rings of its radius under the shapes added to it, and its labels over them", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {k: "a", v: 1},
+      {k: "b", v: 2},
+    ])
+    .transform(cm.encode, {x: "k", y: "v"})
+    .transform(cm.spreadX)
+    .transform(cm.polar, {y: {axis: true}})
+    .add(cm.arc);
+  root.render();
+  const children = Array.from(renderer.node().children);
+  const ring = children.findIndex((d) => d.tagName === "path" && d.getAttribute("stroke-opacity") === "0.1");
+  const wedge = children.findIndex((d) => d.tagName === "path" && d.getAttribute("stroke-opacity") !== "0.1");
+  const label = children.findIndex((d) => d.tagName === "text");
+  assert.ok(ring < wedge && wedge < label);
+});

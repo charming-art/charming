@@ -1,7 +1,7 @@
 import {link} from "../../core/shape/link.js";
 import {path} from "../../core/shape/path.js";
 import {text} from "../../core/shape/text.js";
-import {alignOf, countOf, font, formatOf, key, positionOf, scaleOf, ticksOf} from "./axisUtils.js";
+import {alignOf, countOf, font, formatOf, key, positionOf, scaleOf, ticksOf, widthOf} from "./axisUtils.js";
 
 const stroke = "currentColor";
 
@@ -23,12 +23,12 @@ function titleOf(frame, titles = {}, axis, {label}) {
   return label !== undefined ? label : (titles[axis] ?? null);
 }
 
-// The angle axis of cm.polar. The ticks point into the hole, as in D3's radial stacked bar chart,
-// or out of the chart, as in GoFish's donut chart. The anchor is inner if there's a hole. Its
-// title is at the bottom right, like a plane's x axis.
-export function polarAxisX(flow, frame, x, options, titles) {
+// The ticks of the angle axis of a polar frame on the ring of its anchor, with how they're placed:
+// the radius of the ring, the direction of the ticks, out of the chart or into its hole, the
+// count of ticks, and the angle of each.
+function angleTicks(frame, x, options) {
   const {innerRadius, outerRadius, startAngle, endAngle} = frame;
-  const {tickSize = 6, tickPadding = 3, grid = false, anchor = innerRadius > 0 ? "inner" : "outer"} = options;
+  const {anchor = innerRadius > 0 ? "inner" : "outer"} = options;
   const scale = scaleOf(x);
   const [r, k] = anchor === "inner" ? [innerRadius, -1] : [outerRadius, 1];
   // One tick per 80px along the circle where the ticks are, such as the edge of the hole.
@@ -37,8 +37,38 @@ export function polarAxisX(flow, frame, x, options, titles) {
   // A full turn ends where it starts, so its last tick is dropped.
   const full = Math.abs(endAngle - startAngle) >= 2 * Math.PI - 1e-6;
   const ticks = ticksOf(scale, options, count).filter((d) => !full || Math.abs(A(d) - endAngle) > 1e-6);
+  return {scale, r, k, count, A, ticks};
+}
+
+// The boxes of the tick labels of the angle axis of a polar frame, as polarAxisX draws them, as
+// [x0, y0, x1, y1], measured like Plot's text, by the widths of their characters: for its margins.
+export function polarLabelBoxes(frame, x, options = {}) {
+  const {tickSize = 6, tickPadding = 3} = options;
+  const {scale, r, k, count, A, ticks} = angleTicks(frame, x, options);
+  const format = formatOf(scale, options, count);
+  const r2 = r + k * (tickSize + tickPadding);
+  return ticks.flatMap((d) => {
+    const label = `${format(d) ?? ""}`;
+    if (label === "") return [];
+    const [px, py] = pointOf(frame, r2, A(d));
+    const {textAlign, textBaseline} = alignOf(k * Math.sin(A(d)), -k * Math.cos(A(d)));
+    const w = widthOf(label);
+    const h = font.fontSize;
+    const x0 = textAlign === "start" ? px : textAlign === "end" ? px - w : px - w / 2;
+    const y0 = textBaseline === "top" ? py : textBaseline === "bottom" ? py - h : py - h / 2;
+    return [[x0, y0, x0 + w, y0 + h]];
+  });
+}
+
+// The angle axis of cm.polar. The ticks point into the hole, as in D3's radial stacked bar chart,
+// or out of the chart, as in GoFish's donut chart. The anchor is inner if there's a hole. Its
+// title is at the bottom right, like a plane's x axis.
+export function polarAxisX(flow, frame, x, options, titles) {
+  const {innerRadius, outerRadius} = frame;
+  const {tickSize = 6, tickPadding = 3, grid = false, layer} = options;
+  const {scale, r, k, count, A, ticks} = angleTicks(frame, x, options);
   const at = (radius, i) => pointOf(frame, radius, A(ticks[i]));
-  if (grid) {
+  if (grid && layer !== "axis") {
     const spoke = (radius, j) => (d, i) => at(radius, i)[j];
     flow.data(ticks).append(link, {
       key,
@@ -50,6 +80,8 @@ export function polarAxisX(flow, frame, x, options, titles) {
       strokeOpacity: 0.1,
     });
   }
+  // An implicit axis draws its grid and the rest in two layers, under and over the shapes.
+  if (layer === "grid") return;
   const r1 = r + k * tickSize;
   const r2 = r + k * (tickSize + tickPadding);
   flow.data(ticks).append(link, {
@@ -83,12 +115,16 @@ export function polarAxisX(flow, frame, x, options, titles) {
 // tickPadding don't apply. Its title is at the top left, like a plane's y axis.
 export function polarAxisY(flow, frame, y, options, titles) {
   const {cx, cy, innerRadius, outerRadius} = frame;
-  const {grid = true} = options;
+  const {grid = true, layer} = options;
   const scale = scaleOf(y);
   const count = countOf(options, outerRadius - innerRadius, 35);
   const R = positionOf(scale);
   const ticks = ticksOf(scale, options, count).filter((d) => R(d) > innerRadius + 1e-6);
-  if (grid) flow.data(ticks).append(path, {key, x: cx, y: cy, d: (d) => ringOf(R(d)), stroke, strokeOpacity: 0.1});
+  if (grid && layer !== "axis") {
+    flow.data(ticks).append(path, {key, x: cx, y: cy, d: (d) => ringOf(R(d)), stroke, strokeOpacity: 0.1});
+  }
+  // An implicit axis draws its rings and its labels in two layers, under and over the shapes.
+  if (layer === "grid") return;
   const format = formatOf(scale, options, count);
   const label = {...font, key, text: format, x: cx, y: (d) => cy - R(d), textAlign: "center", textBaseline: "middle"};
   flow.data(ticks).append(text, {key, ...label, fill: null, stroke: "white", strokeWidth: 3});

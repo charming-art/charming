@@ -119,20 +119,20 @@ export function replaced(flow, shapes, same, guides) {
 }
 
 // The options of an axis, from the guides of its context and the options given to it: an implicit
-// axis draws the side of its guide, and an explicit one its anchor, else the first side of its
+// axis draws one layer, its grid or the rest, of the side of its guide, and an explicit one its anchor, else the first side of its
 // guide. Like Plot's, only the first side has a grid and a title. Null if an implicit axis has no
 // such side, or isn't drawn.
 export function axisOptions(flow, guides, axis, options, shapes) {
   const {anchors = [], name, ...guided} = guides?.[axis] ?? {};
   if (options.implicit) {
-    const {side} = options;
-    const same = ({guides: other, scales = {}}, {implicit, side: otherSide}) =>
+    const {side, layer} = options;
+    const same = ({guides: other, scales = {}}, {implicit, side: otherSide, layer: otherLayer}) =>
       other.id === guides.id &&
       other[axis].name === name &&
       scales[axis] !== undefined &&
-      (!implicit || otherSide === side);
+      (!implicit || (otherSide === side && otherLayer === layer));
     if (side >= anchors.length || replaced(flow, shapes, same, guides)) return null;
-    return {...guided, anchor: anchors[side], ...(side > 0 && {grid: false, label: null})};
+    return {...guided, anchor: anchors[side], layer, ...(side > 0 && {grid: false, label: null})};
   }
   const anchor = options.anchor ?? anchors[0];
   return {...guided, ...options, ...(anchor !== undefined && {anchor})};

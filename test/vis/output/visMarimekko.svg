@@ -1,4 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640">
+  <rect x="35.4" y="290.0898876404494" width="402.547" height="327.9101123595506" fill="#5470c6" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="35.4" y="126.13483146067409" width="402.547" height="163.95505617977528" fill="#91cc75" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="35.4" y="44.157303370786465" width="402.547" height="81.97752808988763" fill="#fac858" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="35.4" y="10" width="402.547" height="34.157303370786465" fill="#ee6666" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="437.947" y="396.9090909090909" width="248.765" height="221.09090909090912" fill="#5470c6" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="437.947" y="197.9272727272727" width="248.765" height="198.98181818181817" fill="#91cc75" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="437.947" y="65.2727272727273" width="248.765" height="132.65454545454543" fill="#fac858" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="437.947" y="10" width="248.765" height="55.272727272727295" fill="#ee6666" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="686.712" y="470.6060606060606" width="149.25900000000001" height="147.39393939393938" fill="#5470c6" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="686.712" y="249.5151515151515" width="149.25900000000001" height="221.09090909090912" fill="#91cc75" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="686.712" y="102.12121212121211" width="149.25900000000001" height="147.39393939393938" fill="#fac858" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="686.712" y="10" width="149.25900000000001" height="92.12121212121211" fill="#ee6666" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="835.971" y="512.2608695652174" width="104.029" height="105.73913043478262" fill="#5470c6" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="835.971" y="353.6521739130435" width="104.029" height="158.60869565217388" fill="#91cc75" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="835.971" y="142.17391304347825" width="104.029" height="211.47826086956525" fill="#fac858" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="835.971" y="10" width="104.029" height="132.17391304347825" fill="#ee6666" fill-opacity="0.5" stroke="white"></rect>
+  <rect x="35.4" y="10" width="904.6" height="608" fill="none" stroke="currentColor"></rect>
   <line x1="236.67350000000002" y1="618" x2="236.67350000000002" y2="624" stroke="currentColor" stroke-width="1"></line>
   <line x1="562.3295" y1="618" x2="562.3295" y2="624" stroke="currentColor" stroke-width="1"></line>
   <line x1="761.3415" y1="618" x2="761.3415" y2="624" stroke="currentColor" stroke-width="1"></line>
@@ -49,21 +66,4 @@
   <text x="26.4" y="70.79999999999998" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">90%</text>
   <text x="26.4" y="40.40000000000003" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">95%</text>
   <text x="26.4" y="10" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">100%</text>
-  <rect x="35.4" y="290.0898876404494" width="402.547" height="327.9101123595506" fill="#5470c6" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="35.4" y="126.13483146067409" width="402.547" height="163.95505617977528" fill="#91cc75" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="35.4" y="44.157303370786465" width="402.547" height="81.97752808988763" fill="#fac858" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="35.4" y="10" width="402.547" height="34.157303370786465" fill="#ee6666" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="437.947" y="396.9090909090909" width="248.765" height="221.09090909090912" fill="#5470c6" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="437.947" y="197.9272727272727" width="248.765" height="198.98181818181817" fill="#91cc75" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="437.947" y="65.2727272727273" width="248.765" height="132.65454545454543" fill="#fac858" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="437.947" y="10" width="248.765" height="55.272727272727295" fill="#ee6666" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="686.712" y="470.6060606060606" width="149.25900000000001" height="147.39393939393938" fill="#5470c6" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="686.712" y="249.5151515151515" width="149.25900000000001" height="221.09090909090912" fill="#91cc75" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="686.712" y="102.12121212121211" width="149.25900000000001" height="147.39393939393938" fill="#fac858" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="686.712" y="10" width="149.25900000000001" height="92.12121212121211" fill="#ee6666" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="835.971" y="512.2608695652174" width="104.029" height="105.73913043478262" fill="#5470c6" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="835.971" y="353.6521739130435" width="104.029" height="158.60869565217388" fill="#91cc75" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="835.971" y="142.17391304347825" width="104.029" height="211.47826086956525" fill="#fac858" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="835.971" y="10" width="104.029" height="132.17391304347825" fill="#ee6666" fill-opacity="0.5" stroke="white"></rect>
-  <rect x="35.4" y="10" width="904.6" height="608" fill="none" stroke="currentColor"></rect>
 </svg>

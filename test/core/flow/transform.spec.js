@@ -89,3 +89,23 @@ test("flow.transform(transform) adds no marks without bound values", () => {
   root.render();
   assert.deepStrictEqual(drawn, [["later", {}]]);
 });
+
+test("flow.transform(transform) draws the marks of transform.marks marked front after later shapes", () => {
+  const drawn = [];
+  const root = cm.flow().renderer(cm.canvas({width: 100, height: 100, dpi: 1}));
+  const transform = (_, data) => data;
+  transform.marks = () => [
+    [recorder("under", drawn), {}],
+    [recorder("front", drawn), {}, {front: true}],
+  ];
+  root
+    .data([1])
+    .transform(cm.bind, {x: (d) => d})
+    .transform(transform)
+    .append(recorder("later", drawn));
+  root.render();
+  assert.deepStrictEqual(
+    drawn.map(([name]) => name),
+    ["under", "later", "front"],
+  );
+});

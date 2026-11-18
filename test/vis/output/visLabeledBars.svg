@@ -1,4 +1,56 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="560" viewBox="0 0 640 560">
+  <rect x="21.8" y="11.961685823754776" width="598.2" height="17.65517241379311" fill="steelblue"></rect>
+  <rect x="21.8" y="31.578544061302672" width="426.4918280585735" height="17.655172413793103" fill="steelblue"></rect>
+  <rect x="21.8" y="51.19540229885057" width="384.62442135096836" height="17.65517241379311" fill="steelblue"></rect>
+  <rect x="21.8" y="70.81226053639845" width="353.54175720359" height="17.655172413793125" fill="steelblue"></rect>
+  <rect x="21.8" y="90.42911877394636" width="328.0633915918753" height="17.65517241379311" fill="steelblue"></rect>
+  <rect x="21.8" y="110.04597701149424" width="317.84378837978267" height="17.65517241379311" fill="steelblue"></rect>
+  <rect x="21.8" y="129.66283524904213" width="297.9697213037317" height="17.65517241379311" fill="steelblue"></rect>
+  <rect x="21.8" y="149.27969348659005" width="286.99659896079356" height="17.65517241379311" fill="steelblue"></rect>
+  <rect x="21.8" y="168.89655172413794" width="281.95743977326407" height="17.65517241379311" fill="steelblue"></rect>
+  <rect x="21.8" y="188.51340996168582" width="200.29480396787906" height="17.65517241379311" fill="steelblue"></rect>
+  <rect x="21.8" y="208.1302681992337" width="189.55715635333019" height="17.65517241379311" fill="steelblue"></rect>
+  <rect x="21.8" y="227.74712643678163" width="131.0181388757676" height="17.65517241379311" fill="steelblue"></rect>
+  <rect x="21.8" y="247.36398467432952" width="129.88786017949928" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="266.9808429118774" width="113.3104393008975" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="286.59770114942535" width="111.14407179971657" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="306.2145593869732" width="107.75323571091168" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="325.8314176245211" width="94.89631554085973" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="345.44827586206895" width="92.96542276806804" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="365.0651340996169" width="90.84615021256496" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="384.68199233716473" width="70.26565895134624" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="404.2988505747127" width="46.058856872933404" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="423.9157088122606" width="36.35729806329712" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="443.53256704980845" width="7.205526688710439" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="463.1494252873564" width="7.0642418516769006" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="482.7662835249042" width="4.474019839395371" height="17.655172413793082" fill="steelblue"></rect>
+  <rect x="21.8" y="502.38314176245217" width="3.485025980160607" height="17.655172413793025" fill="steelblue"></rect>
+  <text x="616" y="20.789272030651333" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">12.7%</text>
+  <text x="444.2918280585735" y="40.40613026819922" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">9.1%</text>
+  <text x="402.4244213509684" y="60.02298850574712" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">8.2%</text>
+  <text x="371.34175720359" y="79.63984674329501" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">7.5%</text>
+  <text x="345.8633915918753" y="99.25670498084291" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">7.0%</text>
+  <text x="335.6437883797827" y="118.8735632183908" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">6.7%</text>
+  <text x="315.7697213037317" y="138.4904214559387" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">6.3%</text>
+  <text x="304.7965989607936" y="158.1072796934866" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">6.1%</text>
+  <text x="299.7574397732641" y="177.72413793103448" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">6.0%</text>
+  <text x="218.09480396787907" y="197.34099616858236" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">4.3%</text>
+  <text x="207.3571563533302" y="216.95785440613025" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">4.0%</text>
+  <text x="148.8181388757676" y="236.5747126436782" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">2.8%</text>
+  <text x="147.6878601794993" y="256.1915708812261" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">2.8%</text>
+  <text x="131.1104393008975" y="275.8084291187739" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">2.4%</text>
+  <text x="128.94407179971657" y="295.42528735632186" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">2.4%</text>
+  <text x="125.55323571091168" y="315.0421455938697" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">2.3%</text>
+  <text x="112.69631554085973" y="334.65900383141764" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">2.0%</text>
+  <text x="118.76542276806803" y="354.27586206896547" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">2.0%</text>
+  <text x="116.64615021256496" y="373.8927203065134" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">1.9%</text>
+  <text x="96.06565895134624" y="393.50957854406124" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">1.5%</text>
+  <text x="71.8588568729334" y="413.1264367816092" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">1.0%</text>
+  <text x="62.15729806329712" y="432.74329501915713" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">0.8%</text>
+  <text x="33.00552668871044" y="452.36015325670496" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">0.2%</text>
+  <text x="32.8642418516769" y="471.9770114942529" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">0.1%</text>
+  <text x="30.274019839395372" y="491.59386973180074" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">0.1%</text>
+  <text x="29.285025980160608" y="511.2107279693487" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">0.1%</text>
   <line x1="21.8" y1="522" x2="21.8" y2="528" stroke="currentColor" stroke-width="1"></line>
   <line x1="115.98989135569201" y1="522" x2="115.98989135569201" y2="528" stroke="currentColor" stroke-width="1"></line>
   <line x1="210.17978271138404" y1="522" x2="210.17978271138404" y2="528" stroke="currentColor" stroke-width="1"></line>
@@ -66,56 +118,4 @@
   <text x="12.8" y="471.97701149425296" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">X</text>
   <text x="12.8" y="491.5938697318008" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Q</text>
   <text x="12.8" y="511.21072796934874" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">Z</text>
-  <rect x="21.8" y="11.961685823754776" width="598.2" height="17.65517241379311" fill="steelblue"></rect>
-  <rect x="21.8" y="31.578544061302672" width="426.4918280585735" height="17.655172413793103" fill="steelblue"></rect>
-  <rect x="21.8" y="51.19540229885057" width="384.62442135096836" height="17.65517241379311" fill="steelblue"></rect>
-  <rect x="21.8" y="70.81226053639845" width="353.54175720359" height="17.655172413793125" fill="steelblue"></rect>
-  <rect x="21.8" y="90.42911877394636" width="328.0633915918753" height="17.65517241379311" fill="steelblue"></rect>
-  <rect x="21.8" y="110.04597701149424" width="317.84378837978267" height="17.65517241379311" fill="steelblue"></rect>
-  <rect x="21.8" y="129.66283524904213" width="297.9697213037317" height="17.65517241379311" fill="steelblue"></rect>
-  <rect x="21.8" y="149.27969348659005" width="286.99659896079356" height="17.65517241379311" fill="steelblue"></rect>
-  <rect x="21.8" y="168.89655172413794" width="281.95743977326407" height="17.65517241379311" fill="steelblue"></rect>
-  <rect x="21.8" y="188.51340996168582" width="200.29480396787906" height="17.65517241379311" fill="steelblue"></rect>
-  <rect x="21.8" y="208.1302681992337" width="189.55715635333019" height="17.65517241379311" fill="steelblue"></rect>
-  <rect x="21.8" y="227.74712643678163" width="131.0181388757676" height="17.65517241379311" fill="steelblue"></rect>
-  <rect x="21.8" y="247.36398467432952" width="129.88786017949928" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="266.9808429118774" width="113.3104393008975" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="286.59770114942535" width="111.14407179971657" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="306.2145593869732" width="107.75323571091168" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="325.8314176245211" width="94.89631554085973" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="345.44827586206895" width="92.96542276806804" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="365.0651340996169" width="90.84615021256496" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="384.68199233716473" width="70.26565895134624" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="404.2988505747127" width="46.058856872933404" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="423.9157088122606" width="36.35729806329712" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="443.53256704980845" width="7.205526688710439" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="463.1494252873564" width="7.0642418516769006" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="482.7662835249042" width="4.474019839395371" height="17.655172413793082" fill="steelblue"></rect>
-  <rect x="21.8" y="502.38314176245217" width="3.485025980160607" height="17.655172413793025" fill="steelblue"></rect>
-  <text x="616" y="20.789272030651333" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">12.7%</text>
-  <text x="444.2918280585735" y="40.40613026819922" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">9.1%</text>
-  <text x="402.4244213509684" y="60.02298850574712" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">8.2%</text>
-  <text x="371.34175720359" y="79.63984674329501" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">7.5%</text>
-  <text x="345.8633915918753" y="99.25670498084291" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">7.0%</text>
-  <text x="335.6437883797827" y="118.8735632183908" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">6.7%</text>
-  <text x="315.7697213037317" y="138.4904214559387" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">6.3%</text>
-  <text x="304.7965989607936" y="158.1072796934866" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">6.1%</text>
-  <text x="299.7574397732641" y="177.72413793103448" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">6.0%</text>
-  <text x="218.09480396787907" y="197.34099616858236" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">4.3%</text>
-  <text x="207.3571563533302" y="216.95785440613025" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">4.0%</text>
-  <text x="148.8181388757676" y="236.5747126436782" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">2.8%</text>
-  <text x="147.6878601794993" y="256.1915708812261" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">2.8%</text>
-  <text x="131.1104393008975" y="275.8084291187739" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">2.4%</text>
-  <text x="128.94407179971657" y="295.42528735632186" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">2.4%</text>
-  <text x="125.55323571091168" y="315.0421455938697" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">2.3%</text>
-  <text x="112.69631554085973" y="334.65900383141764" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="white">2.0%</text>
-  <text x="118.76542276806803" y="354.27586206896547" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">2.0%</text>
-  <text x="116.64615021256496" y="373.8927203065134" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">1.9%</text>
-  <text x="96.06565895134624" y="393.50957854406124" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">1.5%</text>
-  <text x="71.8588568729334" y="413.1264367816092" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">1.0%</text>
-  <text x="62.15729806329712" y="432.74329501915713" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">0.8%</text>
-  <text x="33.00552668871044" y="452.36015325670496" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">0.2%</text>
-  <text x="32.8642418516769" y="471.9770114942529" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">0.1%</text>
-  <text x="30.274019839395372" y="491.59386973180074" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">0.1%</text>
-  <text x="29.285025980160608" y="511.2107279693487" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="central" fill="currentColor">0.1%</text>
 </svg>
