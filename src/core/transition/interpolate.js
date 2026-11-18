@@ -3,7 +3,7 @@ import * as eases from "d3-ease";
 import {interpolateRgb} from "d3-interpolate";
 
 // The default of an attribute that a primitive doesn't give, for interpolating to and from it.
-const defaults = {fillOpacity: 1, strokeOpacity: 1};
+const defaults = {fillOpacity: 1, strokeOpacity: 1, clipTop: 0, clipRight: 0, clipBottom: 0, clipLeft: 0, sweep: 1};
 
 // The attributes that are colors, which interpolate in RGB.
 const paints = new Set(["fill", "stroke"]);

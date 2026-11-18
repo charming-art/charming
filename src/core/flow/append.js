@@ -9,9 +9,10 @@ function isChannel(key, value, channels) {
   return !((key === "fill" || key === "stroke") && isColor(value));
 }
 
-// The states of a mark as it enters or exits, such as enter: {y: 200, delay: (d, i) => i * 50}, are
+// The states of a mark as it appears, enters or exits, such as enter: {y: 200, delay: 100}, are
 // channels of their own, enterY and enterDelay, so that they move with their rows like any other.
-const states = new Set(["enter", "exit"]);
+// Appear: true is a channel of its own too, which reuses the enter state on the first render.
+const states = new Set(["appear", "enter", "exit"]);
 
 function isState(key, value) {
   return states.has(key) && value !== null && typeof value === "object" && !Array.isArray(value);
@@ -29,7 +30,7 @@ function flatten(options) {
 // Options whose values are functions themselves, such as the format of a text or an easing, rather
 // than functions of each row, or strings that aren't the names of channels, such as the d3 format
 // "x" of a text, rather than the values of a channel x.
-const functions = new Set(["format", "ease", "enterEase", "exitEase"]);
+const functions = new Set(["format", "ease", "appearEase", "enterEase", "exitEase"]);
 
 // Channels are plain arrays, even for typed array data, so they can hold any value. A string that
 // names a bound channel takes its values, such as {y: "v2"}; other strings are constants.

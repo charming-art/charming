@@ -1,8 +1,8 @@
 // The points of the outline of a primitive, in the coordinates it's drawn in, and whether it's
-// closed: the corners of a rect, points along a circle, the vertices of a triangle or polygon, or
-// the ends of a line, turned as the renderers turn them. Other primitives, such as paths and texts,
-// have no outline, so they don't morph. A primitive caught in the middle of a morph keeps its points,
-// and whether they're closed.
+// closed: the corners of a rect, points along a circle, the vertices of a triangle or polygon, the
+// ends of a line, or the wedge of an arc, turned as the renderers turn them. Other primitives, such
+// as paths and texts, have no outline, so they don't morph. A primitive caught in the middle of a
+// morph keeps its points, and whether they're closed.
 export function outlineOf({type, attrs, points, closed = true}) {
   if (points) return {points, closed};
   const {x = 0, y = 0, rotate} = attrs;
@@ -17,6 +17,7 @@ export function outlineOf({type, attrs, points, closed = true}) {
   }
   if (type === "polygon") return polygon(attrs.x, attrs.y);
   if (type === "line") return line(attrs);
+  if (type === "arc") return arc(attrs);
   return null;
 }
 
@@ -54,6 +55,22 @@ function circle(x, y, r) {
     const a = (i / n) * 2 * Math.PI - Math.PI / 2;
     points[i] = [x + r * Math.cos(a), y + r * Math.sin(a)];
   }
+  return {points, closed: true};
+}
+
+// An arc's wedge: along its outer radius from its start angle to the end of its sweep, and back
+// along its inner radius, clockwise from 12 o'clock around x and y.
+function arc({x = 0, y = 0, innerRadius = 0, outerRadius = 0, startAngle = 0, endAngle = 0, sweep = 1}) {
+  const n = 32;
+  const end = startAngle + (endAngle - startAngle) * sweep;
+  const at = (r, t) => {
+    const a = startAngle + (end - startAngle) * t;
+    return [x + r * Math.sin(a), y - r * Math.cos(a)];
+  };
+  const points = [];
+  for (let i = 0; i <= n; i++) points.push(at(outerRadius, i / n));
+  if (innerRadius > 0) for (let i = n; i >= 0; i--) points.push(at(innerRadius, i / n));
+  else points.push([x, y]);
   return {points, closed: true};
 }
 

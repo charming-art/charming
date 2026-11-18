@@ -37,6 +37,20 @@ test("cm.keyframe draws the rows of the parent as moments, one after another", a
   assert.deepStrictEqual(xs(renderer), [40]);
 });
 
+test("cm.keyframe draws the first moment as it is, and only enters marks from the second, unless they appear", () => {
+  const [root, renderer] = chart();
+  const ys = () => Array.from(renderer.node().querySelectorAll("rect"), (r) => +r.getAttribute("y"));
+  root
+    .data([0, 100])
+    .append(cm.keyframe)
+    .append(cm.rect, {x: (d) => d, y: 0, width: 10, height: 10, enter: {y: 200}});
+  root.render();
+  // The enter state is for marks entering a later moment: the first is drawn, and the next starts.
+  assert.deepStrictEqual(ys(), [0]);
+  vi.advanceTimersByTime(80);
+  assert.deepStrictEqual(xs(renderer), [50]);
+});
+
 test("cm.keyframe plays keyframes even with transitions off", () => {
   const renderer = cm.svg({width: 200, height: 200});
   const root = cm.flow().renderer(renderer);

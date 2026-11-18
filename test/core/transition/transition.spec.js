@@ -19,8 +19,11 @@ const attrs = (element, ...names) =>
     return v !== null && !isNaN(v) ? +v : v;
   });
 
+// The rects drawn, without those of clip paths.
 const rects = (renderer) =>
-  Array.from(renderer.node().querySelectorAll("rect"), (r) => attrs(r, "x", "y", "width", "height"));
+  Array.from(renderer.node().querySelectorAll("rect"))
+    .filter((r) => !r.closest("clipPath"))
+    .map((r) => attrs(r, "x", "y", "width", "height"));
 
 // Bars by id: x by index, growing up from y = 200.
 function bars(root, data, options) {
@@ -79,6 +82,83 @@ test("bars matched by key update, new ones enter from their enter state, and rem
     [0, 80, 20, 120],
     [30, 170, 20, 30],
   ]);
+});
+
+test("on the first render, marks appear only if they opt in: with their enter state, or a state of their own", async () => {
+  const [root, renderer] = chart();
+  const bar = (x, options) =>
+    root
+      .data([{v: 50}])
+      .transform(cm.bind, {x: () => x, y: (d) => 200 - d.v, width: () => 20, height: (d) => d.v})
+      .append(cm.rect, options);
+  // The first bar's enter state is for later renders; the second reuses it with appear: true; the
+  // third appears from a state of its own, and the fourth only with timing of its own, so it fades.
+  bar(0, {enter: {y: 200, height: 0}});
+  bar(30, {appear: true, enter: {y: 200, height: 0}});
+  bar(60, {appear: {height: 0}, enter: {y: 200, height: 0}});
+  bar(90, {appear: {delay: 0}});
+  root.render();
+  vi.advanceTimersByTime(80);
+  assert.deepStrictEqual(rects(renderer), [
+    [0, 150, 20, 50],
+    [30, 175, 20, 25],
+    [60, 150, 20, 25],
+    [90, 150, 20, 50],
+  ]);
+  assert.strictEqual(+renderer.node().querySelectorAll("rect")[3].getAttribute("fill-opacity"), 0.5);
+  vi.advanceTimersByTime(96);
+  await root.finished();
+  assert.deepStrictEqual(rects(renderer).slice(1, 3), [
+    [30, 150, 20, 50],
+    [60, 150, 20, 50],
+  ]);
+});
+
+test("a mark wipes in from a side by its clip insets, such as from the bottom with clipTop", async () => {
+  const [root, renderer] = chart();
+  root.data([0]).append(cm.rect, {x: 0, y: 100, width: 20, height: 100, appear: {clipTop: 1}});
+  root.render();
+  const clip = () =>
+    Array.from(renderer.node().querySelectorAll("clipPath rect"), (r) => [
+      +r.getAttribute("y"),
+      +r.getAttribute("height"),
+    ]);
+  vi.advanceTimersByTime(80);
+  // Halfway, the bottom half shows, and the rect itself doesn't change.
+  assert.deepStrictEqual(clip(), [[150, 50]]);
+  assert.deepStrictEqual(rects(renderer), [[0, 100, 20, 100]]);
+  vi.advanceTimersByTime(96);
+  await root.finished();
+  assert.strictEqual(renderer.node().querySelectorAll("clipPath").length, 0);
+});
+
+test("arcs interpolate in angle and radius, and open like a wheel with sweep", async () => {
+  const [root, renderer] = chart();
+  // A shape that draws an arc per row, with its end angle.
+  const wedge = Object.assign(
+    (renderer, I, {endAngle: E}) => {
+      for (const i of I) renderer.arc({x: 100, y: 100, outerRadius: 80, startAngle: 0, endAngle: E[i]});
+    },
+    {builtin: true},
+  );
+  const d = (endAngle) => {
+    const r = cm.svg({width: 200, height: 200});
+    r.arc({x: 100, y: 100, outerRadius: 80, startAngle: 0, endAngle});
+    return r.node().querySelector("path").getAttribute("d");
+  };
+  const path = () => renderer.node().querySelector("path").getAttribute("d");
+  root.data([0]).append(wedge, {endAngle: Math.PI, appear: {sweep: 0}});
+  root.render();
+  // Halfway, the wedge has opened halfway from its start angle.
+  vi.advanceTimersByTime(80);
+  assert.strictEqual(path(), d(Math.PI / 2));
+  vi.advanceTimersByTime(96);
+  await root.finished();
+  // Its end angle interpolates, rather than its path.
+  root.data([0]).append(wedge, {endAngle: Math.PI / 2});
+  root.render();
+  vi.advanceTimersByTime(80);
+  assert.strictEqual(path(), d((Math.PI * 3) / 4));
 });
 
 test("marks without keys match by datum, such as a step of a bubble sort", () => {

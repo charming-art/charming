@@ -1,0 +1,120 @@
+scale, 1, 1
+save
+beginPath
+rect, 20, 70, 50, 50
+clip
+save
+translate, 45, 70
+beginPath
+fillStyle, "rgba(70,130,180,1)"
+rect, -25, -50, 50, 100
+fill
+closePath
+restore
+restore
+save
+beginPath
+rect, 90, 20, 25, 100
+clip
+save
+translate, 115, 70
+beginPath
+fillStyle, "rgba(70,130,180,1)"
+rect, -25, -50, 50, 100
+fill
+closePath
+restore
+restore
+save
+beginPath
+rect, 160, 20, 50, 50
+clip
+save
+translate, 185, 70
+beginPath
+fillStyle, "rgba(70,130,180,1)"
+rect, -25, -50, 50, 100
+fill
+closePath
+restore
+restore
+save
+beginPath
+rect, 255, 20, 25, 100
+clip
+save
+translate, 255, 70
+beginPath
+fillStyle, "rgba(70,130,180,1)"
+rect, -25, -50, 50, 100
+fill
+closePath
+restore
+restore
+save
+fillStyle, "rgba(0,0,0,1)"
+textAlign, center
+textBaseline, top
+font, normal 10px undefined
+fillText, clipTop: 0.5, 45, 135
+restore
+save
+fillStyle, "rgba(0,0,0,1)"
+textAlign, center
+textBaseline, top
+font, normal 10px undefined
+fillText, clipRight: 0.5, 115, 135
+restore
+save
+fillStyle, "rgba(0,0,0,1)"
+textAlign, center
+textBaseline, top
+font, normal 10px undefined
+fillText, clipBottom: 0.5, 185, 135
+restore
+save
+fillStyle, "rgba(0,0,0,1)"
+textAlign, center
+textBaseline, top
+font, normal 10px undefined
+fillText, clipLeft: 0.5, 255, 135
+restore
+save
+beginPath
+rect, 20, 180, 74.24, 32
+clip
+save
+fillStyle, "rgba(0,0,0,1)"
+textBaseline, top
+font, bold 32px undefined
+fillText, Charming, 20, 180
+restore
+restore
+save
+beginPath
+rect, 190, 200, 60, 30
+clip
+save
+beginPath
+fillStyle, "rgba(255,165,0,1)"
+arc, 220, 200, 30, 0, 6.283185307179586
+fill
+closePath
+restore
+restore
+save
+beginPath
+rect, 268, 200, 64, 32
+clip
+save
+translate, 300, 200
+beginPath
+strokeStyle, "rgba(0,0,0,1)"
+lineWidth, 4
+fillStyle, "rgba(0,0,0,0)"
+rect, -30, -30, 60, 60
+fill
+stroke
+closePath
+restore
+restore

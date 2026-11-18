@@ -1,8 +1,9 @@
-import {arc as d3arc} from "d3-shape";
 import {define} from "../../core/shape/define.js";
 
-// Draws the wedges of cm.polar around the center cx and cy, with d3.arc, which also rounds the
-// corners with cornerRadius and separates the wedges with padAngle. The channels follow the
+// Draws the wedges of cm.polar around the center cx and cy, as arcs, drawn with d3.arc, which also
+// rounds the corners with cornerRadius and separates the wedges with padAngle; sweep draws a
+// fraction of a wedge from its start angle, such as enter: {sweep: 0} for a wedge that opens like
+// a wheel. As arcs, wedges interpolate in angle and radius. The channels follow the
 // positions of cm.polar:
 // - x and x1 are the angles of the wedge, clockwise from 12 o'clock, in either order: a band of
 //   cm.spreadX goes from x to x1, and a stack of cm.stackX from x1 to x, so its sweep is negative.
@@ -22,19 +23,19 @@ export const arc = define((renderer, I, value) => {
     strokeWidth: SW = [],
     padAngle: PA = [],
     cornerRadius: CR = [],
+    sweep: SP = [],
   } = value;
-  const path = d3arc()
-    .startAngle((i) => X[i])
-    .endAngle((i) => X1[i])
-    .innerRadius((i) => Y1[i])
-    .outerRadius((i) => Y[i])
-    .padAngle((i) => PA[i] ?? 0)
-    .cornerRadius((i) => CR[i] ?? 0);
   for (const i of I) {
-    renderer.path({
+    renderer.arc({
       x: CX[i],
       y: CY[i],
-      d: path(i),
+      startAngle: X[i],
+      endAngle: X1[i],
+      innerRadius: Y1[i],
+      outerRadius: Y[i],
+      padAngle: PA[i] ?? 0,
+      cornerRadius: CR[i] ?? 0,
+      ...(SP[i] !== undefined && {sweep: SP[i]}),
       stroke: S[i],
       fill: F[i],
       fillOpacity: FO[i],

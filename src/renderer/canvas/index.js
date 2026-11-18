@@ -7,6 +7,7 @@ import {canvas$line} from "./line.js";
 import {canvas$triangle} from "./triangle.js";
 import {canvas$translate} from "./translate.js";
 import {canvas$path} from "./path.js";
+import {canvas$arc} from "./arc.js";
 import {canvas$polygon} from "./polygon.js";
 import {canvas$text} from "./text.js";
 import {canvas$clear} from "./clear.js";
@@ -33,6 +34,7 @@ Object.defineProperties(Canvas.prototype, {
   line: {value: canvas$line},
   triangle: {value: canvas$triangle},
   path: {value: canvas$path},
+  arc: {value: canvas$arc},
   polygon: {value: canvas$polygon},
   text: {value: canvas$text},
   clear: {value: canvas$clear},
