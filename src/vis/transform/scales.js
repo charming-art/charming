@@ -237,16 +237,22 @@ export function scaleOf({type, domain, range, paddingInner, paddingOuter, align,
   return scaleLinear(domain, range);
 }
 
+// Whether a value has arithmetic, so that the transform of its scale applies: a number or a date.
+const quantity = (v) => typeof v === "number" || v instanceof Date;
+
 // Gives a recorded position scale apply and invert, like the scales of Plot: apply maps a value to
 // pixels, or to an angle or radius in polar, at the middle of its band if any; bandwidth is the
 // width of the bands, or 0, and width the width of a category's band, which varies with flex. They aren't
-// enumerable, so that records stay plain values.
-export function callable(record) {
+// enumerable, so that records stay plain values. Like Plot's, apply transforms a value first, with
+// the transform or percent of the scale's options, as the values of its channels were.
+export function callable(record, options) {
   const scale = scaleOf(record);
   const offset = scale.bandwidth ? scale.bandwidth() / 2 : 0;
   const middle = scale.middle ?? ((v) => scale(v) + offset);
   const width = scale.width ?? (() => offset * 2);
-  const properties = {apply: {value: middle}, bandwidth: {value: offset * 2}, width: {value: width}};
+  const f = record.type === "band" ? undefined : transformOf(options);
+  const apply = f ? (v) => middle(quantity(v) ? f(v) : v) : middle;
+  const properties = {apply: {value: apply}, bandwidth: {value: offset * 2}, width: {value: width}};
   if (scale.invert) properties.invert = {value: (p) => scale.invert(p)};
   return Object.defineProperties(record, properties);
 }
@@ -316,7 +322,6 @@ export function withScaleOptions(context, scales, axes) {
   // The values of a scale with transform or percent are transformed, with the domains hinted for
   // them, such as the extents of a stack, as they reach the plane.
   // Only numbers and dates are transformed, as categories have no arithmetic: "a" * 100 is NaN.
-  const quantity = (v) => typeof v === "number" || v instanceof Date;
   const transform = (key, f) => {
     if (!(key in value)) return false;
     const first = Array.from(value[key]).find((v) => v != null);

@@ -137,3 +137,38 @@ test("cm.annotate(cm.rect) covers a whole flex band, as wide as its category", (
   const [rect] = renderer.node().querySelectorAll("rect");
   assert.deepStrictEqual(attributes(rect, "x", "width"), [50, 150]);
 });
+
+test("cm.annotate transforms its positions with the transform or percent of their scale", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {x: 0, y: 0},
+      {x: 10, y: 1},
+    ])
+    .transform(cm.encode, {x: "x", y: "y"})
+    .transform(cm.plane, {margin: 0, x: {axis: null}, y: {axis: null, percent: true}})
+    .add(cm.annotate(cm.link), {y: 0.5});
+  root.render();
+  const [line] = renderer.node().querySelectorAll("line");
+  // 0.5 is 50%, in the middle of the frame.
+  assert.deepStrictEqual(attributes(line, "x1", "y1", "x2", "y2"), [0, 100, 200, 100]);
+});
+
+test("cm.annotate transforms its radii in polar with the transform of their scale", () => {
+  const [circle] = annotation(cm.circle, {x: 0, y: 50, r: 3}, {coordinate: cm.polar, selector: "circle"});
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {x: 0, y: 0},
+      {x: 10, y: 1},
+    ])
+    .transform(cm.encode, {x: "x", y: "y"})
+    .transform(cm.polar, {margin: 0, x: {axis: null}, y: {axis: null, type: "linear", transform: (d) => d * 100}})
+    .add(cm.annotate(cm.circle), {x: 0, y: 0.5, r: 3});
+  root.render();
+  // A radius of 0.5 is 50 once transformed, as in the chart of y in [0, 100].
+  const [transformed] = renderer.node().querySelectorAll("circle");
+  assert.deepStrictEqual(attributes(transformed, "cx", "cy"), attributes(circle, "cx", "cy"));
+});

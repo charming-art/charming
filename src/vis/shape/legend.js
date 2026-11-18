@@ -113,10 +113,19 @@ function ramp(key, scale, options, maxWidth) {
   const labeled = ticks.filter((d) => `${format(d) ?? ""}` !== "");
   const n = 64;
   const slices = Array.from({length: n}, (_, i) => i);
-  const numeric = !s.interpolator && typeof s.range?.()[0] === "number" && typeof s.invert === "function";
-  const p = numeric ? s.copy().range([0, width]) : null;
+  // The ticks are placed through the scale itself, such as a log color, so that the ramp shares its
+  // axis: a sequential scale maps to positions through its interpolator, and its slices take the
+  // colors of the interpolator at their middles; another continuous scale, such as a log opacity or
+  // colors of a range, maps to positions with its range, and its slices sample its domain.
+  const sequential = typeof s.interpolator === "function";
+  const p = sequential
+    ? s.copy().interpolator((t) => t * width)
+    : typeof s.invert === "function"
+      ? s.copy().range([0, width])
+      : null;
   const at = p ?? ((d) => ((d - d0) / (d1 - d0 || 1)) * width);
-  const value = p ? (i) => p.invert(((i + 0.5) * width) / n) : (i) => d0 + ((d1 - d0) * (i + 0.5)) / n;
+  const value = p?.invert ? (i) => p.invert(((i + 0.5) * width) / n) : (i) => d0 + ((d1 - d0) * (i + 0.5)) / n;
+  const paint = sequential ? (i) => s.interpolator()((i + 0.5) / n) : (i) => s(value(i));
   // The labels at the ends are aligned inward, so that they stay within the ramp's width.
   const alignOf = (d) => (at(d) <= 0.5 ? "start" : at(d) >= width - 0.5 ? "end" : "center");
   return {
@@ -132,7 +141,7 @@ function ramp(key, scale, options, maxWidth) {
         // so that the ramp ends within its width.
         width: (i) => width / n + (i < n - 1 ? 1 : 0),
         height: rampHeight,
-        ...(opacity ? {fill: "currentColor", fillOpacity: (i) => s(value(i))} : {fill: (i) => s(value(i))}),
+        ...(opacity ? {fill: "currentColor", fillOpacity: paint} : {fill: paint}),
       });
       flow.data(labeled).append(text, {
         ...font,
@@ -264,10 +273,19 @@ function rampY(key, scale, options, maxWidth) {
   const labeled = ticks.filter((d) => `${format(d) ?? ""}` !== "");
   const n = 64;
   const slices = Array.from({length: n}, (_, i) => i);
-  const numeric = !s.interpolator && typeof s.range?.()[0] === "number" && typeof s.invert === "function";
-  const p = numeric ? s.copy().range([0, height]) : null;
+  // The ticks are placed through the scale itself, such as a log color, so that the ramp shares its
+  // axis: a sequential scale maps to positions through its interpolator, and its slices take the
+  // colors of the interpolator at their middles; another continuous scale, such as a log opacity or
+  // colors of a range, maps to positions with its range, and its slices sample its domain.
+  const sequential = typeof s.interpolator === "function";
+  const p = sequential
+    ? s.copy().interpolator((t) => t * height)
+    : typeof s.invert === "function"
+      ? s.copy().range([0, height])
+      : null;
   const at = p ?? ((d) => ((d - d0) / (d1 - d0 || 1)) * height);
-  const value = p ? (i) => p.invert(((i + 0.5) * height) / n) : (i) => d0 + ((d1 - d0) * (i + 0.5)) / n;
+  const value = p?.invert ? (i) => p.invert(((i + 0.5) * height) / n) : (i) => d0 + ((d1 - d0) * (i + 0.5)) / n;
+  const paint = sequential ? (i) => s.interpolator()((i + 0.5) / n) : (i) => s(value(i));
   // The labels at the ends are aligned inward, so that they stay within the ramp's height.
   const baselineOf = (d) => (at(d) <= 0.5 ? "bottom" : at(d) >= height - 0.5 ? "top" : "middle");
   return {
@@ -283,7 +301,7 @@ function rampY(key, scale, options, maxWidth) {
         y: (i) => bottom - ((i + 1) * height) / n - (i < n - 1 ? 1 : 0),
         width: rampHeight,
         height: (i) => height / n + (i < n - 1 ? 1 : 0),
-        ...(opacity ? {fill: "currentColor", fillOpacity: (i) => s(value(i))} : {fill: (i) => s(value(i))}),
+        ...(opacity ? {fill: "currentColor", fillOpacity: paint} : {fill: paint}),
       });
       flow.data(labeled).append(text, {
         ...font,

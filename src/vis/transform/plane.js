@@ -292,8 +292,8 @@ export function plane(
       sharedX.get(nameX) || positionScale(value, ownKeysX, {...hintX, ...positionOptions([hintX], options[nameX])});
     const y =
       sharedY.get(nameY) || positionScale(value, ownKeysY, {...hintY, ...positionOptions([hintY], options[nameY])});
-    const recordX = callable(labeled(positionRecord(x, rangeX, hintX), hintX));
-    const recordY = callable(labeled(positionRecord(y, rangeY, hintY), hintY));
+    const recordX = callable(labeled(positionRecord(x, rangeX, hintX), hintX), options[nameX]);
+    const recordY = callable(labeled(positionRecord(y, rangeY, hintY), hintY), options[nameY]);
     return {x, y, rangeX, rangeY, nameX, nameY, ownKeysX, ownKeysY, recordX, recordY};
   };
 

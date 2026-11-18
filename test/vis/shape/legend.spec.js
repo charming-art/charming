@@ -303,6 +303,27 @@ test("cm.legend places the ticks of a ramp through its scale, such as a log opac
   assertInDelta(x("100") - x("10"), x("1k") - x("100"));
 });
 
+test("cm.legend places the ticks and colors of a ramp through its scale, such as a log color", () => {
+  for (const anchor of ["top", "right"]) {
+    const node = margin([{v: 1}, {v: 1000}], {fill: (d) => d.v}, 250, {fill: {type: "log"}}, anchor);
+    const at = anchor === "top" ? "x" : "y";
+    const position = (t) =>
+      +Array.from(node.querySelectorAll("text"))
+        .find((d) => d.textContent === t)
+        .getAttribute(at);
+    // 1, 10, 100 and 1000 are evenly spaced, as on a log axis.
+    assertInDelta(position("10") - position("1"), position("100") - position("10"));
+    assertInDelta(position("100") - position("10"), position("1k") - position("100"));
+    // The slices, from the lowest values, are evenly spaced in the interpolator, so the middle one
+    // is the middle color, of about 32, not of 500.
+    const slices = rects(node);
+    const fills = slices.map((r) => r.getAttribute("fill"));
+    const n = fills.length;
+    const i = Math.floor(n / 2);
+    assert.strictEqual(fills[i], d3.rgb(d3.interpolateTurbo((i + 0.5) / n)).toString());
+  }
+});
+
 test("cm.legend keeps sizes at the top within the chart, dropping the ticks in the middle", () => {
   // Mostly small values: the default range puts the largest radius at 30px, so 5,000 and 10,000
   // side by side are 110px wide, wider than the 97px left from the left of the plot at 300.
