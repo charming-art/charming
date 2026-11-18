@@ -508,12 +508,21 @@ export function guidesOf(id, options, nameX, nameY, sides, defaults) {
 }
 
 // The implicit marks of the guides of contexts, for cm.plane and cm.polar: an axis of x and of y
-// per side that any context draws, and a legend if any context has one.
+// per side that any context draws, in two layers, and a legend if any context has one.
 export function guideMarks(values, {axisX, axisY, legend}) {
   const marks = [];
   const sides = (axis) => Math.max(0, ...values.map(({guides}) => guides?.[axis].anchors.length ?? 0));
-  for (let side = 0; side < sides("x"); side++) marks.push([axisX, {side}]);
-  for (let side = 0; side < sides("y"); side++) marks.push([axisY, {side}]);
+  // Each axis is drawn in two layers: its grid under the shapes added to the chart, and its tick
+  // marks, labels and title in front of them, such as the labels of the radius of cm.polar.
+  for (const [axis, shape] of [
+    ["x", axisX],
+    ["y", axisY],
+  ]) {
+    for (let side = 0; side < sides(axis); side++) {
+      marks.push([shape, {side, layer: "grid"}]);
+      marks.push([shape, {side, layer: "axis"}, {front: true}]);
+    }
+  }
   if (values.some(({guides}) => guides && Object.keys(guides.legends).length)) marks.push([legend, {}]);
   return marks;
 }

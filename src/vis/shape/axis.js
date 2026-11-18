@@ -136,7 +136,7 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
   const {x, y} = scales;
   if (!x || frame?.empty) return; // like Plot, a facet without rows has no axes
   if (frame?.type === "polar") return polarAxisX(flow, frame, x, options, titles);
-  const {tickSize = 6, tickPadding = 3, tickRotate = 0, grid = false, anchor = "bottom"} = options;
+  const {tickSize = 6, tickPadding = 3, tickRotate = 0, grid = false, anchor = "bottom", layer} = options;
   const {height} = flow.renderer()._props;
   const scale = scaleOf(x);
   const [left, right] = extentOf(x.range);
@@ -145,9 +145,11 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
   const ticks = ticksOf(scale, options, count);
   const X = positionOf(scale);
   const stroke = "currentColor";
-  if (grid) flow.data(ticks).append(link, {key, x: X, x1: X, y: top, y1: bottom, stroke, strokeOpacity: 0.1});
+  if (grid && layer !== "axis")
+    flow.data(ticks).append(link, {key, x: X, x1: X, y: top, y1: bottom, stroke, strokeOpacity: 0.1});
   // In facets, only the cells along the anchor label x; nested charts leave titles to the outer chart.
-  if (frame?.edges && !frame.edges[anchor]) return;
+  // An implicit axis draws its grid and the rest in two layers, under and over the shapes.
+  if (layer === "grid" || (frame?.edges && !frame.edges[anchor])) return;
   const isTop = anchor === "top";
   const [edge, k] = isTop ? [top, -1] : [bottom, 1];
   flow.data(ticks).append(link, {key, x: X, x1: X, y: edge, y1: edge + k * tickSize, stroke});
@@ -197,7 +199,7 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
   const {x, y} = scales;
   if (!y || frame?.empty) return;
   if (frame?.type === "polar") return polarAxisY(flow, frame, y, options, titles);
-  const {tickSize = 6, tickPadding = 3, tickRotate = 0, grid = false, anchor = "left"} = options;
+  const {tickSize = 6, tickPadding = 3, tickRotate = 0, grid = false, anchor = "left", layer} = options;
   const {width} = flow.renderer()._props;
   const scale = scaleOf(y);
   const [left, right] = frame ? [frame.left, frame.right] : x ? extentOf(x.range) : [0, width];
@@ -206,9 +208,11 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
   const ticks = ticksOf(scale, options, count);
   const Y = positionOf(scale);
   const stroke = "currentColor";
-  if (grid) flow.data(ticks).append(link, {key, x: left, x1: right, y: Y, y1: Y, stroke, strokeOpacity: 0.1});
+  if (grid && layer !== "axis")
+    flow.data(ticks).append(link, {key, x: left, x1: right, y: Y, y1: Y, stroke, strokeOpacity: 0.1});
   // In facets, only the cells along the anchor label y; nested charts leave titles to the outer chart.
-  if (frame?.edges && !frame.edges[anchor]) return;
+  // An implicit axis draws its grid and the rest in two layers, under and over the shapes.
+  if (layer === "grid" || (frame?.edges && !frame.edges[anchor])) return;
   const isRight = anchor === "right";
   const [edge, k] = isRight ? [right, 1] : [left, -1];
   flow.data(ticks).append(link, {key, x: edge, x1: edge + k * tickSize, y: Y, y1: Y, stroke});

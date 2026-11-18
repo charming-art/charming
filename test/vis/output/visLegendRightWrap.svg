@@ -1,4 +1,83 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
+  <text x="578.3" y="24" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" dominant-baseline="text-before-edge" fill="currentColor">letter</text>
+  <rect x="578.3" y="39" width="10" height="10" fill="#5470c6"></rect>
+  <rect x="578.3" y="53" width="10" height="10" fill="#91cc75"></rect>
+  <rect x="578.3" y="67" width="10" height="10" fill="#fac858"></rect>
+  <rect x="578.3" y="81" width="10" height="10" fill="#ee6666"></rect>
+  <rect x="578.3" y="95" width="10" height="10" fill="#73c0de"></rect>
+  <rect x="578.3" y="109" width="10" height="10" fill="#3ba272"></rect>
+  <rect x="578.3" y="123" width="10" height="10" fill="#fc8452"></rect>
+  <rect x="578.3" y="137" width="10" height="10" fill="#9a60b4"></rect>
+  <rect x="578.3" y="151" width="10" height="10" fill="#ea7ccc"></rect>
+  <rect x="578.3" y="165" width="10" height="10" fill="#5470c6"></rect>
+  <rect x="578.3" y="179" width="10" height="10" fill="#91cc75"></rect>
+  <rect x="578.3" y="193" width="10" height="10" fill="#fac858"></rect>
+  <rect x="578.3" y="207" width="10" height="10" fill="#ee6666"></rect>
+  <rect x="613.1999999999999" y="39" width="10" height="10" fill="#73c0de"></rect>
+  <rect x="613.1999999999999" y="53" width="10" height="10" fill="#3ba272"></rect>
+  <rect x="613.1999999999999" y="67" width="10" height="10" fill="#fc8452"></rect>
+  <rect x="613.1999999999999" y="81" width="10" height="10" fill="#9a60b4"></rect>
+  <rect x="613.1999999999999" y="95" width="10" height="10" fill="#ea7ccc"></rect>
+  <rect x="613.1999999999999" y="109" width="10" height="10" fill="#5470c6"></rect>
+  <rect x="613.1999999999999" y="123" width="10" height="10" fill="#91cc75"></rect>
+  <rect x="613.1999999999999" y="137" width="10" height="10" fill="#fac858"></rect>
+  <rect x="613.1999999999999" y="151" width="10" height="10" fill="#ee6666"></rect>
+  <rect x="613.1999999999999" y="165" width="10" height="10" fill="#73c0de"></rect>
+  <rect x="613.1999999999999" y="179" width="10" height="10" fill="#3ba272"></rect>
+  <rect x="613.1999999999999" y="193" width="10" height="10" fill="#fc8452"></rect>
+  <rect x="613.1999999999999" y="207" width="10" height="10" fill="#9a60b4"></rect>
+  <text x="592.3" y="38" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">A</text>
+  <text x="592.3" y="52" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">B</text>
+  <text x="592.3" y="66" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">C</text>
+  <text x="592.3" y="80" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">D</text>
+  <text x="592.3" y="94" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">E</text>
+  <text x="592.3" y="108" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">F</text>
+  <text x="592.3" y="122" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">G</text>
+  <text x="592.3" y="136" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">H</text>
+  <text x="592.3" y="150" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">I</text>
+  <text x="592.3" y="164" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">J</text>
+  <text x="592.3" y="178" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">K</text>
+  <text x="592.3" y="192" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">L</text>
+  <text x="592.3" y="206" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">M</text>
+  <text x="627.1999999999999" y="38" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">N</text>
+  <text x="627.1999999999999" y="52" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">O</text>
+  <text x="627.1999999999999" y="66" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">P</text>
+  <text x="627.1999999999999" y="80" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Q</text>
+  <text x="627.1999999999999" y="94" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">R</text>
+  <text x="627.1999999999999" y="108" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">S</text>
+  <text x="627.1999999999999" y="122" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">T</text>
+  <text x="627.1999999999999" y="136" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">U</text>
+  <text x="627.1999999999999" y="150" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">V</text>
+  <text x="627.1999999999999" y="164" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">W</text>
+  <text x="627.1999999999999" y="178" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">X</text>
+  <text x="627.1999999999999" y="192" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Y</text>
+  <text x="627.1999999999999" y="206" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Z</text>
+  <rect x="118.03946360153256" y="24" width="18.33793103448275" height="338" fill="#73c0de"></rect>
+  <rect x="423.67164750957846" y="121.01999685088958" width="18.33793103448278" height="240.98000314911042" fill="#91cc75"></rect>
+  <rect x="36.53754789272029" y="144.67627145331443" width="18.337931034482764" height="217.32372854668557" fill="#5470c6"></rect>
+  <rect x="321.7942528735632" y="162.23886002204375" width="18.33793103448278" height="199.76113997795625" fill="#3ba272"></rect>
+  <rect x="199.54137931034484" y="176.6348606518658" width="18.33793103448275" height="185.3651393481342" fill="#ea7ccc"></rect>
+  <rect x="301.41877394636015" y="182.40922689340266" width="18.33793103448272" height="179.59077310659734" fill="#73c0de"></rect>
+  <rect x="403.29616858237546" y="193.63863958431742" width="18.33793103448278" height="168.36136041568258" fill="#5470c6"></rect>
+  <rect x="179.16590038314177" y="199.8387655487325" width="18.33793103448275" height="162.1612344512675" fill="#9a60b4"></rect>
+  <rect x="382.92068965517234" y="202.68603369548103" width="18.33793103448278" height="159.31396630451897" fill="#ea7ccc"></rect>
+  <rect x="97.66398467432948" y="248.82774366241537" width="18.337931034482764" height="113.17225633758463" fill="#ee6666"></rect>
+  <rect x="260.667816091954" y="254.89481971343096" width="18.33793103448272" height="107.10518028656904" fill="#fac858"></rect>
+  <rect x="77.28850574712644" y="287.9710281845379" width="18.33793103448275" height="74.02897181546211" fill="#fac858"></rect>
+  <rect x="444.0471264367816" y="288.6096677688553" width="18.33793103448278" height="73.39033223114473" fill="#fac858"></rect>
+  <rect x="281.0432950191571" y="297.97638167217764" width="18.33793103448272" height="64.02361832782236" fill="#ee6666"></rect>
+  <rect x="484.7980842911877" y="299.2004408754527" width="18.33793103448278" height="62.79955912454727" fill="#73c0de"></rect>
+  <rect x="138.41494252873562" y="301.116359628405" width="18.33793103448275" height="60.88364037159499" fill="#3ba272"></rect>
+  <rect x="158.79042145593868" y="308.38088490001576" width="18.33793103448275" height="53.61911509998424" fill="#fc8452"></rect>
+  <rect x="525.5490421455938" y="309.4718941898913" width="18.33793103448272" height="52.528105810108684" fill="#fc8452"></rect>
+  <rect x="342.1697318007663" y="310.66934341048653" width="18.33793103448272" height="51.33065658951347" fill="#fc8452"></rect>
+  <rect x="56.91302681992336" y="322.29790584159974" width="18.337931034482764" height="39.70209415840026" fill="#91cc75"></rect>
+  <rect x="464.4226053639847" y="335.9754369390647" width="18.33793103448278" height="26.024563060935293" fill="#ee6666"></rect>
+  <rect x="240.29233716475096" y="341.45709337112265" width="18.33793103448272" height="20.542906628877347" fill="#91cc75"></rect>
+  <rect x="219.9168582375479" y="357.92867264997636" width="18.33793103448275" height="4.071327350023637" fill="#5470c6"></rect>
+  <rect x="505.1735632183908" y="358.00850259801604" width="18.337931034482665" height="3.9914974019839633" fill="#3ba272"></rect>
+  <rect x="362.54521072796933" y="359.47205164541015" width="18.33793103448278" height="2.527948354589853" fill="#9a60b4"></rect>
+  <rect x="545.924521072797" y="360.0308612816879" width="18.337931034482608" height="1.969138718312081" fill="#9a60b4"></rect>
   <line x1="45.706513409961666" y1="362" x2="45.706513409961666" y2="368" stroke="currentColor" stroke-width="1"></line>
   <line x1="66.08199233716472" y1="362" x2="66.08199233716472" y2="368" stroke="currentColor" stroke-width="1"></line>
   <line x1="86.45747126436778" y1="362" x2="86.45747126436778" y2="368" stroke="currentColor" stroke-width="1"></line>
@@ -79,83 +158,4 @@
   <text x="25.5" y="69.29019052117778" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.11</text>
   <text x="25.5" y="42.680207841284826" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">0.12</text>
   <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ frequency</text>
-  <text x="578.3" y="24" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" dominant-baseline="text-before-edge" fill="currentColor">letter</text>
-  <rect x="578.3" y="39" width="10" height="10" fill="#5470c6"></rect>
-  <rect x="578.3" y="53" width="10" height="10" fill="#91cc75"></rect>
-  <rect x="578.3" y="67" width="10" height="10" fill="#fac858"></rect>
-  <rect x="578.3" y="81" width="10" height="10" fill="#ee6666"></rect>
-  <rect x="578.3" y="95" width="10" height="10" fill="#73c0de"></rect>
-  <rect x="578.3" y="109" width="10" height="10" fill="#3ba272"></rect>
-  <rect x="578.3" y="123" width="10" height="10" fill="#fc8452"></rect>
-  <rect x="578.3" y="137" width="10" height="10" fill="#9a60b4"></rect>
-  <rect x="578.3" y="151" width="10" height="10" fill="#ea7ccc"></rect>
-  <rect x="578.3" y="165" width="10" height="10" fill="#5470c6"></rect>
-  <rect x="578.3" y="179" width="10" height="10" fill="#91cc75"></rect>
-  <rect x="578.3" y="193" width="10" height="10" fill="#fac858"></rect>
-  <rect x="578.3" y="207" width="10" height="10" fill="#ee6666"></rect>
-  <rect x="613.1999999999999" y="39" width="10" height="10" fill="#73c0de"></rect>
-  <rect x="613.1999999999999" y="53" width="10" height="10" fill="#3ba272"></rect>
-  <rect x="613.1999999999999" y="67" width="10" height="10" fill="#fc8452"></rect>
-  <rect x="613.1999999999999" y="81" width="10" height="10" fill="#9a60b4"></rect>
-  <rect x="613.1999999999999" y="95" width="10" height="10" fill="#ea7ccc"></rect>
-  <rect x="613.1999999999999" y="109" width="10" height="10" fill="#5470c6"></rect>
-  <rect x="613.1999999999999" y="123" width="10" height="10" fill="#91cc75"></rect>
-  <rect x="613.1999999999999" y="137" width="10" height="10" fill="#fac858"></rect>
-  <rect x="613.1999999999999" y="151" width="10" height="10" fill="#ee6666"></rect>
-  <rect x="613.1999999999999" y="165" width="10" height="10" fill="#73c0de"></rect>
-  <rect x="613.1999999999999" y="179" width="10" height="10" fill="#3ba272"></rect>
-  <rect x="613.1999999999999" y="193" width="10" height="10" fill="#fc8452"></rect>
-  <rect x="613.1999999999999" y="207" width="10" height="10" fill="#9a60b4"></rect>
-  <text x="592.3" y="38" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">A</text>
-  <text x="592.3" y="52" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">B</text>
-  <text x="592.3" y="66" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">C</text>
-  <text x="592.3" y="80" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">D</text>
-  <text x="592.3" y="94" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">E</text>
-  <text x="592.3" y="108" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">F</text>
-  <text x="592.3" y="122" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">G</text>
-  <text x="592.3" y="136" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">H</text>
-  <text x="592.3" y="150" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">I</text>
-  <text x="592.3" y="164" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">J</text>
-  <text x="592.3" y="178" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">K</text>
-  <text x="592.3" y="192" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">L</text>
-  <text x="592.3" y="206" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">M</text>
-  <text x="627.1999999999999" y="38" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">N</text>
-  <text x="627.1999999999999" y="52" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">O</text>
-  <text x="627.1999999999999" y="66" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">P</text>
-  <text x="627.1999999999999" y="80" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Q</text>
-  <text x="627.1999999999999" y="94" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">R</text>
-  <text x="627.1999999999999" y="108" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">S</text>
-  <text x="627.1999999999999" y="122" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">T</text>
-  <text x="627.1999999999999" y="136" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">U</text>
-  <text x="627.1999999999999" y="150" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">V</text>
-  <text x="627.1999999999999" y="164" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">W</text>
-  <text x="627.1999999999999" y="178" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">X</text>
-  <text x="627.1999999999999" y="192" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Y</text>
-  <text x="627.1999999999999" y="206" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Z</text>
-  <rect x="118.03946360153256" y="24" width="18.33793103448275" height="338" fill="#73c0de"></rect>
-  <rect x="423.67164750957846" y="121.01999685088958" width="18.33793103448278" height="240.98000314911042" fill="#91cc75"></rect>
-  <rect x="36.53754789272029" y="144.67627145331443" width="18.337931034482764" height="217.32372854668557" fill="#5470c6"></rect>
-  <rect x="321.7942528735632" y="162.23886002204375" width="18.33793103448278" height="199.76113997795625" fill="#3ba272"></rect>
-  <rect x="199.54137931034484" y="176.6348606518658" width="18.33793103448275" height="185.3651393481342" fill="#ea7ccc"></rect>
-  <rect x="301.41877394636015" y="182.40922689340266" width="18.33793103448272" height="179.59077310659734" fill="#73c0de"></rect>
-  <rect x="403.29616858237546" y="193.63863958431742" width="18.33793103448278" height="168.36136041568258" fill="#5470c6"></rect>
-  <rect x="179.16590038314177" y="199.8387655487325" width="18.33793103448275" height="162.1612344512675" fill="#9a60b4"></rect>
-  <rect x="382.92068965517234" y="202.68603369548103" width="18.33793103448278" height="159.31396630451897" fill="#ea7ccc"></rect>
-  <rect x="97.66398467432948" y="248.82774366241537" width="18.337931034482764" height="113.17225633758463" fill="#ee6666"></rect>
-  <rect x="260.667816091954" y="254.89481971343096" width="18.33793103448272" height="107.10518028656904" fill="#fac858"></rect>
-  <rect x="77.28850574712644" y="287.9710281845379" width="18.33793103448275" height="74.02897181546211" fill="#fac858"></rect>
-  <rect x="444.0471264367816" y="288.6096677688553" width="18.33793103448278" height="73.39033223114473" fill="#fac858"></rect>
-  <rect x="281.0432950191571" y="297.97638167217764" width="18.33793103448272" height="64.02361832782236" fill="#ee6666"></rect>
-  <rect x="484.7980842911877" y="299.2004408754527" width="18.33793103448278" height="62.79955912454727" fill="#73c0de"></rect>
-  <rect x="138.41494252873562" y="301.116359628405" width="18.33793103448275" height="60.88364037159499" fill="#3ba272"></rect>
-  <rect x="158.79042145593868" y="308.38088490001576" width="18.33793103448275" height="53.61911509998424" fill="#fc8452"></rect>
-  <rect x="525.5490421455938" y="309.4718941898913" width="18.33793103448272" height="52.528105810108684" fill="#fc8452"></rect>
-  <rect x="342.1697318007663" y="310.66934341048653" width="18.33793103448272" height="51.33065658951347" fill="#fc8452"></rect>
-  <rect x="56.91302681992336" y="322.29790584159974" width="18.337931034482764" height="39.70209415840026" fill="#91cc75"></rect>
-  <rect x="464.4226053639847" y="335.9754369390647" width="18.33793103448278" height="26.024563060935293" fill="#ee6666"></rect>
-  <rect x="240.29233716475096" y="341.45709337112265" width="18.33793103448272" height="20.542906628877347" fill="#91cc75"></rect>
-  <rect x="219.9168582375479" y="357.92867264997636" width="18.33793103448275" height="4.071327350023637" fill="#5470c6"></rect>
-  <rect x="505.1735632183908" y="358.00850259801604" width="18.337931034482665" height="3.9914974019839633" fill="#3ba272"></rect>
-  <rect x="362.54521072796933" y="359.47205164541015" width="18.33793103448278" height="2.527948354589853" fill="#9a60b4"></rect>
-  <rect x="545.924521072797" y="360.0308612816879" width="18.337931034482608" height="1.969138718312081" fill="#9a60b4"></rect>
 </svg>

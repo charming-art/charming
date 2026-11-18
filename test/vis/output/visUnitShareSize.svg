@@ -1,11 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
-  <line x1="101.31545873481357" y1="362" x2="101.31545873481357" y2="368" stroke="currentColor" stroke-width="1"></line>
-  <line x1="234.389216096996" y1="362" x2="234.389216096996" y2="368" stroke="currentColor" stroke-width="1"></line>
-  <line x1="453.0737573621824" y1="362" x2="453.0737573621824" y2="368" stroke="currentColor" stroke-width="1"></line>
-  <text x="101.31545873481357" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">1</text>
-  <text x="234.389216096996" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">2</text>
-  <text x="453.0737573621824" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">3</text>
-  <text x="320" y="387" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">pclass</text>
   <g transform="translate(39.35483870967742,181)">
     <rect x="0" y="-181" width="123.92124005027229" height="362" fill="none" stroke="currentColor"></rect>
     <circle cx="5.63278363864874" cy="175.36721636135127" r="4.78786609285143" fill="#91cc75"></circle>
@@ -1324,4 +1317,11 @@
     <circle cx="88.54284235688408" cy="-155.46280095615953" r="5.017427733556765" fill="#5470c6"></circle>
     <circle cx="100.3485546711353" cy="-155.46280095615953" r="5.017427733556765" fill="#5470c6"></circle>
   </g>
+  <line x1="101.31545873481357" y1="362" x2="101.31545873481357" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="234.389216096996" y1="362" x2="234.389216096996" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="453.0737573621824" y1="362" x2="453.0737573621824" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <text x="101.31545873481357" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">1</text>
+  <text x="234.389216096996" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">2</text>
+  <text x="453.0737573621824" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">3</text>
+  <text x="320" y="387" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">pclass</text>
 </svg>

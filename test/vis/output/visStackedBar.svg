@@ -1,34 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
-  <line x1="42.2" y1="362" x2="42.2" y2="368" stroke="currentColor" stroke-width="1"></line>
-  <line x1="116.93960272266362" y1="362" x2="116.93960272266362" y2="368" stroke="currentColor" stroke-width="1"></line>
-  <line x1="191.67920544532723" y1="362" x2="191.67920544532723" y2="368" stroke="currentColor" stroke-width="1"></line>
-  <line x1="266.41880816799085" y1="362" x2="266.41880816799085" y2="368" stroke="currentColor" stroke-width="1"></line>
-  <line x1="341.15841089065447" y1="362" x2="341.15841089065447" y2="368" stroke="currentColor" stroke-width="1"></line>
-  <line x1="415.8980136133181" y1="362" x2="415.8980136133181" y2="368" stroke="currentColor" stroke-width="1"></line>
-  <line x1="490.63761633598165" y1="362" x2="490.63761633598165" y2="368" stroke="currentColor" stroke-width="1"></line>
-  <line x1="565.3772190586453" y1="362" x2="565.3772190586453" y2="368" stroke="currentColor" stroke-width="1"></line>
-  <text x="42.2" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0M</text>
-  <text x="116.93960272266362" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">5M</text>
-  <text x="191.67920544532723" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">10M</text>
-  <text x="266.41880816799085" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">15M</text>
-  <text x="341.15841089065447" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">20M</text>
-  <text x="415.8980136133181" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">25M</text>
-  <text x="490.63761633598165" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">30M</text>
-  <text x="565.3772190586453" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">35M</text>
-  <text x="620" y="387" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-before-edge" fill="currentColor">population →</text>
-  <line x1="42.2" y1="41.7377049180328" x2="36.2" y2="41.7377049180328" stroke="currentColor" stroke-width="1"></line>
-  <line x1="42.2" y1="99.44262295081967" x2="36.2" y2="99.44262295081967" stroke="currentColor" stroke-width="1"></line>
-  <line x1="42.2" y1="157.14754098360655" x2="36.2" y2="157.14754098360655" stroke="currentColor" stroke-width="1"></line>
-  <line x1="42.2" y1="214.85245901639342" x2="36.2" y2="214.85245901639342" stroke="currentColor" stroke-width="1"></line>
-  <line x1="42.2" y1="272.55737704918033" x2="36.2" y2="272.55737704918033" stroke="currentColor" stroke-width="1"></line>
-  <line x1="42.2" y1="330.2622950819671" x2="36.2" y2="330.2622950819671" stroke="currentColor" stroke-width="1"></line>
-  <text x="33.2" y="41.7377049180328" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">CA</text>
-  <text x="33.2" y="99.44262295081967" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">FL</text>
-  <text x="33.2" y="157.14754098360655" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">IL</text>
-  <text x="33.2" y="214.85245901639342" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">NY</text>
-  <text x="33.2" y="272.55737704918033" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">PA</text>
-  <text x="33.2" y="330.2622950819671" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">TX</text>
-  <text x="13.000000000000004" y="186" transform="rotate(-90,13.000000000000004,186)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">state</text>
   <rect x="42.2" y="15.770491803278695" width="75.31409615295162" height="51.9344262295082" fill="#5470c6"></rect>
   <rect x="117.51409615295162" y="15.770491803278695" width="77.28584645613986" height="51.9344262295082" fill="#91cc75"></rect>
   <rect x="194.7999426090915" y="15.770491803278695" width="86.83927174703837" height="51.9344262295082" fill="#fac858"></rect>
@@ -83,4 +53,34 @@
   <rect x="189.08536753283718" y="246.59016393442622" width="22.295361617310164" height="51.934426229508205" fill="#fc8452"></rect>
   <rect x="211.38072915014735" y="246.59016393442622" width="12.719140747581235" height="51.934426229508205" fill="#9a60b4"></rect>
   <rect x="224.09986989772858" y="246.59016393442622" width="9.194002541405212" height="51.934426229508205" fill="#ea7ccc"></rect>
+  <line x1="42.2" y1="362" x2="42.2" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="116.93960272266362" y1="362" x2="116.93960272266362" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="191.67920544532723" y1="362" x2="191.67920544532723" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="266.41880816799085" y1="362" x2="266.41880816799085" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="341.15841089065447" y1="362" x2="341.15841089065447" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="415.8980136133181" y1="362" x2="415.8980136133181" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="490.63761633598165" y1="362" x2="490.63761633598165" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <line x1="565.3772190586453" y1="362" x2="565.3772190586453" y2="368" stroke="currentColor" stroke-width="1"></line>
+  <text x="42.2" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">0M</text>
+  <text x="116.93960272266362" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">5M</text>
+  <text x="191.67920544532723" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">10M</text>
+  <text x="266.41880816799085" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">15M</text>
+  <text x="341.15841089065447" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">20M</text>
+  <text x="415.8980136133181" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">25M</text>
+  <text x="490.63761633598165" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">30M</text>
+  <text x="565.3772190586453" y="371" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">35M</text>
+  <text x="620" y="387" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-before-edge" fill="currentColor">population →</text>
+  <line x1="42.2" y1="41.7377049180328" x2="36.2" y2="41.7377049180328" stroke="currentColor" stroke-width="1"></line>
+  <line x1="42.2" y1="99.44262295081967" x2="36.2" y2="99.44262295081967" stroke="currentColor" stroke-width="1"></line>
+  <line x1="42.2" y1="157.14754098360655" x2="36.2" y2="157.14754098360655" stroke="currentColor" stroke-width="1"></line>
+  <line x1="42.2" y1="214.85245901639342" x2="36.2" y2="214.85245901639342" stroke="currentColor" stroke-width="1"></line>
+  <line x1="42.2" y1="272.55737704918033" x2="36.2" y2="272.55737704918033" stroke="currentColor" stroke-width="1"></line>
+  <line x1="42.2" y1="330.2622950819671" x2="36.2" y2="330.2622950819671" stroke="currentColor" stroke-width="1"></line>
+  <text x="33.2" y="41.7377049180328" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">CA</text>
+  <text x="33.2" y="99.44262295081967" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">FL</text>
+  <text x="33.2" y="157.14754098360655" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">IL</text>
+  <text x="33.2" y="214.85245901639342" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">NY</text>
+  <text x="33.2" y="272.55737704918033" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">PA</text>
+  <text x="33.2" y="330.2622950819671" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">TX</text>
+  <text x="13.000000000000004" y="186" transform="rotate(-90,13.000000000000004,186)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">state</text>
 </svg>

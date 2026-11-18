@@ -1,4 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640">
+  <path d="M98.99494936611666,0A98.99494936611666,98.99494936611666,0,1,1,-98.99494936611666,0A98.99494936611666,98.99494936611666,0,1,1,98.99494936611666,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
+  <path d="M140,0A140,140,0,1,1,-140,0A140,140,0,1,1,140,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
+  <path d="M171.46428199482247,0A171.46428199482247,171.46428199482247,0,1,1,-171.46428199482247,0A171.46428199482247,171.46428199482247,0,1,1,171.46428199482247,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
+  <path d="M197.9898987322333,0A197.9898987322333,197.9898987322333,0,1,1,-197.9898987322333,0A197.9898987322333,197.9898987322333,0,1,1,197.9898987322333,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
+  <path d="M221.35943621178654,0A221.35943621178654,221.35943621178654,0,1,1,-221.35943621178654,0A221.35943621178654,221.35943621178654,0,1,1,221.35943621178654,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
+  <path d="M242.4871130596428,0A242.4871130596428,242.4871130596428,0,1,1,-242.4871130596428,0A242.4871130596428,242.4871130596428,0,1,1,242.4871130596428,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
+  <path d="M261.9160170741759,0A261.9160170741759,261.9160170741759,0,1,1,-261.9160170741759,0A261.9160170741759,261.9160170741759,0,1,1,261.9160170741759,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
+  <path d="M280,0A280,280,0,1,1,-280,0A280,280,0,1,1,280,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
+  <path d="M21.698,-279.158A280,280,0,0,1,196.061,-199.9L0,0Z" transform="translate(320,320)" fill="#5470c6"></path>
+  <path d="M205.62,-179.444A272.91,272.91,0,0,1,272.859,-5.292L0,0Z" transform="translate(320,320)" fill="#91cc75"></path>
+  <path d="M250.016,14.562A250.44,250.44,0,0,1,182.163,171.862L0,0Z" transform="translate(320,320)" fill="#fac858"></path>
+  <path d="M162.953,179.572A242.487,242.487,0,0,1,9.403,242.305L0,0Z" transform="translate(320,320)" fill="#ee6666"></path>
+  <path d="M-9.084,234.089A234.265,234.265,0,0,1,-157.428,173.483L0,0Z" transform="translate(320,320)" fill="#73c0de"></path>
+  <path d="M-164.2,154.914A225.743,225.743,0,0,1,-225.361,13.126L0,0Z" transform="translate(320,320)" fill="#3ba272"></path>
+  <path d="M-207.615,-4.027A207.654,207.654,0,0,1,-156.454,-136.537L0,0Z" transform="translate(320,320)" fill="#fc8452"></path>
+  <path d="M-131.522,-134.097A187.83,187.83,0,0,1,-14.555,-187.265L0,0Z" transform="translate(320,320)" fill="#9a60b4"></path>
   <line x1="435.86700286143895" y1="65.09837652947894" x2="438.3498672084698" y2="59.63619888368203" stroke="currentColor" stroke-width="1"></line>
   <line x1="581.2074373249601" y1="219.15023705468104" x2="586.8047395533522" y2="216.9891707058528" stroke="currentColor" stroke-width="1"></line>
   <line x1="577.1005099264767" y1="430.9023344909639" x2="582.6098065677584" y2="433.27881308719884" stroke="currentColor" stroke-width="1"></line>
@@ -15,22 +31,6 @@
   <text x="54.635545111600834" y="434.4670523853163" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-before-edge" fill="currentColor">rose 6</text>
   <text x="50.39660933245176" y="215.9086375314389" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-after-edge" fill="currentColor">rose 7</text>
   <text x="200.4087006180146" y="56.90511006078373" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="text-after-edge" fill="currentColor">rose 8</text>
-  <path d="M21.698,-279.158A280,280,0,0,1,196.061,-199.9L0,0Z" transform="translate(320,320)" fill="#5470c6"></path>
-  <path d="M205.62,-179.444A272.91,272.91,0,0,1,272.859,-5.292L0,0Z" transform="translate(320,320)" fill="#91cc75"></path>
-  <path d="M250.016,14.562A250.44,250.44,0,0,1,182.163,171.862L0,0Z" transform="translate(320,320)" fill="#fac858"></path>
-  <path d="M162.953,179.572A242.487,242.487,0,0,1,9.403,242.305L0,0Z" transform="translate(320,320)" fill="#ee6666"></path>
-  <path d="M-9.084,234.089A234.265,234.265,0,0,1,-157.428,173.483L0,0Z" transform="translate(320,320)" fill="#73c0de"></path>
-  <path d="M-164.2,154.914A225.743,225.743,0,0,1,-225.361,13.126L0,0Z" transform="translate(320,320)" fill="#3ba272"></path>
-  <path d="M-207.615,-4.027A207.654,207.654,0,0,1,-156.454,-136.537L0,0Z" transform="translate(320,320)" fill="#fc8452"></path>
-  <path d="M-131.522,-134.097A187.83,187.83,0,0,1,-14.555,-187.265L0,0Z" transform="translate(320,320)" fill="#9a60b4"></path>
-  <path d="M98.99494936611666,0A98.99494936611666,98.99494936611666,0,1,1,-98.99494936611666,0A98.99494936611666,98.99494936611666,0,1,1,98.99494936611666,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
-  <path d="M140,0A140,140,0,1,1,-140,0A140,140,0,1,1,140,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
-  <path d="M171.46428199482247,0A171.46428199482247,171.46428199482247,0,1,1,-171.46428199482247,0A171.46428199482247,171.46428199482247,0,1,1,171.46428199482247,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
-  <path d="M197.9898987322333,0A197.9898987322333,197.9898987322333,0,1,1,-197.9898987322333,0A197.9898987322333,197.9898987322333,0,1,1,197.9898987322333,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
-  <path d="M221.35943621178654,0A221.35943621178654,221.35943621178654,0,1,1,-221.35943621178654,0A221.35943621178654,221.35943621178654,0,1,1,221.35943621178654,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
-  <path d="M242.4871130596428,0A242.4871130596428,242.4871130596428,0,1,1,-242.4871130596428,0A242.4871130596428,242.4871130596428,0,1,1,242.4871130596428,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
-  <path d="M261.9160170741759,0A261.9160170741759,261.9160170741759,0,1,1,-261.9160170741759,0A261.9160170741759,261.9160170741759,0,1,1,261.9160170741759,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
-  <path d="M280,0A280,280,0,1,1,-280,0A280,280,0,1,1,280,0Z" transform="translate(320,320)" fill="none" stroke="currentColor" stroke-opacity="0.1"></path>
   <text x="320" y="221.00505063388334" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="central" fill="none" stroke="white" stroke-width="3">5</text>
   <text x="320" y="180" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="central" fill="none" stroke="white" stroke-width="3">10</text>
   <text x="320" y="148.53571800517753" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="central" fill="none" stroke="white" stroke-width="3">15</text>
