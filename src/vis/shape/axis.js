@@ -87,7 +87,8 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
 }
 
 // Draws the y axis of the scales recorded by cm.plane, on the left of the chart, like Plot, or on
-// the right with anchor "right"; or the radius axis of cm.polar.
+// the right with anchor "right"; or the radius axis of cm.polar. Like cm.axisX, its options default
+// to the guides of the plane, and an axis added explicitly replaces the implicit one.
 export function axisY(flow, value, {scales = {}, frame, titles, guides, options = {}} = {}) {
   options = axisOptions(flow, guides, "y", options, [axis, axisY]);
   if (!options) return;

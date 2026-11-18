@@ -59,25 +59,24 @@ export function positionOf(scale) {
   return (d) => scale(d) + offset;
 }
 
-// Whether an implicit guide, drawn by cm.plane or cm.polar, isn't drawn: if a guide of the given
-// shapes for the same scale of the same chart is added explicitly, in any of its layers, or the
-// same implicit one is drawn before it, such as in the first of the layers sharing x. Same tells
+// Whether an implicit guide, drawn by cm.plane or cm.polar for the context of the given guides,
+// isn't drawn: if a guide of the given shapes for the same scale of the same chart is added
+// explicitly, in any of its layers, or the same implicit one is drawn before it in the same cell,
+// such as in the first of the layers sharing x, unless that layer has no rows there. Same tells
 // from the guides and the options of another guide whether it's for the same scale.
-export function replaced(flow, shapes, same) {
+export function replaced(flow, shapes, same, guides) {
   const node = flow._parent;
   const siblings = node._parent._children;
   const index = siblings.indexOf(node);
-  return siblings.some(
-    (sibling, i) =>
-      sibling !== node &&
-      sibling._data.some(
-        ({render, options, context}) =>
-          shapes.includes(render) &&
-          (!options?.implicit || i < index) &&
-          context?.guides &&
-          same(context.guides, options),
-      ),
-  );
+  const j = node._data.findIndex(({context}) => context?.guides === guides);
+  const of = ({render, options, context}) =>
+    shapes.includes(render) && context?.guides !== undefined && same(context.guides, options);
+  return siblings.some((sibling, i) => {
+    if (sibling === node) return false;
+    if (sibling._data.some((d) => !d.options?.implicit && of(d))) return true;
+    const d = sibling._data[sibling._shared ? 0 : j];
+    return i < index && d !== undefined && of(d) && !d.context.frame?.empty;
+  });
 }
 
 // The options of an axis, from the guides of its context and the options given to it: an implicit
@@ -88,7 +87,7 @@ export function axisOptions(flow, guides, axis, options, shapes) {
   if (options.implicit) {
     const same = (other, {implicit, side} = {}) =>
       other.id === guides.id && other[axis].name === name && (!implicit || side === options.side);
-    if (options.side >= anchors.length || replaced(flow, shapes, same)) return null;
+    if (options.side >= anchors.length || replaced(flow, shapes, same, guides)) return null;
     return {...guided, anchor: anchors[options.side]};
   }
   const anchor = options.anchor ?? anchors[0];

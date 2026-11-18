@@ -558,6 +558,31 @@ test("cm.plane draws the axes of a layer of branches once per scale", () => {
   assert.strictEqual(ten.getAttribute("text-anchor"), "start");
 });
 
+test("cm.plane draws the axes of layers in each cell of a nested chart where a layer has rows", () => {
+  const renderer = cm.svg({width: 400, height: 200});
+  const root = cm.flow().renderer(renderer);
+  const rows = [{v: 1}, {v: 2}];
+  const [left, right] = root
+    .data(["L", "R"])
+    .transform(cm.encode, {x: (d) => d})
+    .transform(cm.spreadX)
+    .transform(cm.plane, {x: {axis: null}})
+    .append(cm.g)
+    .branch(
+      (flow) => flow.data((cell) => (cell === "L" ? rows : [])).transform(cm.encode, {x: "v", y: "v"}),
+      (flow) => flow.data((cell) => (cell === "R" ? rows : [])).transform(cm.encode, {x: "v", y: "v"}),
+    )
+    .transform(cm.plane, {x: {axis: "bottom"}, y: {axis: null}});
+  left.add(cm.circle);
+  right.add(cm.circle);
+  root.render();
+  // The first layer has no rows in the right cell, so the second labels it.
+  const cells = Array.from(renderer.node().querySelectorAll("text"))
+    .filter((t) => t.textContent === "1.0")
+    .map((t) => t.parentNode.getAttribute("transform"));
+  assert.strictEqual(new Set(cells).size, 2);
+});
+
 test("cm.plane draws no axes in charts nested in a chart, unless asked", () => {
   const nested = (options) => {
     const renderer = cm.svg({width: 200, height: 200});
