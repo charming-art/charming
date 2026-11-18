@@ -117,9 +117,9 @@ function ramp(key, scale, options, maxWidth) {
   };
 }
 
-// A radius: its title, then circles at a few ticks of the scale, side by side, aligned at their
-// tops, each labeled in a row under the largest. If they're wider than the column, the ticks in the
-// middle are dropped, keeping the smallest and the largest, then the largest only.
+// A radius at the top, like Vega-Lite's: its title, then circles at a few ticks of the scale, side by
+// side, centered on one line, each labeled at its right, like a swatch. If they're wider than the
+// chart, the ticks in the middle are dropped, keeping the smallest and the largest, then the largest.
 function sizes(key, scale, options, maxWidth) {
   const s = scaleOf(scale);
   const label = labelOf(scale, options, maxWidth);
@@ -132,11 +132,10 @@ function sizes(key, scale, options, maxWidth) {
     let x = 0;
     for (const d of values) {
       const r = s(d);
-      const w = Math.max(2 * r, widthOf(format(d)));
-      items.push({d, x: x + w / 2, r});
-      x += w + 8;
+      items.push({d, x, r});
+      x += 2 * r + 4 + widthOf(format(d)) + 12;
     }
-    return [items, x - 8];
+    return [items, x - 12];
   };
   const candidates = [ticks, ticks.length > 2 ? [ticks[0], ticks[ticks.length - 1]] : null, ticks.slice(-1)];
   let [items] = layout(ticks);
@@ -146,17 +145,19 @@ function sizes(key, scale, options, maxWidth) {
     items = fitted;
     if (width <= maxWidth) break;
   }
+  // The row is as tall as the largest circle, with its stroke, or a line of text.
   const radius = Math.max(0, ...items.map(({r}) => r));
+  const row = Math.max(2 * radius + 2, lineHeight);
   return {
-    height: top + 1 + 2 * radius + 4 + lineHeight,
+    height: top + row,
     draw(flow, x0, y0) {
       if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
       const k = keyOf(key);
-      const y1 = y0 + top + 1;
+      const middle = y0 + top + row / 2;
       flow.data(items).append(circle, {
         key: ({d}) => k(d),
-        x: ({x}) => x0 + x,
-        y: ({r}) => y1 + r,
+        x: ({x, r}) => x0 + x + r,
+        y: middle,
         r: ({r}) => r,
         fill: "none",
         stroke: "currentColor",
@@ -165,10 +166,9 @@ function sizes(key, scale, options, maxWidth) {
         ...font,
         key: ({d}) => k(d),
         text: ({d}) => format(d),
-        x: ({x}) => x0 + x,
-        y: y1 + 2 * radius + 4,
-        textAlign: "center",
-        textBaseline: "top",
+        x: ({x, r}) => x0 + x + 2 * r + 4,
+        y: middle,
+        textBaseline: "middle",
       });
     },
   };

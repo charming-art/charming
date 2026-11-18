@@ -84,10 +84,21 @@ test("cm.legend stacks its legends at the top of the chart by default, horizonta
     xs,
     xs.slice().sort((a, b) => a - b),
   );
-  // The size legend is under the swatches, its circles side by side, aligned at their tops.
-  const circles = Array.from(node.querySelectorAll("circle"), (c) => +c.getAttribute("cy") - +c.getAttribute("r"));
-  assert.ok(circles.every((top) => top > +swatches[0].getAttribute("y") + 10));
-  assert.strictEqual(new Set(circles.map((d) => Math.round(d * 1e6))).size, 1);
+  // The size legend is under the swatches, its circles side by side, centered on one line, like
+  // Vega-Lite's, each labeled at its right, centered on the line too.
+  const circles = Array.from(node.querySelectorAll("circle"), (c) => ({
+    cx: +c.getAttribute("cx"),
+    cy: +c.getAttribute("cy"),
+    r: +c.getAttribute("r"),
+  }));
+  assert.ok(circles.every(({cy, r}) => cy - r > +swatches[0].getAttribute("y") + 10));
+  assert.strictEqual(new Set(circles.map(({cy}) => cy)).size, 1);
+  const labels = Array.from(node.querySelectorAll("text")).filter((t) => t.getAttribute("y") === `${circles[0].cy}`);
+  assert.strictEqual(labels.length, circles.length);
+  labels.forEach((t, i) => {
+    assertInDelta(+t.getAttribute("x"), circles[i].cx + circles[i].r + 4);
+    assert.strictEqual(t.getAttribute("dominant-baseline"), "central");
+  });
 });
 
 test("cm.legend wraps the swatches of a legend at the top past the width of the chart", () => {
