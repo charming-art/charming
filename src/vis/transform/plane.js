@@ -177,29 +177,32 @@ const sidesOfPlane = {
   y: {first: "left", both: ["left", "right"]},
 };
 
-// Resolves the scales of the channels, and maps positions to the chart area with y up, inside margins
-// that fit what the chart draws on each side, its axes, their titles and its legends, unless given. A renderer without a given size is resized, like Plot: 640 wide, with
-// a height that depends on y. The scales are resolved once for all the contexts, so that facets
-// compare; with resolve, a position can be inferred per context instead. Colors are always shared.
-// The options of scales are given by name, like Plot's: the type, domain, reverse and label of a
-// position, such as {y: {domain: [0, 100]}} or a named {length: {type: "log"}}; the type, domain,
-// range, scheme and label of a color, such as {fill: {scheme: "PiYG"}}; and the type, domain, range
-// and label of a radius or an opacity, such as {r: {range: [0, 20]}}. The type "identity" leaves a
-// color, radius or opacity as it is. Like Plot's, any scale also takes transform, a function of its
-// values, such as (d) => d / 1000, or percent, mapping proportions to percentages; and a continuous
-// one zero, to include 0 in its domain, nice, to round it, true or a count of ticks, and clamp, to
-// pin values past it to its ends. The other options of the plane can't name a scale. Like Plot's, a chart draws the axes of its positions, at the bottom and the left: the
-// options of a position also take axis, "top", "both" or null for x, "right", "both" or null for y,
-// and the options of cm.axis, such as {x: {axis: "top", grid: true}}; a scale such as fill takes
-// legend: true to draw its legend, and the options of cm.legend. An axis or legend added to the
-// chart explicitly replaces the one of its kind drawn for the same scale, such as cm.axisY with
-// anchor "right" for a second scale of y.
+// Resolves the scales of the channels, and maps positions to the chart area with y up, inside
+// margins that fit what the chart draws on each side, its axes, their titles and its legends,
+// unless given. A renderer without a given size is resized, like Plot: 640 wide, with a height that
+// depends on y. The scales are resolved once for all the contexts, so that facets compare; with
+// resolve, a position can be inferred per context instead. Colors are always shared. The options of
+// scales are given by name, like Plot's: the type, domain, reverse and label of a position, such as
+// {y: {domain: [0, 100]}} or a named {length: {type: "log"}}; the type, domain, range, scheme and
+// label of a color, such as {fill: {scheme: "PiYG"}}; and the type, domain, range and label of a
+// radius or an opacity, such as {r: {range: [0, 20]}}. The type "identity" leaves a color, radius
+// or opacity as it is. Like Plot's, any scale also takes transform, a function of its values, such
+// as (d) => d / 1000, or percent, mapping proportions to percentages; and a continuous one zero, to
+// include 0 in its domain, but for log, nice, to round it, true or a count of ticks, a log scale
+// rounding to powers of its base, and clamp, to pin values past it to its ends. The other options
+// of the plane can't name a scale. Like Plot's, a chart draws the axes of its positions, at the
+// bottom and the left: the options of a position also take axis, "top", "both" or null for x,
+// "right", "both" or null for y, and the options of cm.axis, such as {x: {axis: "top", grid:
+// true}}; a scale such as fill takes legend: true to draw its legend, and the options of cm.legend.
+// An axis or legend added to the chart explicitly replaces the one of its kind drawn for the same
+// scale, such as cm.axisY with anchor "right" for a second scale of y.
 // In a nested flow, such as one chart per row of a parent mark, each context is drawn in the frame
 // of its parent row: the cell of a band, or a width × height box around a point. The resolved
 // scales are kept in context.scales, and the chart area in context.frame. With clip, the marks are
 // clipped to the frame, like Plot's clip, such as bars sliding in from outside it, unless a mark
 // gives its own clip option, false to draw outside it or true to be clipped without the plane's
-// clip; axes aren't. A chart nested in a chart draws no axes unless asked, such as x: {axis: "bottom"}.
+// clip; axes aren't. A chart nested in a chart draws no axes unless asked, such as x: {axis:
+// "bottom"}.
 export function plane(
   flow,
   data,

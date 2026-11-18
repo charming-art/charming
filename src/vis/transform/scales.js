@@ -6,6 +6,10 @@ import {
   scalePoint,
   scalePow,
   scaleSequential,
+  scaleSequentialLog,
+  scaleSequentialPow,
+  scaleSequentialSqrt,
+  scaleSequentialSymlog,
   scaleSqrt,
   scaleSymlog,
   scaleUtc,
@@ -42,15 +46,19 @@ export function transformOf({transform, percent} = {}) {
   return transform ?? (percent ? (d) => d * 100 : undefined);
 }
 
-// The domain of a continuous scale extended, like Plot's: with zero, to include 0, and with nice, to
-// round values, such as [0, 100] rather than [3, 97], nice being true or the count of ticks.
+// The domain of a continuous scale extended, like Plot's: with zero, to include 0, unless the scale
+// is logarithmic, and with nice, to round values, such as [0, 100] rather than [3, 97], nice being
+// true or a count of ticks, which d3's log scales ignore, rounding to powers of their base.
 function adjustDomain(domain, {zero, nice} = {}, type) {
   if (!domain || domain.length !== 2 || !domain.every((d) => typeof d === "number" || d instanceof Date)) return domain;
+  const t = typeof type === "string" ? typeOf(type) : type;
   let [d0, d1] = domain;
-  if (zero && typeof d0 === "number")
+  // A log scale has no logarithm of 0, so it isn't extended to it.
+  if (zero && typeof d0 === "number" && !isLog(t)) {
     [d0, d1] = d0 <= d1 ? [Math.min(0, d0), Math.max(0, d1)] : [Math.max(0, d0), Math.min(0, d1)];
+  }
   if (nice) {
-    const base = typeof type === "function" ? type.copy() : d0 instanceof Date ? scaleUtc() : scaleLinear();
+    const base = typeof t === "function" ? t.copy() : d0 instanceof Date ? scaleUtc() : scaleLinear();
     [d0, d1] = base
       .domain([d0, d1])
       .nice(nice === true ? undefined : nice)
@@ -148,18 +156,40 @@ export function channelScales(value, hints) {
     if (type === "identity") continue;
     const V = value[key];
     if (type === undefined && domain === undefined && range === undefined && isIdentity(V)) continue;
-    if (type === "linear" || (type === undefined && isNumeric(V))) {
-      const sequential = range === undefined ? scaleSequential(interpolatorOf(scheme)) : scaleLinear();
-      const d = adjustDomain(domain ?? [min(V), max(V)], options, sequential);
+    // Like Plot's, a continuous color of a named type, such as log, is sequential too, through the
+    // interpolator of the scheme, or the colors of the range.
+    const sequentialOf = {
+      linear: () => scaleSequential(),
+      log: () => (options.base === undefined ? scaleSequentialLog() : scaleSequentialLog().base(options.base)),
+      sqrt: () => scaleSequentialSqrt(),
+      pow: () =>
+        options.exponent === undefined ? scaleSequentialPow() : scaleSequentialPow().exponent(options.exponent),
+      symlog: () =>
+        options.constant === undefined ? scaleSequentialSymlog() : scaleSequentialSymlog().constant(options.constant),
+    };
+    const named = type === undefined && isNumeric(V) ? "linear" : Object.hasOwn(sequentialOf, type) ? type : undefined;
+    if (named) {
+      const log = named === "log";
+      const sequential =
+        range === undefined
+          ? sequentialOf[named]().interpolator(interpolatorOf(scheme))
+          : named === "linear"
+            ? scaleLinear()
+            : typeOf(named, options);
+      const d = adjustDomain(domain ?? (log ? logDomain(V) : [min(V), max(V)]), options, sequential);
       scales[key] = {type: sequential, domain: d, range, ...(clamp && {clamp})};
       continue;
     }
     const ordinal = type === undefined || type === "ordinal";
+    const continuous = !ordinal && !discrete(type, V);
     scales[key] = {
       type: type ?? "ordinal",
       domain: domain ?? (ordinal ? sort(new InternSet(V)) : domainOf(type, V)),
       range: range ?? (ordinal ? schemeCategory : undefined),
+      ...(continuous && clamp && {clamp}),
     };
+    // A continuous color of another type, such as log, takes zero and nice too.
+    if (continuous) scales[key].domain = adjustDomain(scales[key].domain, options, type);
   }
   return scales;
 }
@@ -285,23 +315,34 @@ export function withScaleOptions(context, scales, axes) {
   const value = {...context.value};
   // The values of a scale with transform or percent are transformed, with the domains hinted for
   // them, such as the extents of a stack, as they reach the plane.
+  // Only numbers and dates are transformed, as categories have no arithmetic: "a" * 100 is NaN.
+  const quantity = (v) => typeof v === "number" || v instanceof Date;
   const transform = (key, f) => {
-    if (key in value) value[key] = Array.from(value[key], (v) => (v == null ? v : f(v)));
+    if (!(key in value)) return false;
+    const first = Array.from(value[key]).find((v) => v != null);
+    if (!quantity(first)) return false;
+    value[key] = Array.from(value[key], (v) => (v == null ? v : f(v)));
     const domain = hints[key]?.domain;
-    if (Array.isArray(domain) && domain.every((d) => typeof d === "number")) {
-      hints[key] = {...hints[key], domain: domain.map(f)};
-    }
+    if (Array.isArray(domain) && domain.every(quantity)) hints[key] = {...hints[key], domain: domain.map(f)};
+    return true;
   };
   for (const [keys, axis] of axes) {
     const options = scales[scaleName(hints, keys, axis)];
     if (!options) continue;
-    const {reverse, label, percent} = options;
-    // Like Plot's, a label of a percent, but one given, says so.
-    const inferred = hints[keys[0]]?.label;
-    const percented = percent && label === undefined && inferred != null ? `${inferred} (%)` : undefined;
+    const {reverse, label, percent, transform: own} = options;
     const f = transformOf(options);
-    if (f && !hints[keys[0]]?.band) for (const key of keysOf(value, hints, keys, axis)) transform(key, f);
-    hints[keys[0]] = {...hints[keys[0]], ...definedOptions({reverse, label: label !== undefined ? label : percented})};
+    let transformed = false;
+    if (f && !hints[keys[0]]?.band) {
+      for (const key of keysOf(value, hints, keys, axis)) transformed = transform(key, f) || transformed;
+    }
+    // Like Plot's, a label inferred from a field says it's a percentage, if percent scaled its values,
+    // rather than a transform given with it.
+    const inferred = hints[keys[0]]?.label;
+    const percented = percent && !own && transformed && label === undefined && inferred != null;
+    hints[keys[0]] = {
+      ...hints[keys[0]],
+      ...definedOptions({reverse, label: label !== undefined ? label : percented ? `${inferred} (%)` : undefined}),
+    };
   }
   for (const key of scaledKeys) {
     if (!scales[key]) continue;

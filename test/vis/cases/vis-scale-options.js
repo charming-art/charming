@@ -11,7 +11,8 @@ export const visScaleOptions = withSVG(async () => {
   return renderFlow(
     (root) => {
       root
-        .data(penguins.filter((d) => d.body_mass_g !== null))
+        // The missing values of the data are NaN, which is a number, so they're filtered as finite.
+        .data(penguins.filter((d) => Number.isFinite(d.body_mass_g) && Number.isFinite(d.culmen_length_mm)))
         .transform(cm.encode, {x: "culmen_length_mm", y: "body_mass_g"})
         .transform(cm.plane, {
           x: {domain: [35, 50], clamp: true},

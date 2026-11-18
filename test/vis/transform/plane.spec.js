@@ -1358,3 +1358,40 @@ test("cm.plane pins values past the domain of a scale to its ends with clamp", (
   const {value: free} = scaled(data, {x: "v", y: "v"}, {x: {domain: [0, 10]}});
   assert.deepStrictEqual(free.x, [-100, 50, 200]);
 });
+
+test("cm.plane leaves a log scale unextended to zero, and rounds continuous colors of other types", () => {
+  const data = [{v: 3}, {v: 97}];
+  // A log radius has no logarithm of 0, so zero doesn't extend it; nice rounds it to powers of 10.
+  const {scales} = scaled(
+    data,
+    {x: "v", y: "v", r: "v", fillOpacity: "v"},
+    {
+      r: {type: "log", zero: true},
+      fillOpacity: {type: "log", zero: true, nice: true},
+    },
+  );
+  assert.deepStrictEqual(scales.r.domain, [3, 97]);
+  assert.deepStrictEqual(scales.fillOpacity.domain, [1, 100]);
+  // A log color takes nice too.
+  const {scales: colors} = scaled(data, {x: "v", y: "v", fill: "v"}, {fill: {type: "log", nice: true}});
+  assert.deepStrictEqual(colors.fill.domain, [1, 100]);
+});
+
+test("cm.plane transforms only numbers and dates, and says percent only if it scaled them", () => {
+  // Categories have no arithmetic: percent leaves them, and their scales, as they are.
+  const categories = [{k: "a"}, {k: "b"}];
+  const {value, scales} = scaled(categories, {x: "k", y: "k", fill: "k"}, {x: {percent: true}, fill: {percent: true}});
+  assert.deepStrictEqual(scales.x.domain, ["a", "b"]);
+  assert.strictEqual(scales.x.label, "k");
+  assert.strictEqual(scales.fill.type, "ordinal");
+  assert.deepStrictEqual(value.fill, ["#5470c6", "#91cc75"]);
+  // A transform given with percent wins, and the label doesn't say percent.
+  const {scales: own} = scaled([{v: 1}, {v: 2}], {x: "v", y: "v"}, {x: {percent: true, transform: (d) => d * 2}});
+  assert.deepStrictEqual(own.x.domain, [2, 4]);
+  assert.strictEqual(own.x.label, "v");
+  // Dates are transformed too.
+  const day = 24 * 3600 * 1000;
+  const dates = [{d: new Date(Date.UTC(2000, 0, 1))}, {d: new Date(Date.UTC(2000, 0, 2))}];
+  const {scales: shifted} = scaled(dates, {x: "d", y: () => 1}, {x: {transform: (d) => new Date(+d + day)}});
+  assert.deepStrictEqual(shifted.x.domain, [new Date(Date.UTC(2000, 0, 2)), new Date(Date.UTC(2000, 0, 3))]);
+});
