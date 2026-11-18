@@ -71,8 +71,42 @@ test("cm.legend takes options per scale, such as a label, or false to skip a leg
   assert.deepStrictEqual(texts(legend({fill: "k"}, {label: null})), ["a", "b", "c"]);
 });
 
-test("cm.legend stacks its legends in a column right of the frame, from its top", () => {
+test("cm.legend stacks its legends at the top of the chart by default, horizontal, from the left of the plot", () => {
   const node = legend({fill: "k", r: "v"});
+  // The frame starts at 20, without axes; the legends start 3px from the top.
+  const [title] = node.querySelectorAll("text");
+  assert.deepStrictEqual([+title.getAttribute("x"), +title.getAttribute("y")], [20, 3]);
+  // The swatches are side by side, in a row.
+  const swatches = rects(node);
+  assert.strictEqual(new Set(swatches.map((r) => r.getAttribute("y"))).size, 1);
+  const xs = swatches.map((r) => +r.getAttribute("x"));
+  assert.deepStrictEqual(
+    xs,
+    xs.slice().sort((a, b) => a - b),
+  );
+  // The size legend is under the swatches, its circles side by side, aligned at their tops.
+  const circles = Array.from(node.querySelectorAll("circle"), (c) => +c.getAttribute("cy") - +c.getAttribute("r"));
+  assert.ok(circles.every((top) => top > +swatches[0].getAttribute("y") + 10));
+  assert.strictEqual(new Set(circles.map((d) => Math.round(d * 1e6))).size, 1);
+});
+
+test("cm.legend wraps the swatches of a legend at the top past the width of the chart", () => {
+  const node = legend({fill: "k"}, {}, {marginLeft: 340});
+  // From 340, the 57px left before the right edge hold two swatches with their labels, 20px each,
+  // with a gap of 12; the third wraps to the next row.
+  const swatches = rects(node);
+  assert.deepStrictEqual(
+    swatches.map((r) => [+r.getAttribute("x"), +r.getAttribute("y")]),
+    [
+      [340, 3 + 14 + 1],
+      [340 + 20 + 12, 3 + 14 + 1],
+      [340, 3 + 28 + 1],
+    ],
+  );
+});
+
+test("cm.legend stacks its legends in a column right of the frame with anchor right, vertical", () => {
+  const node = legend({fill: "k", r: "v"}, {anchor: "right"});
   // The frame ends at 400 - 150 and starts at 10; the column starts 12px right of it.
   const [title] = node.querySelectorAll("text");
   assert.deepStrictEqual([+title.getAttribute("x"), +title.getAttribute("y")], [400 - 150 + 12, 10]);
@@ -83,11 +117,69 @@ test("cm.legend stacks its legends in a column right of the frame, from its top"
     ys,
     ys.slice().sort((a, b) => a - b),
   );
-  // The size legend is under the swatches.
-  const circles = Array.from(node.querySelectorAll("circle"), (c) => +c.getAttribute("cy") - +c.getAttribute("r"));
-  assert.ok(circles.every((top) => top > ys[ys.length - 1]));
-  // Its circles are aligned at their tops.
-  assert.strictEqual(new Set(circles.map((d) => Math.round(d * 1e6))).size, 1);
+  // The size legend is under the swatches, its circles from the smallest down, on one line.
+  const circles = Array.from(node.querySelectorAll("circle"), (c) => [+c.getAttribute("cx"), +c.getAttribute("cy")]);
+  assert.ok(circles.every(([, cy]) => cy > ys[ys.length - 1]));
+  assert.strictEqual(new Set(circles.map(([cx]) => cx)).size, 1);
+  assert.deepStrictEqual(
+    circles.map(([, cy]) => cy),
+    circles.map(([, cy]) => cy).sort((a, b) => a - b),
+  );
+});
+
+test("cm.legend stands a ramp up on the right, low values at the bottom, with ticks right of it", () => {
+  const node = legend({fill: "v"}, {anchor: "right"});
+  const slices = rects(node);
+  assert.strictEqual(slices.length, 64);
+  // The first slice, of the lowest values, is at the bottom of the 120px ramp, under a title of 18.
+  assertInDelta(+slices[0].getAttribute("y") + +slices[0].getAttribute("height"), 10 + 18 + 120);
+  assert.ok(+slices[63].getAttribute("y") < +slices[0].getAttribute("y"));
+  const ticks = Array.from(node.querySelectorAll("text")).filter((t) => /^\d+$/.test(t.textContent));
+  assert.ok(ticks.every((t) => +t.getAttribute("x") === 400 - 150 + 12 + 10 + 4));
+  // The labels at the ends are aligned inward, so that they stay within the ramp's height; without a
+  // title, the ramp starts at the top of the frame, 10.
+  const ends = margin([{v: 0}, {v: 10}], {fill: (d) => d.v}, 150);
+  const labels = Array.from(ends.querySelectorAll("text")).filter((t) => /^\d+$/.test(t.textContent));
+  const [low, high] = [labels.find((t) => t.textContent === "0"), labels.find((t) => t.textContent === "10")];
+  assert.deepStrictEqual(
+    [+low.getAttribute("y"), low.getAttribute("dominant-baseline")],
+    [10 + 120, "text-after-edge"],
+  );
+  assert.deepStrictEqual([+high.getAttribute("y"), high.getAttribute("dominant-baseline")], [10, "text-before-edge"]);
+});
+
+test("cm.plane gives room to the legends at the top, and turns the title of y under them", () => {
+  const chart = (fill) => {
+    const renderer = cm.svg({width: 400, height: 300});
+    const root = cm.flow().renderer(renderer);
+    const [context] = root
+      .data([
+        {k: "a", v: 1},
+        {k: "b", v: 4},
+      ])
+      .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+      .transform(cm.plane, {fill})._values;
+    root.render();
+    return [
+      context.frame,
+      Array.from(renderer.node().querySelectorAll("text")).find(
+        (t) => /\bv\b/.test(t.textContent) && t.getAttribute("transform"),
+      ),
+    ];
+  };
+  const [level] = chart({});
+  // Over the legend's title and swatches, 3 + 14 + 14, and a gap of 10, the half of a tick label.
+  const [frame, title] = chart({legend: true});
+  assert.strictEqual(frame.top, 3 + 14 + 14 + 10 + 10);
+  assert.ok(frame.top !== level.top);
+  // The title of y is turned beside its tick labels, 24 more, ending at the top of the plot.
+  assert.strictEqual(frame.left, 46 + 24);
+  assert.strictEqual(title.textContent, "v →");
+  assert.strictEqual(title.getAttribute("text-anchor"), "end");
+  assert.strictEqual(+title.getAttribute("y"), frame.top);
+  // A legend on the right leaves the top and the title as they are.
+  const [right] = chart({legend: "right"});
+  assert.deepStrictEqual(right, level);
 });
 
 test("cm.legend draws nothing in charts nested in a chart, nor without scales to show", () => {
@@ -120,7 +212,7 @@ test("cm.legend in cm.polar stacks its legends right of the disc, from its top",
     .transform(cm.stackX)
     .transform(cm.polar, {margin: 20, marginRight: 120})
     .add(cm.arc)
-    .add(cm.legend);
+    .add(cm.legend, {anchor: "right"});
   root.render();
   // The disc is centered in the box from 20 to 280 and 20 to 280: radius 130, its right at 280.
   const [title] = Array.from(renderer.node().querySelectorAll("text"));
@@ -130,28 +222,29 @@ test("cm.legend in cm.polar stacks its legends right of the disc, from its top",
 
 // Renders a legend of a channel over the given values, in a margin of the given width, and returns
 // the renderer's node.
-function margin(values, channels, marginRight, plane = {}) {
+function margin(values, channels, marginRight, plane = {}, anchor = "right") {
   const renderer = cm.svg({width: 400, height: 300});
   const root = cm.flow().renderer(renderer);
   root
     .data(values)
     .transform(cm.encode, {x: (d) => d.v, y: (d) => d.v, ...channels})
     .transform(cm.plane, {marginRight, x: {axis: null}, y: {axis: null}, ...plane})
-    .add(cm.legend);
+    .add(cm.legend, {anchor});
   root.render();
   return renderer.node();
 }
 
 test("cm.legend aligns the labels at the ends of a ramp inward, so that they stay within it", () => {
-  const node = margin([{v: 0}, {v: 10}], {fill: (d) => d.v}, 150);
+  // At the top, from the left of the plot at 20, 240px wide.
+  const node = margin([{v: 0}, {v: 10}], {fill: (d) => d.v}, 150, {}, "top");
   const ticks = Array.from(node.querySelectorAll("text")).filter((t) => /^\d+$/.test(t.textContent));
   assert.strictEqual(ticks[0].getAttribute("text-anchor"), "start");
   assert.strictEqual(ticks[ticks.length - 1].getAttribute("text-anchor"), "end");
-  assert.strictEqual(+ticks[ticks.length - 1].getAttribute("x"), 400 - 3);
+  assert.strictEqual(+ticks[ticks.length - 1].getAttribute("x"), 20 + 240);
 });
 
 test("cm.legend places the ticks of a ramp through its scale, such as a log opacity", () => {
-  const node = margin([{v: 1}, {v: 1000}], {fillOpacity: (d) => d.v}, 250, {fillOpacity: {type: "log"}});
+  const node = margin([{v: 1}, {v: 1000}], {fillOpacity: (d) => d.v}, 250, {fillOpacity: {type: "log"}}, "top");
   const x = (t) =>
     +Array.from(node.querySelectorAll("text"))
       .find((d) => d.textContent === t)
@@ -161,10 +254,10 @@ test("cm.legend places the ticks of a ramp through its scale, such as a log opac
   assertInDelta(x("100") - x("10"), x("1k") - x("100"));
 });
 
-test("cm.legend keeps sizes within the margin, dropping the ticks in the middle", () => {
+test("cm.legend keeps sizes at the top within the chart, dropping the ticks in the middle", () => {
   // Mostly small values: the default range puts the largest radius at 30px, so 5,000 and 10,000
-  // side by side are 110px wide, wider than the 85px the margin leaves.
-  const node = margin([{v: 1}, {v: 1}, {v: 1}, {v: 10000}], {r: (d) => d.v}, 100);
+  // side by side are 110px wide, wider than the 97px left from the left of the plot at 300.
+  const node = margin([{v: 1}, {v: 1}, {v: 1}, {v: 10000}], {r: (d) => d.v}, 20, {marginLeft: 300}, "top");
   const circles = Array.from(node.querySelectorAll("circle"));
   assert.strictEqual(circles.length, 1);
   for (const c of circles) assert.ok(+c.getAttribute("cx") + +c.getAttribute("r") <= 400);
@@ -210,4 +303,23 @@ test("cm.plane draws the legends of the scales given legend true, with their opt
     chart({fill: {legend: true}}, (flow) => flow.add(cm.legend, {fill: false, r: false})),
     [],
   );
+});
+
+test("cm.polar gives room to the legends at the top over its disc", () => {
+  const renderer = cm.svg({width: 400, height: 300});
+  const root = cm.flow().renderer(renderer);
+  const [context] = root
+    .data([
+      {k: "a", v: 1},
+      {k: "b", v: 2},
+    ])
+    .transform(cm.encode, {x: "v", fill: "k"})
+    .transform(cm.stackX)
+    .transform(cm.polar, {fill: {legend: true}})._values;
+  root.render();
+  // The title and the swatches, 3 + 14 + 14, and a gap of 10, over the margin of 40.
+  const {cy, outerRadius} = context.frame;
+  assertInDelta(cy - outerRadius, 3 + 14 + 14 + 10 + 40);
+  const swatches = rects(renderer.node()).filter((r) => r.getAttribute("width") === "10");
+  assert.ok(swatches.every((r) => +r.getAttribute("y") + 10 <= cy - outerRadius));
 });

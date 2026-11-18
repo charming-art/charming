@@ -153,9 +153,10 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
   // one, like Plot's, which aligns it with the edge of the margin, with an arrow along the axis; or
   // turned to read along it at its middle, the default of a discrete scale, past its tick labels,
   // else its tick marks, else the plot. The default margins of cm.plane leave room for it on the
-  // sides with axes.
+  // sides with axes. Under a legend at the top of the chart, a title at the top is turned too,
+  // ending at the top of the axis, so that it leaves the top to the legend.
   const {labelAnchor = scale.ticks ? "top" : "center"} = options;
-  const turn = labelAnchor === "center";
+  const turn = labelAnchor === "center" || (labelAnchor === "top" && hasTopLegend(guides, scales));
   const label = labelOf(y, scale, "y", options, turn);
   if (label == null || frame?.nested) return;
   if (!turn) {
@@ -180,16 +181,22 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
     pad: padY,
     across: acrossY,
   });
+  const [labelY, textAlign] = labelAnchor === "top" ? [top, "end"] : [(top + bottom) / 2, "center"];
   flow.datum(label).append(text, {
     ...font,
     text: label,
     x: edge + k * (reach + titleGap),
-    y: (top + bottom) / 2,
+    y: labelY,
     rotate: -Math.PI / 2,
-    textAlign: "center",
+    textAlign,
     // Turned a quarter counterclockwise, the text sits left of its point, or right of it.
     textBaseline: isRight ? "top" : "bottom",
   });
+}
+
+// Whether a chart draws a legend at its top, from its guides, for a scale it has.
+function hasTopLegend(guides, scales) {
+  return Object.entries(guides?.legends ?? {}).some(([key, {anchor}]) => anchor !== "right" && scales[key]);
 }
 
 // Draws both axes. The options x and y are the options of each axis, or false to skip it; the

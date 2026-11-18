@@ -975,7 +975,7 @@ test("cm.plane records the guides of its scales from their options, in context.g
   })._values;
   assert.deepStrictEqual(guides.x, {name: "x", anchors: ["bottom", "top"], grid: true});
   assert.deepStrictEqual(guides.y, {name: "length", anchors: ["right"], tickFormat: "d"});
-  assert.deepStrictEqual(guides.legends, {fill: {width: 100}});
+  assert.deepStrictEqual(guides.legends, {fill: {width: 100, anchor: "top"}});
   // By default, axes at the bottom and the left, and no legends; null hides an axis.
   const [defaults] = flow.transform(cm.plane, {length: {axis: null}})._values;
   assert.deepStrictEqual([defaults.guides.x.anchors, defaults.guides.y.anchors], [["bottom"], []]);

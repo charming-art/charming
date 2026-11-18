@@ -467,10 +467,21 @@ export function scaleFlex(domain, weights, {paddingInner = 0, paddingOuter = 0, 
 const axisKeys = ["ticks", "tickFormat", "tickSize", "tickPadding", "tickRotate", "grid", "labelAnchor"];
 
 // The options of a legend given with the options of its scale, such as {fill: {legend: true}}.
-const legendKeys = ["ticks", "tickFormat", "width"];
+const legendKeys = ["ticks", "tickFormat", "width", "height"];
 
 function pick(options = {}, keys) {
   return definedOptions(Object.fromEntries(keys.map((key) => [key, options[key]])));
+}
+
+// The legends asked by the options of scales, such as {fill: {legend: true}}, with their options
+// and sides: at the top, by default, or on the right with legend: "right".
+export function legendsOf(options) {
+  const legends = {};
+  for (const key of scaledKeys) {
+    const legend = options[key]?.legend;
+    if (legend) legends[key] = {...pick(options[key], legendKeys), anchor: legend === "right" ? "right" : "top"};
+  }
+  return legends;
 }
 
 // The guides of a context, for its axes and legends: the sides of each axis, from the axis option
@@ -487,10 +498,7 @@ export function guidesOf(id, options, nameX, nameY, sides, defaults) {
   };
   const {axis: axisX} = options[nameX] ?? {};
   const {axis: axisY} = options[nameY] ?? {};
-  const legends = {};
-  for (const key of scaledKeys) {
-    if (options[key]?.legend) legends[key] = pick(options[key], legendKeys);
-  }
+  const legends = legendsOf(options);
   return {
     id,
     x: {name: nameX, anchors: anchors(axisX, sides.x, defaults.x), ...pick(options[nameX], axisKeys)},

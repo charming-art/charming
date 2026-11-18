@@ -25,6 +25,7 @@ export {visNonFacetedMarks} from "./vis-non-faceted-marks.js";
 export {visNormalHistogram} from "./vis-normal-histogram.js";
 export {visNormalizedStack} from "./vis-normalized-stack.js";
 export {visPenguinBubble} from "./vis-penguin-bubble.js";
+export {visPenguinLegendsRight} from "./vis-penguin-legends-right.js";
 export {visPenguinSpeciesIsland} from "./vis-penguin-species-island.js";
 export {visPieGlyphs} from "./vis-pie-glyphs.js";
 export {visPieLabels} from "./vis-pie-labels.js";
