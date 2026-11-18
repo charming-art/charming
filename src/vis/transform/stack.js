@@ -1,5 +1,7 @@
 import {ascending, cumsum, group, InternMap, InternSet, max, min, range, sum} from "d3-array";
 import {scaleBand} from "d3-scale";
+import {transitionOptions} from "../../core/transition/index.js";
+import {indexOf} from "./reduce.js";
 import {orderOf, seriesOf, seriesOrder, withSeriesOrder} from "./series.js";
 
 // Adapted from the stack transform of Observable Plot (ISC license): the rows of each group are
@@ -253,4 +255,68 @@ export function stackY(flow, data, options) {
 // Stacks x: sums x per y for stacked bars, or splits the bands of cm.spreadX for grouped columns.
 export function stackX(flow, data, options) {
   return stack(data, options, ["x", "x1", "y", "y1"], "stackX");
+}
+
+// Stacks the rows along time, like G2's stackEnter: the groups of rows enter one after another, gap
+// milliseconds apart, and the rows of a group step milliseconds apart, in their order, each for
+// duration milliseconds, the flow's by default, or its own duration, such as an encoded
+// enterDuration in milliseconds. Unlike the other transforms, whose groups lay the rows out, its
+// groups only tell when they enter, so they come from the by option, the name of a channel, rather
+// than from z: by default the series (z, else fill, else stroke), such as the fruits of a grouped
+// bar chart, else "x" for its years, or null for one group. Like the stacks, the groups are in order
+// of first appearance, or of the domain of the series, or of order, an array of their values, and
+// reverse reverses it. Its delays are in milliseconds, added to an encoded delay in milliseconds,
+// and cm.plane and cm.polar leave them as they are.
+function stackTime(flow, data, {by, order, reverse = false, step = 0, gap = 0, duration} = {}, stage, name) {
+  if (!data) throw new Error(`No channels: call flow.transform(cm.encode, channels) before cm.${name}.`);
+  const [delayKey, durationKey] = [`${stage}Delay`, `${stage}Duration`];
+  duration ??= (transitionOptions(flow._context?.transition) ?? transitionOptions(true)).duration;
+  return data.map((context) => {
+    const {value, hints = {}} = context;
+    const I = indexOf(context);
+    const n = context.group?.length ?? I.length;
+    const series = seriesOf(context);
+    const key = by === undefined ? series.key : by;
+    const G = key == null ? null : value[key];
+    const given = Array.isArray(order) ? order : key === series.key ? series.domain : hints[key]?.domain;
+    const groups = G ? Array.from(group(I, (i) => G[i])) : [[undefined, I]];
+    if (given) {
+      const index = new InternMap(given.map((d, i) => [d, i]));
+      groups.sort(([a], [b]) => ascending(index.get(a) ?? Infinity, index.get(b) ?? Infinity));
+    }
+    if (reverse) groups.reverse();
+    const D0 = value[delayKey];
+    const D = Array.from(value[durationKey] ?? {length: n}, (d) => (Number.isFinite(d) ? d : duration));
+    const delays = new Array(n);
+    let start = 0;
+    for (const [, J] of groups) {
+      let end = start;
+      J.forEach((i, k) => {
+        delays[i] = start + k * step + (Number.isFinite(D0?.[i]) ? D0[i] : 0);
+        end = Math.max(end, delays[i] + D[i]);
+      });
+      start = end + gap;
+    }
+    // The timing is in milliseconds, so it isn't scaled.
+    const identity = {type: "identity"};
+    return {
+      ...context,
+      value: {...value, [delayKey]: delays, [durationKey]: D},
+      hints: {
+        ...hints,
+        [delayKey]: {...hints[delayKey], ...identity},
+        [durationKey]: {...hints[durationKey], ...identity},
+      },
+    };
+  });
+}
+
+// Stacks the entrances of the rows along time: groups of rows enter one after another.
+export function stackEnter(flow, data, options) {
+  return stackTime(flow, data, options, "enter", "stackEnter");
+}
+
+// Stacks the exits of the rows along time: groups of rows exit one after another.
+export function stackExit(flow, data, options) {
+  return stackTime(flow, data, options, "exit", "stackExit");
 }

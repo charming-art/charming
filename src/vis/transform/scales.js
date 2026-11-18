@@ -20,11 +20,13 @@ import {isColor} from "../color.js";
 import {seriesOf} from "./series.js";
 import {schemeCategory} from "../scheme.js";
 
-// The scales shared by cm.plane and cm.polar. Besides positions, they scale colors, radii and
-// opacities, such as r: "body_mass_g" or fillOpacity: "count".
+// The scales shared by cm.plane and cm.polar. Besides positions, they scale colors, radii,
+// opacities and the timing of transitions, such as r: "body_mass_g", fillOpacity: "count" or
+// enterDelay: "start".
 const colorKeys = ["fill", "stroke"];
 const opacityKeys = ["fillOpacity", "strokeOpacity"];
-export const scaledKeys = [...colorKeys, "r", ...opacityKeys];
+export const timingKeys = ["appearDelay", "appearDuration", "enterDelay", "enterDuration", "exitDelay", "exitDuration"];
+export const scaledKeys = [...colorKeys, "r", ...opacityKeys, ...timingKeys];
 
 // The d3 scales of the continuous types that are named, like Plot's, such as {type: "log"}, with
 // their options: the exponent of pow, the base of log and the constant of symlog. Other types, such
@@ -134,9 +136,20 @@ function radiusRange(V, domain) {
 // by default) or the range's colors; missing numbers have no color. Radii and opacities are
 // numbers from 0: a radius by a square root, so that the area of a dot tracks its value, and an
 // opacity linearly to [0, 1]. Values that aren't numbers aren't scaled, and like Plot's, the type
-// "identity" leaves values as they are, such as radii already in pixels.
+// "identity" leaves values as they are, such as radii already in pixels. Timings, such as
+// enterDelay, are milliseconds, unless their scale has a range: then they're scaled linearly from
+// 0, so that a duration twice as long lasts twice as long, such as {domain: [0, 1], range: [0, 600]}
+// for 600ms per unit, or over the extent of the values to the range, without a domain.
 export function channelScales(value, hints) {
   const scales = {};
+  for (const key of timingKeys) {
+    if (!(key in hints) || !(key in value)) continue;
+    const {type, domain, range, clamp, ...options} = hints[key];
+    if (range === undefined || type === "identity" || !isNumeric(value[key])) continue;
+    const t = typeOf(type ?? "linear", options);
+    const d = adjustDomain(domain ?? [0, max(value[key]) ?? 1], options, t);
+    scales[key] = {type: t, domain: d, range, ...(clamp && {clamp})};
+  }
   for (const key of ["r", ...opacityKeys]) {
     if (!(key in hints) || !(key in value)) continue;
     const {type, domain, range, clamp, ...options} = hints[key];

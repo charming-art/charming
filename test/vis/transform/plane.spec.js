@@ -1592,3 +1592,44 @@ test("cm.plane transforms only numbers and dates, and says percent only if it sc
   const {scales: shifted} = scaled(dates, {x: "d", y: () => 1}, {x: {transform: (d) => new Date(+d + day)}});
   assert.deepStrictEqual(shifted.x.domain, [new Date(Date.UTC(2000, 0, 2)), new Date(Date.UTC(2000, 0, 3))]);
 });
+
+// The enter timing of rows encoded and drawn in cm.plane with options, after transforms.
+function timings(data, channels, options, ...transforms) {
+  const [shape, calls] = probe();
+  const root = cm.flow().renderer(cm.svg({width: 400, height: 300}));
+  let flow = root.data(data).transform(cm.encode, channels);
+  for (const transform of transforms) flow = flow.transform(transform);
+  flow.transform(cm.plane, options).add(shape);
+  root.render();
+  return calls[0];
+}
+
+const tasks = [
+  {start: 1, length: 3},
+  {start: 3, length: 10},
+];
+
+test("cm.plane scales timings with a range, linearly from 0, and leaves them in milliseconds without one", () => {
+  const channels = {x: "start", y: "length", enterDelay: "start", enterDuration: "length"};
+  // 600ms per unit.
+  const unit = {domain: [0, 1], range: [0, 600]};
+  const scaled = timings(tasks, channels, {enterDelay: unit, enterDuration: unit});
+  assert.deepStrictEqual(scaled.enterDelay, [600, 1800]);
+  assert.deepStrictEqual(scaled.enterDuration, [1800, 6000]);
+  // Without a domain, from 0 to the largest value.
+  const fitted = timings(tasks, channels, {enterDelay: {range: [0, 3000]}});
+  assert.deepStrictEqual(fitted.enterDelay, [1000, 3000]);
+  // Without a range, they're milliseconds.
+  const raw = timings(tasks, channels);
+  assert.deepStrictEqual(raw.enterDelay, [1, 3]);
+  assert.deepStrictEqual(raw.enterDuration, [3, 10]);
+});
+
+test("cm.plane leaves the timings of cm.stackEnter in milliseconds, even with a range", () => {
+  const scaled = timings(tasks, {x: "start", y: "length"}, {enterDelay: {range: [0, 1]}}, cm.stackEnter);
+  assert.deepStrictEqual(scaled.enterDelay, [0, 0]);
+  const stepped = timings(tasks, {x: "start", y: "length"}, {enterDelay: {range: [0, 1]}}, (flow, data) =>
+    cm.stackEnter(flow, data, {by: null, step: 100}),
+  );
+  assert.deepStrictEqual(stepped.enterDelay, [0, 100]);
+});

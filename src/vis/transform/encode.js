@@ -6,7 +6,18 @@ const field = (name) => (d) => d[name];
 const colorKeys = ["fill", "stroke"];
 
 // The channels that cm.plane and cm.polar scale besides positions, when they vary with the data.
-const scaledKeys = [...colorKeys, "r", "fillOpacity", "strokeOpacity"];
+const scaledKeys = [
+  ...colorKeys,
+  "r",
+  "fillOpacity",
+  "strokeOpacity",
+  "appearDelay",
+  "appearDuration",
+  "enterDelay",
+  "enterDuration",
+  "exitDelay",
+  "exitDuration",
+];
 
 // A channel can be a descriptor that names the scale it uses, such as {value: "v2", scale: "y"}.
 // The options of scales, such as their domains, are given to cm.plane and cm.polar by name, and

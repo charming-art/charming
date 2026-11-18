@@ -343,3 +343,75 @@ test("cm.stackY with offset wiggle stacks in order along x, whatever the order o
 test("cm.stackY throws an error for an unknown offset, like Plot", () => {
   assert.throws(() => values(flows, {x: "x", y: "v", z: "s"}, stackYOf({offset: "wigle"})), /Unknown offset: wigle/);
 });
+
+// The enter delays and durations of rows after cm.stackEnter, or cm.stackExit.
+function timing(data, channels, options, transform = cm.stackEnter, flowOptions) {
+  const [{value}] = cm
+    .flow(flowOptions)
+    .data(data)
+    .transform(cm.encode, channels)
+    .transform(transform, options)._values;
+  const stage = transform === cm.stackEnter ? "enter" : "exit";
+  return [value[`${stage}Delay`], value[`${stage}Duration`]];
+}
+
+const fruits = [
+  {year: 2001, fruit: "Apple"},
+  {year: 2001, fruit: "Orange"},
+  {year: 2002, fruit: "Apple"},
+  {year: 2002, fruit: "Orange"},
+];
+
+test("cm.stackEnter enters the series one after another, gap apart, and their rows step apart", () => {
+  const [delays, durations] = timing(fruits, {x: "year", fill: "fruit"}, {step: 100, gap: 200, duration: 300});
+  // Apple's rows at 0 and 100, ending at 400; Orange's from 600, at 600 and 700.
+  assert.deepStrictEqual(delays, [0, 600, 100, 700]);
+  assert.deepStrictEqual(durations, [300, 300, 300, 300]);
+});
+
+test("cm.stackEnter groups by the channel given with by, or puts every row in one group with null", () => {
+  const [byX] = timing(fruits, {x: "year", fill: "fruit"}, {by: "x", step: 100, gap: 200, duration: 300});
+  assert.deepStrictEqual(byX, [0, 100, 600, 700]);
+  const [all] = timing(fruits, {x: "year", fill: "fruit"}, {by: null, step: 100, duration: 300});
+  assert.deepStrictEqual(all, [0, 100, 200, 300]);
+});
+
+test("cm.stackEnter orders the groups by order, or the domain of the series from an earlier stack, and reverse", () => {
+  const [ordered] = timing(fruits, {fill: "fruit"}, {order: ["Orange", "Apple"], duration: 300});
+  assert.deepStrictEqual(ordered, [300, 0, 300, 0]);
+  const [reversed] = timing(fruits, {fill: "fruit"}, {reverse: true, duration: 300});
+  assert.deepStrictEqual(reversed, [300, 0, 300, 0]);
+  // The order of an earlier stack is the domain of the series.
+  const [{value}] = cm
+    .flow()
+    .data(fruits)
+    .transform(cm.encode, {x: "year", y: () => 1, fill: "fruit"})
+    .transform(cm.stackY, {order: ["Orange", "Apple"]})
+    .transform(cm.stackEnter, {duration: 300})._values;
+  assert.deepStrictEqual(value.enterDelay, [300, 0, 300, 0]);
+});
+
+test("cm.stackEnter takes the durations of rows, and adds to their delays, in milliseconds", () => {
+  const data = [
+    {fruit: "Apple", d: 100, t: 50},
+    {fruit: "Apple", d: 500, t: 0},
+    {fruit: "Orange", d: 100, t: 0},
+  ];
+  const [delays, durations] = timing(data, {fill: "fruit", enterDuration: "d", enterDelay: "t"}, {step: 100});
+  // Apple ends with its second row, at 100 + 500; Orange starts there.
+  assert.deepStrictEqual(durations, [100, 500, 100]);
+  assert.deepStrictEqual(delays, [50, 100, 600]);
+});
+
+test("cm.stackEnter lasts the flow's duration by default, else 750ms like transitions", () => {
+  const [, durations] = timing(fruits, {fill: "fruit"}, {}, cm.stackEnter, {transition: {duration: 400}});
+  assert.deepStrictEqual(durations, [400, 400, 400, 400]);
+  const [, defaults] = timing(fruits, {fill: "fruit"}, {});
+  assert.deepStrictEqual(defaults, [750, 750, 750, 750]);
+});
+
+test("cm.stackExit stacks the exits of rows along time", () => {
+  const [delays, durations] = timing(fruits, {fill: "fruit"}, {duration: 300}, cm.stackExit);
+  assert.deepStrictEqual(delays, [0, 300, 0, 300]);
+  assert.deepStrictEqual(durations, [300, 300, 300, 300]);
+});

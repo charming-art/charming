@@ -13,5 +13,5 @@ export {pack} from "./transform/pack.js";
 export {plane} from "./transform/plane.js";
 export {polar} from "./transform/polar.js";
 export {spreadX, spreadY} from "./transform/spread.js";
-export {stackX, stackY} from "./transform/stack.js";
+export {stackEnter, stackExit, stackX, stackY} from "./transform/stack.js";
 export {unitX, unitY} from "./transform/unit.js";
