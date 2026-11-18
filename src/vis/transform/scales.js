@@ -260,7 +260,9 @@ export function callable(record, options) {
     bandwidth: {get: () => offset * 2 * k()},
     width: {value: (v) => width(v) * k()},
   };
-  if (scale.invert) properties.invert = {value: (p) => scale.invert(p)};
+  // Invert undoes the grid's map first, so that invert(apply(v)) is v.
+  const unwarp = (p) => (record.warp?.k ? (p - record.warp.b) / record.warp.k : p);
+  if (scale.invert) properties.invert = {value: (p) => scale.invert(unwarp(p))};
   return Object.defineProperties(record, properties);
 }
 
@@ -748,6 +750,7 @@ function edge(record, side, value) {
 function warp(record, k, b) {
   const f = (p) => k * p + b;
   f.k = k;
+  f.b = b;
   Object.defineProperty(record, "warp", {value: f, configurable: true});
 }
 

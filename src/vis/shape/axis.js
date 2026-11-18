@@ -156,6 +156,12 @@ function warped(record, position) {
   return warp ? (d) => warp(position(d)) : position;
 }
 
+// The range of a recorded position scale, following a grid of cells nested in its chart, if it was
+// scaled; see gridFrames.
+function rangeOf({range, warp}) {
+  return warp ? range.map(warp) : range;
+}
+
 function extentOf(range) {
   return [Math.min(...range), Math.max(...range)];
 }
@@ -173,8 +179,9 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
   const {tickSize = 6, tickPadding = 3, tickRotate = 0, grid = false, anchor = "bottom", layer} = options;
   const {height} = flow.renderer()._props;
   const scale = scaleOf(x);
-  const [left, right] = extentOf(x.range);
-  const [top, bottom] = frame ? [frame.top, frame.bottom] : y ? extentOf(y.range) : [0, height];
+  // Its range, its ticks and its title follow a grid nested in the chart, if it was scaled.
+  const [left, right] = extentOf(rangeOf(x));
+  const [top, bottom] = frame ? [frame.top, frame.bottom] : y ? extentOf(rangeOf(y)) : [0, height];
   const count = countOf(options, right - left, 80);
   const ticks = ticksOf(scale, options, count);
   const X = warped(x, positionOf(scale));
@@ -237,8 +244,8 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
   const {tickSize = 6, tickPadding = 3, tickRotate = 0, grid = false, anchor = "left", layer} = options;
   const {width} = flow.renderer()._props;
   const scale = scaleOf(y);
-  const [left, right] = frame ? [frame.left, frame.right] : x ? extentOf(x.range) : [0, width];
-  const [top, bottom] = extentOf(y.range);
+  const [left, right] = frame ? [frame.left, frame.right] : x ? extentOf(rangeOf(x)) : [0, width];
+  const [top, bottom] = extentOf(rangeOf(y));
   const count = countOf(options, bottom - top, 35);
   const ticks = ticksOf(scale, options, count);
   const Y = warped(y, positionOf(scale));

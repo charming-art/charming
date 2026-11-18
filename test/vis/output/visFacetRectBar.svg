@@ -225,7 +225,7 @@
   <text x="523.9270157174933" y="571" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Thur.</text>
   <text x="624.2476934068177" y="571" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Fri.</text>
   <text x="724.568371096142" y="571" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">Sat.</text>
-  <text x="414.8" y="587" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">day</text>
+  <text x="423.6063380281689" y="587" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">day</text>
   <line x1="49.6" y1="66.85834333733496" x2="49.6" y2="66.85834333733496" stroke="currentColor" stroke-width="1"></line>
   <line x1="49.6" y1="169.81152460984396" x2="49.6" y2="169.81152460984396" stroke="currentColor" stroke-width="1"></line>
   <line x1="49.6" y1="272.7647058823529" x2="49.6" y2="272.7647058823529" stroke="currentColor" stroke-width="1"></line>
@@ -236,5 +236,5 @@
   <text x="25.6" y="272.7647058823529" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">3</text>
   <text x="25.6" y="375.71788715486196" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">4</text>
   <text x="25.6" y="478.6710684273709" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">5</text>
-  <text x="13" y="278.5" transform="rotate(-90,13,278.5)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">week</text>
+  <text x="13" y="272.764705882353" transform="rotate(-90,13,272.764705882353)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">week</text>
 </svg>

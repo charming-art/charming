@@ -1369,6 +1369,35 @@ test("cm.plane draws the legends of a nested grid over the level title of y of i
   assertInDelta(title, at("10")[1] - 5 - 6);
 });
 
+test("cm.plane keeps the title of a continuous axis of a parent at the end of the scaled grid, and inverts through it", () => {
+  const renderer = cm.svg({width: 400, height: 300});
+  const root = cm.flow().renderer(renderer);
+  const parent = root
+    .data([
+      {x: 0, x1: 5},
+      {x: 5, x1: 10},
+    ])
+    .transform(cm.encode, {x: "x", x1: "x1"})
+    .transform(cm.plane, {x: {label: "v"}});
+  parent
+    .append(cm.g)
+    .data(() => [{v: 0, k: "one"}])
+    .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+    .transform(cm.plane, {fill: {legend: "right"}})
+    .add(cm.annotate(cm.rect), {fill: "none", stroke: "black"});
+  root.render();
+  const node = renderer.node();
+  const right = Math.max(
+    ...Array.from(node.querySelectorAll("rect[stroke=black]"), (r) => absolute(r)[0] + +r.getAttribute("width")),
+  );
+  // The title of x ends at the right of the grid, where the last tick is, rather than at the frame.
+  const title = Array.from(node.querySelectorAll("text")).find((t) => t.textContent === "v →");
+  assertInDelta(absolute(title)[0], right);
+  const [x] = parent._values.map(({scales}) => scales.x);
+  assertInDelta(x.apply(10), right);
+  assertInDelta(x.invert(x.apply(3)), 3);
+});
+
 test("cm.plane maps the annotations of a parent through the scaled grid of its cells", () => {
   const {cells, node} = legendGrid({fill: {legend: "right"}}, (flow) =>
     flow.add(cm.annotate(cm.link), {x: "b", stroke: "red"}),
