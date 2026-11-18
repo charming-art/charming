@@ -71,7 +71,7 @@ test("cm.legend takes options per scale, such as a label, or false to skip a leg
   assert.deepStrictEqual(texts(legend({fill: "k"}, {label: null})), ["a", "b", "c"]);
 });
 
-test("cm.legend stacks its legends at the top of the chart by default, horizontal, from the left of the plot", () => {
+test("cm.legend lays out its legends at the top by default, horizontal, from the left of the plot", () => {
   const node = legend({fill: "k", r: "v"});
   // The frame starts at 20, without axes; the legends start 3px from the top.
   const [title] = node.querySelectorAll("text");
@@ -84,14 +84,17 @@ test("cm.legend stacks its legends at the top of the chart by default, horizonta
     xs,
     xs.slice().sort((a, b) => a - b),
   );
-  // The size legend is under the swatches, its circles side by side, centered on one line, like
-  // Vega-Lite's, each labeled at its right, centered on the line too.
+  // The size legend fits beside them, 20px past their 84px: three swatches of 20 with gaps of 12.
+  const sizeTitle = Array.from(node.querySelectorAll("text")).find((t) => t.textContent === "v");
+  assert.deepStrictEqual([+sizeTitle.getAttribute("x"), +sizeTitle.getAttribute("y")], [20 + 84 + 20, 3]);
+  // Its circles are side by side, centered on one line, like Vega-Lite's, each labeled at its right,
+  // centered on the line too.
   const circles = Array.from(node.querySelectorAll("circle"), (c) => ({
     cx: +c.getAttribute("cx"),
     cy: +c.getAttribute("cy"),
     r: +c.getAttribute("r"),
   }));
-  assert.ok(circles.every(({cy, r}) => cy - r > +swatches[0].getAttribute("y") + 10));
+  assert.ok(circles.every(({cx, r}) => cx - r >= 20 + 84 + 20));
   assert.strictEqual(new Set(circles.map(({cy}) => cy)).size, 1);
   const labels = Array.from(node.querySelectorAll("text")).filter((t) => t.getAttribute("y") === `${circles[0].cy}`);
   assert.strictEqual(labels.length, circles.length);
@@ -99,6 +102,36 @@ test("cm.legend stacks its legends at the top of the chart by default, horizonta
     assertInDelta(+t.getAttribute("x"), circles[i].cx + circles[i].r + 4);
     assert.strictEqual(t.getAttribute("dominant-baseline"), "central");
   });
+});
+
+test("cm.legend starts a new row at the top for a legend that doesn't fit beside the others", () => {
+  // From 300, the 97px left hold the swatches, 84px, but not the sizes beside them.
+  const node = legend({fill: "k", r: "v"}, {}, {marginLeft: 300});
+  const sizeTitle = Array.from(node.querySelectorAll("text")).find((t) => t.textContent === "v");
+  // Under the swatches, a title and a row of 14 each, by a gap of 10.
+  assert.deepStrictEqual([+sizeTitle.getAttribute("x"), +sizeTitle.getAttribute("y")], [300, 3 + 28 + 10]);
+});
+
+test("cm.legend starts a new column on the right for a legend that doesn't fit under the others", () => {
+  // The frame is 10 to 70 tall: the swatches, 56px, fit, but not the sizes under them.
+  const node = legend({fill: "k", r: "v"}, {anchor: "right"}, {marginBottom: 130});
+  const sizeTitle = Array.from(node.querySelectorAll("text")).find((t) => t.textContent === "v");
+  // Right of the swatches, 20px wide, by a gap of 20, from the top of the frame.
+  assert.deepStrictEqual([+sizeTitle.getAttribute("x"), +sizeTitle.getAttribute("y")], [400 - 150 + 12 + 20 + 20, 10]);
+});
+
+test("cm.legend wraps the swatches of a legend on the right into columns past the height of the frame", () => {
+  // The frame is 10 to 40 tall: under the title, one swatch per column, 20px wide, gaps of 12.
+  const node = legend({fill: "k"}, {anchor: "right"}, {marginBottom: 160});
+  const x0 = 400 - 150 + 12;
+  assert.deepStrictEqual(
+    rects(node).map((r) => [+r.getAttribute("x"), +r.getAttribute("y")]),
+    [
+      [x0, 10 + 14 + 1],
+      [x0 + 32, 10 + 14 + 1],
+      [x0 + 64, 10 + 14 + 1],
+    ],
+  );
 });
 
 test("cm.legend wraps the swatches of a legend at the top past the width of the chart", () => {
