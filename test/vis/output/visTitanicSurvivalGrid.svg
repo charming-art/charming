@@ -1,16 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
-  <line x1="162.46746031746034" y1="442" x2="162.46746031746034" y2="448" stroke="currentColor" stroke-width="1"></line>
-  <line x1="340.15000000000003" y1="442" x2="340.15000000000003" y2="448" stroke="currentColor" stroke-width="1"></line>
-  <line x1="517.8325396825397" y1="442" x2="517.8325396825397" y2="448" stroke="currentColor" stroke-width="1"></line>
-  <text x="162.46746031746034" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">1</text>
-  <text x="340.15000000000003" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">2</text>
-  <text x="517.8325396825397" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">3</text>
-  <text x="340.15" y="467" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">pclass</text>
-  <line x1="60.3" y1="125.53488372093021" x2="54.3" y2="125.53488372093021" stroke="currentColor" stroke-width="1"></line>
-  <line x1="60.3" y1="326.4651162790698" x2="54.3" y2="326.4651162790698" stroke="currentColor" stroke-width="1"></line>
-  <text x="51.3" y="125.53488372093021" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">female</text>
-  <text x="51.3" y="326.4651162790698" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">male</text>
-  <text x="13" y="226" transform="rotate(-90,13,226)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">sex</text>
   <g transform="translate(86.95238095238095,40.139534883720934)">
     <rect x="0" y="0" width="151.0301587301587" height="170.79069767441862" fill="none" stroke="currentColor"></rect>
     <circle cx="6.292923280423278" cy="164.49777439399534" r="5.348984788359786" fill="#2b8cbe"></circle>
@@ -1338,4 +1326,16 @@
     <circle cx="51.48755411255412" cy="16.32803533675627" r="2.917628066378067" fill="#ff8408"></circle>
     <circle cx="58.35256132756133" cy="16.32803533675627" r="2.917628066378067" fill="#ff8408"></circle>
   </g>
+  <line x1="162.46746031746034" y1="442" x2="162.46746031746034" y2="448" stroke="currentColor" stroke-width="1"></line>
+  <line x1="340.15000000000003" y1="442" x2="340.15000000000003" y2="448" stroke="currentColor" stroke-width="1"></line>
+  <line x1="517.8325396825397" y1="442" x2="517.8325396825397" y2="448" stroke="currentColor" stroke-width="1"></line>
+  <text x="162.46746031746034" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">1</text>
+  <text x="340.15000000000003" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">2</text>
+  <text x="517.8325396825397" y="451" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">3</text>
+  <text x="340.15" y="467" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-before-edge" fill="currentColor">pclass</text>
+  <line x1="60.3" y1="125.53488372093021" x2="54.3" y2="125.53488372093021" stroke="currentColor" stroke-width="1"></line>
+  <line x1="60.3" y1="326.4651162790698" x2="54.3" y2="326.4651162790698" stroke="currentColor" stroke-width="1"></line>
+  <text x="51.3" y="125.53488372093021" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">female</text>
+  <text x="51.3" y="326.4651162790698" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">male</text>
+  <text x="13" y="226" transform="rotate(-90,13,226)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">sex</text>
 </svg>

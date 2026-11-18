@@ -100,7 +100,8 @@ function renderNode(renderer, node, index, context, path, scope, time, pick) {
 // Draws the children of a row. With keyframes, the keyframes among them form a sequence, the rows of
 // each in turn, and only the one at the moment of time is drawn, the last one past the end; the
 // other children are drawn at every moment. The keyframes share one path, so that what they draw
-// matches from moment to moment.
+// matches from moment to moment. The children marked to be drawn in front, such as the tick labels
+// of an axis, are drawn after the others, keeping their paths.
 function renderChildren(renderer, children, indexOf, context, path, scope, time) {
   const sequence = [];
   if (time) {
@@ -119,7 +120,9 @@ function renderChildren(renderer, children, indexOf, context, path, scope, time)
   // The timing of a scene comes from the sequences that move into it; a sequence holding its last
   // moment doesn't move.
   if (moment && time.m < sequence.length) time.timings.push(timingOf(moment.value, moment.k));
-  for (let c = 0; c < children.length; c++) {
+  const order = children.map((_, c) => c);
+  order.sort((a, b) => (children[a]._front ? 1 : 0) - (children[b]._front ? 1 : 0));
+  for (const c of order) {
     const child = children[c];
     const j = indexOf(child);
     if (time && child._data[j]?.render.keyframe) {

@@ -1,4 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
+  <circle cx="25.2" cy="362" r="3"></circle>
+  <circle cx="251.79047619047614" cy="233.79310344827587" r="3"></circle>
+  <circle cx="350.92380952380944" cy="268.7586206896552" r="3"></circle>
+  <circle cx="435.895238095238" cy="105.58620689655174" r="3"></circle>
+  <circle cx="620" cy="24" r="3"></circle>
   <line x1="67.68571428571425" y1="362" x2="67.68571428571425" y2="368" stroke="currentColor" stroke-width="1"></line>
   <line x1="138.49523809523808" y1="362" x2="138.49523809523808" y2="368" stroke="currentColor" stroke-width="1"></line>
   <line x1="209.30476190476188" y1="362" x2="209.30476190476188" y2="368" stroke="currentColor" stroke-width="1"></line>
@@ -47,9 +52,4 @@
   <text x="16.2" y="47.31034482758622" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">68</text>
   <text x="16.2" y="24" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">70</text>
   <text x="3" y="13" font-family="system-ui, sans-serif" font-size="10" text-anchor="start" dominant-baseline="text-after-edge" fill="currentColor">↑ height</text>
-  <circle cx="25.2" cy="362" r="3"></circle>
-  <circle cx="251.79047619047614" cy="233.79310344827587" r="3"></circle>
-  <circle cx="350.92380952380944" cy="268.7586206896552" r="3"></circle>
-  <circle cx="435.895238095238" cy="105.58620689655174" r="3"></circle>
-  <circle cx="620" cy="24" r="3"></circle>
 </svg>

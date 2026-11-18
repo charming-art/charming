@@ -16,8 +16,16 @@ export function flow$transform(transform, ...params) {
   // A transform may come with the marks that draw what it resolved, such as the axes of cm.plane:
   // transform.marks returns them as [shape, options] pairs, which are added right after it, before
   // the shapes added to the flow, marked implicit, so that a shape may tell when one of its kind,
-  // added explicitly, replaces it.
+  // added explicitly, replaces it. A pair may end with {front: true}, such as the tick labels of an
+  // axis: that mark is drawn in front, after the shapes added to the flow, rather than under them.
   const marks = values && transform.marks?.(values, ...params);
-  if (marks) for (const [shape, options] of marks) flow$add.call(transformed, shape, {...options, implicit: true});
+  if (marks) {
+    const children = flow._parent._children;
+    for (const [shape, options, {front} = {}] of marks) {
+      const start = children.length;
+      flow$add.call(transformed, shape, {...options, implicit: true});
+      if (front) for (const node of children.slice(start)) Object.defineProperty(node, "_front", {value: true});
+    }
+  }
   return transformed;
 }

@@ -65,10 +65,10 @@ export function polarLabelBoxes(frame, x, options = {}) {
 // title is at the bottom right, like a plane's x axis.
 export function polarAxisX(flow, frame, x, options, titles) {
   const {innerRadius, outerRadius} = frame;
-  const {tickSize = 6, tickPadding = 3, grid = false} = options;
+  const {tickSize = 6, tickPadding = 3, grid = false, layer} = options;
   const {scale, r, k, count, A, ticks} = angleTicks(frame, x, options);
   const at = (radius, i) => pointOf(frame, radius, A(ticks[i]));
-  if (grid) {
+  if (grid && layer !== "axis") {
     const spoke = (radius, j) => (d, i) => at(radius, i)[j];
     flow.data(ticks).append(link, {
       key,
@@ -80,6 +80,8 @@ export function polarAxisX(flow, frame, x, options, titles) {
       strokeOpacity: 0.1,
     });
   }
+  // An implicit axis draws its grid and the rest in two layers, under and over the shapes.
+  if (layer === "grid") return;
   const r1 = r + k * tickSize;
   const r2 = r + k * (tickSize + tickPadding);
   flow.data(ticks).append(link, {
@@ -113,12 +115,16 @@ export function polarAxisX(flow, frame, x, options, titles) {
 // tickPadding don't apply. Its title is at the top left, like a plane's y axis.
 export function polarAxisY(flow, frame, y, options, titles) {
   const {cx, cy, innerRadius, outerRadius} = frame;
-  const {grid = true} = options;
+  const {grid = true, layer} = options;
   const scale = scaleOf(y);
   const count = countOf(options, outerRadius - innerRadius, 35);
   const R = positionOf(scale);
   const ticks = ticksOf(scale, options, count).filter((d) => R(d) > innerRadius + 1e-6);
-  if (grid) flow.data(ticks).append(path, {key, x: cx, y: cy, d: (d) => ringOf(R(d)), stroke, strokeOpacity: 0.1});
+  if (grid && layer !== "axis") {
+    flow.data(ticks).append(path, {key, x: cx, y: cy, d: (d) => ringOf(R(d)), stroke, strokeOpacity: 0.1});
+  }
+  // An implicit axis draws its rings and its labels in two layers, under and over the shapes.
+  if (layer === "grid") return;
   const format = formatOf(scale, options, count);
   const label = {...font, key, text: format, x: cx, y: (d) => cy - R(d), textAlign: "center", textBaseline: "middle"};
   flow.data(ticks).append(text, {key, ...label, fill: null, stroke: "white", strokeWidth: 3});

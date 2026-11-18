@@ -15,11 +15,9 @@ export const visPolarRibbonSeafood = withSVG(async () => {
         .transform(cm.encode, {x: "lake", y: "count", fill: "species"})
         .transform(cm.spreadX, {paddingInner: 0.9, paddingOuter: 0.45, align: 0})
         .transform(cm.stackY, {order: "value"})
-        .transform(cm.polar, {innerRadius: 0.2, x: {axis: "outer"}, y: {type: "linear"}})
+        .transform(cm.polar, {innerRadius: 0.2, x: {axis: "outer"}, y: {type: "linear", axis: true}})
         .add(cm.arc)
-        .add(cm.areaRadial, {curve: "bump-x", fillOpacity: 0.8})
-        // The rings and labels of the radius are drawn over the ribbons, after them.
-        .add(cm.axisY);
+        .add(cm.areaRadial, {curve: "bump-x", fillOpacity: 0.8});
     },
     {width: 640, height: 640},
   );

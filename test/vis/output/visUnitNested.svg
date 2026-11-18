@@ -1,11 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640">
-  <line x1="75.4" y1="86.4349584841388" x2="75.4" y2="86.4349584841388" stroke="currentColor" stroke-width="1"></line>
-  <line x1="75.4" y1="219.43599794612328" x2="75.4" y2="219.43599794612328" stroke="currentColor" stroke-width="1"></line>
-  <line x1="75.4" y1="438.0010394619844" x2="75.4" y2="438.0010394619844" stroke="currentColor" stroke-width="1"></line>
-  <text x="25.400000000000006" y="86.4349584841388" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1</text>
-  <text x="25.400000000000006" y="219.43599794612328" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2</text>
-  <text x="25.400000000000006" y="438.0010394619844" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">3</text>
-  <text x="13.000000000000007" y="305" transform="rotate(-90,13.000000000000007,305)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">pclass</text>
   <g transform="translate(347.7,19.67213114754098)">
     <g transform="translate(69.97182662538702,66.76282733659781)">
       <g transform="translate(94.52262327267236,-63.50610405188572)">
@@ -1385,4 +1378,11 @@
       </g>
     </g>
   </g>
+  <line x1="75.4" y1="86.4349584841388" x2="75.4" y2="86.4349584841388" stroke="currentColor" stroke-width="1"></line>
+  <line x1="75.4" y1="219.43599794612328" x2="75.4" y2="219.43599794612328" stroke="currentColor" stroke-width="1"></line>
+  <line x1="75.4" y1="438.0010394619844" x2="75.4" y2="438.0010394619844" stroke="currentColor" stroke-width="1"></line>
+  <text x="25.400000000000006" y="86.4349584841388" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">1</text>
+  <text x="25.400000000000006" y="219.43599794612328" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">2</text>
+  <text x="25.400000000000006" y="438.0010394619844" font-family="system-ui, sans-serif" font-size="10" text-anchor="end" dominant-baseline="central" fill="currentColor">3</text>
+  <text x="13.000000000000007" y="305" transform="rotate(-90,13.000000000000007,305)" font-family="system-ui, sans-serif" font-size="10" text-anchor="middle" dominant-baseline="text-after-edge" fill="currentColor">pclass</text>
 </svg>
