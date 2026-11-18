@@ -471,9 +471,12 @@ export function topLegends(data, colors, options, maxWidth) {
 // right, past its axes, and cm.polar's those at the top. A legend added explicitly to the chart replaces them, and takes their
 // options and sides; the names of scales, such as {fill: {label: "Species"}}, take the options of
 // each legend, or false to skip it, and the other options apply to all of them, such as anchor.
-// Charts nested in a chart, such as facets, have no legends yet.
+// A chart nested in a grid of cells, such as facets, draws its legends once for the grid: at the
+// top of the parents' frames, from the left of the grid, or on the right of the grid, past its axes
+// there, with room kept for them; a chart nested elsewhere, such as glyphs at points, or one whose
+// data is shared by its cells, given as an array rather than a function, has none.
 export function legend(flow, value, {scales = {}, frame, guides, options = {}} = {}) {
-  if (frame?.nested) return;
+  if (frame?.nested && !guides?.legendAt) return;
   const legends = guides?.legends ?? {};
   let entries;
   if (options.implicit) {
@@ -489,19 +492,23 @@ export function legend(flow, value, {scales = {}, frame, guides, options = {}} =
       });
   }
   entries = entries.filter(([key]) => scales[key]);
-  const {width} = flow.renderer()._props;
+  const {width, height} = flow.renderer()._props;
   const polar = frame?.type === "polar";
-  // At the top, from the left of the plot, or of the box of a polar chart inside its margins, as
-  // the top margin measured them.
-  const left = frame?.left ?? 3;
+  // Where the legends are drawn, in the coordinates of the root: at the top, from the left of the
+  // plot, or of the box of a polar chart inside its margins, as the top margin measured them, and on
+  // the right, past the axes on the right of the plot, as cm.plane records them; in a grid of cells,
+  // where gridFrames placed them, drawn by one cell, in its coordinates.
+  const at = guides?.legendAt;
+  const [ox, oy] = at?.origin ?? [0, 0];
   const right = polar ? frame.cx + frame.outerRadius : (frame?.right ?? width);
+  const left = at ? at.left : (frame?.left ?? 3);
+  const top = at ? at.top : 3;
+  const x0 = at ? at.x : (guides?.legendX ?? right + 12);
+  const y0 = at ? at.y0 : polar ? frame.cy - frame.outerRadius : (frame?.top ?? 3);
+  const y1 = at ? at.y1 : polar ? frame.cy + frame.outerRadius : (frame?.bottom ?? height);
   const maxWidth = Math.max(0, width - 3 - left);
   const [rows] = rowsOf(topBlocks(entries, scales, maxWidth), maxWidth);
-  for (const {block, x, y} of rows) block.draw(flow, left + x, 3 + y);
-  // On the right, past the axes on the right of the plot, as cm.plane records them.
-  const x0 = guides?.legendX ?? right + 12;
-  const y0 = polar ? frame.cy - frame.outerRadius : (frame?.top ?? 3);
-  const y1 = polar ? frame.cy + frame.outerRadius : (frame?.bottom ?? flow.renderer()._props.height);
+  for (const {block, x, y} of rows) block.draw(flow, left - ox + x, top - oy + y);
   // On the right, one under another while they fit the height, else from the top of a new column
   // right of the widest of the column, if it fits the width left there; otherwise under the others,
   // as the right margin leaves no room for another column.
@@ -514,7 +521,7 @@ export function legend(flow, value, {scales = {}, frame, guides, options = {}} =
       const moved = blockAt(next);
       if (x0 + next + moved.width <= width - 3) [x, y, columnWidth, block] = [next, 0, 0, moved];
     }
-    block.draw(flow, x0 + x, y0 + y);
+    block.draw(flow, x0 - ox + x, y0 - oy + y);
     y += block.height + legendGap;
     columnWidth = Math.max(columnWidth, block.width);
   }

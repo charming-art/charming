@@ -11,6 +11,7 @@ import {
   channelHints,
   channelScales,
   guideMarks,
+  gridFrames,
   guidesOf,
   hasAny,
   isNested,
@@ -297,92 +298,46 @@ export function plane(
     return {x, y, rangeX, rangeY, nameX, nameY, ownKeysX, ownKeysY, recordX, recordY};
   };
 
-  let frames, legendX;
+  let frames, legendX, legendAt;
   if (nested) {
     // A nested chart has no margins of its own by default: its parent's margins and bands leave the
     // room. In a grid of cells, such as facets, the axes asked of it, such as x: {axis: "bottom"},
-    // are drawn on the cells along the edges of the grid, so their room is kept at those edges: on
-    // each side, what they draw, measured as the axes draw them, plus 3px, past the room the grid
-    // already has to the edge of the parent's frame, such as the outer padding of its bands. The
-    // cells and the gaps between them are scaled into what's left, keeping their proportions, such
-    // as the widths of flex bands, and the padding between them. As the ticks depend on the size of
-    // the cells, they're measured again until they hold, up to three times, the room only growing,
-    // as fewer ticks in narrower cells may need less, such as "0" rather than "0.0". A given margin
-    // insets every cell instead.
-    const boxes = nestedFrames(flow, data, {width, height});
+    // are drawn on the cells along the edges of the grid, and its legends once for the grid, so
+    // their room is kept at those edges, as gridFrames lays out. A given margin insets every cell
+    // instead of keeping room for the axes; the legends keep theirs.
     const given = {top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft};
     const margins = Object.fromEntries(Object.keys(given).map((side) => [side, given[side] ?? margin ?? 0]));
-    // The cells form one grid, in the coordinates of the root, even if drawn under different
-    // parents, such as the rows of a marginal histogram, so that its rows and columns stay aligned.
-    const cells = boxes.filter((frame) => frame.cell);
-    const B = cells.map(({cell}) => cell.box);
-    const W = cells.map(({cell}) => cell.within).filter((w) => w);
-    const bounds = [
-      Math.min(...B.map((b) => b[0])),
-      Math.max(...B.map((b) => b[1])),
-      Math.min(...B.map((b) => b[2])),
-      Math.max(...B.map((b) => b[3])),
-    ];
-    // The room the grid already has to the edges of its parents, such as their outer padding.
-    const free = W.length
-      ? {
-          left: bounds[0] - Math.min(...W.map((w) => w[0])),
-          right: Math.max(...W.map((w) => w[1])) - bounds[1],
-          top: bounds[2] - Math.min(...W.map((w) => w[2])),
-          bottom: Math.max(...W.map((w) => w[3])) - bounds[3],
-        }
-      : {left: 0, right: 0, top: 0, bottom: 0};
-    const sides = ["left", "right", "top", "bottom"];
-    let reserve = Object.fromEntries(sides.map((side) => [side, 0]));
-    // The frames of the cells, the grid scaled into its bounds less the room kept at its edges, and
-    // inset by the margins given.
-    const layout = () => {
-      const kept = sides.every((side) => !reserve[side]);
-      const [gl, gr, gt, gb] = bounds;
-      const [nl, nr, nt, nb] = [gl + reserve.left, gr - reserve.right, gt + reserve.top, gb - reserve.bottom];
-      const sx = gr > gl ? (nr - nl) / (gr - gl) : 1;
-      const sy = gb > gt ? (nb - nt) / (gb - gt) : 1;
-      return boxes.map((frame) => {
-        if (!frame.cell || kept) return insetBy(frame, margins);
-        const {
-          box: [l, r, t, b],
-          x,
-          y,
-        } = frame.cell;
-        const scaled = {
-          ...frame,
-          left: nl + (l - gl) * sx - x,
-          right: nl + (r - gl) * sx - x,
-          top: nt + (t - gt) * sy - y,
-          bottom: nt + (b - gt) * sy - y,
-        };
-        return insetBy(scaled, margins);
-      });
+    const auto = Object.values(given).includes(undefined) && margin === undefined;
+    const need = (boxes) => {
+      const frames = boxes.map((frame) => insetBy(frame, margins));
+      const rooms = measureCells(
+        data,
+        options,
+        keysX,
+        keysY,
+        has,
+        (context, j) => recordsOf(context, frames[j]),
+        frames,
+      );
+      return Object.fromEntries(
+        Object.keys(given).map((side) => [
+          side,
+          given[side] !== undefined ? 0 : Math.max(0, ...rooms.map((room) => room[side])),
+        ]),
+      );
     };
-    frames = layout();
-    if (cells.length && Object.values(given).includes(undefined) && margin === undefined) {
-      for (let pass = 0; pass < 3; pass++) {
-        const rooms = measureCells(
-          data,
-          options,
-          keysX,
-          keysY,
-          has,
-          (context, j) => recordsOf(context, frames[j]),
-          frames,
-        );
-        const next = Object.fromEntries(
-          sides.map((side) => {
-            if (given[side] !== undefined) return [side, 0];
-            const need = Math.max(0, ...rooms.map((room) => room[side]));
-            return [side, Math.max(reserve[side], need ? Math.max(0, need + 3 - free[side]) : 0)];
-          }),
-        );
-        if (sides.every((side) => Math.abs(next[side] - reserve[side]) < 1e-9)) break;
-        reserve = next;
-        frames = layout();
-      }
-    }
+    const {width: rendererWidth} = renderer._props;
+    const legends = (left, height) => ({
+      top: topLegends(data, colors, options, rendererWidth - 3 - left),
+      right: rightLegends(data, colors, options, height),
+    });
+    const grid = gridFrames(nestedFrames(flow, data, {width, height}), {
+      need: auto ? need : null,
+      legends,
+      shared: typeof flow._data !== "function",
+    });
+    frames = grid.frames.map((frame) => insetBy(frame, margins));
+    legendAt = grid.legendAt;
   } else {
     // The margins that aren't given fit what's drawn on each side: the axes, their titles, the
     // ends of the tick labels past the plot, and the legends at the top and on the right, plus 3px,
@@ -484,6 +439,7 @@ export function plane(
       nested ? {x: [], y: []} : {x: ["bottom"], y: ["left"]},
     );
     if (legendX !== undefined) guides.legendX = legendX;
+    if (j === legendAt?.index) guides.legendAt = legendAt;
     return {...withoutHints(scaled), value: newValue, scales, frame, clip: shape, clipped: clip, guides};
   });
 }

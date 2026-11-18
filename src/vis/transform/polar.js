@@ -12,6 +12,7 @@ import {
   channelHints,
   channelScales,
   guideMarks,
+  gridFrames,
   guidesOf,
   hasAny,
   isNested,
@@ -140,12 +141,24 @@ export function polar(
     return nested ? {...frame, nested} : frame;
   };
 
-  let frames, legendX;
+  let frames, legendX, legendAt;
   if (nested) {
-    // A nested chart has no margins by default: its parent leaves the room.
+    // A nested chart has no margins by default: its parent leaves the room. In a grid of cells,
+    // such as facets, its legends are drawn once for the grid, with room kept for them at its
+    // edges, as gridFrames lays out.
     const margins = {top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft};
     for (const side in margins) margins[side] ??= margin ?? 0;
-    frames = nestedFrames(flow, data, {width, height}).map((box) => frameOf(box, margins));
+    const {width: rendererWidth} = renderer._props;
+    const legends = (left, height) => ({
+      top: topLegends(data, colors, options, rendererWidth - 3 - left),
+      right: rightLegends(data, colors, options, height),
+    });
+    const grid = gridFrames(nestedFrames(flow, data, {width, height}), {
+      legends,
+      shared: typeof flow._data !== "function",
+    });
+    frames = grid.frames.map((box) => frameOf(box, margins));
+    legendAt = grid.legendAt;
   } else {
     // The margins that aren't given are 40, like the default margin, and grow to fit what's drawn
     // past the disc: the tick labels of an angle axis on the outer ring, and the legends on the
@@ -284,6 +297,7 @@ export function polar(
     // donuts have none.
     const guides = guidesOf(id, options, nameX, nameY, sidesOfPolar, {x: [], y: []});
     if (legendX !== undefined) guides.legendX = legendX;
+    if (j === legendAt?.index) guides.legendAt = legendAt;
     return {...withoutHints(scaled), value: newValue, scales, frame, titles, clip: shape, clipped: clip, guides};
   });
 }

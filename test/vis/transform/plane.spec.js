@@ -1210,6 +1210,95 @@ test("cm.plane keeps room for the axes asked of a grid nested in it at its edges
   }
 });
 
+// The position of an element in the chart: its attributes, translated by its groups.
+function absolute(element, x = "x", y = "y") {
+  let [px, py] = [+element.getAttribute(x), +element.getAttribute(y)];
+  for (let node = element.parentNode; node?.getAttribute; node = node.parentNode) {
+    const [tx, ty] = (node.getAttribute("transform")?.match(/^translate\(([-\d.e]+),([-\d.e]+)\)$/) ?? [])
+      .slice(1)
+      .map(Number);
+    if (tx !== undefined) [px, py] = [px + tx, py + ty];
+  }
+  return [px, py];
+}
+
+// Renders a grid of cells a and b, across, under a parent with an axis of x at the bottom, each
+// cell a chart of k colored by k, with its frame drawn as a rect, and its options.
+function legendGrid(options, parent = (flow) => flow) {
+  const renderer = cm.svg({width: 400, height: 300});
+  const root = cm.flow().renderer(renderer);
+  parent(
+    root
+      .data(["a", "b"])
+      .transform(cm.encode, {x: (d) => d})
+      .transform(cm.spreadX, {padding: 0})
+      .transform(cm.plane, {x: {label: null}}),
+  )
+    .append(cm.g)
+    .data(() => [
+      {v: 0, k: "one"},
+      {v: 1, k: "two"},
+    ])
+    .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+    .transform(cm.plane, options)
+    .add(cm.annotate(cm.rect), {fill: "none", stroke: "black"});
+  root.render();
+  const node = renderer.node();
+  const cells = Array.from(node.querySelectorAll("rect[stroke=black]"), (r) => {
+    const [x, y] = absolute(r);
+    return {left: x, top: y, right: x + +r.getAttribute("width"), bottom: y + +r.getAttribute("height")};
+  });
+  const text = (content) => Array.from(node.querySelectorAll("text")).filter((t) => t.textContent === content);
+  return {node, cells, text};
+}
+
+test("cm.plane keeps room for the legends of a nested grid over its topmost cells, drawn once", () => {
+  const {cells: plain} = legendGrid({});
+  const {cells, text} = legendGrid({fill: {legend: true}});
+  // The legend is drawn once, 3px under the top of the parent's frame, at 0 without y, from the
+  // left of the grid, at 20.
+  const [title] = text("k");
+  assert.strictEqual(text("k").length, 1);
+  assert.deepStrictEqual(absolute(title), [20, 3]);
+  // The cells start under it: a title of 14, a row of swatches of 14, and a gap of 10.
+  for (const cell of cells) assertInDelta(cell.top, 3 + 14 + 14 + 10);
+  assert.deepStrictEqual(
+    cells.map(({left, right, bottom}) => [left, right, bottom]),
+    plain.map(({left, right, bottom}) => [left, right, bottom]),
+  );
+});
+
+test("cm.plane keeps room for the legends of a nested grid on its right, and its parent's axes follow the cells", () => {
+  const {cells, text} = legendGrid({fill: {legend: "right"}});
+  // The legend is drawn once, 12px right of the grid, from the top of its cells, ending within the
+  // chart.
+  const [title] = text("k");
+  assert.strictEqual(text("k").length, 1);
+  const [x0, y0] = absolute(title);
+  assertInDelta(x0, cells[1].right + 12);
+  assertInDelta(y0, cells[1].top);
+  const swatch = (label) => 10 + 4 + widthOf(label);
+  assertInDelta(400 - 20 - cells[1].right, 12 + swatch("one") + 3);
+  // The cells are scaled into the rest, and the labels of the parent's axis stay at their middles.
+  assertInDelta(cells[0].right - cells[0].left, cells[1].right - cells[1].left);
+  for (const [i, label] of ["a", "b"].entries()) {
+    const [x] = absolute(text(label)[0]);
+    assertInDelta(x, (cells[i].left + cells[i].right) / 2);
+  }
+  // Without a legend, the cells are the bands of the parent.
+  const {cells: plain} = legendGrid({});
+  assertInDelta(plain[1].right, 380);
+});
+
+test("cm.plane maps the annotations of a parent through the scaled grid of its cells", () => {
+  const {cells, node} = legendGrid({fill: {legend: "right"}}, (flow) =>
+    flow.add(cm.annotate(cm.link), {x: "b", stroke: "red"}),
+  );
+  const [rule] = node.querySelectorAll("line[stroke=red]");
+  const [x] = absolute(rule, "x1", "y1");
+  assertInDelta(x, (cells[1].left + cells[1].right) / 2);
+});
+
 test("cm.plane keeps the axes asked of cells inside the grid of its parent", () => {
   const renderer = cm.svg({width: 400, height: 400});
   const root = cm.flow().renderer(renderer);

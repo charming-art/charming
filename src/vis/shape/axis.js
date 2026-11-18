@@ -122,6 +122,13 @@ export function extentY(y, options = {}, side = "left") {
   return {reach, start, end};
 }
 
+// The positions of an axis, following a grid of cells nested in its chart, if it was scaled to keep
+// room at its edges, such as for the legends of facets; see gridFrames.
+function warped(record, position) {
+  const {warp} = record;
+  return warp ? (d) => warp(position(d)) : position;
+}
+
 function extentOf(range) {
   return [Math.min(...range), Math.max(...range)];
 }
@@ -143,7 +150,7 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
   const [top, bottom] = frame ? [frame.top, frame.bottom] : y ? extentOf(y.range) : [0, height];
   const count = countOf(options, right - left, 80);
   const ticks = ticksOf(scale, options, count);
-  const X = positionOf(scale);
+  const X = warped(x, positionOf(scale));
   const stroke = "currentColor";
   if (grid && layer !== "axis")
     flow.data(ticks).append(link, {key, x: X, x1: X, y: top, y1: bottom, stroke, strokeOpacity: 0.1});
@@ -206,7 +213,7 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
   const [top, bottom] = extentOf(y.range);
   const count = countOf(options, bottom - top, 35);
   const ticks = ticksOf(scale, options, count);
-  const Y = positionOf(scale);
+  const Y = warped(y, positionOf(scale));
   const stroke = "currentColor";
   if (grid && layer !== "axis")
     flow.data(ticks).append(link, {key, x: left, x1: right, y: Y, y1: Y, stroke, strokeOpacity: 0.1});

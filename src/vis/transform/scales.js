@@ -244,15 +244,22 @@ const quantity = (v) => typeof v === "number" || v instanceof Date;
 // pixels, or to an angle or radius in polar, at the middle of its band if any; bandwidth is the
 // width of the bands, or 0, and width the width of a category's band, which varies with flex. They aren't
 // enumerable, so that records stay plain values. Like Plot's, apply transforms a value first, with
-// the transform or percent of the scale's options, as the values of its channels were.
+// the transform or percent of the scale's options, as the values of its channels were; and the
+// positions follow a grid of cells nested in the chart, if it was scaled to keep room at its edges.
 export function callable(record, options) {
   const scale = scaleOf(record);
   const offset = scale.bandwidth ? scale.bandwidth() / 2 : 0;
   const middle = scale.middle ?? ((v) => scale(v) + offset);
   const width = scale.width ?? (() => offset * 2);
   const f = record.type === "band" ? undefined : transformOf(options);
-  const apply = f ? (v) => middle(quantity(v) ? f(v) : v) : middle;
-  const properties = {apply: {value: apply}, bandwidth: {value: offset * 2}, width: {value: width}};
+  const at = f ? (v) => middle(quantity(v) ? f(v) : v) : middle;
+  // The positions follow a grid of cells nested in the chart, if it was scaled; see gridFrames.
+  const k = () => record.warp?.k ?? 1;
+  const properties = {
+    apply: {value: (v) => (record.warp ? record.warp(at(v)) : at(v))},
+    bandwidth: {get: () => offset * 2 * k()},
+    width: {value: (v) => width(v) * k()},
+  };
   if (scale.invert) properties.invert = {value: (p) => scale.invert(p)};
   return Object.defineProperties(record, properties);
 }
@@ -520,7 +527,7 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
     const [left, right] = extent(X, X1, "x", width, [parent?.left, parent?.right]);
     const [top, bottom] = extent(Y, Y1, "y", height, [parent?.top, parent?.bottom]);
     // A cell of a grid has an extent, such as a band; a glyph at a point labels its own axes.
-    return {box: [left, right, top, bottom], tx, ty, cell: !!(X1 || Y1), parent, origin};
+    return {box: [left, right, top, bottom], tx, ty, cell: !!(X1 || Y1), parent, origin, scales};
   });
   // Facets in a grid: the bottom (or top) cell of each column labels x, and the left (or right)
   // cell of each row labels y, by the anchor of the axis, compared in the coordinates of the root,
@@ -571,10 +578,132 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
       const [ox, oy] = frame.origin;
       const {parent} = frame;
       const within = parent ? [parent.left + ox, parent.right + ox, parent.top + oy, parent.bottom + oy] : null;
-      Object.defineProperty(nested, "cell", {value: {box: absolute(frame), x: ox + tx, y: oy + ty, within}});
+      const {scales, origin} = frame;
+      Object.defineProperty(nested, "cell", {
+        value: {box: absolute(frame), x: ox + tx, y: oy + ty, within, scales, origin},
+      });
     }
     return nested;
   });
+}
+
+// The frames of a chart nested in a grid of cells, such as facets, laid out with room kept at the
+// edges of the grid for what's drawn past it: what the axes of the cells along an edge need past
+// them, given by need for the frames of the cells, and the legends of the chart, measured by
+// legends for the left of the grid and its height, as {top, right}: the height of the rows at the
+// top, with their gaps, and the width of the columns on the right. The cells form one grid, in the
+// coordinates of the root, even if drawn under different parents, such as the rows of a marginal
+// histogram, so that its rows and columns stay aligned. On each side, the room is what's drawn plus
+// 3px, past the room the grid already has to the edge of the parents' frames, such as the outer
+// padding of their bands; the cells and the gaps between them are scaled into what's left, keeping
+// their proportions, such as the widths of flex bands, and the padding between them. As the ticks
+// and the legends depend on the size of the cells, they're measured again until they hold, up to
+// three times, the room only growing, as fewer ticks in narrower cells may need less, such as "0"
+// rather than "0.0". Like the legends of a chart, those of the grid are at the top of its parents'
+// frames, 3px under it, from the left of the grid, above the axes at the top, else on the right of
+// the grid, past its axes there, from the top of the topmost cells: where, in the coordinates of
+// the root, is returned with the frames, for the legends to draw once for the whole grid. The
+// positions of the parents follow the grid, so that their axes stay on the cells. A chart whose
+// data is shared by its cells, given as an array rather than a function, is drawn in one frame for
+// all of them, so it has no legends, and its parents keep their positions.
+export function gridFrames(boxes, {need, legends, shared}) {
+  const cells = boxes.filter((frame) => frame.cell);
+  if (!cells.length) return {frames: boxes};
+  const B = cells.map(({cell}) => cell.box);
+  const W = cells.map(({cell}) => cell.within).filter((w) => w);
+  const [gl, gr, gt, gb] = [
+    Math.min(...B.map((b) => b[0])),
+    Math.max(...B.map((b) => b[1])),
+    Math.min(...B.map((b) => b[2])),
+    Math.max(...B.map((b) => b[3])),
+  ];
+  // The room the grid already has to the edges of its parents, such as their outer padding.
+  const free = W.length
+    ? {
+        left: gl - Math.min(...W.map((w) => w[0])),
+        right: Math.max(...W.map((w) => w[1])) - gr,
+        top: gt - Math.min(...W.map((w) => w[2])),
+        bottom: Math.max(...W.map((w) => w[3])) - gb,
+      }
+    : {left: 0, right: 0, top: 0, bottom: 0};
+  const sides = ["left", "right", "top", "bottom"];
+  let reserve = {left: 0, right: 0, top: 0, bottom: 0};
+  // The grid inside the room kept at its edges.
+  const inner = () => [gl + reserve.left, gr - reserve.right, gt + reserve.top, gb - reserve.bottom];
+  const layout = () => {
+    if (sides.every((side) => !reserve[side])) return boxes;
+    const [nl, nr, nt, nb] = inner();
+    const sx = gr > gl ? (nr - nl) / (gr - gl) : 1;
+    const sy = gb > gt ? (nb - nt) / (gb - gt) : 1;
+    return boxes.map((frame) => {
+      if (!frame.cell) return frame;
+      const {
+        box: [l, r, t, b],
+        x,
+        y,
+      } = frame.cell;
+      return {
+        ...frame,
+        left: nl + (l - gl) * sx - x,
+        right: nl + (r - gl) * sx - x,
+        top: nt + (t - gt) * sy - y,
+        bottom: nt + (b - gt) * sy - y,
+      };
+    });
+  };
+  const measure = (frames) => {
+    const [nl, , nt, nb] = inner();
+    const legend = shared ? {top: 0, right: 0} : legends(nl, nb - nt);
+    return {need: need?.(frames) ?? {left: 0, right: 0, top: 0, bottom: 0}, legend};
+  };
+  let frames = layout();
+  let measured = measure(frames);
+  for (let pass = 0; pass < 3; pass++) {
+    const {need: n, legend} = measured;
+    const room = {
+      left: n.left ? n.left + 3 : 0,
+      bottom: n.bottom ? n.bottom + 3 : 0,
+      // The legends at the top include their gaps, 3px over them and 10 under them.
+      top: legend.top ? legend.top + n.top : n.top ? n.top + 3 : 0,
+      right: n.right || legend.right ? n.right + (legend.right ? 12 + legend.right : 0) + 3 : 0,
+    };
+    const next = Object.fromEntries(
+      sides.map((side) => [side, Math.max(reserve[side], room[side] ? Math.max(0, room[side] - free[side]) : 0)]),
+    );
+    if (sides.every((side) => Math.abs(next[side] - reserve[side]) < 1e-9)) break;
+    reserve = next;
+    frames = layout();
+    measured = measure(frames);
+  }
+  // The parents' positions follow the grid, so that their axes and annotations stay on the cells:
+  // their records map through it, from the coordinates of each parent.
+  if (shared) return {frames};
+  if (frames !== boxes) {
+    const [nl, nr, nt, nb] = inner();
+    const sx = gr > gl ? (nr - nl) / (gr - gl) : 1;
+    const sy = gb > gt ? (nb - nt) / (gb - gt) : 1;
+    for (const {cell} of cells) {
+      const {x: rx, y: ry} = cell.scales ?? {};
+      const [ox, oy] = cell.origin;
+      if (rx) warp(rx, sx, nl + (ox - gl) * sx - ox);
+      if (ry) warp(ry, sy, nt + (oy - gt) * sy - oy);
+    }
+  }
+  // The legends are drawn by the first cell with rows, less the origin of its coordinates.
+  const index = boxes.findIndex((frame) => frame.cell && !frame.empty);
+  if (index < 0) return {frames};
+  const {x: ox, y: oy} = boxes[index].cell;
+  const [nl, nr, nt, nb] = inner();
+  const legendAt = {index, origin: [ox, oy], left: nl, top: gt - free.top + 3, x: nr + measured.need.right + 12};
+  return {frames, legendAt: {...legendAt, y0: nt, y1: nb}};
+}
+
+// Maps the positions of a recorded position scale linearly, by k * p + b, after it's applied, such
+// as those of a parent of a grid of cells scaled to keep room at its edges.
+function warp(record, k, b) {
+  const f = (p) => k * p + b;
+  f.k = k;
+  Object.defineProperty(record, "warp", {value: f, configurable: true});
 }
 
 // A band scale whose bands are proportional to weights, like G2's flex for shareSize: each
