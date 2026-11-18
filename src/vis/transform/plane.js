@@ -171,8 +171,10 @@ export function plane(
   marginBottom ??= margin ?? (nested ? 0 : room.bottom || 20);
   marginLeft ??= margin ?? (nested ? 0 : room.left || 20);
   if (!nested) width ??= renderer._props.auto?.width ? 640 : renderer._props.width;
-  marginTop ??=
-    margin ?? (nested ? 0 : (room.top || (hasY ? 10 : 0)) + topLegends(data, colors, options, width - 3 - marginLeft));
+  // The legends at the top add to the top margin, like cm.polar's, unless it's given itself.
+  const legendRoom = nested || marginTop !== undefined ? 0 : topLegends(data, colors, options, width - 3 - marginLeft);
+  marginTop ??= margin ?? (nested ? 0 : room.top || (hasY ? 10 : 0));
+  marginTop += legendRoom;
 
   // Values grow upward, but categories in bands go down from the top, like Plot's ordinal y, unless
   // the scale is reversed. An independent y points its own way in each context.

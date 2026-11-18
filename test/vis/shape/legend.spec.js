@@ -404,3 +404,41 @@ test("cm.polar starts its legends at the top at its left margin, as its top marg
   assert.ok(swatches.every((r) => +r.getAttribute("x") >= 40));
   assert.ok(swatches.every((r) => +r.getAttribute("y") + 10 <= cy - outerRadius));
 });
+
+test("cm.legend fits the columns of swatches on the right, and the columns of legends, within the chart", () => {
+  const renderer = cm.svg({width: 400, height: 160});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(d3.range(12).map((i) => ({k: `Category number ${i}`, v: i})))
+    .transform(cm.encode, {x: "v", y: "v", fill: "k", fillOpacity: "v"})
+    .transform(cm.plane, {marginRight: 120, x: {axis: null}, y: {axis: null}})
+    .add(cm.legend, {anchor: "right"});
+  root.render();
+  const node = renderer.node();
+  // The two columns of swatches share the 105px left; with no room for a third column, the ramp is
+  // under them.
+  for (const r of rects(node)) assert.ok(+r.getAttribute("x") + +r.getAttribute("width") <= 400 + 1e-6);
+  for (const t of node.querySelectorAll("text")) {
+    if (t.getAttribute("text-anchor") === "end" || t.getAttribute("text-anchor") === "middle") continue;
+    assert.ok(+t.getAttribute("x") + t.textContent.length * 6 <= 400 + 1e-6, t.textContent);
+  }
+});
+
+test("cm.plane adds the legends at the top to a uniform margin, like cm.polar, unless marginTop is given", () => {
+  const frameOf = (options) => {
+    const renderer = cm.svg({width: 640, height: 400});
+    const root = cm.flow().renderer(renderer);
+    const [context] = root
+      .data(d3.range(30).map((i) => ({k: `k${i}`, v: i})))
+      .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+      .transform(cm.plane, {fill: {legend: true}, ...options})._values;
+    root.render();
+    const bottom = Math.max(...rects(renderer.node()).map((r) => +r.getAttribute("y") + +r.getAttribute("height")));
+    return [context.frame.top, bottom];
+  };
+  const [top, legendBottom] = frameOf({margin: 30});
+  assert.ok(top > legendBottom);
+  assert.ok(top > 30);
+  // A given marginTop comes first.
+  assert.strictEqual(frameOf({margin: 30, marginTop: 30})[0], 30);
+});

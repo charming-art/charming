@@ -43,11 +43,14 @@ function swatches(key, scale, options, maxWidth, maxHeight = Infinity) {
   const {domain, range} = scale;
   const color = (d) => range[domain.indexOf(d) % range.length];
   const formatValue = typeof options.tickFormat === "function" ? options.tickFormat : (d) => `${d}`;
-  const format = (d) => fit(formatValue(d), maxWidth - swatchSize - 4);
   const label = labelOf(scale, options, maxWidth);
   const top = label == null ? 0 : lineHeight;
   const fitting = Math.max(1, Math.floor((maxHeight - top) / lineHeight));
-  const rows = Math.min(fitting, Math.ceil(domain.length / Math.ceil(domain.length / fitting))) || 1;
+  const columns = Math.max(1, Math.ceil(domain.length / fitting));
+  const rows = Math.max(1, Math.ceil(domain.length / columns));
+  // The columns share the width, each label shortened to fit its column.
+  const share = (maxWidth - 12 * (columns - 1)) / columns;
+  const format = (d) => fit(formatValue(d), share - swatchSize - 4);
   const items = [];
   let x = 0;
   for (let i = 0; i < domain.length; i += rows) {
@@ -56,7 +59,7 @@ function swatches(key, scale, options, maxWidth, maxHeight = Infinity) {
     x += swatchSize + 4 + Math.max(...column.map((d) => widthOf(format(d)))) + 12;
   }
   return {
-    width: Math.max(titleWidth(label), x - 12),
+    width: Math.max(titleWidth(label), x - 12, 0),
     height: top + Math.min(rows, domain.length) * lineHeight,
     draw(flow, x0, y0) {
       if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
@@ -357,20 +360,6 @@ function rowsOf(blocks, maxWidth) {
   return [placed, placed.length ? y + height : 0];
 }
 
-// Lays out the legends on the right: one under another in a column while they fit the height,
-// else from the top of a new column right of the widest of the column.
-function columnsOf(blocks, maxHeight) {
-  const placed = [];
-  let [x, y, width] = [0, 0, 0];
-  for (const block of blocks) {
-    if (y > 0 && y + block.height > maxHeight) [x, y, width] = [x + width + legendSpace, 0, 0];
-    placed.push({block, x, y});
-    y += block.height + legendGap;
-    width = Math.max(width, block.width);
-  }
-  return placed;
-}
-
 // The blocks of the legends at the top of a chart, given the scales, the options of their legends
 // by name, and the width from the left of the plot to the right of the chart.
 function topBlocks(entries, scales, maxWidth) {
@@ -439,10 +428,22 @@ export function legend(flow, value, {scales = {}, frame, guides, options = {}} =
   const x0 = right + 12;
   const y0 = polar ? frame.cy - frame.outerRadius : (frame?.top ?? 3);
   const y1 = polar ? frame.cy + frame.outerRadius : (frame?.bottom ?? flow.renderer()._props.height);
-  const blocks = entries
-    .filter(([, {anchor}]) => anchor === "right")
-    .map(([key, options]) => legendOf(key, scales[key], options, Math.max(0, width - 3 - x0), "right", y1 - y0));
-  for (const {block, x, y} of columnsOf(blocks, y1 - y0)) block.draw(flow, x0 + x, y0 + y);
+  // On the right, one under another while they fit the height, else from the top of a new column
+  // right of the widest of the column, if it fits the width left there; otherwise under the others,
+  // as the right margin leaves no room for another column.
+  let [x, y, columnWidth] = [0, 0, 0];
+  for (const [key, options] of entries.filter(([, {anchor}]) => anchor === "right")) {
+    const blockAt = (x) => legendOf(key, scales[key], options, Math.max(0, width - 3 - x0 - x), "right", y1 - y0);
+    let block = blockAt(x);
+    if (y > 0 && y + block.height > y1 - y0) {
+      const next = x + columnWidth + legendSpace;
+      const moved = blockAt(next);
+      if (x0 + next + moved.width <= width - 3) [x, y, columnWidth, block] = [next, 0, 0, moved];
+    }
+    block.draw(flow, x0 + x, y0 + y);
+    y += block.height + legendGap;
+    columnWidth = Math.max(columnWidth, block.width);
+  }
 }
 
 // Legends receive their options as they are, such as a tickFormat function, not per datum.
