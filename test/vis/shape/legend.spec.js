@@ -3,7 +3,11 @@ import * as d3 from "d3";
 import {test} from "vitest";
 import "../../install-canvas-mock.js";
 import * as cm from "../../../src/index.js";
+import {widthOf} from "../../../src/vis/shape/axisUtils.js";
 import {assertInDelta} from "../../helpers.js";
+
+// The width of a swatch with its label, measured like Plot's, by the widths of its characters.
+const swatch = (label) => 10 + 4 + widthOf(label);
 
 // Renders a chart of the channels with cm.legend and returns the renderer's node.
 function legend(channels, options, plane = {}, width = 400) {
@@ -85,9 +89,11 @@ test("cm.legend lays out its legends at the top by default, horizontal, from the
     xs,
     xs.slice().sort((a, b) => a - b),
   );
-  // The size legend fits beside them, 20px past their 84px: three swatches of 20 with gaps of 12.
+  // The size legend fits beside them, 20px past their three swatches, with gaps of 12.
+  const row = swatch("a") + 12 + swatch("b") + 12 + swatch("c");
   const sizeTitle = Array.from(node.querySelectorAll("text")).find((t) => t.textContent === "v");
-  assert.deepStrictEqual([+sizeTitle.getAttribute("x"), +sizeTitle.getAttribute("y")], [20 + 84 + 20, 3]);
+  assertInDelta(+sizeTitle.getAttribute("x"), 20 + row + 20);
+  assert.strictEqual(+sizeTitle.getAttribute("y"), 3);
   // Its circles are side by side, centered on one line, like Vega-Lite's, each labeled at its right,
   // centered on the line too.
   const circles = Array.from(node.querySelectorAll("circle"), (c) => ({
@@ -95,7 +101,7 @@ test("cm.legend lays out its legends at the top by default, horizontal, from the
     cy: +c.getAttribute("cy"),
     r: +c.getAttribute("r"),
   }));
-  assert.ok(circles.every(({cx, r}) => cx - r >= 20 + 84 + 20));
+  assert.ok(circles.every(({cx, r}) => cx - r >= 20 + row + 20 - 1e-6));
   assert.strictEqual(new Set(circles.map(({cy}) => cy)).size, 1);
   const labels = Array.from(node.querySelectorAll("text")).filter((t) => t.getAttribute("y") === `${circles[0].cy}`);
   assert.strictEqual(labels.length, circles.length);
@@ -106,7 +112,7 @@ test("cm.legend lays out its legends at the top by default, horizontal, from the
 });
 
 test("cm.legend starts a new row at the top for a legend that doesn't fit beside the others", () => {
-  // From 300, the 97px left hold the swatches, 84px, but not the sizes beside them.
+  // From 300, the 97px left hold the swatches, about 84px, but not the sizes beside them.
   const node = legend({fill: "k", r: "v"}, {}, {marginLeft: 300});
   const sizeTitle = Array.from(node.querySelectorAll("text")).find((t) => t.textContent === "v");
   // Under the swatches, a title and a row of 14 each, by a gap of 10.
@@ -117,36 +123,31 @@ test("cm.legend starts a new column on the right for a legend that doesn't fit u
   // The frame is 10 to 70 tall: the swatches, 56px, fit, but not the sizes under them.
   const node = legend({fill: "k", r: "v"}, {anchor: "right"}, {marginBottom: 130});
   const sizeTitle = Array.from(node.querySelectorAll("text")).find((t) => t.textContent === "v");
-  // Right of the swatches, 20px wide, by a gap of 20, from the top of the frame.
-  assert.deepStrictEqual([+sizeTitle.getAttribute("x"), +sizeTitle.getAttribute("y")], [400 - 150 + 12 + 20 + 20, 10]);
+  // Right of the swatches, as wide as the widest, by a gap of 20, from the top of the frame.
+  assertInDelta(+sizeTitle.getAttribute("x"), 400 - 150 + 12 + swatch("b") + 20);
+  assert.strictEqual(+sizeTitle.getAttribute("y"), 10);
 });
 
 test("cm.legend wraps the swatches of a legend on the right into columns past the height of the frame", () => {
-  // The frame is 10 to 40 tall: under the title, one swatch per column, 20px wide, gaps of 12.
+  // The frame is 10 to 40 tall: under the title, one swatch per column, gaps of 12.
   const node = legend({fill: "k"}, {anchor: "right"}, {marginBottom: 160});
   const x0 = 400 - 150 + 12;
-  assert.deepStrictEqual(
-    rects(node).map((r) => [+r.getAttribute("x"), +r.getAttribute("y")]),
-    [
-      [x0, 10 + 14 + 1],
-      [x0 + 32, 10 + 14 + 1],
-      [x0 + 64, 10 + 14 + 1],
-    ],
-  );
+  const positions = rects(node).map((r) => [+r.getAttribute("x"), +r.getAttribute("y")]);
+  [x0, x0 + swatch("a") + 12, x0 + swatch("a") + 12 + swatch("b") + 12].forEach((x, i) => {
+    assertInDelta(positions[i][0], x);
+    assert.strictEqual(positions[i][1], 10 + 14 + 1);
+  });
 });
 
 test("cm.legend wraps the swatches of a legend at the top past the width of the chart", () => {
   const node = legend({fill: "k"}, {}, {marginLeft: 340});
-  // From 340, the 57px left before the right edge hold two swatches with their labels, 20px each,
-  // with a gap of 12; the third wraps to the next row.
-  const swatches = rects(node);
+  // From 340, the 57px left before the right edge hold two swatches with their labels, about 20px
+  // each, with a gap of 12; the third wraps to the next row.
+  const positions = rects(node).map((r) => [+r.getAttribute("x"), +r.getAttribute("y")]);
+  assertInDelta(positions[1][0], 340 + swatch("a") + 12);
   assert.deepStrictEqual(
-    swatches.map((r) => [+r.getAttribute("x"), +r.getAttribute("y")]),
-    [
-      [340, 3 + 14 + 1],
-      [340 + 20 + 12, 3 + 14 + 1],
-      [340, 3 + 28 + 1],
-    ],
+    [positions[0], positions[1][1], positions[2]],
+    [[340, 3 + 14 + 1], 3 + 14 + 1, [340, 3 + 28 + 1]],
   );
 });
 
@@ -217,14 +218,16 @@ test("cm.plane gives room to the legends at the top, and turns the title of y un
   const [frame, title] = chart({legend: true});
   assert.strictEqual(frame.top, 3 + 14 + 14 + 10 + 10);
   assert.ok(frame.top !== level.top);
-  // The title of y is turned beside its tick labels, 24 more, ending at the top of the plot.
-  assert.strictEqual(frame.left, 46 + 24);
+  // The title of y is turned beside its tick labels, 6 + 10 more, ending at the top of the plot.
+  assertInDelta(frame.left, level.left + 16);
   assert.strictEqual(title.textContent, "v →");
   assert.strictEqual(title.getAttribute("text-anchor"), "end");
   assert.strictEqual(+title.getAttribute("y"), frame.top);
-  // A legend on the right leaves the top and the title as they are.
+  // A legend on the right leaves the top and the title as they are, and takes a right margin of 12,
+  // its width, as wide as its widest swatch, and 3px.
   const [right] = chart({legend: "right"});
-  assert.deepStrictEqual(right, level);
+  assert.deepStrictEqual([right.top, right.left, right.bottom], [level.top, level.left, level.bottom]);
+  assertInDelta(400 - right.right, 12 + Math.max(swatch("a"), swatch("b")) + 3);
 });
 
 test("cm.legend draws nothing in charts nested in a chart, nor without scales to show", () => {
@@ -312,7 +315,7 @@ test("cm.legend shortens swatch labels that are wider than the margin", () => {
   const node = margin([{v: 1, k: "Transportation and Utilities"}], {fill: (d) => d.k}, 100);
   const label = Array.from(node.querySelectorAll("text")).find((t) => t.textContent.startsWith("Transp"));
   assert.ok(label.textContent.endsWith("…"));
-  assert.ok(+label.getAttribute("x") + label.textContent.length * 6 <= 400);
+  assert.ok(+label.getAttribute("x") + widthOf(label.textContent) <= 400 + 1e-6);
 });
 
 test("cm.plane draws the legends of the scales given legend true, with their options", () => {

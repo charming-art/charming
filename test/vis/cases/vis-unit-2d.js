@@ -24,7 +24,7 @@ export const visUnit2d = withSVG(async () => {
         })
         .transform(cm.spreadX, {domain: ["First", "Second", "Third", "Crew"]})
         .transform(cm.spreadY, {domain: ["Female", "Male"]})
-        .transform(cm.plane, {marginLeft: 60, x: {label: null}, y: {label: null}})
+        .transform(cm.plane, {x: {label: null}, y: {label: null}})
         .append(cm.g)
         .data(([, , rows]) => rows)
         .transform(cm.encode, {fill: "Survived"})

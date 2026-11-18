@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import {test} from "vitest";
 import "../../install-canvas-mock.js";
 import * as cm from "../../../src/index.js";
+import {widthOf} from "../../../src/vis/shape/axisUtils.js";
 import {assertInDelta, probe} from "../../helpers.js";
 
 function values(data, channels, options) {
@@ -15,9 +16,13 @@ function values(data, channels, options) {
 
 test("cm.plane maps x and y with y up and the default margins of a chart", () => {
   const {x, y} = values([0, 1], {x: (d) => d, y: (d) => d});
-  // The default margins leave room for the tick labels of axes without titles: 46 left, 24 bottom.
-  assert.deepStrictEqual(x, [46, 620]);
-  assert.deepStrictEqual(y, [376, 10]);
+  // The margins fit what the axes draw, without titles: left of y, the tick 6, the padding 3 and the
+  // widest tick label, "0.4", and 3px; under x, the same 9, a label 10 and 3px. Over y, half a
+  // label and 3px, and right of x, half its last label and 3px, are under the floors, 10 and 20.
+  const left = 3 + 6 + 3 + widthOf("0.4");
+  assertInDelta(x[0], left);
+  assert.strictEqual(x[1], 620);
+  assert.deepStrictEqual(y, [400 - 3 - 6 - 3 - 10, 10]);
 });
 
 test("cm.plane uses margin as the default of each side", () => {
@@ -28,29 +33,34 @@ test("cm.plane uses margin as the default of each side", () => {
 
 test("cm.plane takes the domain and the direction of positions in scales", () => {
   const {x, y} = values([0, 1], {x: (d) => d, y: (d) => d}, {x: {domain: [0, 2]}, y: {reverse: false}});
-  assert.deepStrictEqual(x, [46, 333]);
-  assert.deepStrictEqual(y, [10, 376]);
+  const left = 3 + 6 + 3 + widthOf("0.4");
+  assertInDelta(x[0], left);
+  assertInDelta(x[1], (left + 620) / 2);
+  assert.deepStrictEqual(y, [10, 378]);
 });
 
 test("cm.plane places the bands of cm.spreadX like a band scale in the chart area", () => {
   const [shape, calls] = probe();
   const root = cm.flow().renderer(cm.canvas({width: 640, height: 400, dpi: 1}));
-  root
+  const flow = root
     .data([
       {letter: "B", frequency: 2},
       {letter: "A", frequency: 1},
     ])
     .transform(cm.encode, {x: "letter", y: "frequency"})
     .transform(cm.spreadX)
-    .transform(cm.plane)
-    .add(shape);
+    .transform(cm.plane);
+  const [{frame}] = flow._values;
+  flow.add(shape);
   root.render();
   const [{x, y, y1}] = calls;
-  // The titles take a bottom margin of 40 and a top margin of 24, for y's level over the axis.
-  const band = d3.scaleBand(["A", "B"], [46, 620]).padding(0.1);
+  // The titles take a top margin of 24, for y's level over the axis, and a bottom one of 38, for the
+  // tick labels and the title of x, and 3px.
+  assert.deepStrictEqual([frame.top, 400 - frame.bottom], [24, 3 + 6 + 3 + 10 + 6 + 10]);
+  const band = d3.scaleBand(["A", "B"], [frame.left, 620]).padding(0.1);
   ["B", "A"].forEach((d, i) => assertInDelta(x[i], band(d)));
-  assert.deepStrictEqual(y, [24, 192]);
-  assert.deepStrictEqual(y1, [360, 360]);
+  assert.deepStrictEqual(y, [24, (24 + frame.bottom) / 2]);
+  assert.deepStrictEqual(y1, [frame.bottom, frame.bottom]);
 });
 
 function encoded(data, channels, options) {
@@ -127,10 +137,10 @@ test("cm.plane records the resolved scales and drops the hints", () => {
     paddingInner: 0.1,
     paddingOuter: 0.1,
     align: 0.5,
-    range: [46, 620],
+    range: [context.frame.left, 620],
     label: "genre",
   });
-  assert.deepStrictEqual(context.scales.y, {type: "linear", domain: [0, 275], range: [360, 24], label: "sold"});
+  assert.deepStrictEqual(context.scales.y, {type: "linear", domain: [0, 275], range: [362, 24], label: "sold"});
 });
 
 test("cm.plane uses the domain and type hinted for x and y, and the options of scales override them", () => {
@@ -219,11 +229,11 @@ function planed(renderer, data, channels, options) {
   return root.data(data).transform(cm.encode, channels).transform(cm.plane, options)._values[0];
 }
 
-test("cm.plane sizes a renderer without a size like Plot: 640 by 70 without y, with x in the middle", () => {
+test("cm.plane sizes a renderer without a size like Plot: 640 by 68 without y, with x in the middle", () => {
   const renderer = cm.svg();
   const context = planed(renderer, [{v: 1}, {v: 2}, {v: 3}], {x: "v"});
-  // A frame of 30px, like Plot's, and a bottom margin of 40 for the title of x.
-  assert.deepStrictEqual([renderer._props.width, renderer._props.height], [640, 70]);
+  // A frame of 30px, like Plot's, and a bottom margin of 38 for the tick labels and title of x.
+  assert.deepStrictEqual([renderer._props.width, renderer._props.height], [640, 68]);
   assert.deepStrictEqual(context.frame, {top: 0, right: 620, bottom: 30, left: 20});
   assert.deepStrictEqual(context.value.x, [20, 320, 620]);
   assert.deepStrictEqual(context.value.y, [15, 15, 15]);
@@ -238,8 +248,9 @@ test("cm.plane sizes a renderer without a size like Plot: 640 by 400 with a cont
 test("cm.plane sizes a renderer without a size like Plot: 20px per category of y", () => {
   const renderer = cm.svg();
   planed(renderer, ["a", "b", "c"], {x: 1, y: (d) => d});
-  // A frame of 20px per category plus 10, with the margins of untitled axes, 10 and 24.
-  assert.strictEqual(renderer._props.height, 3 * 20 + 10 + 10 + 24);
+  // A frame of 20px per category plus 10, with the margins of untitled axes: the floor of 10 over y,
+  // and 22 under x, for its tick labels.
+  assert.strictEqual(renderer._props.height, 3 * 20 + 10 + 10 + 22);
 });
 
 test("cm.plane keeps the given size of a renderer, and resizes it for its width and height options", () => {
@@ -272,10 +283,10 @@ test("cm.plane centers y for a typed array x", () => {
 test("cm.plane sizes the chart with the type and domain of the scale of y", () => {
   const ordinal = cm.svg();
   planed(ordinal, [1, 2], {x: (d) => d, y: (d) => d}, {y: {type: "ordinal"}});
-  assert.strictEqual(ordinal._props.height, 2 * 20 + 10 + 10 + 24);
+  assert.strictEqual(ordinal._props.height, 2 * 20 + 10 + 10 + 22);
   const domain = cm.svg();
   planed(domain, ["a", "b"], {x: 1, y: (d) => d}, {y: {domain: ["a", "b", "c", "d"]}});
-  assert.strictEqual(domain._props.height, 4 * 20 + 10 + 10 + 24);
+  assert.strictEqual(domain._props.height, 4 * 20 + 10 + 10 + 22);
 });
 
 test("cm.plane places the bands of cm.spreadY from the top, unless the scale of y is reversed", () => {
@@ -287,11 +298,11 @@ test("cm.plane places the bands of cm.spreadY from the top, unless the scale of 
   const flow = root.data(data).transform(cm.encode, {x: "frequency", y: "letter"}).transform(cm.spreadY);
   const [context] = flow.transform(cm.plane)._values;
   // Like Plot's, the title of a discrete y is turned at its middle, leaving the top to half a label.
-  const band = d3.scaleBand(["A", "B"], [10, 360]).padding(0.1);
+  const band = d3.scaleBand(["A", "B"], [10, 362]).padding(0.1);
   ["B", "A"].forEach((d, i) => assertInDelta(context.value.y[i], band(d)));
   assert.deepStrictEqual(context.scales.y.type, "band");
   assert.deepStrictEqual(context.scales.y.domain, ["A", "B"]);
-  assert.deepStrictEqual(context.scales.y.range, [10, 360]);
+  assert.deepStrictEqual(context.scales.y.range, [10, 362]);
   const [reversed] = flow.transform(cm.plane, {y: {reverse: true}})._values;
   assert.ok(reversed.value.y[1] > reversed.value.y[0]);
 });
@@ -587,7 +598,8 @@ test("cm.plane points each independent y its own way, and leaves room for the po
   assert.deepStrictEqual(band2.scales.y.range, band.scales.y.range);
   // Only the second branch has y, and the chart still has the margins of a y axis.
   const [, only] = plane((flow) => flow.transform(cm.encode, {}), values);
-  assert.deepStrictEqual([only.frame.top, only.frame.left], [24, 46]);
+  assert.strictEqual(only.frame.top, 24);
+  assert.ok(only.frame.left > 20);
 });
 
 test("cm.plane shares a position's scale with the contexts that give it the same name", () => {
@@ -982,31 +994,71 @@ test("cm.plane records the guides of its scales from their options, in context.g
   assert.deepStrictEqual(defaults.guides.legends, {});
 });
 
-test("cm.plane leaves the default margins of an axis on each side with one", () => {
+test("cm.plane fits the margins it isn't given to what its axes draw on each side, and 3px", () => {
   const frame = (options) => {
     const flow = cm
       .flow()
       .renderer(cm.svg({width: 400, height: 300}))
-      .data([{v: 1}])
-      .transform(cm.encode, {x: "v", y: "v"});
-    const [{frame}] = flow.transform(cm.plane, options)._values;
-    return [frame.top, 400 - frame.right, 300 - frame.bottom, frame.left];
+      .data([{v: 0}, {v: 1}])
+      .transform(cm.encode, {x: "v", y: (d) => d.v * 100});
+    const plane = {
+      ...options,
+      x: {domain: [0, 1], ticks: [0, 1], ...options?.x},
+      y: {domain: [0, 100], ticks: [0, 100], label: "Y", ...options?.y},
+    };
+    const [{frame}] = flow.transform(cm.plane, plane)._values;
+    return [frame.top, 400 - frame.right, 300 - frame.bottom, frame.left].map((d) => Math.round(d * 10) / 10);
   };
-  // Under x, 24 for its tick labels and 16 for its title; beside y, 46 for its tick labels, and
-  // over it, 24 for its title, or a row of 16 shared with the title of an axis of x at the top.
-  assert.deepStrictEqual(frame(), [24, 20, 40, 46]);
-  assert.deepStrictEqual(frame({x: {axis: "top"}, y: {axis: "right"}}), [40, 46, 20, 20]);
-  assert.deepStrictEqual(frame({x: {axis: "both"}, y: {axis: "both"}}), [40, 46, 40, 46]);
-  // A title turned beside y takes 24 more beside it, and none over it.
-  assert.deepStrictEqual(frame({y: {labelAnchor: "center"}}), [10, 20, 40, 70]);
+  // Beside y, the tick 6, the padding 3 and the widest label, "100"; under or over x, the same 9
+  // and a label 10, and its title, 6 + 10; over y, its level title past half a label: 5 + 6 + 10.
+  const y = 3 + 6 + 3 + Math.round(widthOf("100") * 10) / 10;
+  assert.deepStrictEqual(frame(), [24, 20, 38, y]);
+  // A side without an axis has a floor: 10 over y, 20 elsewhere, past the ends of the labels.
+  assert.deepStrictEqual(frame({x: {axis: "top"}, y: {axis: "right"}}), [38, y, 20, 20]);
+  // With both, only the first side of x has a title; the level title of y, over the top axis of x,
+  // still takes a row over its tick labels.
+  assert.deepStrictEqual(frame({x: {axis: "both"}, y: {axis: "both"}}), [38, y, 38, y]);
+  assert.deepStrictEqual(frame({x: {axis: "both"}, y: {axis: "both", label: null}}), [22, y, 38, y]);
+  // A title turned beside y takes 6 + 10 more beside it, and none over it.
+  assert.deepStrictEqual(frame({y: {labelAnchor: "center"}}), [10, 20, 38, y + 16]);
   // A level title at the bottom shares the row of the title of x, or takes one under its labels.
-  assert.deepStrictEqual(frame({y: {labelAnchor: "bottom"}}), [10, 20, 40, 46]);
-  assert.deepStrictEqual(frame({x: {label: null}, y: {labelAnchor: "bottom"}}), [10, 20, 40, 46]);
+  assert.deepStrictEqual(frame({y: {labelAnchor: "bottom"}}), [10, 20, 38, y]);
+  assert.deepStrictEqual(frame({x: {label: null}, y: {labelAnchor: "bottom"}}), [10, 20, 38, y]);
   // An axis without a title takes the room of its tick labels.
-  assert.deepStrictEqual(frame({x: {label: null}, y: {label: null}}), [10, 20, 24, 46]);
+  assert.deepStrictEqual(frame({x: {label: null}, y: {label: null}}), [10, 20, 22, y]);
   assert.deepStrictEqual(frame({x: {axis: null}, y: {axis: null}}), [10, 20, 20, 20]);
   // Given margins come first.
-  assert.deepStrictEqual(frame({marginLeft: 5, y: {axis: null}}), [10, 20, 40, 5]);
+  assert.deepStrictEqual(frame({marginLeft: 5, y: {axis: null}}), [10, 20, 38, 5]);
+  // Wider tick labels take more room.
+  assert.deepStrictEqual(
+    frame({y: {tickFormat: (d) => `${d},000,000`}})[3],
+    3 + 6 + 3 + Math.round(widthOf("100,000,000") * 10) / 10,
+  );
+});
+
+test("cm.plane fits its margins to the ends of the tick labels of x, rotated tick labels, and legends", () => {
+  const frame = (x, plane = {}, data = [{v: 0}, {v: 1}]) => {
+    const flow = cm
+      .flow()
+      .renderer(cm.svg({width: 400, height: 300}))
+      .data(data)
+      .transform(cm.encode, {x: "v", ...plane.channels});
+    const [{frame}] = flow.transform(cm.plane, {x: {domain: [0, 1], ...x}, ...plane.options})._values;
+    return [frame.top, 400 - frame.right, 300 - frame.bottom, frame.left];
+  };
+  // Half the last tick label of x past the right of the plot, and 3px, past the floor of 20.
+  const [, right] = frame({ticks: [1], tickFormat: () => "a very long label"});
+  assertInDelta(right, widthOf("a very long label") / 2 + 3);
+  // Labels turned by 45° reach under the plot by their rotated height.
+  const [, , bottom] = frame({ticks: [0.5], tickFormat: () => "a long label", tickRotate: -45, label: null});
+  const r = Math.PI / 4;
+  assertInDelta(bottom, 3 + 6 + 3 + 4 * Math.cos(r) + widthOf("a long label") * Math.sin(r) + 10 * Math.cos(r));
+  // A legend on the right takes 12, its width and 3px.
+  const [, legend] = frame({}, {channels: {fill: "k"}, options: {fill: {legend: "right"}}}, [
+    {v: 0, k: "short"},
+    {v: 1, k: "a longer one"},
+  ]);
+  assertInDelta(legend, 12 + Math.max(widthOf("k"), 10 + 4 + widthOf("a longer one")) + 3);
 });
 
 test("cm.plane sizes an auto height with the top and bottom margins of its axes", () => {
@@ -1016,14 +1068,14 @@ test("cm.plane sizes an auto height with the top and bottom margins of its axes"
     return renderer._props.height;
   };
   const dots = [{v: 1}, {v: 2}];
-  // Without y, a frame of 30px with the margins.
-  assert.strictEqual(heightOf(dots, {x: "v"}), 30 + 40);
-  assert.strictEqual(heightOf(dots, {x: "v"}, {x: {axis: "top"}}), 30 + 40 + 20);
-  // With both, the second side has no title: its tick labels take 24.
-  assert.strictEqual(heightOf(dots, {x: "v"}, {x: {axis: "both"}}), 30 + 24 + 40);
+  // Without y, a frame of 30px with the margins: 38 for the tick labels and title of x.
+  assert.strictEqual(heightOf(dots, {x: "v"}), 30 + 38);
+  assert.strictEqual(heightOf(dots, {x: "v"}, {x: {axis: "top"}}), 30 + 38 + 20);
+  // With both, the second side has no title: its tick labels take 22.
+  assert.strictEqual(heightOf(dots, {x: "v"}, {x: {axis: "both"}}), 30 + 22 + 38);
   // With a categorical y, 20px per category plus 10.
   const bars = [{k: "a", v: 1}];
   // Its title is turned beside the axis, at the middle, leaving the top to half a label.
-  assert.strictEqual(heightOf(bars, {x: "v", y: "k"}), 20 + 10 + 10 + 40);
-  assert.strictEqual(heightOf(bars, {x: "v", y: "k"}, {x: {axis: "both"}}), 20 + 10 + 24 + 40);
+  assert.strictEqual(heightOf(bars, {x: "v", y: "k"}), 20 + 10 + 10 + 38);
+  assert.strictEqual(heightOf(bars, {x: "v", y: "k"}, {x: {axis: "both"}}), 20 + 10 + 22 + 38);
 });

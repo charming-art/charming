@@ -20,9 +20,12 @@ const title = {...font, fontWeight: "bold", textBaseline: "top"};
 // A text shortened with an ellipsis to fit a width, such as a long label in a narrow margin.
 function fit(value, width) {
   const string = `${value}`;
-  if (widthOf(string) <= width) return string;
-  const n = Math.max(0, Math.floor(width / (font.fontSize * 0.6)) - 1);
-  return `${string.slice(0, n)}…`;
+  // A text that fits exactly, as measured for a margin, isn't shortened by a rounding error.
+  if (widthOf(string) <= width + 1e-6) return string;
+  const characters = Array.from(string);
+  let n = characters.length;
+  while (n > 0 && widthOf(`${characters.slice(0, n).join("")}…`) > width) n--;
+  return `${characters.slice(0, n).join("")}…`;
 }
 
 // The title of a legend, if any, shortened to fit the column.
@@ -48,8 +51,16 @@ function swatches(key, scale, options, maxWidth, maxHeight = Infinity) {
   const fitting = Math.max(1, Math.floor((maxHeight - top) / lineHeight));
   const columns = Math.max(1, Math.ceil(domain.length / fitting));
   const rows = Math.max(1, Math.ceil(domain.length / columns));
-  // The columns share the width, each label shortened to fit its column.
-  const share = (maxWidth - 12 * (columns - 1)) / columns;
+  // The columns are as wide as their labels; if they're wider than the room, they share it, each
+  // label shortened to fit its column.
+  const groups = Array.from({length: Math.ceil(domain.length / rows)}, (_, i) =>
+    domain.slice(i * rows, (i + 1) * rows),
+  );
+  const natural = groups.reduce(
+    (w, column) => w + swatchSize + 4 + Math.max(...column.map((d) => widthOf(formatValue(d)))) + 12,
+    -12,
+  );
+  const share = natural <= maxWidth + 1e-6 ? Infinity : (maxWidth - 12 * (columns - 1)) / columns;
   const format = (d) => fit(formatValue(d), share - swatchSize - 4);
   const items = [];
   let x = 0;
@@ -376,14 +387,40 @@ function legendsHeight(scales, legends, maxWidth) {
   return height ? 3 + height + legendGap : 0;
 }
 
+// The width of the legends on the right of a chart, for its right margin: their columns, one legend
+// under another while they fit the height of the frame, unshortened.
+function legendsWidth(scales, legends, maxHeight) {
+  let [x, y, columnWidth, any] = [0, 0, 0, false];
+  for (const key of keys) {
+    if (!(key in legends) || !scales[key] || legends[key].anchor !== "right") continue;
+    const block = legendOf(key, scales[key], legends[key], Infinity, "right", maxHeight);
+    if (y > 0 && y + block.height > maxHeight) [x, y, columnWidth] = [x + columnWidth + legendSpace, 0, 0];
+    y += block.height + legendGap;
+    columnWidth = Math.max(columnWidth, block.width);
+    any = true;
+  }
+  return any ? x + columnWidth : 0;
+}
+
+// The scales of colors, radii and opacities resolved for the contexts, recorded with their labels as
+// the legends draw them.
+function recordedScales(data, colors) {
+  const hints = channelHints(data);
+  return Object.fromEntries(Object.keys(colors).map((key) => [key, labeled(resolve(colors[key]), hints[key])]));
+}
+
+// The width of the legends on the right of a chart, for the right margin of cm.plane, given the
+// height of its frame.
+export function rightLegends(data, colors, options, maxHeight) {
+  return legendsWidth(recordedScales(data, colors), legendsOf(options), maxHeight);
+}
+
 // The room of the legends at the top of a chart, for the top margin of cm.plane or cm.polar, from
 // the contexts, their colors, radii and opacities, resolved, and the options of their scales: those
 // given legend: true or "top", recorded with their labels as the legends draw them, in the width
 // from the left of the plot to the right of the chart.
 export function topLegends(data, colors, options, maxWidth) {
-  const hints = channelHints(data);
-  const scales = Object.fromEntries(Object.keys(colors).map((key) => [key, labeled(resolve(colors[key]), hints[key])]));
-  return legendsHeight(scales, legendsOf(options), maxWidth);
+  return legendsHeight(recordedScales(data, colors), legendsOf(options), maxWidth);
 }
 
 // Draws the legends of the scales recorded by cm.plane or cm.polar besides positions: swatches for
@@ -394,8 +431,8 @@ export function topLegends(data, colors, options, maxWidth) {
 // Vega-Lite's, one under another while they fit its height, else in columns, and swatches past its
 // height in balanced columns too. The frame of cm.polar is its disc. Like Plot's, a chart draws the
 // legends of the scales given legend: true, or a side, such as {fill: {legend: "right"}}, whose
-// options default to those of the scale; the default margins of cm.plane and cm.polar leave room
-// for those at the top. A legend added explicitly to the chart replaces them, and takes their
+// options default to those of the scale; the margins of cm.plane fit those at the top and on the
+// right, past its axes, and cm.polar's those at the top. A legend added explicitly to the chart replaces them, and takes their
 // options and sides; the names of scales, such as {fill: {label: "Species"}}, take the options of
 // each legend, or false to skip it, and the other options apply to all of them, such as anchor.
 // Charts nested in a chart, such as facets, have no legends yet.
@@ -425,7 +462,8 @@ export function legend(flow, value, {scales = {}, frame, guides, options = {}} =
   const maxWidth = Math.max(0, width - 3 - left);
   const [rows] = rowsOf(topBlocks(entries, scales, maxWidth), maxWidth);
   for (const {block, x, y} of rows) block.draw(flow, left + x, 3 + y);
-  const x0 = right + 12;
+  // On the right, past the axes on the right of the plot, as cm.plane records them.
+  const x0 = guides?.legendX ?? right + 12;
   const y0 = polar ? frame.cy - frame.outerRadius : (frame?.top ?? 3);
   const y1 = polar ? frame.cy + frame.outerRadius : (frame?.bottom ?? flow.renderer()._props.height);
   // On the right, one under another while they fit the height, else from the top of a new column

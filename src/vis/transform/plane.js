@@ -1,7 +1,7 @@
 import {InternSet} from "d3-array";
 import {discrete, point, scale} from "../../core/transform/scale.js";
-import {axisX, axisY} from "../shape/axis.js";
-import {legend, topLegends} from "../shape/legend.js";
+import {axisX, axisY, extentX, extentY} from "../shape/axis.js";
+import {legend, rightLegends, topLegends} from "../shape/legend.js";
 import {
   allKeysOf,
   axisHint,
@@ -23,6 +23,7 @@ import {
   resolve,
   scaleDescriptors,
   scaleName,
+  scaleOf,
   scaledKeys,
   sharedScale,
   withoutHints,
@@ -47,53 +48,58 @@ function middle(value, keys, [start, end]) {
   return Array.from({length: n}, () => (start + end) / 2);
 }
 
-// The room of the components on each side of a chart, for its default margins: the axes of the
-// positions encoded in any of its contexts, at the bottom and the left by default, and their
-// titles, on the first side of each axis. An axis of x takes its tick marks and labels, 6 + 3 + 10
-// and 5px to spare, and its title, 6 + 10; an axis of y, 6 + 3 and labels up to six characters
-// wide, such as 14,000, and its title turned beside them at the middle, 24, or level at its top or
-// bottom: 24 over or under the frame, or a row of 16 past an axis of x on that side, shared with
-// its title. Without an axis, a side keeps room for the ends of the tick labels of the other axis,
-// such as half a label of y over the frame. Under a legend at the top, a title of y at the top is
-// turned.
-function axisRoom(data, options, keysX, keysY, has) {
-  const room = {top: 0, right: 0, bottom: 0, left: 0};
+// What a chart draws past its plot on each side, for its margins, given the records of the
+// positions of each context: its axes, as cm.axisX and cm.axisY draw them, on the sides of their
+// guides, and their titles, on the first side of each axis. Past an axis of x is its title, 6 + 10;
+// beside an axis of y, its title turned, 6 + 10, or level, in a row over or under the plot, of half
+// a label, else the tick labels of an axis of x on that side, 6 and 10, shared with its title. The
+// tick labels at the ends of an axis may also reach past the plot along it, such as half the last
+// label of x past its right. Under a legend at the top, the title of y at the top is turned.
+function measureSides(data, options, keysX, keysY, has, recordsOf) {
+  const reach = {top: 0, right: 0, bottom: 0, left: 0};
+  const over = {top: 0, right: 0, bottom: 0, left: 0};
   const rows = {top: false, bottom: false};
+  const level = {top: false, bottom: false};
   const topLegend = scaledKeys.some(
     (key) => options[key]?.legend && options[key].legend !== "right" && data.some(({value}) => key in value),
   );
   for (const context of data) {
-    const {hints = {}} = context;
-    const nameX = scaleName(hints, keysX, "x");
-    const nameY = scaleName(hints, keysY, "y");
+    const hasX = has(context, keysX, "x");
+    const hasY = has(context, keysY, "y");
+    if (!hasX && !hasY) continue;
+    const {nameX, nameY, recordX, recordY} = recordsOf(context);
     const {x, y} = guidesOf(null, options, nameX, nameY, sidesOfPlane, {x: ["bottom"], y: ["left"]});
-    const hintY = axisHint(hints, keysY);
-    const titledX = axisHint(hints, keysX).label != null;
-    const titledY = hintY.label != null;
-    const V = keysY.filter((key) => key in context.value).flatMap((key) => Array.from(context.value[key]));
-    const discreteY = hintY.band !== undefined || discrete(options[nameY]?.type ?? hintY.type, V);
-    const labelAnchor = options[nameY]?.labelAnchor ?? (discreteY ? "center" : "top");
-    const turned = labelAnchor === "center" || (labelAnchor === "top" && topLegend);
-    if (has(context, keysX, "x")) {
+    if (hasX) {
       x.anchors.forEach((side, i) => {
-        room[side] = Math.max(room[side], 24);
-        if (i === 0 && titledX) rows[side] = true;
+        const {reach: r, start, end} = extentX(recordX, x, side);
+        reach[side] = Math.max(reach[side], r);
+        over.left = Math.max(over.left, start);
+        over.right = Math.max(over.right, end);
+        if (i === 0 && recordX.label != null && x.label !== null) rows[side] = true;
       });
     }
-    if (has(context, keysY, "y")) {
+    if (hasY) {
+      const labelAnchor = y.labelAnchor ?? (scaleOf(recordY).ticks ? "top" : "center");
+      const turned = labelAnchor === "center" || (labelAnchor === "top" && topLegend);
       y.anchors.forEach((side, i) => {
-        const titled = i === 0 && titledY;
-        room[side] = Math.max(room[side], 46 + (titled && turned ? 24 : 0));
-        if (titled && !turned) rows[labelAnchor] = true;
+        const {reach: r, start, end} = extentY(recordY, y, side);
+        const titled = i === 0 && recordY.label != null;
+        reach[side] = Math.max(reach[side], r + (titled && turned ? 6 + 10 : 0));
+        over.top = Math.max(over.top, start);
+        over.bottom = Math.max(over.bottom, end);
+        if (titled && !turned) level[labelAnchor] = true;
       });
     }
   }
-  // At the top or the bottom, an axis of x and a level title of y share a row of titles, past its
-  // tick labels.
+  // At the top or the bottom, an axis of x and a level title of y share a row of titles, past the
+  // tick labels of x, or half a label without them.
+  const extent = {left: Math.max(reach.left, over.left), right: reach.right, overhangRight: over.right};
   for (const side of ["top", "bottom"]) {
-    room[side] = room[side] ? room[side] + (rows[side] ? 16 : 0) : rows[side] ? 24 : 0;
+    const row = rows[side] || level[side] ? 6 + 10 : 0;
+    const past = reach[side] || (level[side] ? 5 : 0);
+    extent[side] = Math.max(over[side], past + row);
   }
-  return room;
+  return extent;
 }
 
 // The sides of the axes of a plane: the first is the side of axis true, and both are "both".
@@ -102,8 +108,8 @@ const sidesOfPlane = {
   y: {first: "left", both: ["left", "right"]},
 };
 
-// Resolves the scales of the channels, and maps positions to the chart area with y up and the
-// default margins of a chart. A renderer without a given size is resized, like Plot: 640 wide, with
+// Resolves the scales of the channels, and maps positions to the chart area with y up, inside margins
+// that fit what the chart draws on each side, its axes, their titles and its legends, unless given. A renderer without a given size is resized, like Plot: 640 wide, with
 // a height that depends on y. The scales are resolved once for all the contexts, so that facets
 // compare; with resolve, a position can be inferred per context instead. Colors are always shared.
 // The options of scales are given by name, like Plot's: the type, domain, reverse and label of a
@@ -153,61 +159,20 @@ export function plane(
     ]),
   );
 
-  // The margins leave room for the axes of the positions encoded in any context, such as a layer
-  // of branches. A position counts if it's encoded, or if a channel shares its scale, such as
-  // {value: "v2", scale: "y"}. A nested chart has no margins by default: its parent's margins and
-  // bands leave the room. The size and direction of y come from the first context with y.
+  // The size and direction of y come from the first context with y. A position counts if it's
+  // encoded, or if a channel shares its scale, such as {value: "v2", scale: "y"}.
   const has = ({value, hints = {}}, keys, name) => hasAny(value, keysOf(value, hints, keys, name));
   const hasY = data.some((context) => has(context, keysY, "y"));
   const {value: first = {}, hints: firstHints = {}} = data.find((context) => has(context, keysY, "y")) ?? data[0] ?? {};
   const firstY = keysOf(first, firstHints, keysY, "y");
-  // The colors, radii and opacities shared by the contexts, resolved before the frame, as they don't
-  // depend on it, so that the legends at the top can be measured.
+
+  // The colors, radii and opacities shared by the contexts, and positions unless they're
+  // independent, resolved before the frame, as they don't depend on it, so that what the axes and
+  // legends draw can be measured for the margins. A position is shared with the contexts whose
+  // positions use the same scale: the axis, by default, or a name given to it, such as x: {value:
+  // "culmen_length_mm", scale: "length"}. The options of scales and resolve take any name, such as
+  // {x: "independent"}.
   const colors = channelScales(merge(data, scaledKeys), channelHints(data));
-  // The defaults hold the components on each side, such as an axis and its title, and the legends
-  // at the top, which fit the width of the chart.
-  const room = nested ? null : axisRoom(data, options, keysX, keysY, has);
-  marginRight ??= margin ?? (nested ? 0 : room.right || 20);
-  marginBottom ??= margin ?? (nested ? 0 : room.bottom || 20);
-  marginLeft ??= margin ?? (nested ? 0 : room.left || 20);
-  if (!nested) width ??= renderer._props.auto?.width ? 640 : renderer._props.width;
-  // The legends at the top add to the top margin, like cm.polar's, unless it's given itself.
-  const legendRoom = nested || marginTop !== undefined ? 0 : topLegends(data, colors, options, width - 3 - marginLeft);
-  marginTop ??= margin ?? (nested ? 0 : room.top || (hasY ? 10 : 0));
-  marginTop += legendRoom;
-
-  // Values grow upward, but categories in bands go down from the top, like Plot's ordinal y, unless
-  // the scale is reversed. An independent y points its own way in each context.
-  const reverseOf = (hints) => {
-    const {reverse, band} = axisHint(hints, keysY);
-    return reverse ?? !band;
-  };
-
-  let frames;
-  if (nested) {
-    frames = nestedFrames(flow, data, {width, height}).map((frame) => ({
-      ...frame,
-      top: frame.top + marginTop,
-      right: frame.right - marginRight,
-      bottom: frame.bottom - marginBottom,
-      left: frame.left + marginLeft,
-    }));
-  } else {
-    const {auto, height: rendererHeight} = renderer._props;
-    // The height uses the same scale and domain of y as fitting.
-    const hintY = axisHint(firstHints, keysY);
-    const sizeY = {...hintY, ...positionOptions([hintY], options[scaleName(firstHints, keysY, "y")])};
-    height ??= auto?.height ? autoHeight(first, firstY, sizeY, marginTop + marginBottom) : rendererHeight;
-    renderer.resize?.(width, height);
-    ({width, height} = renderer._props);
-    const frame = {top: marginTop, right: width - marginRight, bottom: height - marginBottom, left: marginLeft};
-    frames = data.map(() => frame);
-  }
-
-  // The scales shared by the contexts: colors, and positions unless they're independent. A position
-  // is shared with the contexts whose positions use the same scale: the axis, by default, or a name
-  // given to it, such as x: {value: "culmen_length_mm", scale: "length"}. The options of scales and
-  // resolve take any name, such as {x: "independent"}.
   const independent = (name) => resolution[name] === "independent";
   const sharedOf = (keys, axis) =>
     new Map(
@@ -222,23 +187,24 @@ export function plane(
     );
   const sharedX = sharedOf(keysX, "x");
   const sharedY = sharedOf(keysY, "y");
-  // The direction of a shared y comes from the first of its contexts with y.
+  // The direction of a shared y comes from the first of its contexts with y. Values grow upward,
+  // but categories in bands go down from the top, like Plot's ordinal y, unless the scale is
+  // reversed. An independent y points its own way in each context.
   const firstHintsY = new Map(
     Array.from(byScaleName(data, keysY, "y"), ([name, contexts]) => [
       name,
       (contexts.find((context) => has(context, keysY, "y")) ?? contexts[0]).hints ?? {},
     ]),
   );
+  const reverseOf = (hints) => {
+    const {reverse, band} = axisHint(hints, keysY);
+    return reverse ?? !band;
+  };
 
-  // The guides of the contexts are drawn once per scale, for all of them: the id tells them apart
-  // from the guides of other charts.
-  const id = {};
-  return data.map((context, j) => {
-    const {value, hints = {}} = context;
-    // The channels of this context's scales: its positions, and the channels that join them here.
+  // The scales of the positions of a context in a frame, and their records, for the axes.
+  const recordsOf = ({value, hints = {}}, frame) => {
     const ownKeysX = keysOf(value, hints, keysX, "x");
     const ownKeysY = keysOf(value, hints, keysY, "y");
-    const frame = frames[j];
     const rangeX = [frame.left, frame.right];
     const rangeY = [frame.top, frame.bottom];
     const nameX = scaleName(hints, keysX, "x");
@@ -247,12 +213,89 @@ export function plane(
     const hintY = axisHint(hints, keysY);
     if (hintX.reverse) rangeX.reverse();
     if (reverseOf(independent(nameY) ? hints : firstHintsY.get(nameY))) rangeY.reverse();
-
     // An independent position is inferred from its own context, with the options of its scale.
     const x =
       sharedX.get(nameX) || positionScale(value, ownKeysX, {...hintX, ...positionOptions([hintX], options[nameX])});
     const y =
       sharedY.get(nameY) || positionScale(value, ownKeysY, {...hintY, ...positionOptions([hintY], options[nameY])});
+    const recordX = callable(labeled(positionRecord(x, rangeX, hintX), hintX));
+    const recordY = callable(labeled(positionRecord(y, rangeY, hintY), hintY));
+    return {x, y, rangeX, rangeY, nameX, nameY, ownKeysX, ownKeysY, recordX, recordY};
+  };
+
+  let frames, legendX;
+  if (nested) {
+    // A nested chart has no margins by default: its parent's margins and bands leave the room.
+    marginTop ??= margin ?? 0;
+    marginRight ??= margin ?? 0;
+    marginBottom ??= margin ?? 0;
+    marginLeft ??= margin ?? 0;
+    frames = nestedFrames(flow, data, {width, height}).map((frame) => ({
+      ...frame,
+      top: frame.top + marginTop,
+      right: frame.right - marginRight,
+      bottom: frame.bottom - marginBottom,
+      left: frame.left + marginLeft,
+    }));
+  } else {
+    // The margins that aren't given fit what's drawn on each side: the axes, their titles, the
+    // ends of the tick labels past the plot, and the legends at the top and on the right, plus 3px,
+    // and at least the floors of a chart without axes: 10 over y, else 0, and 20 on the other
+    // sides. As the ticks of the axes depend on the size of the plot, which depends on the
+    // margins, they're measured again until they hold, up to three times. The legends at the top
+    // and on the right add to margin, unless marginTop or marginRight is given itself.
+    const given = {top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft};
+    const floors = {top: hasY ? 10 : 0, right: 20, bottom: 20, left: 20};
+    const {auto, height: rendererHeight} = renderer._props;
+    width ??= auto?.width ? 640 : renderer._props.width;
+    const hintY = axisHint(firstHints, keysY);
+    const sizeY = {...hintY, ...positionOptions([hintY], options[scaleName(firstHints, keysY, "y")])};
+    let margins = Object.fromEntries(Object.keys(floors).map((side) => [side, given[side] ?? margin ?? floors[side]]));
+    let frame, room;
+    for (let pass = 0; pass < 3; pass++) {
+      const frameHeight =
+        height ?? (auto?.height ? autoHeight(first, firstY, sizeY, margins.top + margins.bottom) : rendererHeight);
+      frame = {
+        top: margins.top,
+        right: width - margins.right,
+        bottom: frameHeight - margins.bottom,
+        left: margins.left,
+      };
+      room = measureSides(data, options, keysX, keysY, has, (context) => recordsOf(context, frame));
+      const legendsTop = topLegends(data, colors, options, width - 3 - margins.left);
+      const legendsRight = rightLegends(data, colors, options, frame.bottom - frame.top);
+      const fit = (side, extent) => Math.max(floors[side], extent ? extent + 3 : 0);
+      const next = {
+        top: (given.top ?? margin ?? fit("top", room.top)) + (given.top === undefined ? legendsTop : 0),
+        right:
+          given.right ??
+          (margin !== undefined
+            ? margin + (legendsRight ? 12 + legendsRight + 3 : 0)
+            : fit("right", Math.max(room.overhangRight, room.right + (legendsRight ? 12 + legendsRight : 0)))),
+        bottom: given.bottom ?? margin ?? fit("bottom", room.bottom),
+        left: given.left ?? margin ?? fit("left", room.left),
+      };
+      const done = Object.keys(next).every((side) => next[side] === margins[side]);
+      margins = next;
+      if (done && pass > 0) break;
+    }
+    ({top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft} = margins);
+    height ??= auto?.height ? autoHeight(first, firstY, sizeY, marginTop + marginBottom) : rendererHeight;
+    renderer.resize?.(width, height);
+    ({width, height} = renderer._props);
+    frame = {top: marginTop, right: width - marginRight, bottom: height - marginBottom, left: marginLeft};
+    // The legends on the right start past the axes on the right of the plot.
+    legendX = frame.right + room.right + 12;
+    frames = data.map(() => frame);
+  }
+
+  // The guides of the contexts are drawn once per scale, for all of them: the id tells them apart
+  // from the guides of other charts.
+  const id = {};
+  return data.map((context, j) => {
+    const {value, hints = {}} = context;
+    const frame = frames[j];
+    const {x, y, rangeX, rangeY, nameX, nameY, ownKeysX, ownKeysY, recordX, recordY} = recordsOf(context, frame);
 
     // Colors are categorical by default, and positions are discrete points by default.
     const [colored] = scale(flow, [context], scaleDescriptors(colors));
@@ -263,8 +306,6 @@ export function plane(
 
     const scales = {...context.scales};
     for (const key in colors) scales[key] = labeled(resolve(colors[key]), hints[key]);
-    const recordX = callable(labeled(positionRecord(x, rangeX, hintX), hintX));
-    const recordY = callable(labeled(positionRecord(y, rangeY, hintY), hintY));
     // The scale is recorded as x or y, for axes, even if only channels that share it are encoded.
     if (hasAny(value, ownKeysX)) scales[keysX[0]] = recordX;
     if (hasAny(value, ownKeysY)) scales[keysY[0]] = recordY;
@@ -290,6 +331,7 @@ export function plane(
       sidesOfPlane,
       nested ? {x: [], y: []} : {x: ["bottom"], y: ["left"]},
     );
+    if (legendX !== undefined) guides.legendX = legendX;
     return {...withoutHints(scaled), value: newValue, scales, frame, clip: shape, clipped: clip, guides};
   });
 }

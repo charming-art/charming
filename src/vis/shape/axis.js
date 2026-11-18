@@ -13,6 +13,7 @@ import {
   scaleOf,
   ticksOf,
   titleGap,
+  widthOf,
 } from "./axisUtils.js";
 
 // The size across an x axis of a label of width w and height h, rotated: its height when level.
@@ -46,22 +47,60 @@ function rotatedY(degrees, right) {
   return [{textAlign: "center", textBaseline, rotate: radians}, 4 * Math.cos(radians)];
 }
 
-// How far the axis of x on a side reaches, with the options of its guide, as cm.axisX measures it,
-// such as for a level title of y in the row of its title.
-function reachX(x, options, side) {
+// What an axis of x on a side draws past the plot, with the options of its axis, as cm.axisX draws
+// it: how far it reaches across the axis, its tick marks and labels, and how far its tick labels
+// reach past the start and the end of the axis, such as half the last label past the right of the
+// plot. Its tick labels are measured like Plot's, by the widths of their characters.
+export function extentX(x, options = {}, side = "bottom") {
   const {tickSize = 6, tickPadding = 3, tickRotate = 0} = options;
   const scale = scaleOf(x);
   const [left, right] = extentOf(x.range);
   const count = countOf(options, right - left, 80);
+  const ticks = ticksOf(scale, options, count);
   const format = formatOf(scale, options, count);
-  const [, pad] = rotatedX(tickRotate, side === "top");
-  return reachOf(ticksOf(scale, options, count).map(format), {
-    tickSize,
-    tickPadding,
-    radians: (tickRotate * Math.PI) / 180,
-    pad,
-    across: acrossX,
+  const labels = ticks.map(format);
+  const radians = (tickRotate * Math.PI) / 180;
+  const [{textAlign}, pad] = rotatedX(tickRotate, side === "top");
+  const reach = reachOf(labels, {tickSize, tickPadding, radians, pad, across: acrossX});
+  // Along the axis, a label is as wide as its rotated box, around its tick, before it or after it.
+  const X = positionOf(scale);
+  let [start, end] = [0, 0];
+  ticks.forEach((d, i) => {
+    const label = `${labels[i] ?? ""}`;
+    if (label === "") return;
+    const along = acrossY(widthOf(label), font.fontSize, radians);
+    const [before, after] =
+      textAlign === "center" ? [along / 2, along / 2] : textAlign === "end" ? [along, 0] : [0, along];
+    start = Math.max(start, left - (X(d) - before));
+    end = Math.max(end, X(d) + after - right);
   });
+  return {reach, start, end};
+}
+
+// What an axis of y on a side draws past the plot, as cm.axisY draws it: how far it reaches across
+// the axis, and how far its tick labels reach over its top and under its bottom.
+export function extentY(y, options = {}, side = "left") {
+  const {tickSize = 6, tickPadding = 3, tickRotate = 0} = options;
+  const scale = scaleOf(y);
+  const [top, bottom] = extentOf(y.range);
+  const count = countOf(options, bottom - top, 35);
+  const ticks = ticksOf(scale, options, count);
+  const format = formatOf(scale, options, count);
+  const labels = ticks.map(format);
+  const radians = (tickRotate * Math.PI) / 180;
+  const [, pad] = rotatedY(tickRotate, side === "right");
+  const reach = reachOf(labels, {tickSize, tickPadding, radians, pad, across: acrossY});
+  // Along the axis, a label is as tall as its rotated box, centered on its tick.
+  const Y = positionOf(scale);
+  let [start, end] = [0, 0];
+  ticks.forEach((d, i) => {
+    const label = `${labels[i] ?? ""}`;
+    if (label === "") return;
+    const half = acrossX(widthOf(label), font.fontSize, radians) / 2;
+    start = Math.max(start, top - (Y(d) - half));
+    end = Math.max(end, Y(d) + half - bottom);
+  });
+  return {reach, start, end};
 }
 
 function extentOf(range) {
@@ -108,10 +147,9 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
   // The title is part of the axis: past the farthest of what it draws, its tick labels, else its
   // tick marks, else the plot, by a constant gap, under a bottom axis or over a top one. Like Plot's,
   // it's at the right end of the axis by default, with its arrow, or at the middle of a discrete
-  // axis; with labelAnchor, it's at its left or right end, or its middle. The default margins of
-  // cm.plane leave room for it on the sides with axes, with level tick labels; rotated tick labels,
-  // an axis added explicitly on another side, or one drawn by a nested chart need a margin given to
-  // it, such as marginBottom: 150 with tickRotate: -45.
+  // axis; with labelAnchor, it's at its left or right end, or its middle. The margins of cm.plane
+  // fit what its axes draw, measured with extentX; an axis added explicitly with other options, or
+  // one drawn by a nested chart, needs a margin given to cm.plane.
   const reach = reachOf(ticks.map(format), {
     tickSize,
     tickPadding,
@@ -170,8 +208,7 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
   // from the left edge of the chart on a left axis, or ending 3px from its right edge on a right
   // one, like Plot's, which aligns it with the edge of the margin, with an arrow along the axis; or
   // turned to read along it at its middle, the default of a discrete scale, past its tick labels,
-  // else its tick marks, else the plot. The default margins of cm.plane leave room for it on the
-  // sides with axes. Under a legend at the top of the chart, a title at the top is turned too,
+  // else its tick marks, else the plot. The margins of cm.plane fit it, as for x. Under a legend at the top of the chart, a title at the top is turned too,
   // ending at the top of the axis, so that it leaves the top to the legend.
   const {labelAnchor = scale.ticks ? "top" : "center"} = options;
   const turn = labelAnchor === "center" || (labelAnchor === "top" && hasTopLegend(guides, scales));
@@ -182,7 +219,7 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
     // past it, or past the tick labels of an axis of x on that side, in the row of its title.
     const isBottom = labelAnchor === "bottom";
     const side = isBottom ? "bottom" : "top";
-    const past = x && guides?.x?.anchors?.includes(side) ? reachX(x, guides.x, side) : font.fontSize / 2;
+    const past = x && guides?.x?.anchors?.includes(side) ? extentX(x, guides.x, side).reach : font.fontSize / 2;
     flow.datum(label).append(text, {
       ...font,
       text: label,

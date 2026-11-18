@@ -14,7 +14,6 @@ export const visLegendRightTwo = withSVG(async () => {
         .transform(cm.encode, {x: "letter", y: "frequency", fill: "letter", fillOpacity: "frequency"})
         .transform(cm.spreadX)
         .transform(cm.plane, {
-          marginRight: 160,
           fill: {legend: "right"},
           fillOpacity: {legend: "right", range: [0.3, 1]},
         })
