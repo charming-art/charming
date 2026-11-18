@@ -4,9 +4,10 @@ import {renderFlow, withSVG} from "../../helpers.js";
 
 // Plot's state population change (https://observablehq.com/@observablehq/plot-state-population-change):
 // the change in population of each state from 2010 to 2019, as a share, in bars that grow left or
-// right of 0, colored by sign, under a centered title. Plot labels the states with two y axes at 0
-// and the changes with two text marks, one for each sign; two cm.labels do it, with positions per
-// row: the names along 0 on the side away from their bars, and the changes past their ends.
+// right of 0, colored by sign. As the chart is tall, x has axes at the top and the bottom, with
+// axis: "both". Plot labels the states with two y axes at 0 and the changes with two text marks,
+// one for each sign; two cm.labels do it, with positions per row: the names along 0 on the side
+// away from their bars, and the changes past their ends.
 export const visStatePopulationChange = withSVG(async () => {
   const statepop = await d3.csv("data/us-state-population-2010-2019.csv", d3.autoType);
   const change = (d) => (d[2019] - d[2010]) / d[2010];
@@ -22,7 +23,7 @@ export const visStatePopulationChange = withSVG(async () => {
           // Like Plot's percent option, the ticks are in percentage points.
           x: {
             label: "← decrease · Change in population, 2010–2019 (%) · increase →",
-            axis: "top",
+            axis: "both",
             labelAnchor: "center",
             tickFormat: (d) => d3.format("+.0f")(d * 100),
           },
