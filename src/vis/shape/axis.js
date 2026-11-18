@@ -90,7 +90,8 @@ export function axisX(flow, value, {scales = {}, frame, titles, guides, options 
   // The title is part of the axis: past the farthest of what it draws, its tick labels, else its
   // tick marks, else the plot, by a constant gap, under a bottom axis or over a top one. Like the
   // title of y, it's at the middle of the axis by default; with labelAnchor, it's at its left or
-  // right end. The margins of the chart leave room for it, such as marginTop: 40 for a top axis.
+  // right end. The default margins of cm.plane leave room for it on the sides with axes; an axis
+  // added explicitly on another side, or drawn by a nested chart, needs a margin given to it.
   const reach = reachOf(ticks.map(format), {
     tickSize,
     tickPadding,
@@ -148,7 +149,7 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
   // tick marks, else the plot, by a constant gap, turned to read along the axis, bottom to top, left
   // of a left axis or right of a right one. With labelAnchor, it's at the middle of the axis, the
   // default, or ends at its top, or starts at its bottom. Its arrow, once turned, points up the
-  // axis. A right axis needs a margin given to cm.plane, such as marginRight: 60.
+  // axis. As for x, the default margins of cm.plane leave room for it on the sides with axes.
   const label = labelOf(y, scale, "y", options, true);
   if (label == null || frame?.nested) return;
   const reach = reachOf(ticks.map(format), {
