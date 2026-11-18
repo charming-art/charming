@@ -1053,12 +1053,13 @@ test("cm.plane fits its margins to the ends of the tick labels of x, rotated tic
   const [, , bottom] = frame({ticks: [0.5], tickFormat: () => "a long label", tickRotate: -45, label: null});
   const r = Math.PI / 4;
   assertInDelta(bottom, 3 + 6 + 3 + 4 * Math.cos(r) + widthOf("a long label") * Math.sin(r) + 10 * Math.cos(r));
-  // A legend on the right takes 12, its width and 3px.
+  // A legend on the right starts past the end of the last tick label of x, half of "1.0", and takes
+  // 12, its width and 3px.
   const [, legend] = frame({}, {channels: {fill: "k"}, options: {fill: {legend: "right"}}}, [
     {v: 0, k: "short"},
     {v: 1, k: "a longer one"},
   ]);
-  assertInDelta(legend, 12 + Math.max(widthOf("k"), 10 + 4 + widthOf("a longer one")) + 3);
+  assertInDelta(legend, widthOf("1.0") / 2 + 12 + Math.max(widthOf("k"), 10 + 4 + widthOf("a longer one")) + 3);
 });
 
 test("cm.plane sizes an auto height with the top and bottom margins of its axes", () => {
@@ -1078,4 +1079,82 @@ test("cm.plane sizes an auto height with the top and bottom margins of its axes"
   // Its title is turned beside the axis, at the middle, leaving the top to half a label.
   assert.strictEqual(heightOf(bars, {x: "v", y: "k"}), 20 + 10 + 10 + 38);
   assert.strictEqual(heightOf(bars, {x: "v", y: "k"}, {x: {axis: "both"}}), 20 + 10 + 22 + 38);
+});
+
+// The boxes of the texts of a chart, measured like Plot's text, turned around their anchors.
+function textBoxes(node) {
+  return Array.from(node.querySelectorAll("text"), (t) => {
+    const [x, y, w, h] = [+t.getAttribute("x"), +t.getAttribute("y"), widthOf(t.textContent), 10];
+    const anchor = t.getAttribute("text-anchor") ?? "start";
+    const baseline = t.getAttribute("dominant-baseline");
+    const a = anchor === "end" ? -w : anchor === "middle" ? -w / 2 : 0;
+    const b = baseline === "text-before-edge" ? 0 : baseline === "central" ? -h / 2 : -h;
+    const rotate = t.getAttribute("transform")?.match(/rotate\(([-\d.]+)/);
+    const r = rotate ? (+rotate[1] * Math.PI) / 180 : 0;
+    const corners = [
+      [a, b],
+      [a + w, b],
+      [a, b + h],
+      [a + w, b + h],
+    ].map(([u, v]) => [x + u * Math.cos(r) - v * Math.sin(r), y + u * Math.sin(r) + v * Math.cos(r)]);
+    const X = corners.map(([x]) => x);
+    const Y = corners.map(([, y]) => y);
+    return {text: t.textContent, x0: Math.min(...X), x1: Math.max(...X), y0: Math.min(...Y), y1: Math.max(...Y)};
+  });
+}
+
+function assertInside(node, width, height) {
+  for (const {text, x0, x1, y0, y1} of textBoxes(node)) {
+    assert.ok(x0 >= -1e-6 && x1 <= width + 1e-6 && y0 >= -1e-6 && y1 <= height + 1e-6, text);
+  }
+}
+
+test("cm.plane starts a legend on the right past the last tick label of x, which reaches past the plot", () => {
+  const renderer = cm.svg({width: 400, height: 300});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {v: 0, k: "a"},
+      {v: 1, k: "b"},
+    ])
+    .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+    .transform(cm.plane, {x: {ticks: [1], tickFormat: () => "a very long label"}, fill: {legend: "right"}})
+    .add(cm.circle);
+  root.render();
+  const boxes = textBoxes(renderer.node());
+  const label = boxes.find((d) => d.text === "a very long label");
+  for (const swatch of boxes.filter((d) => d.text === "a" || d.text === "b")) assert.ok(swatch.x0 >= label.x1 + 12);
+  assertInside(renderer.node(), 400, 300);
+});
+
+test("cm.plane fits tick labels of y turned by 60° or less, which end at their ticks", () => {
+  for (const tickRotate of [-45, 45]) {
+    const renderer = cm.svg({width: 400, height: 300});
+    const root = cm.flow().renderer(renderer);
+    root
+      .data([{v: 0}, {v: 1}])
+      .transform(cm.encode, {x: "v", y: "v"})
+      .transform(cm.plane, {y: {ticks: [0, 1], tickFormat: () => "a rather long label", tickRotate}})
+      .add(cm.circle);
+    root.render();
+    assertInside(renderer.node(), 400, 300);
+  }
+});
+
+test("cm.plane fits a title longer than its axis, turned beside y, or under x", () => {
+  // Two categories make an axis of about 50px, under a turned title of about 200: the margins over
+  // and under it grow, and the auto height with them.
+  const renderer = cm.svg();
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {k: "a", v: 1},
+      {k: "b", v: 2},
+    ])
+    .transform(cm.encode, {x: "v", y: "k"})
+    .transform(cm.spreadY)
+    .transform(cm.plane, {width: 200, y: {label: "a very long title of the categories"}})
+    .add(cm.rect);
+  root.render();
+  assertInside(renderer.node(), 200, +renderer.node().getAttribute("height"));
 });

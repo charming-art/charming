@@ -47,6 +47,26 @@ function rotatedY(degrees, right) {
   return [{textAlign: "center", textBaseline, rotate: radians}, 4 * Math.cos(radians)];
 }
 
+// The box of a text w wide and h tall, anchored at (0, 0) by textAlign and textBaseline, turned by
+// radians around its anchor, clockwise, as the renderers draw it: [x0, x1, y0, y1].
+function boxOf(w, h, radians, textAlign, textBaseline) {
+  const a = textAlign === "start" ? 0 : textAlign === "end" ? -w : -w / 2;
+  const b = textBaseline === "top" ? 0 : textBaseline === "bottom" ? -h : -h / 2;
+  const [cos, sin] = [Math.cos(radians), Math.sin(radians)];
+  const X = [];
+  const Y = [];
+  for (const [x, y] of [
+    [a, b],
+    [a + w, b],
+    [a, b + h],
+    [a + w, b + h],
+  ]) {
+    X.push(x * cos - y * sin);
+    Y.push(x * sin + y * cos);
+  }
+  return [Math.min(...X), Math.max(...X), Math.min(...Y), Math.max(...Y)];
+}
+
 // What an axis of x on a side draws past the plot, with the options of its axis, as cm.axisX draws
 // it: how far it reaches across the axis, its tick marks and labels, and how far its tick labels
 // reach past the start and the end of the axis, such as half the last label past the right of the
@@ -60,19 +80,17 @@ export function extentX(x, options = {}, side = "bottom") {
   const format = formatOf(scale, options, count);
   const labels = ticks.map(format);
   const radians = (tickRotate * Math.PI) / 180;
-  const [{textAlign}, pad] = rotatedX(tickRotate, side === "top");
+  const [{textAlign, textBaseline}, pad] = rotatedX(tickRotate, side === "top");
   const reach = reachOf(labels, {tickSize, tickPadding, radians, pad, across: acrossX});
-  // Along the axis, a label is as wide as its rotated box, around its tick, before it or after it.
+  // Along the axis, a label spans its box turned around its anchor at its tick.
   const X = positionOf(scale);
   let [start, end] = [0, 0];
   ticks.forEach((d, i) => {
     const label = `${labels[i] ?? ""}`;
     if (label === "") return;
-    const along = acrossY(widthOf(label), font.fontSize, radians);
-    const [before, after] =
-      textAlign === "center" ? [along / 2, along / 2] : textAlign === "end" ? [along, 0] : [0, along];
-    start = Math.max(start, left - (X(d) - before));
-    end = Math.max(end, X(d) + after - right);
+    const [x0, x1] = boxOf(widthOf(label), font.fontSize, radians, textAlign, textBaseline);
+    start = Math.max(start, left - (X(d) + x0));
+    end = Math.max(end, X(d) + x1 - right);
   });
   return {reach, start, end};
 }
@@ -88,17 +106,18 @@ export function extentY(y, options = {}, side = "left") {
   const format = formatOf(scale, options, count);
   const labels = ticks.map(format);
   const radians = (tickRotate * Math.PI) / 180;
-  const [, pad] = rotatedY(tickRotate, side === "right");
+  const [{textAlign, textBaseline}, pad] = rotatedY(tickRotate, side === "right");
   const reach = reachOf(labels, {tickSize, tickPadding, radians, pad, across: acrossY});
-  // Along the axis, a label is as tall as its rotated box, centered on its tick.
+  // Along the axis, a label spans its box turned around its anchor at its tick, such as one turned
+  // by -45° and ending at its tick, which reaches down from it.
   const Y = positionOf(scale);
   let [start, end] = [0, 0];
   ticks.forEach((d, i) => {
     const label = `${labels[i] ?? ""}`;
     if (label === "") return;
-    const half = acrossX(widthOf(label), font.fontSize, radians) / 2;
-    start = Math.max(start, top - (Y(d) - half));
-    end = Math.max(end, Y(d) + half - bottom);
+    const [, , y0, y1] = boxOf(widthOf(label), font.fontSize, radians, textAlign, textBaseline);
+    start = Math.max(start, top - (Y(d) + y0));
+    end = Math.max(end, Y(d) + y1 - bottom);
   });
   return {reach, start, end};
 }

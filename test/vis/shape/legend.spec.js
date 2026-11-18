@@ -223,11 +223,12 @@ test("cm.plane gives room to the legends at the top, and turns the title of y un
   assert.strictEqual(title.textContent, "v →");
   assert.strictEqual(title.getAttribute("text-anchor"), "end");
   assert.strictEqual(+title.getAttribute("y"), frame.top);
-  // A legend on the right leaves the top and the title as they are, and takes a right margin of 12,
-  // its width, as wide as its widest swatch, and 3px.
+  // A legend on the right leaves the top and the title as they are, and takes a right margin past the
+  // end of the last tick label of x, half of "4", of 12, its width, as wide as its widest swatch,
+  // and 3px.
   const [right] = chart({legend: "right"});
   assert.deepStrictEqual([right.top, right.left, right.bottom], [level.top, level.left, level.bottom]);
-  assertInDelta(400 - right.right, 12 + Math.max(swatch("a"), swatch("b")) + 3);
+  assertInDelta(400 - right.right, widthOf("4") / 2 + 12 + Math.max(swatch("a"), swatch("b")) + 3);
 });
 
 test("cm.legend draws nothing in charts nested in a chart, nor without scales to show", () => {

@@ -1,6 +1,7 @@
 import {InternSet} from "d3-array";
 import {discrete, point, scale} from "../../core/transform/scale.js";
 import {axisX, axisY, extentX, extentY} from "../shape/axis.js";
+import {labelOf, widthOf} from "../shape/axisUtils.js";
 import {legend, rightLegends, topLegends} from "../shape/legend.js";
 import {
   allKeysOf,
@@ -76,6 +77,19 @@ function measureSides(data, options, keysX, keysY, has, recordsOf, colors) {
         over.right = Math.max(over.right, end);
         if (i === 0 && recordX.label != null) rows[side] = true;
       });
+      // A title longer than its axis reaches past its ends: from the middle, both ways, or from an
+      // end, past the other one.
+      const scale = scaleOf(recordX);
+      const title = x.anchors.length ? labelOf(recordX, scale, "x", x) : null;
+      if (title != null) {
+        const [left, right] = [Math.min(...recordX.range), Math.max(...recordX.range)];
+        const past = widthOf(title) - (right - left);
+        const labelAnchor = x.labelAnchor ?? (scale.ticks ? "right" : "center");
+        const [before, after] =
+          labelAnchor === "center" ? [past / 2, past / 2] : labelAnchor === "right" ? [past, 0] : [0, past];
+        over.left = Math.max(over.left, before);
+        over.right = Math.max(over.right, after);
+      }
     }
     if (hasY) {
       const labelAnchor = y.labelAnchor ?? (scaleOf(recordY).ticks ? "top" : "center");
@@ -88,11 +102,22 @@ function measureSides(data, options, keysX, keysY, has, recordsOf, colors) {
         over.bottom = Math.max(over.bottom, end);
         if (titled && !turned) level[labelAnchor] = true;
       });
+      // A turned title longer than its axis reaches past its ends: from the middle, both ways, or
+      // from the top, under the bottom.
+      const title = y.anchors.length && turned ? labelOf(recordY, scaleOf(recordY), "y", y, true) : null;
+      if (title != null) {
+        const [top, bottom] = [Math.min(...recordY.range), Math.max(...recordY.range)];
+        const past = widthOf(title) - (bottom - top);
+        const [above, below] = labelAnchor === "center" ? [past / 2, past / 2] : [0, past];
+        over.top = Math.max(over.top, above);
+        over.bottom = Math.max(over.bottom, below);
+      }
     }
   }
   // At the top or the bottom, an axis of x and a level title of y share a row of titles, past the
   // tick labels of x, or half a label without them.
-  const extent = {left: Math.max(reach.left, over.left), right: reach.right, overhangRight: over.right};
+  // On the right, the legends start past the farther of the axes and the ends of the labels of x.
+  const extent = {left: Math.max(reach.left, over.left), right: Math.max(reach.right, over.right)};
   for (const side of ["top", "bottom"]) {
     const row = rows[side] || level[side] ? 6 + 10 : 0;
     const past = reach[side] || (level[side] ? 5 : 0);
@@ -250,39 +275,42 @@ export function plane(
     const hintY = axisHint(firstHints, keysY);
     const sizeY = {...hintY, ...positionOptions([hintY], options[scaleName(firstHints, keysY, "y")])};
     let margins = Object.fromEntries(Object.keys(floors).map((side) => [side, given[side] ?? margin ?? floors[side]]));
-    let frame, room;
-    for (let pass = 0; pass < 3; pass++) {
+    // The frame inside margins, with the height they give, and what's drawn past it.
+    const frameAt = (margins) => {
       const frameHeight =
         height ?? (auto?.height ? autoHeight(first, firstY, sizeY, margins.top + margins.bottom) : rendererHeight);
-      frame = {
-        top: margins.top,
-        right: width - margins.right,
-        bottom: frameHeight - margins.bottom,
-        left: margins.left,
-      };
-      room = measureSides(data, options, keysX, keysY, has, (context) => recordsOf(context, frame), colors);
+      return {top: margins.top, right: width - margins.right, bottom: frameHeight - margins.bottom, left: margins.left};
+    };
+    const measure = (margins) => {
+      const frame = frameAt(margins);
+      return measureSides(data, options, keysX, keysY, has, (context) => recordsOf(context, frame), colors);
+    };
+    const fit = (side, extent) => Math.max(floors[side], extent ? extent + 3 : 0);
+    let room = measure(margins);
+    for (let pass = 0; pass < 3; pass++) {
+      const frame = frameAt(margins);
       const legendsTop = topLegends(data, colors, options, width - 3 - margins.left);
       const legendsRight = rightLegends(data, colors, options, frame.bottom - frame.top);
-      const fit = (side, extent) => Math.max(floors[side], extent ? extent + 3 : 0);
       const next = {
         top: (given.top ?? margin ?? fit("top", room.top)) + (given.top === undefined ? legendsTop : 0),
         right:
           given.right ??
           (margin !== undefined
             ? margin + (legendsRight ? 12 + legendsRight + 3 : 0)
-            : fit("right", Math.max(room.overhangRight, room.right + (legendsRight ? 12 + legendsRight : 0)))),
+            : fit("right", room.right + (legendsRight ? 12 + legendsRight : 0))),
         bottom: given.bottom ?? margin ?? fit("bottom", room.bottom),
         left: given.left ?? margin ?? fit("left", room.left),
       };
-      const done = Object.keys(next).every((side) => next[side] === margins[side]);
+      if (Object.keys(next).every((side) => next[side] === margins[side])) break;
+      // What's drawn is measured on the margins kept, even past the last pass, for the legends.
       margins = next;
-      if (done && pass > 0) break;
+      room = measure(margins);
     }
     ({top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft} = margins);
     height ??= auto?.height ? autoHeight(first, firstY, sizeY, marginTop + marginBottom) : rendererHeight;
     renderer.resize?.(width, height);
     ({width, height} = renderer._props);
-    frame = {top: marginTop, right: width - marginRight, bottom: height - marginBottom, left: marginLeft};
+    const frame = {top: marginTop, right: width - marginRight, bottom: height - marginBottom, left: marginLeft};
     // The legends on the right start past the axes on the right of the plot, or past margin, which
     // they add to, if it's given.
     legendX = frame.right + (margin !== undefined && given.right === undefined ? margin : room.right) + 12;
