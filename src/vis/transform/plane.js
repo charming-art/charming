@@ -185,8 +185,10 @@ const sidesOfPlane = {
 // position, such as {y: {domain: [0, 100]}} or a named {length: {type: "log"}}; the type, domain,
 // range, scheme and label of a color, such as {fill: {scheme: "PiYG"}}; and the type, domain, range
 // and label of a radius or an opacity, such as {r: {range: [0, 20]}}. The type "identity" leaves a
-// color, radius or opacity as it is. The other options of the plane can't name
-// a scale. Like Plot's, a chart draws the axes of its positions, at the bottom and the left: the
+// color, radius or opacity as it is. Like Plot's, any scale also takes transform, a function of its
+// values, such as (d) => d / 1000, or percent, mapping proportions to percentages; and a continuous
+// one zero, to include 0 in its domain, nice, to round it, true or a count of ticks, and clamp, to
+// pin values past it to its ends. The other options of the plane can't name a scale. Like Plot's, a chart draws the axes of its positions, at the bottom and the left: the
 // options of a position also take axis, "top", "both" or null for x, "right", "both" or null for y,
 // and the options of cm.axis, such as {x: {axis: "top", grid: true}}; a scale such as fill takes
 // legend: true to draw its legend, and the options of cm.legend. An axis or legend added to the
@@ -445,8 +447,10 @@ export function plane(
     // Colors are categorical by default, and positions are discrete points by default.
     const [colored] = scale(flow, [context], scaleDescriptors(colors));
     const descriptors = {};
-    for (const key of ownKeysX) if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX};
-    for (const key of ownKeysY) if (key in value) descriptors[key] = {scale: y.type, domain: y.domain, range: rangeY};
+    for (const key of ownKeysX)
+      if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX, clamp: x.clamp};
+    for (const key of ownKeysY)
+      if (key in value) descriptors[key] = {scale: y.type, domain: y.domain, range: rangeY, clamp: y.clamp};
     const [scaled] = scale(flow, [colored], descriptors, point);
 
     const scales = {...context.scales};

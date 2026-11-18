@@ -1,11 +1,12 @@
 import {InternMap, InternSet, max, min} from "d3-array";
 
 // Missing values, null or undefined, map to NaN, like Plot, rather than to the position of 0.
-function linear([d, d1], [r, r1] = [0, 1]) {
+function linear([d, d1], [r, r1] = [0, 1], clamp = false) {
   const k = d1 - d;
   return (x) => {
     if (x == null) return NaN;
-    const t = k === 0 ? 0.5 : (x - d) / k;
+    let t = k === 0 ? 0.5 : (x - d) / k;
+    if (clamp) t = Math.max(0, Math.min(1, t));
     return r * (1 - t) + t * r1;
   };
 }
@@ -34,14 +35,16 @@ export function domainOf(scale, V) {
   return discrete(scale, V) ? Array.from(new InternSet(V)) : [min(V), max(V)];
 }
 
-function scaleOf({scale, domain, range}, V, ordinalOf) {
+// With clamp, values past the domain of a continuous scale map to the ends of its range.
+function scaleOf({scale, domain, range, clamp}, V, ordinalOf) {
   const o = discrete(scale, V);
   if (domain === undefined) domain = domainOf(scale, V);
   if (typeof scale === "function") {
     const s = scale.copy().domain(domain);
+    if (clamp && s.clamp) s.clamp(true);
     return range === undefined ? s : s.range(range);
   }
-  return o ? ordinalOf(domain, range) : linear(domain, range);
+  return o ? ordinalOf(domain, range) : linear(domain, range, clamp);
 }
 
 function applyScale(value, options, ordinalOf) {

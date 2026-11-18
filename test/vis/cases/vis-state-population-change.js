@@ -20,12 +20,13 @@ export const visStatePopulationChange = withSVG(async () => {
         .transform(cm.plane, {
           marginLeft: 50,
           marginRight: 48,
-          // Like Plot's percent option, the ticks are in percentage points.
+          // Like Plot's, percent maps the changes to percentages, signed by tickFormat.
           x: {
             label: "← decrease · Change in population, 2010–2019 (%) · increase →",
             axis: "both",
             labelAnchor: "center",
-            tickFormat: (d) => d3.format("+.0f")(d * 100),
+            percent: true,
+            tickFormat: "+",
           },
           y: {axis: null},
           fill: {type: "ordinal", range: [d3.schemePiYG[3][0], d3.schemePiYG[3][2]]},

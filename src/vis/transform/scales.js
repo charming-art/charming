@@ -36,6 +36,29 @@ export function typeOf(type, options = {}) {
   return typeof type === "string" && Object.hasOwn(continuous, type) ? continuous[type](options) : type;
 }
 
+// The transform of the values of a scale, from its options: transform, such as (d) => d / 1000, or
+// percent, which maps proportions to percentages, like Plot's.
+export function transformOf({transform, percent} = {}) {
+  return transform ?? (percent ? (d) => d * 100 : undefined);
+}
+
+// The domain of a continuous scale extended, like Plot's: with zero, to include 0, and with nice, to
+// round values, such as [0, 100] rather than [3, 97], nice being true or the count of ticks.
+function adjustDomain(domain, {zero, nice} = {}, type) {
+  if (!domain || domain.length !== 2 || !domain.every((d) => typeof d === "number" || d instanceof Date)) return domain;
+  let [d0, d1] = domain;
+  if (zero && typeof d0 === "number")
+    [d0, d1] = d0 <= d1 ? [Math.min(0, d0), Math.max(0, d1)] : [Math.max(0, d0), Math.min(0, d1)];
+  if (nice) {
+    const base = typeof type === "function" ? type.copy() : d0 instanceof Date ? scaleUtc() : scaleLinear();
+    [d0, d1] = base
+      .domain([d0, d1])
+      .nice(nice === true ? undefined : nice)
+      .domain();
+  }
+  return [d0, d1];
+}
+
 // Whether a scale is logarithmic, which only maps values of one sign.
 function isLog(type) {
   return typeof type?.base === "function";
@@ -108,26 +131,27 @@ export function channelScales(value, hints) {
   const scales = {};
   for (const key of ["r", ...opacityKeys]) {
     if (!(key in hints) || !(key in value)) continue;
-    const {type, domain, range, ...options} = hints[key];
+    const {type, domain, range, clamp, ...options} = hints[key];
     if (type === "identity") continue;
     const V = value[key];
     if (type === undefined && !isNumeric(V)) continue;
     const radius = key === "r";
     const t = typeOf(type ?? (radius ? "sqrt" : "linear"), options);
     // From 0, unless the scale is logarithmic, which has no logarithm of 0.
-    const d = domain ?? (isLog(t) ? logDomain(V) : [0, max(V) ?? 1]);
+    const d = adjustDomain(domain ?? (isLog(t) ? logDomain(V) : [0, max(V) ?? 1]), options, t);
     const r = range ?? (radius ? radiusRange(V, d) : [0, 1]);
-    scales[key] = {type: t, domain: d, range: r};
+    scales[key] = {type: t, domain: d, range: r, ...(clamp && {clamp})};
   }
   for (const key of colorKeys) {
     if (!(key in hints) || !(key in value)) continue;
-    const {type, domain, range, scheme = "turbo"} = hints[key];
+    const {type, domain, range, scheme = "turbo", clamp, ...options} = hints[key];
     if (type === "identity") continue;
     const V = value[key];
     if (type === undefined && domain === undefined && range === undefined && isIdentity(V)) continue;
     if (type === "linear" || (type === undefined && isNumeric(V))) {
       const sequential = range === undefined ? scaleSequential(interpolatorOf(scheme)) : scaleLinear();
-      scales[key] = {type: sequential, domain: domain ?? [min(V), max(V)], range};
+      const d = adjustDomain(domain ?? [min(V), max(V)], options, sequential);
+      scales[key] = {type: sequential, domain: d, range, ...(clamp && {clamp})};
       continue;
     }
     const ordinal = type === undefined || type === "ordinal";
@@ -151,25 +175,29 @@ function isTemporal(values) {
 
 // The scale shared by position channels such as x and x1, with the domain inferred from all of them.
 // The type is the one given, if any; resolved is the type applied, for the record of the scale.
-export function positionScale(value, keys, {type, domain, range}) {
+export function positionScale(value, keys, {type, domain, range, nice, zero, clamp}) {
   type = typeOf(type);
   const V = keys.filter((key) => key in value).flatMap((key) => Array.from(value[key]));
   if (domain === undefined) domain = isLog(type) ? logDomain(V) : domainOf(type, V);
+  // A continuous domain may be extended to zero, or to round values.
+  if (!discrete(type, V))
+    domain = adjustDomain(domain, {nice, zero: zero && !isLog(type)}, typeof type === "function" ? type : undefined);
   // cm.fit maps discrete positions with a point scale, unless a d3 scale is given. Dates are
   // mapped linearly, but recorded as a UTC time scale for the ticks of axes.
   const resolved = typeof type === "function" ? type : discrete(type, V) ? "point" : isTemporal(V) ? "utc" : "linear";
-  return {type, domain, range, resolved};
+  return {type, domain, range, resolved, ...(clamp && !discrete(type, V) && {clamp})};
 }
 
 // The scale recorded for a position: the band of cm.spreadX if any, so that axes can label its
 // categories, or the scale applied by cm.fit.
-export function positionRecord({resolved, domain}, range, {band}) {
+export function positionRecord({resolved, domain, clamp}, range, {band}) {
   if (band) return {type: "band", ...band, range};
-  return resolve({type: resolved, domain, range});
+  return {...resolve({type: resolved, domain, range}), ...(clamp && {clamp})};
 }
 
 // Rebuilds a d3 scale from a recorded scale, for the ticks of axes and for apply.
-export function scaleOf({type, domain, range, paddingInner, paddingOuter, align, flex}) {
+export function scaleOf({type, domain, range, paddingInner, paddingOuter, align, flex, clamp}) {
+  if (clamp) return scaleOf({type, domain, range}).copy().clamp(true);
   if (typeof type === "function") return type;
   if (type === "band" && flex) return scaleFlex(domain, flex, {paddingInner, paddingOuter, align}, range);
   if (type === "band")
@@ -254,16 +282,34 @@ export function axisHint(hints, keys) {
 // depends on the other contexts of the scale: a band's domain comes from its spread.
 export function withScaleOptions(context, scales, axes) {
   const hints = {...context.hints};
+  const value = {...context.value};
+  // The values of a scale with transform or percent are transformed, with the domains hinted for
+  // them, such as the extents of a stack, as they reach the plane.
+  const transform = (key, f) => {
+    if (key in value) value[key] = Array.from(value[key], (v) => (v == null ? v : f(v)));
+    const domain = hints[key]?.domain;
+    if (Array.isArray(domain) && domain.every((d) => typeof d === "number")) {
+      hints[key] = {...hints[key], domain: domain.map(f)};
+    }
+  };
   for (const [keys, axis] of axes) {
     const options = scales[scaleName(hints, keys, axis)];
     if (!options) continue;
-    const {reverse, label} = options;
-    hints[keys[0]] = {...hints[keys[0]], ...definedOptions({reverse, label})};
+    const {reverse, label, percent} = options;
+    // Like Plot's, a label of a percent, but one given, says so.
+    const inferred = hints[keys[0]]?.label;
+    const percented = percent && label === undefined && inferred != null ? `${inferred} (%)` : undefined;
+    const f = transformOf(options);
+    if (f && !hints[keys[0]]?.band) for (const key of keysOf(value, hints, keys, axis)) transform(key, f);
+    hints[keys[0]] = {...hints[keys[0]], ...definedOptions({reverse, label: label !== undefined ? label : percented})};
   }
   for (const key of scaledKeys) {
-    if (scales[key] && key in hints) hints[key] = {...hints[key], ...definedOptions(scales[key])};
+    if (!scales[key]) continue;
+    const f = transformOf(scales[key]);
+    if (f) transform(key, f);
+    if (key in hints) hints[key] = {...hints[key], ...definedOptions(scales[key])};
   }
-  return {...context, hints};
+  return {...context, value, hints};
 }
 
 // The type and domain of a position from the options of its scale, unless the scale has bands,
@@ -271,7 +317,8 @@ export function withScaleOptions(context, scales, axes) {
 // that share the scale.
 export function positionOptions(hints, options = {}) {
   if (hints.some((hint) => hint.band !== undefined)) return {};
-  return definedOptions({type: typeOf(options.type, options), domain: options.domain});
+  const {domain, nice, zero, clamp} = options;
+  return definedOptions({type: typeOf(options.type, options), domain, nice, zero, clamp});
 }
 
 // The hints of the scaled channels of the contexts, for channelScales: for each channel, such as a
@@ -343,7 +390,7 @@ export function sharedDomain(domains, type, values) {
 // The scale of a position shared by the contexts, for cm.plane and cm.polar: its type and domain as
 // given, such as the options of the scale, else from the hints of the contexts, else inferred from
 // the values of all of them.
-export function sharedScale(data, all, keys, {type, domain} = {}) {
+export function sharedScale(data, all, keys, {type, domain, ...options} = {}) {
   const hints = data.map(({hints = {}}) => axisHint(hints, keys));
   type ??= hints[0]?.type;
   const values = merge(data, all);
@@ -352,7 +399,7 @@ export function sharedScale(data, all, keys, {type, domain} = {}) {
     type,
     all.flatMap((key) => values[key] ?? []),
   );
-  return positionScale(values, all, {type, domain});
+  return positionScale(values, all, {type, domain, ...options});
 }
 
 // The point at the radius r and the angle a of a polar frame, clockwise from 12 o'clock.

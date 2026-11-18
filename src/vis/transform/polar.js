@@ -99,8 +99,8 @@ export function polar(
   // The type and domain of a position: the options of its scale, unless it has bands, else its
   // hint; the radius is radial by default, so that areas grow with values.
   const positionOf = (hints, keys, name, fallback) => {
-    const own = positionOptions(hints, options[name]);
-    return {type: radial(own.type ?? hints[0]?.type ?? fallback), domain: own.domain};
+    const {type, ...own} = positionOptions(hints, options[name]);
+    return {...own, type: radial(type ?? hints[0]?.type ?? fallback)};
   };
   const sharedOf = (keys, axis, fallback) =>
     new Map(
@@ -108,8 +108,7 @@ export function polar(
         if (independent(name)) return [name, null];
         const all = allKeysOf(contexts, keys, axis);
         const hints = contexts.map(({hints = {}}) => axisHint(hints, keys));
-        const {type, domain} = positionOf(hints, keys, name, fallback);
-        return [name, sharedScale(contexts, all, keys, {type, domain})];
+        return [name, sharedScale(contexts, all, keys, positionOf(hints, keys, name, fallback))];
       }),
     );
   const sharedX = sharedOf(keysX, "x");
@@ -251,8 +250,10 @@ export function polar(
 
     const [colored] = scale(flow, [context], scaleDescriptors(colors));
     const descriptors = {};
-    for (const key of ownKeysX) if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX};
-    for (const key of ownKeysY) if (key in value) descriptors[key] = {scale: y.type, domain: y.domain, range: rangeY};
+    for (const key of ownKeysX)
+      if (key in value) descriptors[key] = {scale: x.type, domain: x.domain, range: rangeX, clamp: x.clamp};
+    for (const key of ownKeysY)
+      if (key in value) descriptors[key] = {scale: y.type, domain: y.domain, range: rangeY, clamp: y.clamp};
     const [scaled] = scale(flow, [colored], descriptors, point);
 
     const scales = {...context.scales};
