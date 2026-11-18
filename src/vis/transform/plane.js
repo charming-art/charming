@@ -30,13 +30,14 @@ import {
   withSeries,
 } from "./scales.js";
 
-// Like Plot, the height is 400 for a continuous y, 20px per category (up to 60) plus 60 for a
-// categorical y, and 60 without y.
-function autoHeight(value, keys, {type, domain, band}) {
-  if (!hasAny(value, keys)) return 60;
+// Like Plot, the height is 400 for a continuous y; for a categorical y, a frame of 20px per
+// category (up to 60) plus 10, and without y, a frame of 30px, each with the top and bottom margins
+// of the chart, such as 70 without y with the default bottom axis, or more with an axis at the top.
+function autoHeight(value, keys, {type, domain, band}, margins) {
+  if (!hasAny(value, keys)) return 30 + margins;
   const V = keys.filter((key) => key in value).flatMap((key) => Array.from(value[key]));
   const categories = band?.domain ?? (discrete(type, V) ? (domain ?? Array.from(new InternSet(V))) : null);
-  return categories ? Math.min(60, categories.length) * 20 + 60 : 400;
+  return categories ? Math.min(60, categories.length) * 20 + 10 + margins : 400;
 }
 
 // Rows at the middle of the frame, for a position that isn't encoded, such as y in a dot plot of
@@ -44,6 +45,21 @@ function autoHeight(value, keys, {type, domain, band}) {
 function middle(value, keys, [start, end]) {
   const n = value[keys.find((key) => key in value)].length;
   return Array.from({length: n}, () => (start + end) / 2);
+}
+
+// The sides where a chart draws axes, such as bottom and left by default: the sides of the axes of
+// the positions encoded in any of its contexts.
+function axisSides(data, options, keysX, keysY, has) {
+  const sides = new Set();
+  for (const context of data) {
+    const {hints = {}} = context;
+    const nameX = scaleName(hints, keysX, "x");
+    const nameY = scaleName(hints, keysY, "y");
+    const {x, y} = guidesOf(null, options, nameX, nameY, sidesOfPlane, {x: ["bottom"], y: ["left"]});
+    if (has(context, keysX, "x")) for (const side of x.anchors) sides.add(side);
+    if (has(context, keysY, "y")) for (const side of y.anchors) sides.add(side);
+  }
+  return sides;
 }
 
 // The sides of the axes of a plane: the first is the side of axis true, and both are "both".
@@ -108,14 +124,18 @@ export function plane(
   // {value: "v2", scale: "y"}. A nested chart has no margins by default: its parent's margins and
   // bands leave the room. The size and direction of y come from the first context with y.
   const has = ({value, hints = {}}, keys, name) => hasAny(value, keysOf(value, hints, keys, name));
-  const hasX = data.some((context) => has(context, keysX, "x"));
   const hasY = data.some((context) => has(context, keysY, "y"));
   const {value: first = {}, hints: firstHints = {}} = data.find((context) => has(context, keysY, "y")) ?? data[0] ?? {};
   const firstY = keysOf(first, firstHints, keysY, "y");
-  marginTop ??= margin ?? (nested ? 0 : hasY ? 20 : 0);
-  marginRight ??= margin ?? (nested ? 0 : 20);
-  marginBottom ??= margin ?? (nested ? 0 : hasX ? 30 : 20);
-  marginLeft ??= margin ?? (nested ? 0 : hasY ? 40 : 20);
+  // The defaults hold the axes drawn on each side, with their titles past their tick labels: under
+  // or over x, 6 + 3 + 10 + 6 + 10 and 3px to spare; beside y, a title turned beside labels up to
+  // six characters wide, such as 14,000. A side without an axis keeps room for the ends of the tick
+  // labels of the other axis, such as half a label of y over the frame.
+  const sides = nested ? new Set() : axisSides(data, options, keysX, keysY, has);
+  marginTop ??= margin ?? (nested ? 0 : sides.has("top") ? 40 : hasY ? 10 : 0);
+  marginRight ??= margin ?? (nested ? 0 : sides.has("right") ? 64 : 20);
+  marginBottom ??= margin ?? (nested ? 0 : sides.has("bottom") ? 40 : 20);
+  marginLeft ??= margin ?? (nested ? 0 : sides.has("left") ? 64 : 20);
 
   // Values grow upward, but categories in bands go down from the top, like Plot's ordinal y, unless
   // the scale is reversed. An independent y points its own way in each context.
@@ -139,7 +159,7 @@ export function plane(
     // The height uses the same scale and domain of y as fitting.
     const hintY = axisHint(firstHints, keysY);
     const sizeY = {...hintY, ...positionOptions([hintY], options[scaleName(firstHints, keysY, "y")])};
-    height ??= auto?.height ? autoHeight(first, firstY, sizeY) : rendererHeight;
+    height ??= auto?.height ? autoHeight(first, firstY, sizeY, marginTop + marginBottom) : rendererHeight;
     renderer.resize?.(width, height);
     ({width, height} = renderer._props);
     const frame = {top: marginTop, right: width - marginRight, bottom: height - marginBottom, left: marginLeft};

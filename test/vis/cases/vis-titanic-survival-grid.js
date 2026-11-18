@@ -25,7 +25,7 @@ export const visTitanicSurvivalGrid = withSVG(async () => {
         })
         .transform(cm.spreadX, {padding: 0.15, domain: [1, 2, 3]})
         .transform(cm.spreadY, {padding: 0.15, domain: ["female", "male"]})
-        .transform(cm.plane, {marginLeft: 60, x: {label: "pclass"}, y: {label: "sex"}})
+        .transform(cm.plane, {x: {label: "pclass"}, y: {label: "sex"}})
         .append(cm.g)
         .data(([, , rows]) => rows)
         .transform(cm.encode, {fill: "survived"})

@@ -73,9 +73,9 @@ test("cm.legend takes options per scale, such as a label, or false to skip a leg
 
 test("cm.legend stacks its legends in a column right of the frame, from its top", () => {
   const node = legend({fill: "k", r: "v"});
-  // The frame ends at 400 - 150 and starts at 20; the column starts 12px right of it.
+  // The frame ends at 400 - 150 and starts at 10; the column starts 12px right of it.
   const [title] = node.querySelectorAll("text");
-  assert.deepStrictEqual([+title.getAttribute("x"), +title.getAttribute("y")], [400 - 150 + 12, 20]);
+  assert.deepStrictEqual([+title.getAttribute("x"), +title.getAttribute("y")], [400 - 150 + 12, 10]);
   const swatches = rects(node);
   assert.deepStrictEqual(new Set(swatches.map((r) => r.getAttribute("x"))).size, 1);
   const ys = swatches.map((r) => +r.getAttribute("y"));

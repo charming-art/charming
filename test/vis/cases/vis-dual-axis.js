@@ -28,7 +28,6 @@ export const visDualAxis = withSVG(async () => {
           x: {label: null, tickFormat: d3.utcFormat("%b")},
           temperature: {label: "Avg. Temperature (°C)"},
           precipitation: {label: "Precipitation (inches)", axis: "right"},
-          marginRight: 40,
         });
       temperature.add(cm.areaY, {fill: "#85C5A6", fillOpacity: 0.3});
       precipitation.add(cm.lineY, {stroke: "#85A9C5", strokeWidth: 2, curve: "monotone-x"});
