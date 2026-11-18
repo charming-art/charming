@@ -30,14 +30,14 @@ import {
   withSeries,
 } from "./scales.js";
 
-// Like Plot, the height is 400 for a continuous y, 20px per category (up to 60) plus 60 for a
-// categorical y, and without y, 70: like Plot's 60, a frame of 30px, with the room of the default
-// bottom margin, which holds the title of x past its tick labels.
-function autoHeight(value, keys, {type, domain, band}) {
-  if (!hasAny(value, keys)) return 70;
+// Like Plot, the height is 400 for a continuous y; for a categorical y, a frame of 20px per
+// category (up to 60) plus 10, and without y, a frame of 30px, each with the top and bottom margins
+// of the chart, such as 70 without y with the default bottom axis, or more with an axis at the top.
+function autoHeight(value, keys, {type, domain, band}, margins) {
+  if (!hasAny(value, keys)) return 30 + margins;
   const V = keys.filter((key) => key in value).flatMap((key) => Array.from(value[key]));
   const categories = band?.domain ?? (discrete(type, V) ? (domain ?? Array.from(new InternSet(V))) : null);
-  return categories ? Math.min(60, categories.length) * 20 + 60 : 400;
+  return categories ? Math.min(60, categories.length) * 20 + 10 + margins : 400;
 }
 
 // Rows at the middle of the frame, for a position that isn't encoded, such as y in a dot plot of
@@ -159,7 +159,7 @@ export function plane(
     // The height uses the same scale and domain of y as fitting.
     const hintY = axisHint(firstHints, keysY);
     const sizeY = {...hintY, ...positionOptions([hintY], options[scaleName(firstHints, keysY, "y")])};
-    height ??= auto?.height ? autoHeight(first, firstY, sizeY) : rendererHeight;
+    height ??= auto?.height ? autoHeight(first, firstY, sizeY, marginTop + marginBottom) : rendererHeight;
     renderer.resize?.(width, height);
     ({width, height} = renderer._props);
     const frame = {top: marginTop, right: width - marginRight, bottom: height - marginBottom, left: marginLeft};

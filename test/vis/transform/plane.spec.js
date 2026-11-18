@@ -996,3 +996,20 @@ test("cm.plane leaves the default margins of an axis on each side with one", () 
   // Given margins come first.
   assert.deepStrictEqual(frame({marginLeft: 5, y: {axis: null}}), [10, 20, 40, 5]);
 });
+
+test("cm.plane sizes an auto height with the top and bottom margins of its axes", () => {
+  const heightOf = (data, channels, options) => {
+    const renderer = cm.svg();
+    cm.flow().renderer(renderer).data(data).transform(cm.encode, channels).transform(cm.plane, options);
+    return renderer._props.height;
+  };
+  const dots = [{v: 1}, {v: 2}];
+  // Without y, a frame of 30px with the margins.
+  assert.strictEqual(heightOf(dots, {x: "v"}), 30 + 40);
+  assert.strictEqual(heightOf(dots, {x: "v"}, {x: {axis: "top"}}), 30 + 40 + 20);
+  assert.strictEqual(heightOf(dots, {x: "v"}, {x: {axis: "both"}}), 30 + 40 + 40);
+  // With a categorical y, 20px per category plus 10.
+  const bars = [{k: "a", v: 1}];
+  assert.strictEqual(heightOf(bars, {x: "v", y: "k"}), 20 + 10 + 10 + 40);
+  assert.strictEqual(heightOf(bars, {x: "v", y: "k"}, {x: {axis: "both"}}), 20 + 10 + 40 + 40);
+});

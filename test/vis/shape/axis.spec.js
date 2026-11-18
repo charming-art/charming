@@ -101,14 +101,14 @@ test("cm.axis rotates tick labels by tickRotate degrees, aligned to their ticks"
 });
 
 // The tick labels of a column chart of letters, with options for its axes.
-function rotated(options) {
+function rotated(options, plane) {
   const renderer = cm.svg({width: 640, height: 400});
   const root = cm.flow().renderer(renderer);
   root
     .data(data)
     .transform(cm.encode, {x: "letter", y: "frequency"})
     .transform(cm.spreadX)
-    .transform(cm.plane)
+    .transform(cm.plane, plane)
     .add(cm.axis, options);
   root.render();
   const find = (text) => Array.from(renderer.node().querySelectorAll("text")).find((t) => t.textContent === text);
@@ -221,25 +221,31 @@ test("cm.axis draws no titles in charts nested in a polar chart, and labels each
 });
 
 test("cm.axisX with anchor top labels the ticks above the chart, and titles it at the top", () => {
-  const a = rotated({x: {anchor: "top"}, y: false})("A");
-  // The top of the chart is at 10; the tick is 6px and the padding 3px.
-  assert.strictEqual(+a.getAttribute("y"), 10 - 6 - 3);
+  // The axis of x at the top of the plane gives it a top margin of 40.
+  const find = rotated({x: {anchor: "top"}, y: false}, {x: {axis: "top"}});
+  const a = find("A");
+  // The top of the chart is at 40; the tick is 6px and the padding 3px.
+  assert.strictEqual(+a.getAttribute("y"), 40 - 6 - 3);
   assert.strictEqual(a.getAttribute("dominant-baseline"), "text-after-edge");
-  // The title sits 6px over the tick labels, 10px tall, on its bottom; a top axis needs a margin.
-  const title = rotated({x: {anchor: "top"}, y: false})("letter");
-  assert.strictEqual(+title.getAttribute("y"), 10 - 6 - 3 - 10 - 6);
+  // The title sits 6px over the tick labels, 10px tall, on its bottom, inside the chart.
+  const title = find("letter");
+  assert.strictEqual(+title.getAttribute("y"), 40 - 6 - 3 - 10 - 6);
+  assert.ok(+title.getAttribute("y") - 10 >= 0);
   assert.strictEqual(title.getAttribute("dominant-baseline"), "text-after-edge");
 });
 
 test("cm.axisY with anchor right labels the ticks right of the chart, aligned to their start", () => {
-  const find = rotated({x: false, y: {anchor: "right"}});
+  // The axis of y at the right of the plane gives it a right margin of 64.
+  const find = rotated({x: false, y: {anchor: "right"}}, {y: {axis: "right"}});
   const tick = find("0.08");
-  // The right of the chart is at 620.
-  assert.strictEqual(+tick.getAttribute("x"), 620 + 6 + 3);
+  // The right of the chart is at 576.
+  assert.strictEqual(+tick.getAttribute("x"), 576 + 6 + 3);
   assert.strictEqual(tick.getAttribute("text-anchor"), "start");
-  // The title is turned right of the tick labels, the widest 4 characters of 6px, 6px past them.
+  // The title is turned right of the tick labels, the widest 4 characters of 6px, 6px past them,
+  // and hangs 10px right of that, inside the chart.
   const title = find("frequency →");
-  assert.strictEqual(+title.getAttribute("x"), 620 + 6 + 3 + 24 + 6);
+  assert.strictEqual(+title.getAttribute("x"), 576 + 6 + 3 + 24 + 6);
+  assert.ok(+title.getAttribute("x") + 10 <= 640);
   assert.strictEqual(title.getAttribute("dominant-baseline"), "text-before-edge");
 });
 
