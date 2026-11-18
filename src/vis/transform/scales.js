@@ -475,14 +475,15 @@ function pick(options = {}, keys) {
 
 // The guides of a context, for its axes and legends: the sides of each axis, from the axis option
 // of its scale, such as "top", "both", true for its first side, or null for none, else the default
-// sides, and the options of each axis and legend. The sides of x and y are given in pairs, such as
-// ["bottom", "top"], with their defaults, such as ["bottom"] or none in a nested chart.
-export function guidesOf(id, options, nameX, nameY, {x: [x0, x1], y: [y0, y1]}, defaults) {
-  const sides = (option, first, second, side) => {
+// sides, and the options of each axis and legend. The sides of x and y are given as their first
+// side and both of them, such as {first: "bottom", both: ["bottom", "top"]}, with their defaults,
+// such as ["bottom"] or none in a nested chart.
+export function guidesOf(id, options, nameX, nameY, sides, defaults) {
+  const anchors = (option, {first, both}, side) => {
     if (option === undefined) return side;
     if (option === null || option === false) return [];
     if (option === true) return [first];
-    return option === "both" ? [first, second] : [option];
+    return option === "both" ? both : [option];
   };
   const {axis: axisX} = options[nameX] ?? {};
   const {axis: axisY} = options[nameY] ?? {};
@@ -492,8 +493,8 @@ export function guidesOf(id, options, nameX, nameY, {x: [x0, x1], y: [y0, y1]}, 
   }
   return {
     id,
-    x: {name: nameX, anchors: sides(axisX, x0, x1, defaults.x), ...pick(options[nameX], axisKeys)},
-    y: {name: nameY, anchors: sides(axisY, y0, y1, defaults.y), ...pick(options[nameY], axisKeys)},
+    x: {name: nameX, anchors: anchors(axisX, sides.x, defaults.x), ...pick(options[nameX], axisKeys)},
+    y: {name: nameY, anchors: anchors(axisY, sides.y, defaults.y), ...pick(options[nameY], axisKeys)},
     legends,
   };
 }

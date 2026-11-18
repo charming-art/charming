@@ -41,6 +41,10 @@ function radial(type) {
   return type === "radial" ? scaleRadial() : type;
 }
 
+// The sides of the axes of cm.polar: the angle axis on its default ring with axis true, outside it
+// and inside the hole with "both"; the radius axis has one side.
+const sidesOfPolar = {x: {first: undefined, both: ["outer", "inner"]}, y: {first: undefined, both: [undefined]}};
+
 // Resolves the scales of the channels, and maps positions to polar coordinates: x to the angle,
 // clockwise from 12 o'clock like d3.arc, and y to the radius, with a radial scale so that areas
 // grow with values. A pie is then a stack along x, and a rose a spread along x. The center is
@@ -190,7 +194,7 @@ export function polar(
     const titles = {x: options[nameX]?.label, y: options[nameY]?.label};
     // Unlike cm.plane, cm.polar draws axes only when asked, such as {x: {axis: true}}, as pies and
     // donuts have none.
-    const guides = guidesOf(id, options, nameX, nameY, {x: [], y: []}, {x: [], y: []});
+    const guides = guidesOf(id, options, nameX, nameY, sidesOfPolar, {x: [], y: []});
     return {...withoutHints(scaled), value: newValue, scales, frame, titles, clip: shape, clipped: clip, guides};
   });
 }

@@ -60,35 +60,39 @@ export function positionOf(scale) {
 }
 
 // Whether an implicit guide, drawn by cm.plane or cm.polar for the context of the given guides,
-// isn't drawn: if a guide of the given shapes for the same scale of the same chart is added
-// explicitly, in any of its layers, or the same implicit one is drawn before it in the same cell,
-// such as in the first of the layers sharing x, unless that layer has no rows there. Same tells
-// from the guides and the options of another guide whether it's for the same scale.
+// isn't drawn: if a guide of the given shapes for the same scale of the same chart draws in the
+// same cell, added explicitly in any of its layers, or implicitly before it, such as in the first
+// of the layers sharing x. A guide draws in a cell if its layer has rows there; same tells from the
+// context and the options of another guide whether it's for the same scale, and draws.
 export function replaced(flow, shapes, same, guides) {
   const node = flow._parent;
   const siblings = node._parent._children;
   const index = siblings.indexOf(node);
   const j = node._data.findIndex(({context}) => context?.guides === guides);
-  const of = ({render, options, context}) =>
-    shapes.includes(render) && context?.guides !== undefined && same(context.guides, options);
   return siblings.some((sibling, i) => {
     if (sibling === node) return false;
-    if (sibling._data.some((d) => !d.options?.implicit && of(d))) return true;
     const d = sibling._data[sibling._shared ? 0 : j];
-    return i < index && d !== undefined && of(d) && !d.context.frame?.empty;
+    if (d === undefined || !shapes.includes(d.render) || d.context?.guides === undefined) return false;
+    if (d.context.frame?.empty || !same(d.context, d.options ?? {})) return false;
+    return !d.options?.implicit || i < index;
   });
 }
 
 // The options of an axis, from the guides of its context and the options given to it: an implicit
 // axis draws the side of its guide, and an explicit one its anchor, else the first side of its
-// guide. Null if an implicit axis has no such side, or isn't drawn.
+// guide. Like Plot's, only the first side has a grid and a title. Null if an implicit axis has no
+// such side, or isn't drawn.
 export function axisOptions(flow, guides, axis, options, shapes) {
   const {anchors = [], name, ...guided} = guides?.[axis] ?? {};
   if (options.implicit) {
-    const same = (other, {implicit, side} = {}) =>
-      other.id === guides.id && other[axis].name === name && (!implicit || side === options.side);
-    if (options.side >= anchors.length || replaced(flow, shapes, same, guides)) return null;
-    return {...guided, anchor: anchors[options.side]};
+    const {side} = options;
+    const same = ({guides: other, scales = {}}, {implicit, side: otherSide}) =>
+      other.id === guides.id &&
+      other[axis].name === name &&
+      scales[axis] !== undefined &&
+      (!implicit || otherSide === side);
+    if (side >= anchors.length || replaced(flow, shapes, same, guides)) return null;
+    return {...guided, anchor: anchors[side], ...(side > 0 && {grid: false, label: null})};
   }
   const anchor = options.anchor ?? anchors[0];
   return {...guided, ...options, ...(anchor !== undefined && {anchor})};

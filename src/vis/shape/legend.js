@@ -200,7 +200,7 @@ export function legend(flow, value, {scales = {}, frame, guides, options = {}} =
   if (frame?.nested) return;
   const legends = guides?.legends ?? {};
   if (options.implicit) {
-    if (replaced(flow, [legend], (other) => other.id === guides.id, guides)) return;
+    if (replaced(flow, [legend], ({guides: other}) => other.id === guides.id, guides)) return;
     options = Object.fromEntries(keys.map((key) => [key, key in legends ? legends[key] : false]));
   } else {
     options = {...options};

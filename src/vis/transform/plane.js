@@ -47,7 +47,10 @@ function middle(value, keys, [start, end]) {
 }
 
 // The sides of the axes of a plane: the first is the side of axis true, and both are "both".
-const sidesOfPlane = {x: ["bottom", "top"], y: ["left", "right"]};
+const sidesOfPlane = {
+  x: {first: "bottom", both: ["bottom", "top"]},
+  y: {first: "left", both: ["left", "right"]},
+};
 
 // Resolves the scales of the channels, and maps positions to the chart area with y up and the
 // default margins of a chart. A renderer without a given size is resized, like Plot: 640 wide, with

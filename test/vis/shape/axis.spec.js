@@ -583,6 +583,74 @@ test("cm.plane draws the axes of layers in each cell of a nested chart where a l
   assert.strictEqual(new Set(cells).size, 2);
 });
 
+test("cm.plane draws an axis in a later layer if an earlier layer has no scale for it", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  const [a, b] = root
+    .data([
+      {x: 0, y: 0},
+      {x: 1, y: 1},
+    ])
+    .branch(
+      (flow) => flow.transform(cm.encode, {x: "x"}),
+      (flow) => flow.transform(cm.encode, {x: "x", y: "y"}),
+    )
+    .transform(cm.plane, {margin: 30});
+  a.add(cm.circle);
+  b.add(cm.circle);
+  root.render();
+  const T = Array.from(renderer.node().querySelectorAll("text"), (t) => t.textContent);
+  assert.strictEqual(T.filter((d) => d === "x →").length, 1);
+  assert.strictEqual(T.filter((d) => d === "↑ y").length, 1);
+});
+
+test("an explicit axis replaces the implicit ones only in the cells where it draws", () => {
+  const renderer = cm.svg({width: 400, height: 200});
+  const root = cm.flow().renderer(renderer);
+  const rows = [{v: 1}, {v: 2}];
+  const [left, right] = root
+    .data(["L", "R"])
+    .transform(cm.encode, {x: (d) => d})
+    .transform(cm.spreadX)
+    .transform(cm.plane, {x: {axis: null}})
+    .append(cm.g)
+    .branch(
+      (flow) => flow.data((cell) => (cell === "L" ? rows : [])).transform(cm.encode, {x: "v", y: "v"}),
+      (flow) => flow.data(() => rows).transform(cm.encode, {x: "v", y: "v"}),
+    )
+    .transform(cm.plane, {x: {axis: "bottom"}, y: {axis: null}});
+  left.add(cm.axisX, {tickFormat: (d) => `<${d}>`}).add(cm.circle);
+  right.add(cm.circle);
+  root.render();
+  const T = Array.from(renderer.node().querySelectorAll("text"), (t) => t.textContent);
+  // The left cell has the explicit axis, and the right one, where it has no rows, the implicit one.
+  assert.strictEqual(T.filter((d) => d === "<1>").length, 1);
+  assert.strictEqual(T.filter((d) => d === "1.0").length, 1);
+});
+
+test("cm.plane draws the grid and the title of an axis on both sides once, on its first side", () => {
+  const renderer = cm.svg({width: 200, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data([
+      {x: 0, y: 0},
+      {x: 1, y: 1},
+    ])
+    .transform(cm.encode, {x: "x", y: "y"})
+    .transform(cm.plane, {margin: 30, x: {axis: "both", grid: true}, y: {axis: null}});
+  root.render();
+  const node = renderer.node();
+  const titles = Array.from(node.querySelectorAll("text")).filter((t) => t.textContent === "x →");
+  assert.deepStrictEqual(
+    titles.map((t) => +t.getAttribute("y")),
+    [197],
+  );
+  // One grid line per tick, across the frame, and ticks on both sides.
+  const lines = Array.from(node.querySelectorAll("line"), (l) => [+l.getAttribute("y1"), +l.getAttribute("y2")]);
+  assert.strictEqual(lines.filter(([y1, y2]) => Math.abs(y2 - y1) === 140).length, 3);
+  assert.strictEqual(lines.filter(([y1, y2]) => Math.abs(y2 - y1) === 6).length, 6);
+});
+
 test("cm.plane draws no axes in charts nested in a chart, unless asked", () => {
   const nested = (options) => {
     const renderer = cm.svg({width: 200, height: 200});
@@ -601,6 +669,30 @@ test("cm.plane draws no axes in charts nested in a chart, unless asked", () => {
   };
   assert.deepStrictEqual(nested(), []);
   assert.ok(nested({x: {axis: "bottom"}}).includes("0.0"));
+});
+
+test("cm.polar draws its angle axis outside and inside its ring with axis both", () => {
+  const radii = (plane) => {
+    const renderer = cm.svg({width: 200, height: 200});
+    const root = cm.flow().renderer(renderer);
+    root
+      .data([
+        {x: 0, y: 1},
+        {x: 1, y: 2},
+      ])
+      .transform(cm.encode, {x: "x", y: "y"})
+      .transform(cm.polar, {margin: 0, innerRadius: 0.5, ...plane});
+    root.render();
+    const texts = Array.from(renderer.node().querySelectorAll("text")).filter((t) => t.textContent === "0.0");
+    return texts.map((t) => Math.round(Math.hypot(+t.getAttribute("x") - 100, +t.getAttribute("y") - 100)));
+  };
+  const [inner] = radii({x: {axis: true}});
+  const both = radii({x: {axis: "both"}});
+  assert.strictEqual(both.length, 2);
+  assert.ok(both.includes(inner));
+  assert.ok(Math.max(...both) > 100 * 0.5 && Math.min(...both) < 100 * 0.5);
+  // The radius axis has one side.
+  assert.deepStrictEqual(radii({y: {axis: "both"}}), radii({y: {axis: true}}));
 });
 
 test("cm.polar draws no axes unless asked", () => {
