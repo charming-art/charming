@@ -307,64 +307,55 @@ export function plane(
     const boxes = nestedFrames(flow, data, {width, height});
     const given = {top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft};
     const margins = Object.fromEntries(Object.keys(given).map((side) => [side, given[side] ?? margin ?? 0]));
-    // The cells of each parent form a grid, in the coordinates of that parent, such as the rows of a
-    // marginal histogram, each with its own cells.
-    const grids = new Map();
-    boxes.forEach((frame, j) => {
-      if (!frame.cell) return;
-      const parent = frame.cell.parent ?? null;
-      if (!grids.has(parent)) grids.set(parent, {parent, indexes: []});
-      grids.get(parent).indexes.push(j);
-    });
-    for (const grid of grids.values()) {
-      const B = grid.indexes.map((j) => boxes[j].cell.box);
-      const bounds = [
-        Math.min(...B.map((b) => b[0])),
-        Math.max(...B.map((b) => b[1])),
-        Math.min(...B.map((b) => b[2])),
-        Math.max(...B.map((b) => b[3])),
-      ];
-      const [wl, wr, wt, wb] = grid.parent
-        ? [grid.parent.left, grid.parent.right, grid.parent.top, grid.parent.bottom]
-        : bounds;
-      grid.bounds = bounds;
-      grid.free = {left: bounds[0] - wl, right: wr - bounds[1], top: bounds[2] - wt, bottom: wb - bounds[3]};
-    }
-    // The frames of the cells, each grid scaled into its bounds less the room kept at its edges,
-    // and inset by the margins given.
-    const layout = () =>
-      boxes.map((frame) => {
-        const grid = frame.cell && grids.get(frame.cell.parent ?? null);
-        if (!grid || Object.values(grid.reserve ?? {}).every((d) => !d)) return insetBy(frame, margins);
-        const [gl, gr, gt, gb] = grid.bounds;
-        const {reserve} = grid;
-        const [nl, nr, nt, nb] = [gl + reserve.left, gr - reserve.right, gt + reserve.top, gb - reserve.bottom];
-        const sx = gr > gl ? (nr - nl) / (gr - gl) : 1;
-        const sy = gb > gt ? (nb - nt) / (gb - gt) : 1;
+    // The cells form one grid, in the coordinates of the root, even if drawn under different
+    // parents, such as the rows of a marginal histogram, so that its rows and columns stay aligned.
+    const cells = boxes.filter((frame) => frame.cell);
+    const B = cells.map(({cell}) => cell.box);
+    const W = cells.map(({cell}) => cell.within).filter((w) => w);
+    const bounds = [
+      Math.min(...B.map((b) => b[0])),
+      Math.max(...B.map((b) => b[1])),
+      Math.min(...B.map((b) => b[2])),
+      Math.max(...B.map((b) => b[3])),
+    ];
+    // The room the grid already has to the edges of its parents, such as their outer padding.
+    const free = W.length
+      ? {
+          left: bounds[0] - Math.min(...W.map((w) => w[0])),
+          right: Math.max(...W.map((w) => w[1])) - bounds[1],
+          top: bounds[2] - Math.min(...W.map((w) => w[2])),
+          bottom: Math.max(...W.map((w) => w[3])) - bounds[3],
+        }
+      : {left: 0, right: 0, top: 0, bottom: 0};
+    const sides = ["left", "right", "top", "bottom"];
+    let reserve = Object.fromEntries(sides.map((side) => [side, 0]));
+    // The frames of the cells, the grid scaled into its bounds less the room kept at its edges, and
+    // inset by the margins given.
+    const layout = () => {
+      const kept = sides.every((side) => !reserve[side]);
+      const [gl, gr, gt, gb] = bounds;
+      const [nl, nr, nt, nb] = [gl + reserve.left, gr - reserve.right, gt + reserve.top, gb - reserve.bottom];
+      const sx = gr > gl ? (nr - nl) / (gr - gl) : 1;
+      const sy = gb > gt ? (nb - nt) / (gb - gt) : 1;
+      return boxes.map((frame) => {
+        if (!frame.cell || kept) return insetBy(frame, margins);
         const {
           box: [l, r, t, b],
-          tx,
-          ty,
+          x,
+          y,
         } = frame.cell;
         const scaled = {
           ...frame,
-          left: nl + (l - gl) * sx - tx,
-          right: nl + (r - gl) * sx - tx,
-          top: nt + (t - gt) * sy - ty,
-          bottom: nt + (b - gt) * sy - ty,
+          left: nl + (l - gl) * sx - x,
+          right: nl + (r - gl) * sx - x,
+          top: nt + (t - gt) * sy - y,
+          bottom: nt + (b - gt) * sy - y,
         };
         return insetBy(scaled, margins);
       });
+    };
     frames = layout();
-    if (grids.size && Object.values(given).includes(undefined) && margin === undefined) {
-      const sides = ["left", "right", "top", "bottom"];
-      for (const grid of grids.values()) grid.reserve = Object.fromEntries(sides.map((side) => [side, 0]));
-      // Grids whose parents span the same width, such as stacked rows, keep the same room left and
-      // right, so that their cells stay aligned; and the same height, top and bottom.
-      const same = (a, b, [s0, s1]) =>
-        !a.parent ||
-        !b.parent ||
-        (Math.abs(a.parent[s0] - b.parent[s0]) < 1e-6 && Math.abs(a.parent[s1] - b.parent[s1]) < 1e-6);
+    if (cells.length && Object.values(given).includes(undefined) && margin === undefined) {
       for (let pass = 0; pass < 3; pass++) {
         const rooms = measureCells(
           data,
@@ -375,28 +366,15 @@ export function plane(
           (context, j) => recordsOf(context, frames[j]),
           frames,
         );
-        const needs = new Map();
-        for (const grid of grids.values()) {
-          const need = Object.fromEntries(sides.map((side) => [side, 0]));
-          for (const j of grid.indexes) {
-            for (const side of sides) {
-              if (given[side] === undefined && rooms[j][side])
-                need[side] = Math.max(need[side], rooms[j][side] + 3 - grid.free[side]);
-            }
-          }
-          needs.set(grid, need);
-        }
-        let grown = false;
-        for (const grid of grids.values()) {
-          for (const side of sides) {
-            const axis = side === "left" || side === "right" ? ["left", "right"] : ["top", "bottom"];
-            let need = 0;
-            for (const other of grids.values())
-              if (same(grid, other, axis)) need = Math.max(need, needs.get(other)[side]);
-            if (need > grid.reserve[side] + 1e-9) [grid.reserve[side], grown] = [need, true];
-          }
-        }
-        if (!grown) break;
+        const next = Object.fromEntries(
+          sides.map((side) => {
+            if (given[side] !== undefined) return [side, 0];
+            const need = Math.max(0, ...rooms.map((room) => room[side]));
+            return [side, Math.max(reserve[side], need ? Math.max(0, need + 3 - free[side]) : 0)];
+          }),
+        );
+        if (sides.every((side) => Math.abs(next[side] - reserve[side]) < 1e-9)) break;
+        reserve = next;
         frames = layout();
       }
     }

@@ -367,11 +367,30 @@ function parentRows(flow, n) {
   const counts = flow._branches?.map(({count}) => count) ?? [n];
   return counts.flatMap((count) => {
     const rows = [];
-    for (const entry of flow._parent._data) {
-      for (let k = 0; k < entry.group.length && rows.length < count; k++) rows.push([entry, k]);
-    }
+    flow._parent._data.forEach((entry, i) => {
+      for (let k = 0; k < entry.group.length && rows.length < count; k++) rows.push([entry, k, i]);
+    });
     return rows;
   });
+}
+
+// The origin of the j-th group of a node in the coordinates of the root: the shapes of a node,
+// such as cm.g, are drawn at the point of each row of their parent, so the origin of a group is
+// the sum of the points of the rows it's drawn under, up to the root.
+function originOf(node, j) {
+  const parent = node?._parent;
+  if (!parent?._data) return [0, 0];
+  let n = 0;
+  for (let i = 0; i < parent._data.length; i++) {
+    const {group, value = {}} = parent._data[i];
+    if (j < n + group.length) {
+      const k = j - n;
+      const [ox, oy] = originOf(parent, i);
+      return [ox + (value.x?.[k] ?? 0), oy + (value.y?.[k] ?? 0)];
+    }
+    n += group.length;
+  }
+  return [0, 0];
 }
 
 // Whether a context has no rows, such as a facet without data.
@@ -387,7 +406,9 @@ function isEmptyContext({I, group = []}) {
 // axes leave their titles to the outer chart, and empty if it has no rows, so that it draws no
 // axes; the cells of a grid also record the edges they label.
 export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
-  const boxes = parentRows(flow, data.length).map(([{value = {}, context = {}}, k]) => {
+  const boxes = parentRows(flow, data.length).map(([{value = {}, context = {}}, k, i]) => {
+    // The origin of the coordinates of the parent row, in the root's.
+    const origin = originOf(flow._parent, i);
     const {x: X = [], x1: X1, y: Y = [], y1: Y1} = value;
     const {frame: parent, scales = {}} = context;
     const tx = X[k] ?? 0;
@@ -396,7 +417,7 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
       const a = X1 ? (X[k] + X1[k]) / 2 : X[k];
       const r = Y1 ? (Y[k] + Y1[k]) / 2 : Y[k];
       const [px, py] = polarPoint(parent, r, a);
-      return {box: [px - width / 2, px + width / 2, py - height / 2, py + height / 2], tx, ty, cell: false};
+      return {box: [px - width / 2, px + width / 2, py - height / 2, py + height / 2], tx, ty, cell: false, origin};
     }
     const extent = (V, V1, key, size, [start, end]) => {
       if (V1) return [Math.min(V[k], V1[k]), Math.max(V[k], V1[k])];
@@ -406,18 +427,33 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
     const [left, right] = extent(X, X1, "x", width, [parent?.left, parent?.right]);
     const [top, bottom] = extent(Y, Y1, "y", height, [parent?.top, parent?.bottom]);
     // A cell of a grid has an extent, such as a band; a glyph at a point labels its own axes.
-    return {box: [left, right, top, bottom], tx, ty, cell: !!(X1 || Y1), parent};
+    return {box: [left, right, top, bottom], tx, ty, cell: !!(X1 || Y1), parent, origin};
   });
   // Facets in a grid: the bottom (or top) cell of each column labels x, and the left (or right)
-  // cell of each row labels y, by the anchor of the axis. Like Plot, cells without rows are
-  // skipped, as they draw no axes, so an edge falls on the nearest cell with rows; and cells
-  // missing from the grid, such as the days before the first of a month, don't count.
-  const filled = boxes.filter((_, j) => !isEmptyContext(data[j]));
+  // cell of each row labels y, by the anchor of the axis, compared in the coordinates of the root,
+  // as cells may be drawn under different parents, such as the rows of a marginal histogram. Like
+  // Plot, cells without rows are skipped, as they draw no axes, so an edge falls on the nearest
+  // cell with rows; and cells missing from the grid, such as the days before the first of a month,
+  // don't count.
+  const absolute = ({box: [l, r, t, b], origin: [ox, oy]}) => [l + ox, r + ox, t + oy, b + oy];
+  const filled = boxes.filter((_, j) => !isEmptyContext(data[j])).map(absolute);
   const same = (a, b) => Math.abs(a - b) < 1e-6;
-  const isBottom = ({box: [l, , , b]}) => filled.every(({box}) => !same(box[0], l) || box[3] <= b + 1e-6);
-  const isTop = ({box: [l, , t]}) => filled.every(({box}) => !same(box[0], l) || box[2] >= t - 1e-6);
-  const isLeft = ({box: [l, , t]}) => filled.every(({box}) => !same(box[2], t) || box[0] >= l - 1e-6);
-  const isRight = ({box: [, r, t]}) => filled.every(({box}) => !same(box[2], t) || box[1] <= r + 1e-6);
+  const isBottom = (frame) => {
+    const [l, , , b] = absolute(frame);
+    return filled.every((box) => !same(box[0], l) || box[3] <= b + 1e-6);
+  };
+  const isTop = (frame) => {
+    const [l, , t] = absolute(frame);
+    return filled.every((box) => !same(box[0], l) || box[2] >= t - 1e-6);
+  };
+  const isLeft = (frame) => {
+    const [l, , t] = absolute(frame);
+    return filled.every((box) => !same(box[2], t) || box[0] >= l - 1e-6);
+  };
+  const isRight = (frame) => {
+    const [, r, t] = absolute(frame);
+    return filled.every((box) => !same(box[2], t) || box[1] <= r + 1e-6);
+  };
   return boxes.map((frame, j) => {
     const {
       box: [l, r, t, b],
@@ -436,9 +472,14 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
         edges: {top: isTop(frame), right: isRight(frame), bottom: isBottom(frame), left: isLeft(frame)},
       }),
     };
-    // The box of a cell in its parent, with the frame of its parent, is kept apart from its frame,
-    // for the room of the axes of the chart nested in it.
-    if (cell) Object.defineProperty(nested, "cell", {value: {box: [l, r, t, b], tx, ty, parent: frame.parent}});
+    // The box of a cell and the frame of its parent, in the coordinates of the root, and the origin
+    // of the cell, are kept apart from its frame, for the room of the axes of the chart nested in it.
+    if (cell) {
+      const [ox, oy] = frame.origin;
+      const {parent} = frame;
+      const within = parent ? [parent.left + ox, parent.right + ox, parent.top + oy, parent.bottom + oy] : null;
+      Object.defineProperty(nested, "cell", {value: {box: absolute(frame), x: ox + tx, y: oy + ty, within}});
+    }
     return nested;
   });
 }
