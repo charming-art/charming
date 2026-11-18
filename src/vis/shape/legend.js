@@ -214,7 +214,7 @@ function sizes(key, scale, options, maxWidth) {
 }
 
 // A categorical color at the top: its title, then a swatch per value with its label, side by side,
-// wrapping to a new row past the width of the chart.
+// wrapping to new rows past the width of the chart, balanced.
 function swatchRow(key, scale, options, maxWidth) {
   const {domain, range} = scale;
   const color = (d) => range[domain.indexOf(d) % range.length];
@@ -222,18 +222,36 @@ function swatchRow(key, scale, options, maxWidth) {
   const format = (d) => fit(formatValue(d), maxWidth - swatchSize - 4);
   const label = labelOf(scale, options, maxWidth);
   const top = label == null ? 0 : lineHeight;
-  const items = [];
-  let [x, row, width] = [0, 0, 0];
-  for (const d of domain) {
-    const w = swatchSize + 4 + widthOf(format(d));
-    if (x > 0 && x + w > maxWidth) [x, row] = [0, row + 1];
-    items.push({d, x, y: top + row * lineHeight});
-    width = Math.max(width, x + w);
-    x += w + 12;
+  const widths = domain.map((d) => swatchSize + 4 + widthOf(format(d)));
+  // The swatches side by side, wrapping past a width.
+  const wrap = (limit) => {
+    const items = [];
+    let [x, row, width] = [0, 0, 0];
+    domain.forEach((d, i) => {
+      const w = widths[i];
+      if (x > 0 && x + w > limit) [x, row] = [0, row + 1];
+      items.push({d, x, y: top + row * lineHeight});
+      width = Math.max(width, x + w);
+      x += w + 12;
+    });
+    return {items, rows: domain.length ? row + 1 : 0, width};
+  };
+  // Like the columns on the right, the rows are balanced: as few as fit the width, each about as
+  // wide, such as 4, 4, 3 and 3 rather than 5, 5, 3 and 1, by wrapping at the narrowest width that
+  // needs no more rows.
+  let {items, rows, width} = wrap(maxWidth);
+  if (rows > 1) {
+    let [lo, hi] = [Math.max(...widths), maxWidth];
+    while (hi - lo > 0.5) {
+      const mid = (lo + hi) / 2;
+      if (wrap(mid).rows > rows) lo = mid;
+      else hi = mid;
+    }
+    ({items, width} = wrap(hi));
   }
   return {
     width: Math.max(titleWidth(label), width),
-    height: top + (domain.length ? row + 1 : 0) * lineHeight,
+    height: top + rows * lineHeight,
     draw(flow, x0, y0) {
       if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
       const k = keyOf(key);

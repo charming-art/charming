@@ -501,3 +501,24 @@ test("cm.plane starts the legends on the right past a given margin, which they a
   const label = Array.from(renderer.node().querySelectorAll("text")).find((t) => t.textContent === "aaaa");
   assertInDelta(+label.getAttribute("x") + widthOf("aaaa"), 400 - 3);
 });
+
+test("cm.legend balances the rows of swatches at the top, like the columns on the right", () => {
+  const renderer = cm.svg({width: 400, height: 200});
+  const root = cm.flow().renderer(renderer);
+  const keys = ["a", "b", "c", "d", "e"];
+  const row = (n) => keys.slice(0, n).reduce((w, k) => w + swatch(k), 0) + 12 * (n - 1);
+  // The legend starts at the left of the plot, given so that four swatches fit a row, not five.
+  const left = 400 - 3 - (row(4) + row(5)) / 2;
+  root
+    .data(keys.map((k, i) => ({k, v: i})))
+    .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+    .transform(cm.plane, {marginLeft: left, x: {axis: null}, y: {axis: null}, fill: {legend: true}});
+  root.render();
+  // Five swatches in two rows of three and two, rather than four and one.
+  const rows = d3.rollup(
+    rects(renderer.node()),
+    (R) => R.length,
+    (r) => r.getAttribute("y"),
+  );
+  assert.deepStrictEqual(Array.from(rows.values()), [3, 2]);
+});
