@@ -1,7 +1,7 @@
 import {InternSet} from "d3-array";
 import {discrete, point, scale} from "../../core/transform/scale.js";
 import {axisX, axisY} from "../shape/axis.js";
-import {legend} from "../shape/legend.js";
+import {legend, topLegends} from "../shape/legend.js";
 import {
   allKeysOf,
   axisHint,
@@ -54,10 +54,14 @@ function middle(value, keys, [start, end]) {
 // wide, such as 14,000, and its title turned beside them at the middle, 24, or level at its top or
 // bottom: 24 over or under the frame, or a row of 16 past an axis of x on that side, shared with
 // its title. Without an axis, a side keeps room for the ends of the tick labels of the other axis,
-// such as half a label of y over the frame.
+// such as half a label of y over the frame. Under a legend at the top, a title of y at the top is
+// turned.
 function axisRoom(data, options, keysX, keysY, has) {
   const room = {top: 0, right: 0, bottom: 0, left: 0};
   const rows = {top: false, bottom: false};
+  const topLegend = scaledKeys.some(
+    (key) => options[key]?.legend && options[key].legend !== "right" && data.some(({value}) => key in value),
+  );
   for (const context of data) {
     const {hints = {}} = context;
     const nameX = scaleName(hints, keysX, "x");
@@ -69,6 +73,7 @@ function axisRoom(data, options, keysX, keysY, has) {
     const V = keysY.filter((key) => key in context.value).flatMap((key) => Array.from(context.value[key]));
     const discreteY = hintY.band !== undefined || discrete(options[nameY]?.type ?? hintY.type, V);
     const labelAnchor = options[nameY]?.labelAnchor ?? (discreteY ? "center" : "top");
+    const turned = labelAnchor === "center" || (labelAnchor === "top" && topLegend);
     if (has(context, keysX, "x")) {
       x.anchors.forEach((side, i) => {
         room[side] = Math.max(room[side], 24);
@@ -78,8 +83,8 @@ function axisRoom(data, options, keysX, keysY, has) {
     if (has(context, keysY, "y")) {
       y.anchors.forEach((side, i) => {
         const titled = i === 0 && titledY;
-        room[side] = Math.max(room[side], 46 + (titled && labelAnchor === "center" ? 24 : 0));
-        if (titled && labelAnchor !== "center") rows[labelAnchor] = true;
+        room[side] = Math.max(room[side], 46 + (titled && turned ? 24 : 0));
+        if (titled && !turned) rows[labelAnchor] = true;
       });
     }
   }
@@ -156,12 +161,18 @@ export function plane(
   const hasY = data.some((context) => has(context, keysY, "y"));
   const {value: first = {}, hints: firstHints = {}} = data.find((context) => has(context, keysY, "y")) ?? data[0] ?? {};
   const firstY = keysOf(first, firstHints, keysY, "y");
-  // The defaults hold the components on each side, such as an axis and its title.
+  // The colors, radii and opacities shared by the contexts, resolved before the frame, as they don't
+  // depend on it, so that the legends at the top can be measured.
+  const colors = channelScales(merge(data, scaledKeys), channelHints(data));
+  // The defaults hold the components on each side, such as an axis and its title, and the legends
+  // at the top, which fit the width of the chart.
   const room = nested ? null : axisRoom(data, options, keysX, keysY, has);
-  marginTop ??= margin ?? (nested ? 0 : room.top || (hasY ? 10 : 0));
   marginRight ??= margin ?? (nested ? 0 : room.right || 20);
   marginBottom ??= margin ?? (nested ? 0 : room.bottom || 20);
   marginLeft ??= margin ?? (nested ? 0 : room.left || 20);
+  if (!nested) width ??= renderer._props.auto?.width ? 640 : renderer._props.width;
+  marginTop ??=
+    margin ?? (nested ? 0 : (room.top || (hasY ? 10 : 0)) + topLegends(data, colors, options, width - 3 - marginLeft));
 
   // Values grow upward, but categories in bands go down from the top, like Plot's ordinal y, unless
   // the scale is reversed. An independent y points its own way in each context.
@@ -180,8 +191,7 @@ export function plane(
       left: frame.left + marginLeft,
     }));
   } else {
-    const {auto, width: rendererWidth, height: rendererHeight} = renderer._props;
-    width ??= auto?.width ? 640 : rendererWidth;
+    const {auto, height: rendererHeight} = renderer._props;
     // The height uses the same scale and domain of y as fitting.
     const hintY = axisHint(firstHints, keysY);
     const sizeY = {...hintY, ...positionOptions([hintY], options[scaleName(firstHints, keysY, "y")])};
@@ -196,7 +206,6 @@ export function plane(
   // is shared with the contexts whose positions use the same scale: the axis, by default, or a name
   // given to it, such as x: {value: "culmen_length_mm", scale: "length"}. The options of scales and
   // resolve take any name, such as {x: "independent"}.
-  const colors = channelScales(merge(data, scaledKeys), channelHints(data));
   const independent = (name) => resolution[name] === "independent";
   const sharedOf = (keys, axis) =>
     new Map(

@@ -2,7 +2,7 @@ import {circle} from "../../core/shape/circle.js";
 import {rect} from "../../core/shape/rect.js";
 import {text} from "../../core/shape/text.js";
 import {font} from "../font.js";
-import {scaleOf} from "../transform/scales.js";
+import {channelHints, labeled, legendsOf, resolve, scaleOf} from "../transform/scales.js";
 import {formatOf, replaced, ticksOf, widthOf} from "./axisUtils.js";
 
 // The scales that have legends, in order: colors, then radii, then opacities.
@@ -31,24 +31,39 @@ function labelOf(scale, options, maxWidth) {
   return label == null ? label : fit(label, maxWidth);
 }
 
-// A categorical color: its title, then a swatch per value with its label, one per line, shortened
-// to fit the column.
-function swatches(key, scale, options, maxWidth) {
+// The width of the title of a legend, if any.
+function titleWidth(label) {
+  return label == null ? 0 : widthOf(label);
+}
+
+// A categorical color on the right: its title, then a swatch per value with its label, one per
+// line, shortened to fit the column; past the height of the frame, in as few columns side by side
+// as fit it, balanced, like CSS's columns, such as 13 and 13 rather than 22 and 4.
+function swatches(key, scale, options, maxWidth, maxHeight = Infinity) {
   const {domain, range} = scale;
   const color = (d) => range[domain.indexOf(d) % range.length];
   const formatValue = typeof options.tickFormat === "function" ? options.tickFormat : (d) => `${d}`;
   const format = (d) => fit(formatValue(d), maxWidth - swatchSize - 4);
   const label = labelOf(scale, options, maxWidth);
   const top = label == null ? 0 : lineHeight;
-  const items = domain.map((d, i) => ({d, y: top + i * lineHeight}));
+  const fitting = Math.max(1, Math.floor((maxHeight - top) / lineHeight));
+  const rows = Math.min(fitting, Math.ceil(domain.length / Math.ceil(domain.length / fitting))) || 1;
+  const items = [];
+  let x = 0;
+  for (let i = 0; i < domain.length; i += rows) {
+    const column = domain.slice(i, i + rows);
+    column.forEach((d, j) => items.push({d, x, y: top + j * lineHeight}));
+    x += swatchSize + 4 + Math.max(...column.map((d) => widthOf(format(d)))) + 12;
+  }
   return {
-    height: top + domain.length * lineHeight,
+    width: Math.max(titleWidth(label), x - 12),
+    height: top + Math.min(rows, domain.length) * lineHeight,
     draw(flow, x0, y0) {
       if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
       const k = keyOf(key);
       flow.data(items).append(rect, {
         key: ({d}) => k(d),
-        x: x0,
+        x: ({x}) => x0 + x,
         y: ({y}) => y0 + y + 1,
         width: swatchSize,
         height: swatchSize,
@@ -58,7 +73,7 @@ function swatches(key, scale, options, maxWidth) {
         ...font,
         key: ({d}) => k(d),
         text: ({d}) => format(d),
-        x: x0 + swatchSize + 4,
+        x: ({x}) => x0 + x + swatchSize + 4,
         y: ({y}) => y0 + y,
         textBaseline: "top",
       });
@@ -91,6 +106,7 @@ function ramp(key, scale, options, maxWidth) {
   // The labels at the ends are aligned inward, so that they stay within the ramp's width.
   const alignOf = (d) => (at(d) <= 0.5 ? "start" : at(d) >= width - 0.5 ? "end" : "center");
   return {
+    width: Math.max(titleWidth(label), width),
     height: top + rampHeight + 4 + lineHeight,
     draw(flow, x0, y0) {
       if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
@@ -117,9 +133,9 @@ function ramp(key, scale, options, maxWidth) {
   };
 }
 
-// A radius: its title, then circles at a few ticks of the scale, side by side, aligned at their
-// tops, each labeled in a row under the largest. If they're wider than the column, the ticks in the
-// middle are dropped, keeping the smallest and the largest, then the largest only.
+// A radius at the top, like Vega-Lite's: its title, then circles at a few ticks of the scale, side by
+// side, centered on one line, each labeled at its right, like a swatch. If they're wider than the
+// chart, the ticks in the middle are dropped, keeping the smallest and the largest, then the largest.
 function sizes(key, scale, options, maxWidth) {
   const s = scaleOf(scale);
   const label = labelOf(scale, options, maxWidth);
@@ -132,31 +148,32 @@ function sizes(key, scale, options, maxWidth) {
     let x = 0;
     for (const d of values) {
       const r = s(d);
-      const w = Math.max(2 * r, widthOf(format(d)));
-      items.push({d, x: x + w / 2, r});
-      x += w + 8;
+      items.push({d, x, r});
+      x += 2 * r + 4 + widthOf(format(d)) + 12;
     }
-    return [items, x - 8];
+    return [items, x - 12];
   };
   const candidates = [ticks, ticks.length > 2 ? [ticks[0], ticks[ticks.length - 1]] : null, ticks.slice(-1)];
-  let [items] = layout(ticks);
+  let [items, width] = layout(ticks);
   for (const values of candidates) {
     if (!values) continue;
-    const [fitted, width] = layout(values);
-    items = fitted;
+    [items, width] = layout(values);
     if (width <= maxWidth) break;
   }
+  // The row is as tall as the largest circle, with its stroke, or a line of text.
   const radius = Math.max(0, ...items.map(({r}) => r));
+  const row = Math.max(2 * radius + 2, lineHeight);
   return {
-    height: top + 1 + 2 * radius + 4 + lineHeight,
+    width: Math.max(titleWidth(label), width),
+    height: top + row,
     draw(flow, x0, y0) {
       if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
       const k = keyOf(key);
-      const y1 = y0 + top + 1;
+      const middle = y0 + top + row / 2;
       flow.data(items).append(circle, {
         key: ({d}) => k(d),
-        x: ({x}) => x0 + x,
-        y: ({r}) => y1 + r,
+        x: ({x, r}) => x0 + x + r,
+        y: middle,
         r: ({r}) => r,
         fill: "none",
         stroke: "currentColor",
@@ -165,55 +182,267 @@ function sizes(key, scale, options, maxWidth) {
         ...font,
         key: ({d}) => k(d),
         text: ({d}) => format(d),
+        x: ({x, r}) => x0 + x + 2 * r + 4,
+        y: middle,
+        textBaseline: "middle",
+      });
+    },
+  };
+}
+
+// A categorical color at the top: its title, then a swatch per value with its label, side by side,
+// wrapping to a new row past the width of the chart.
+function swatchRow(key, scale, options, maxWidth) {
+  const {domain, range} = scale;
+  const color = (d) => range[domain.indexOf(d) % range.length];
+  const formatValue = typeof options.tickFormat === "function" ? options.tickFormat : (d) => `${d}`;
+  const format = (d) => fit(formatValue(d), maxWidth - swatchSize - 4);
+  const label = labelOf(scale, options, maxWidth);
+  const top = label == null ? 0 : lineHeight;
+  const items = [];
+  let [x, row, width] = [0, 0, 0];
+  for (const d of domain) {
+    const w = swatchSize + 4 + widthOf(format(d));
+    if (x > 0 && x + w > maxWidth) [x, row] = [0, row + 1];
+    items.push({d, x, y: top + row * lineHeight});
+    width = Math.max(width, x + w);
+    x += w + 12;
+  }
+  return {
+    width: Math.max(titleWidth(label), width),
+    height: top + (domain.length ? row + 1 : 0) * lineHeight,
+    draw(flow, x0, y0) {
+      if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
+      const k = keyOf(key);
+      flow.data(items).append(rect, {
+        key: ({d}) => k(d),
         x: ({x}) => x0 + x,
-        y: y1 + 2 * radius + 4,
-        textAlign: "center",
+        y: ({y}) => y0 + y + 1,
+        width: swatchSize,
+        height: swatchSize,
+        fill: ({d}) => color(d),
+      });
+      flow.data(items).append(text, {
+        ...font,
+        key: ({d}) => k(d),
+        text: ({d}) => format(d),
+        x: ({x}) => x0 + x + swatchSize + 4,
+        y: ({y}) => y0 + y,
         textBaseline: "top",
       });
     },
   };
 }
 
-function legendOf(key, scale, options, maxWidth) {
-  if (key === "r") return sizes(key, scale, options, maxWidth);
-  if (scale.type === "ordinal") return swatches(key, scale, options, maxWidth);
-  return ramp(key, scale, options, maxWidth);
+// A continuous color or an opacity on the right: its title, then a ramp standing up, low values at
+// the bottom, with its ticks right of it, like a small axis of y. As for the ramp at the top, a scale
+// to numbers places its ticks and samples its slices through the scale itself.
+function rampY(key, scale, options, maxWidth) {
+  const s = scaleOf(scale);
+  const [d0, d1] = [scale.domain[0], scale.domain[scale.domain.length - 1]];
+  const opacity = key.endsWith("Opacity");
+  const label = labelOf(scale, options, maxWidth);
+  const top = label == null ? 0 : lineHeight + 4;
+  const height = Math.max(0, options.height ?? 120);
+  const count = typeof options.ticks === "number" ? options.ticks : Math.max(2, height / 35);
+  const ticks = ticksOf(s, options, count);
+  const format = formatOf(s, options, count);
+  const labeled = ticks.filter((d) => `${format(d) ?? ""}` !== "");
+  const n = 64;
+  const slices = Array.from({length: n}, (_, i) => i);
+  const numeric = !s.interpolator && typeof s.range?.()[0] === "number" && typeof s.invert === "function";
+  const p = numeric ? s.copy().range([0, height]) : null;
+  const at = p ?? ((d) => ((d - d0) / (d1 - d0 || 1)) * height);
+  const value = p ? (i) => p.invert(((i + 0.5) * height) / n) : (i) => d0 + ((d1 - d0) * (i + 0.5)) / n;
+  // The labels at the ends are aligned inward, so that they stay within the ramp's height.
+  const baselineOf = (d) => (at(d) <= 0.5 ? "bottom" : at(d) >= height - 0.5 ? "top" : "middle");
+  return {
+    width: Math.max(titleWidth(label), rampHeight + 4 + Math.max(0, ...labeled.map((d) => widthOf(format(d))))),
+    height: top + height,
+    draw(flow, x0, y0) {
+      if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
+      const bottom = y0 + top + height;
+      flow.data(slices).append(rect, {
+        key: (i) => `legend\0${key}\0slice\0${i}`,
+        x: x0,
+        // Slices overlap the next by a pixel, so that no seam shows between them, but the last.
+        y: (i) => bottom - ((i + 1) * height) / n - (i < n - 1 ? 1 : 0),
+        width: rampHeight,
+        height: (i) => height / n + (i < n - 1 ? 1 : 0),
+        ...(opacity ? {fill: "currentColor", fillOpacity: (i) => s(value(i))} : {fill: (i) => s(value(i))}),
+      });
+      flow.data(labeled).append(text, {
+        ...font,
+        key: keyOf(key),
+        text: format,
+        x: x0 + rampHeight + 4,
+        y: (d) => bottom - at(d),
+        textBaseline: baselineOf,
+      });
+    },
+  };
+}
+
+// A radius on the right: its title, then circles at a few ticks of the scale, smallest first, from
+// the top down, centered on one line, each labeled right of the largest.
+function sizesY(key, scale, options, maxWidth) {
+  const s = scaleOf(scale);
+  const label = labelOf(scale, options, maxWidth);
+  const top = label == null ? 0 : lineHeight;
+  const count = typeof options.ticks === "number" ? options.ticks : 3;
+  const ticks = ticksOf(s, options, count).filter((d) => s(d) > 0);
+  const format = formatOf(s, options, count);
+  const radius = Math.max(0, ...ticks.map((d) => s(d)));
+  const items = [];
+  let y = 0;
+  for (const d of ticks) {
+    const r = s(d);
+    const h = Math.max(2 * r, lineHeight);
+    items.push({d, r, y: y + h / 2});
+    y += h + 4;
+  }
+  return {
+    width: Math.max(titleWidth(label), 2 * radius + 6 + Math.max(0, ...ticks.map((d) => widthOf(format(d))))),
+    height: top + 1 + Math.max(0, y - 4),
+    draw(flow, x0, y0) {
+      if (label != null) flow.datum(label).append(text, {...title, text: label, x: x0, y: y0});
+      const k = keyOf(key);
+      const y1 = y0 + top + 1;
+      flow.data(items).append(circle, {
+        key: ({d}) => k(d),
+        x: x0 + radius,
+        y: ({y}) => y1 + y,
+        r: ({r}) => r,
+        fill: "none",
+        stroke: "currentColor",
+      });
+      flow.data(items).append(text, {
+        ...font,
+        key: ({d}) => k(d),
+        text: ({d}) => format(d),
+        x: x0 + 2 * radius + 6,
+        y: ({y}) => y1 + y,
+        textBaseline: "middle",
+      });
+    },
+  };
+}
+
+// The block of a legend: horizontal at the top of the chart, vertical on its right.
+function legendOf(key, scale, options, maxWidth, anchor = "top", maxHeight) {
+  const right = anchor === "right";
+  if (key === "r") return (right ? sizesY : sizes)(key, scale, options, maxWidth);
+  if (scale.type === "ordinal")
+    return right ? swatches(key, scale, options, maxWidth, maxHeight) : swatchRow(key, scale, options, maxWidth);
+  return (right ? rampY : ramp)(key, scale, options, maxWidth);
+}
+
+// The gaps between legends: across a row or a column, and between rows or legends in a column, and
+// between the legends at the top and the chart under them.
+const legendSpace = 20;
+const legendGap = 10;
+
+// Lays out the legends at the top, like the swatches in each: side by side in a row while they fit
+// the width, else from a new row under the tallest of the row. Returns the position of each block,
+// and the height of the rows.
+function rowsOf(blocks, maxWidth) {
+  const placed = [];
+  let [x, y, height] = [0, 0, 0];
+  for (const block of blocks) {
+    if (x > 0 && x + block.width > maxWidth) [x, y, height] = [0, y + height + legendGap, 0];
+    placed.push({block, x, y});
+    x += block.width + legendSpace;
+    height = Math.max(height, block.height);
+  }
+  return [placed, placed.length ? y + height : 0];
+}
+
+// Lays out the legends on the right: one under another in a column while they fit the height,
+// else from the top of a new column right of the widest of the column.
+function columnsOf(blocks, maxHeight) {
+  const placed = [];
+  let [x, y, width] = [0, 0, 0];
+  for (const block of blocks) {
+    if (y > 0 && y + block.height > maxHeight) [x, y, width] = [x + width + legendSpace, 0, 0];
+    placed.push({block, x, y});
+    y += block.height + legendGap;
+    width = Math.max(width, block.width);
+  }
+  return placed;
+}
+
+// The blocks of the legends at the top of a chart, given the scales, the options of their legends
+// by name, and the width from the left of the plot to the right of the chart.
+function topBlocks(entries, scales, maxWidth) {
+  return entries
+    .filter(([key, {anchor}]) => scales[key] && anchor !== "right")
+    .map(([key, options]) => legendOf(key, scales[key], options, maxWidth, "top"));
+}
+
+// The height of the legends at the top of a chart, for its default top margin: they start 3px from
+// the top, and leave a gap over what's under them.
+function legendsHeight(scales, legends, maxWidth) {
+  const entries = keys.filter((key) => key in legends).map((key) => [key, legends[key]]);
+  const [, height] = rowsOf(topBlocks(entries, scales, maxWidth), maxWidth);
+  return height ? 3 + height + legendGap : 0;
+}
+
+// The room of the legends at the top of a chart, for the top margin of cm.plane or cm.polar, from
+// the contexts, their colors, radii and opacities, resolved, and the options of their scales: those
+// given legend: true or "top", recorded with their labels as the legends draw them, in the width
+// from the left of the plot to the right of the chart.
+export function topLegends(data, colors, options, maxWidth) {
+  const hints = channelHints(data);
+  const scales = Object.fromEntries(Object.keys(colors).map((key) => [key, labeled(resolve(colors[key]), hints[key])]));
+  return legendsHeight(scales, legendsOf(options), maxWidth);
 }
 
 // Draws the legends of the scales recorded by cm.plane or cm.polar besides positions: swatches for
 // categorical colors, a ramp for continuous colors and opacities, and circles for radii, each under
-// its title. Like Vega-Lite's, they're in a column right of the frame, from its top, where the
-// margins of the chart leave the most room clear of the axes; the room is given to cm.plane, such
-// as marginRight: 140. The frame of cm.polar is its disc, from its right and its top. The names of
-// scales, such as {fill: {label: "Species"}}, take the options of each legend, or false to skip it;
-// the other options apply to all of them. Like Plot's, a chart draws the legends of the scales
-// given legend: true, such as cm.plane({fill: {legend: true}}), whose options default to those of
-// the scale; a legend added explicitly to the chart replaces them. Charts nested in a chart, such
-// as facets, have no legends yet.
+// its title. Like Plot's, they're at the top of the chart by default, horizontal, 3px from the top,
+// from the left of the plot, or the left margin of cm.polar, side by side while they fit the width,
+// else in rows; with anchor "right", they're vertical, right of the frame from its top, like
+// Vega-Lite's, one under another while they fit its height, else in columns, and swatches past its
+// height in balanced columns too. The frame of cm.polar is its disc. Like Plot's, a chart draws the
+// legends of the scales given legend: true, or a side, such as {fill: {legend: "right"}}, whose
+// options default to those of the scale; the default margins of cm.plane and cm.polar leave room
+// for those at the top. A legend added explicitly to the chart replaces them, and takes their
+// options and sides; the names of scales, such as {fill: {label: "Species"}}, take the options of
+// each legend, or false to skip it, and the other options apply to all of them, such as anchor.
+// Charts nested in a chart, such as facets, have no legends yet.
 export function legend(flow, value, {scales = {}, frame, guides, options = {}} = {}) {
   if (frame?.nested) return;
   const legends = guides?.legends ?? {};
+  let entries;
   if (options.implicit) {
     if (replaced(flow, [legend], ({guides: other}) => other.id === guides.id, guides)) return;
-    options = Object.fromEntries(keys.map((key) => [key, key in legends ? legends[key] : false]));
+    entries = keys.filter((key) => key in legends).map((key) => [key, legends[key]]);
   } else {
-    options = {...options};
-    for (const key in legends) if (options[key] !== false) options[key] = {...legends[key], ...options[key]};
+    const shared = Object.fromEntries(Object.entries(options).filter(([key]) => !keys.includes(key)));
+    entries = keys
+      .filter((key) => options[key] !== false)
+      .map((key) => {
+        const own = {...legends[key], ...shared, ...options[key]};
+        return [key, {...own, anchor: options[key]?.anchor ?? options.anchor ?? legends[key]?.anchor ?? "top"}];
+      });
   }
-  const shared = Object.fromEntries(Object.entries(options).filter(([key]) => !keys.includes(key)));
+  entries = entries.filter(([key]) => scales[key]);
   const {width} = flow.renderer()._props;
   const polar = frame?.type === "polar";
+  // At the top, from the left of the plot, or of the box of a polar chart inside its margins, as
+  // the top margin measured them.
+  const left = frame?.left ?? 3;
   const right = polar ? frame.cx + frame.outerRadius : (frame?.right ?? width);
-  const x = right + 12;
-  const maxWidth = Math.max(0, width - 3 - x);
-  let y = polar ? frame.cy - frame.outerRadius : (frame?.top ?? 3);
-  for (const key of keys) {
-    const scale = scales[key];
-    if (!scale || options[key] === false) continue;
-    const block = legendOf(key, scale, {...shared, ...options[key]}, maxWidth);
-    block.draw(flow, x, y);
-    y += block.height + 10;
-  }
+  const maxWidth = Math.max(0, width - 3 - left);
+  const [rows] = rowsOf(topBlocks(entries, scales, maxWidth), maxWidth);
+  for (const {block, x, y} of rows) block.draw(flow, left + x, 3 + y);
+  const x0 = right + 12;
+  const y0 = polar ? frame.cy - frame.outerRadius : (frame?.top ?? 3);
+  const y1 = polar ? frame.cy + frame.outerRadius : (frame?.bottom ?? flow.renderer()._props.height);
+  const blocks = entries
+    .filter(([, {anchor}]) => anchor === "right")
+    .map(([key, options]) => legendOf(key, scales[key], options, Math.max(0, width - 3 - x0), "right", y1 - y0));
+  for (const {block, x, y} of columnsOf(blocks, y1 - y0)) block.draw(flow, x0 + x, y0 + y);
 }
 
 // Legends receive their options as they are, such as a tickFormat function, not per datum.

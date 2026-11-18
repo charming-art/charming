@@ -1,7 +1,7 @@
 import {scaleRadial} from "d3-scale";
 import {arc} from "d3-shape";
 import {axisX, axisY} from "../shape/axis.js";
-import {legend} from "../shape/legend.js";
+import {legend, topLegends} from "../shape/legend.js";
 import {point, scale} from "../../core/transform/scale.js";
 import {
   allKeysOf,
@@ -89,9 +89,14 @@ export function polar(
     ]),
   );
 
-  // A nested chart has no margins by default: its parent leaves the room.
+  // A nested chart has no margins by default: its parent leaves the room. The colors are resolved
+  // before the frame, so that the legends at the top, measured from the left of the chart, are given
+  // room over the margin.
+  const colors = channelScales(merge(data, scaledKeys), channelHints(data));
+  if (!nested) width ??= renderer._props.auto?.width ? 640 : renderer._props.width;
+  const legendRoom = nested ? 0 : topLegends(data, colors, options, width - 3 - (marginLeft ?? margin ?? 40));
   margin ??= nested ? 0 : 40;
-  marginTop ??= margin;
+  marginTop ??= margin + legendRoom;
   marginRight ??= margin;
   marginBottom ??= margin;
   marginLeft ??= margin;
@@ -100,8 +105,7 @@ export function polar(
   if (nested) {
     boxes = nestedFrames(flow, data, {width, height});
   } else {
-    const {auto, width: rendererWidth, height: rendererHeight} = renderer._props;
-    width ??= auto?.width ? 640 : rendererWidth;
+    const {auto, height: rendererHeight} = renderer._props;
     height ??= auto?.height ? 640 : rendererHeight;
     renderer.resize?.(width, height);
     ({width, height} = renderer._props);
@@ -114,13 +118,14 @@ export function polar(
     const b = bottom - marginBottom;
     const outerRadius = Math.max(0, Math.min(r - l, b - t) / 2);
     const r0 = innerRadius * outerRadius;
+    // The left of the box inside the margins is kept for the legends at the top, which start there.
     const frame = {type: "polar", cx: (l + r) / 2, cy: (t + b) / 2, innerRadius: r0, outerRadius, startAngle, endAngle};
+    frame.left = l;
     // Like cm.plane's, a nested frame is marked, so that its axes leave titles to the outer chart.
     return nested ? {...frame, nested} : frame;
   });
   // The scales shared by all the contexts: colors, and positions unless they're independent.
   // Like cm.plane, a position is shared by the name of its scale, the axis by default.
-  const colors = channelScales(merge(data, scaledKeys), channelHints(data));
   const independent = (name) => resolution[name] === "independent";
   // The type and domain of a position: the options of its scale, unless it has bands, else its
   // hint; the radius is radial by default, so that areas grow with values.
