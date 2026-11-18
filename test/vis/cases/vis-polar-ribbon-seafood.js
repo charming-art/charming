@@ -17,7 +17,9 @@ export const visPolarRibbonSeafood = withSVG(async () => {
         .transform(cm.stackY, {order: "value"})
         .transform(cm.polar, {innerRadius: 0.2, x: {axis: "outer"}, y: {type: "linear"}})
         .add(cm.arc)
-        .add(cm.areaRadial, {curve: "bump-x", fillOpacity: 0.8});
+        .add(cm.areaRadial, {curve: "bump-x", fillOpacity: 0.8})
+        // The rings and labels of the radius are drawn over the ribbons, after them.
+        .add(cm.axisY);
     },
     {width: 640, height: 640},
   );
