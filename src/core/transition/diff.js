@@ -6,9 +6,10 @@ const fade = {fillOpacity: 0, strokeOpacity: 0};
 
 // The items that animate from the primitives shown, prev, to the primitives drawn, next. A drawn
 // primitive matches a shown one by its key, else by its datum, else by its position in the flow,
-// within the same shape of the flow, and then updates; keyed primitives only match by key. One that doesn't match may split from a
-// shown primitive whose key is its group key; a shown one that doesn't match may merge into a drawn
-// primitive whose key is its group key. The others enter or exit.
+// within the same shape of the flow, and then updates; keyed primitives only match by key. One that
+// doesn't match may split from a shown primitive whose key is its group key; a shown one that
+// doesn't match may merge into a drawn primitive whose key is its group key. The others enter or
+// exit.
 export function diff(prev, next, options) {
   const m = prev.length;
   const n = next.length;
@@ -175,14 +176,19 @@ function opsOf(a, b) {
   return a.ops.length === b.ops.length ? b.ops : a.ops;
 }
 
-// The items of the first render, when nothing is shown yet: like Vue's appear and G2's enter, the
-// primitives with their own enter state, such as {clipTop: 1}, or enter timing, enter from it, or
-// fade in; the others are drawn as they are, so that marks without them don't fade in.
+// The items of the first render, when nothing is shown yet. Like Vue's appear, it's opt-in: the
+// primitives with appear: true enter as they would later, from their enter state and with their
+// enter timing, and those with an appear state or timing of their own, such as {clipRight: 1},
+// enter from it, or fade in; the others are drawn as they are, such as the bars of a race, whose
+// enter state, from under the chart, is for the bars that join it later.
 export function appear(next, options) {
   return next.map((q) => {
-    const own = (o = {}) => Object.values(o).some((v) => v !== undefined);
-    if (!own(q.enter) && !own(q.timing?.enter)) return {end: 0, at: () => q};
-    return item(q, "always", {...q.attrs, ...state(q.enter)}, q.attrs, q.ops, q.ops, timing(q, "enter", options));
+    const own = (o) => o !== null && typeof o === "object" && Object.values(o).some((v) => v !== undefined);
+    if (q.appear === true) {
+      return item(q, "always", {...q.attrs, ...state(q.enter)}, q.attrs, q.ops, q.ops, timing(q, "enter", options));
+    }
+    if (!own(q.appear) && !own(q.timing?.appear)) return {end: 0, at: () => q};
+    return item(q, "always", {...q.attrs, ...state(q.appear)}, q.attrs, q.ops, q.ops, timing(q, "appear", options));
   });
 }
 

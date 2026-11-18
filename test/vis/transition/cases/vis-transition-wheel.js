@@ -2,7 +2,8 @@ import * as d3 from "d3";
 import * as cm from "../../../../src/index.js";
 import {loop} from "../../../core/transition/cases/loop.js";
 
-// The rose of visRose, in and out: its wedges enter with sweep 0, so each opens like a wheel from
+// The rose of visRose, in and out, from the first render with appear: true: its wedges enter with
+// sweep 0, so each opens like a wheel from
 // its start angle, and exit to it, closing back. The axes are drawn as they are.
 export async function visTransitionWheel() {
   const data = await d3.csv("data/rose.csv", d3.autoType);
@@ -16,7 +17,7 @@ export async function visTransitionWheel() {
         .transform(cm.encode, {x: "name", y: "value", fill: "name"})
         .transform(cm.spreadX)
         .transform(cm.polar, {x: {axis: true}, y: {axis: true}})
-        .add(cm.arc, {enter: {sweep: 0}, exit: {sweep: 0}});
+        .add(cm.arc, {appear: true, enter: {sweep: 0}, exit: {sweep: 0}});
     }
     root.render();
   };

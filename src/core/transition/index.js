@@ -21,8 +21,7 @@ function unschedule(id) {
 
 // Animates from what the renderer shows to the primitives drawn by a render: matched primitives
 // update, and the others enter, exit, split or merge. On the first render after transitions are
-// on, the primitives with their own enter state or timing enter, and the others are drawn as they
-// are. A render during an animation starts from the primitives as they are shown then.
+// on, the primitives that opt in with appear enter, and the others are drawn as they are. A render during an animation starts from the primitives as they are shown then.
 // Once it ends, or is stopped by another, onend is called, such as to play the next keyframe.
 export function animate(state, renderer, next, options, onend) {
   // A render that isn't a moment of keyframes stops their sequence.

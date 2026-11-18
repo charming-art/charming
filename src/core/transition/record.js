@@ -66,10 +66,12 @@ function identify({path, scope, I, value = {}, group}, row, n) {
     key: at("key"),
     groupKey: at("groupKey"),
     datum: datum !== null && typeof datum === "object" ? datum : undefined,
+    appear: at("appear") === true || stateOf(value, "appear", r),
     enter: stateOf(value, "enter", r),
     exit: stateOf(value, "exit", r),
     timing: {
       update: timingOf(value, "", r),
+      appear: timingOf(value, "appear", r),
       enter: timingOf(value, "enter", r),
       exit: timingOf(value, "exit", r),
     },

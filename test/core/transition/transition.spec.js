@@ -61,9 +61,6 @@ test("bars matched by key update, new ones enter from their enter state, and rem
     ],
     states,
   );
-  // On the first render, the bars rise from their enter state too.
-  vi.advanceTimersByTime(176);
-  await root.finished();
   bars(
     root,
     [
@@ -87,31 +84,39 @@ test("bars matched by key update, new ones enter from their enter state, and rem
   ]);
 });
 
-test("on the first render, marks with their own enter state or timing enter, and the others are drawn as they are", async () => {
+test("on the first render, marks appear only if they opt in: with their enter state, or a state of their own", async () => {
   const [root, renderer] = chart();
-  root
-    .data([{v: 50}])
-    .transform(cm.bind, {x: () => 0, y: (d) => 200 - d.v, width: () => 20, height: (d) => d.v})
-    .append(cm.rect, {enter: {y: 200, height: 0}});
-  root
-    .data([0])
-    .append(cm.circle, {x: 100, y: 100, r: 10, enter: {delay: 0}})
-    .append(cm.circle, {x: 150, y: 100, r: 10});
+  const bar = (x, options) =>
+    root
+      .data([{v: 50}])
+      .transform(cm.bind, {x: () => x, y: (d) => 200 - d.v, width: () => 20, height: (d) => d.v})
+      .append(cm.rect, options);
+  // The first bar's enter state is for later renders; the second reuses it with appear: true; the
+  // third appears from a state of its own, and the fourth only with timing of its own, so it fades.
+  bar(0, {enter: {y: 200, height: 0}});
+  bar(30, {appear: true, enter: {y: 200, height: 0}});
+  bar(60, {appear: {height: 0}, enter: {y: 200, height: 0}});
+  bar(90, {appear: {delay: 0}});
   root.render();
   vi.advanceTimersByTime(80);
-  // The bar rises halfway, the first circle, with only enter timing, fades in, and the second is drawn.
-  assert.deepStrictEqual(rects(renderer), [[0, 175, 20, 25]]);
-  const [faded, drawn] = renderer.node().querySelectorAll("circle");
-  assert.strictEqual(+faded.getAttribute("fill-opacity"), 0.5);
-  assert.strictEqual(drawn.getAttribute("fill-opacity"), null);
+  assert.deepStrictEqual(rects(renderer), [
+    [0, 150, 20, 50],
+    [30, 175, 20, 25],
+    [60, 150, 20, 25],
+    [90, 150, 20, 50],
+  ]);
+  assert.strictEqual(+renderer.node().querySelectorAll("rect")[3].getAttribute("fill-opacity"), 0.5);
   vi.advanceTimersByTime(96);
   await root.finished();
-  assert.deepStrictEqual(rects(renderer), [[0, 150, 20, 50]]);
+  assert.deepStrictEqual(rects(renderer).slice(1, 3), [
+    [30, 150, 20, 50],
+    [60, 150, 20, 50],
+  ]);
 });
 
 test("a mark wipes in from a side by its clip insets, such as from the bottom with clipTop", async () => {
   const [root, renderer] = chart();
-  root.data([0]).append(cm.rect, {x: 0, y: 100, width: 20, height: 100, enter: {clipTop: 1}});
+  root.data([0]).append(cm.rect, {x: 0, y: 100, width: 20, height: 100, appear: {clipTop: 1}});
   root.render();
   const clip = () =>
     Array.from(renderer.node().querySelectorAll("clipPath rect"), (r) => [
@@ -142,7 +147,7 @@ test("arcs interpolate in angle and radius, and open like a wheel with sweep", a
     return r.node().querySelector("path").getAttribute("d");
   };
   const path = () => renderer.node().querySelector("path").getAttribute("d");
-  root.data([0]).append(wedge, {endAngle: Math.PI, enter: {sweep: 0}});
+  root.data([0]).append(wedge, {endAngle: Math.PI, appear: {sweep: 0}});
   root.render();
   // Halfway, the wedge has opened halfway from its start angle.
   vi.advanceTimersByTime(80);

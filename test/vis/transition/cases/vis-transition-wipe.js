@@ -2,7 +2,8 @@ import * as d3 from "d3";
 import * as cm from "../../../../src/index.js";
 import {loop} from "../../../core/transition/cases/loop.js";
 
-// A column chart of letter frequencies, in and out: its bars enter with clipTop 1, so they're
+// A column chart of letter frequencies, in and out, from the first render with appear: true: its
+// bars enter with clipTop 1, so they're
 // revealed from the bottom up, and exit to it, hidden from the top down. The axes are drawn as they
 // are.
 export async function visTransitionWipe() {
@@ -17,7 +18,7 @@ export async function visTransitionWipe() {
         .transform(cm.encode, {x: "letter", y: "frequency"})
         .transform(cm.spreadX)
         .transform(cm.plane, {y: {percent: true}})
-        .add(cm.rect, {fill: "steelblue", enter: {clipTop: 1}, exit: {clipTop: 1}});
+        .add(cm.rect, {fill: "steelblue", appear: true, enter: {clipTop: 1}, exit: {clipTop: 1}});
     }
     root.render();
   };
