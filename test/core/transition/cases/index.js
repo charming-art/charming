@@ -8,3 +8,4 @@ export {transitionManyRects} from "./transition-many-rects.js";
 export {transitionMorph} from "./transition-morph.js";
 export {transitionSplitMerge} from "./transition-split-merge.js";
 export {transitionStagger} from "./transition-stagger.js";
+export {transitionWipe} from "./transition-wipe.js";

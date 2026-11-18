@@ -47,6 +47,7 @@ export {visRepeatMatrix} from "./vis-repeat-matrix.js";
 export {visRibbonArea} from "./vis-ribbon-area.js";
 export {visRibbonSeafood} from "./vis-ribbon-seafood.js";
 export {visRose} from "./vis-rose.js";
+export {visRoseSweep} from "./vis-rose-sweep.js";
 export {visScaleOptions} from "./vis-scale-options.js";
 export {visScatterAxis} from "./vis-scatter-axis.js";
 export {visSeattleHeatmap} from "./vis-seattle-heatmap.js";
