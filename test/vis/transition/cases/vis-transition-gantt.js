@@ -3,8 +3,9 @@ import {intro} from "./intro.js";
 
 // Canis's Gantt chart (https://canisjs.github.io/canis-editor/index.html?exmp=gantt_1): the tasks of
 // an event plan, each bar wiping in from the left at its start time and lasting its duration, at
-// 600ms per unit of time, by the scales of enterDelay and enterDuration; the labels wipe in with
-// their bars, for 300ms.
+// 600ms per unit, by the time scale that enterDelay and enterDuration share. With linear easing,
+// the bars' edges sweep across together, like the hand of a timeline. The labels wipe in with their
+// bars, for 300ms.
 export function visTransitionGantt() {
   const tasks = [
     {event: "event planning", start: 1, end: 4},
@@ -17,8 +18,7 @@ export function visTransitionGantt() {
     {event: "event celebration", start: 17, end: 18},
   ].map((d) => ({...d, duration: d.end - d.start}));
   const renderer = cm.svg({width: 640, height: 400});
-  const root = cm.flow({transition: true}).renderer(renderer);
-  const unit = {domain: [0, 1], range: [0, 600]};
+  const root = cm.flow({transition: {ease: "linear"}}).renderer(renderer);
   const draw = () => {
     root
       .data(tasks)
@@ -28,8 +28,7 @@ export function visTransitionGantt() {
         marginRight: 120,
         x: {domain: [0, 18], label: null},
         y: {axis: null},
-        enterDelay: unit,
-        enterDuration: unit,
+        time: {domain: [0, 1], range: [0, 600]},
       })
       .add(cm.rect, {fill: "steelblue", appear: true, enter: {clipRight: 1}})
       .add(cm.label, {

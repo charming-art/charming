@@ -1609,26 +1609,33 @@ const tasks = [
   {start: 3, length: 10},
 ];
 
-test("cm.plane scales timings with a range, linearly from 0, and leaves them in milliseconds without one", () => {
+test("cm.plane scales timings with the range of their time scale, linearly from 0, else leaves them in milliseconds", () => {
   const channels = {x: "start", y: "length", enterDelay: "start", enterDuration: "length"};
-  // 600ms per unit.
-  const unit = {domain: [0, 1], range: [0, 600]};
-  const scaled = timings(tasks, channels, {enterDelay: unit, enterDuration: unit});
+  // 600ms per unit, for delays and durations alike.
+  const scaled = timings(tasks, channels, {time: {domain: [0, 1], range: [0, 600]}});
   assert.deepStrictEqual(scaled.enterDelay, [600, 1800]);
   assert.deepStrictEqual(scaled.enterDuration, [1800, 6000]);
-  // Without a domain, from 0 to the largest value.
-  const fitted = timings(tasks, channels, {enterDelay: {range: [0, 3000]}});
-  assert.deepStrictEqual(fitted.enterDelay, [1000, 3000]);
+  // Without a domain, from 0 to the largest of the delays and durations, 10, which they share.
+  const fitted = timings(tasks, channels, {time: {range: [0, 1000]}});
+  assert.deepStrictEqual(fitted.enterDelay, [100, 300]);
+  assert.deepStrictEqual(fitted.enterDuration, [300, 1000]);
   // Without a range, they're milliseconds.
   const raw = timings(tasks, channels);
   assert.deepStrictEqual(raw.enterDelay, [1, 3]);
   assert.deepStrictEqual(raw.enterDuration, [3, 10]);
 });
 
+test("cm.plane scales a timing that names its own scale apart from time", () => {
+  const channels = {x: "start", y: "length", enterDelay: {value: "start", scale: "delay"}, enterDuration: "length"};
+  const scaled = timings(tasks, channels, {delay: {range: [0, 30]}, time: {range: [0, 1000]}});
+  assert.deepStrictEqual(scaled.enterDelay, [10, 30]);
+  assert.deepStrictEqual(scaled.enterDuration, [300, 1000]);
+});
+
 test("cm.plane leaves the timings of cm.stackEnter in milliseconds, even with a range", () => {
-  const scaled = timings(tasks, {x: "start", y: "length"}, {enterDelay: {range: [0, 1]}}, cm.stackEnter);
+  const scaled = timings(tasks, {x: "start", y: "length"}, {time: {range: [0, 1]}}, cm.stackEnter);
   assert.deepStrictEqual(scaled.enterDelay, [0, 0]);
-  const stepped = timings(tasks, {x: "start", y: "length"}, {enterDelay: {range: [0, 1]}}, (flow, data) =>
+  const stepped = timings(tasks, {x: "start", y: "length"}, {time: {range: [0, 1]}}, (flow, data) =>
     cm.stackEnter(flow, data, {by: null, step: 100}),
   );
   assert.deepStrictEqual(stepped.enterDelay, [0, 100]);

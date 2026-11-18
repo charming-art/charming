@@ -22,7 +22,7 @@ import {schemeCategory} from "../scheme.js";
 
 // The scales shared by cm.plane and cm.polar. Besides positions, they scale colors, radii,
 // opacities and the timing of transitions, such as r: "body_mass_g", fillOpacity: "count" or
-// enterDelay: "start".
+// enterDelay: "start", whose scale is named time by default.
 const colorKeys = ["fill", "stroke"];
 const opacityKeys = ["fillOpacity", "strokeOpacity"];
 export const timingKeys = ["appearDelay", "appearDuration", "enterDelay", "enterDuration", "exitDelay", "exitDuration"];
@@ -137,18 +137,26 @@ function radiusRange(V, domain) {
 // numbers from 0: a radius by a square root, so that the area of a dot tracks its value, and an
 // opacity linearly to [0, 1]. Values that aren't numbers aren't scaled, and like Plot's, the type
 // "identity" leaves values as they are, such as radii already in pixels. Timings, such as
-// enterDelay, are milliseconds, unless their scale has a range: then they're scaled linearly from
-// 0, so that a duration twice as long lasts twice as long, such as {domain: [0, 1], range: [0, 600]}
-// for 600ms per unit, or over the extent of the values to the range, without a domain.
+// enterDelay and enterDuration, are milliseconds, unless their scale has a range: then they share
+// one scale, time, unless a channel names another, such as {value: "start", scale: "delay"}, so
+// that a delay and a duration in the same units map alike, such as the start and the length of a
+// task. It's linear from 0, so that a duration twice as long lasts twice as long: {domain: [0, 1],
+// range: [0, 600]} for 600ms per unit, or from 0 to the largest of its values without a domain.
 export function channelScales(value, hints) {
   const scales = {};
+  const times = new Map();
   for (const key of timingKeys) {
     if (!(key in hints) || !(key in value)) continue;
-    const {type, domain, range, clamp, ...options} = hints[key];
+    const {type, range, scale = "time"} = hints[key];
     if (range === undefined || type === "identity" || !isNumeric(value[key])) continue;
-    const t = typeOf(type ?? "linear", options);
-    const d = adjustDomain(domain ?? [0, max(value[key]) ?? 1], options, t);
-    scales[key] = {type: t, domain: d, range, ...(clamp && {clamp})};
+    times.set(scale, [...(times.get(scale) ?? []), key]);
+  }
+  for (const keys of times.values()) {
+    const hint = hints[keys[0]];
+    const {type, domain, range, clamp} = hint;
+    const t = typeOf(type ?? "linear", hint);
+    const d = adjustDomain(domain ?? [0, max(keys.flatMap((key) => Array.from(value[key]))) ?? 1], hint, t);
+    for (const key of keys) scales[key] = {type: t, domain: d, range, ...(clamp && {clamp})};
   }
   for (const key of ["r", ...opacityKeys]) {
     if (!(key in hints) || !(key in value)) continue;
@@ -372,10 +380,12 @@ export function withScaleOptions(context, scales, axes) {
     };
   }
   for (const key of scaledKeys) {
-    if (!scales[key]) continue;
-    const f = transformOf(scales[key]);
+    // The timings share a scale, time by default, as a delay and a duration are times alike.
+    const options = scales[timingKeys.includes(key) ? (hints[key]?.scale ?? "time") : key];
+    if (!options) continue;
+    const f = transformOf(options);
     if (f) transform(key, f);
-    if (key in hints) hints[key] = {...hints[key], ...definedOptions(scales[key])};
+    if (key in hints) hints[key] = {...hints[key], ...definedOptions(options)};
   }
   return {...context, value, hints};
 }
