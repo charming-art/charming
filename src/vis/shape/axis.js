@@ -123,10 +123,29 @@ export function extentY(y, options = {}, side = "left") {
 }
 
 // What the axes of a chart draw past its frame at the top and on the right, by the guides of its
-// context, for the legends of a grid of cells nested in it, which go past them.
-export function outerReach(scales, guides) {
-  const top = scales.x && guides?.x?.anchors?.includes("top") ? extentX(scales.x, guides.x, "top").reach : 0;
-  const right = scales.y && guides?.y?.anchors?.includes("right") ? extentY(scales.y, guides.y, "right").reach : 0;
+// context, with their titles, for the legends of a grid of cells nested in it, which go past them.
+// Like Plot's, only the first side of an axis has a title: a title of x over a top axis, a level
+// title of y at the top, in the row of the title of x, and a title of y turned past a right axis.
+// A nested chart draws no titles.
+export function outerReach(scales, guides, frame) {
+  const {x, y} = scales;
+  const titled = (record, axis, options, turned) =>
+    !frame?.nested && labelOf(record, scaleOf(record), axis, options, turned) != null;
+  const anchorsX = (x && guides?.x?.anchors) || [];
+  const anchorsY = (y && guides?.y?.anchors) || [];
+  const reachX = anchorsX.includes("top") ? extentX(x, guides.x, "top").reach : 0;
+  let top = reachX;
+  if (anchorsX[0] === "top" && titled(x, "x", guides.x)) top += titleGap + font.fontSize;
+  let right = anchorsY.includes("right") ? extentY(y, guides.y, "right").reach : 0;
+  if (anchorsY.length) {
+    const {labelAnchor = scaleOf(y).ticks ? "top" : "center"} = guides.y;
+    const turned = labelAnchor === "center" || (labelAnchor === "top" && hasTopLegend(guides, scales));
+    if (turned && anchorsY[0] === "right" && titled(y, "y", guides.y, true)) right += titleGap + font.fontSize;
+    if (!turned && labelAnchor === "top" && titled(y, "y", guides.y)) {
+      const past = reachX || font.fontSize / 2;
+      top = Math.max(top, past + titleGap + font.fontSize);
+    }
+  }
   return {top, right};
 }
 
@@ -263,7 +282,8 @@ export function axisY(flow, value, {scales = {}, frame, titles, guides, options 
       ...font,
       text: label,
       x: isRight ? width - 3 : 3,
-      y: isBottom ? bottom + past + titleGap : top - past - titleGap,
+      // At the top, in the row of the title of x, which may move in to a grid nested in the chart.
+      y: isBottom ? bottom + past + titleGap : (x?.edges?.top ?? top) - past - titleGap,
       textAlign: isRight ? "end" : "start",
       textBaseline: isBottom ? "top" : "bottom",
     });

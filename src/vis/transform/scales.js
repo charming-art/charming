@@ -580,7 +580,7 @@ export function nestedFrames(flow, data, {width = 40, height = 40} = {}) {
       const within = parent ? [parent.left + ox, parent.right + ox, parent.top + oy, parent.bottom + oy] : null;
       const {scales, origin, guides} = frame;
       Object.defineProperty(nested, "cell", {
-        value: {box: absolute(frame), x: ox + tx, y: oy + ty, within, scales, origin, guides},
+        value: {box: absolute(frame), x: ox + tx, y: oy + ty, within, scales, origin, guides, parent},
       });
     }
     return nested;
@@ -634,7 +634,7 @@ export function gridFrames(boxes, {need, legends, outer, shared}) {
   const reach = {top: 0, right: 0};
   if (!shared && outer) {
     for (const {cell} of cells) {
-      const {top, right} = outer(cell.scales ?? {}, cell.guides);
+      const {top, right} = outer(cell.scales ?? {}, cell.guides, cell.parent);
       [reach.top, reach.right] = [Math.max(reach.top, top), Math.max(reach.right, right)];
     }
   }
