@@ -15,9 +15,7 @@ export async function visTransitionBarChartRace() {
   const root = cm.flow({transition: {duration: 1000, ease: "linear"}}).renderer(renderer);
   // The labels of a bar, at its end: dark, rather than the bar's color, and sliding in and out from
   // below with it.
-  // On the first year, the bars and their labels grow in from the left, like G2's growInX, rather
-  // than rising from below like the bars that join the top 12 later.
-  const label = {fill: "#333", fontSize: 12, padding: 6, appear: {clipRight: 1}, enter: {y: 500}, exit: {y: 500}};
+  const label = {fill: "#333", fontSize: 12, padding: 6, enter: {y: 500}, exit: {y: 500}};
   const draw = () => {
     const keyframes = root.data(years).append(cm.keyframe);
     keyframes.append(cm.text, {
@@ -33,9 +31,8 @@ export async function visTransitionBarChartRace() {
       .data(([, rows]) => d3.sort(rows, (d) => -d.value).slice(0, n))
       .transform(cm.encode, {x: "value", y: "name", fill: "category", key: "name"})
       .transform(cm.spreadY, {padding: 0.1, sort: "-x"})
-      // The right margin leaves room for the value labels past the longest bar. Like d3's, the
-      // chart ends at the bottom of the SVG, so bars sliding in and out from below are hidden
-      // outside it.
+      // The right margin leaves room for the value labels past the longest bar. Like d3's, the chart
+      // ends at the bottom of the SVG, so bars sliding in and out from below are hidden outside it.
       .transform(cm.plane, {
         marginTop: 30,
         marginLeft: 10,
@@ -46,7 +43,7 @@ export async function visTransitionBarChartRace() {
         y: {axis: null},
       })
       // Like d3's, bars entering or leaving the top 12 slide in and out from below the chart.
-      .add(cm.rect, {fillOpacity: 0.7, appear: {clipRight: 1}, enter: {y: 500}, exit: {y: 500}})
+      .add(cm.rect, {fillOpacity: 0.7, enter: {y: 500}, exit: {y: 500}})
       .add(cm.label, {...label, position: "inside-right", text: (d) => d.datum.name, fontWeight: "bold"})
       .add(cm.label, {...label, position: "right", text: (d) => d.datum.value, format: ",d"});
   };
