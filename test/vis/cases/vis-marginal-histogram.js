@@ -37,7 +37,7 @@ export const visMarginalHistogram = withSVG(async () => {
         .data(rows)
         .transform(cm.encode, {y: "row", h: "h"})
         .transform(cm.spreadY, {flex: "h", paddingInner: 0.05, paddingOuter: 0, domain: ["top", "main"]})
-        .transform(cm.plane, {marginBottom: 30, y: {axis: null}})
+        .transform(cm.plane, {marginLeft: 30, marginBottom: 30, y: {axis: null}})
         .append(cm.g)
         .data((row) => row.cells)
         .transform(cm.encode, {x: "col", w: "w"})

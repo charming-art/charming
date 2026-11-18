@@ -3,7 +3,7 @@ import {rect} from "../../core/shape/rect.js";
 import {text} from "../../core/shape/text.js";
 import {font} from "../font.js";
 import {scaleOf} from "../transform/scales.js";
-import {formatOf, replaced, ticksOf} from "./axisUtils.js";
+import {formatOf, replaced, ticksOf, widthOf} from "./axisUtils.js";
 
 // The scales that have legends, in order: colors, then radii, then opacities.
 const keys = ["fill", "stroke", "r", "fillOpacity", "strokeOpacity"];
@@ -11,12 +11,6 @@ const keys = ["fill", "stroke", "r", "fillOpacity", "strokeOpacity"];
 const lineHeight = 14;
 const swatchSize = 10;
 const rampHeight = 10;
-
-// The width of a text in the legend's font, approximated like a monospace font of 0.6em, so that
-// legends lay out the same in every environment.
-function widthOf(value) {
-  return `${value}`.length * font.fontSize * 0.6;
-}
 
 // The items of a legend are keyed apart from the keys of marks and ticks, like ticks.
 const keyOf = (key) => (d) => `legend\0${key}\0${d instanceof Date ? +d : d}`;

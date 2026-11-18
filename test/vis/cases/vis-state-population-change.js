@@ -18,8 +18,8 @@ export const visStatePopulationChange = withSVG(async () => {
         .transform(cm.encode, {y: "State", x: change, fill: (d) => Math.sign(change(d))})
         .transform(cm.spreadY, {sort: "x"})
         .transform(cm.plane, {
-          marginTop: 30,
           marginLeft: 50,
+          marginRight: 48,
           // Like Plot's percent option, the ticks are in percentage points.
           x: {
             label: "← decrease · Change in population, 2010–2019 (%) · increase →",

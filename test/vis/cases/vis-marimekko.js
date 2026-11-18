@@ -20,7 +20,7 @@ export const visMarimekko = withSVG(async () => {
         })
         .transform(cm.spreadX, {flex: "n", padding: 0, domain: markets})
         .transform(cm.stackY, {offset: "normalize"})
-        .transform(cm.plane, {marginTop: 10, x: {label: null}, y: {label: null, tickFormat: "%"}})
+        .transform(cm.plane, {x: {label: null}, y: {label: null, tickFormat: "%"}})
         .add(cm.rect, {fillOpacity: 0.5, stroke: "white"})
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"});
     },

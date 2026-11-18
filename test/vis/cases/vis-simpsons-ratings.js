@@ -21,7 +21,6 @@ export const visSimpsonsRatings = withSVG(async () => {
         .transform(cm.spreadX, {padding: 0})
         .transform(cm.spreadY, {padding: 0})
         .transform(cm.plane, {
-          marginTop: 40,
           marginBottom: 10,
           marginRight: 140,
           x: {axis: "top", label: "Season", grid: true},

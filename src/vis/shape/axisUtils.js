@@ -2,7 +2,29 @@ import {scaleOf} from "../transform/scales.js";
 
 // The helpers shared by the axes of cm.plane and cm.polar.
 
-export {font} from "../font.js";
+import {font} from "../font.js";
+
+export {font};
+
+// The width of a text in the font of axes and legends, approximated like a monospace font of
+// 0.6em, so that they lay out the same in every environment.
+export function widthOf(value) {
+  return `${value}`.length * font.fontSize * 0.6;
+}
+
+// The gap between an axis, its tick marks and labels, and its title.
+export const titleGap = 6;
+
+// How far an axis reaches from the plot, across it: its tick marks, then, if any of its labels
+// shows, the padding and the size of the labels across the axis, rotated by radians, with the pad
+// of rotated labels. The size of a label along the axis is its width, and across it its height,
+// the font size; across is the size across the axis of a label of width w, unrotated.
+export function reachOf(labels, {tickSize, tickPadding, radians, pad, across}) {
+  const shown = labels.filter((label) => `${label ?? ""}` !== "");
+  if (!shown.length) return tickSize;
+  const size = Math.max(...shown.map((label) => across(widthOf(label), font.fontSize, radians)));
+  return tickSize + tickPadding + pad + size;
+}
 
 // Labels that stay horizontal are aligned by a direction, such as of a polar tick from the center:
 // a label to the right of its point starts there, one above it sits on it, and so on.
