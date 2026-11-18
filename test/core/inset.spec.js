@@ -2,6 +2,7 @@ import assert from "node:assert";
 import {test} from "vitest";
 import "../install-canvas-mock.js";
 import * as cm from "../../src/index.js";
+import {withInsets} from "../../src/core/inset.js";
 import {textWidth} from "../../src/core/textWidth.js";
 import {assertInDelta} from "../helpers.js";
 
@@ -71,4 +72,12 @@ test("clip insets are given per row, and don't clip shapes without a box, such a
   assert.deepStrictEqual(clips(node), [[50, 50, 40, 50]]);
   const path = render(cm.path, {d: "M0,0L10,10", stroke: "black", clipTop: 0.5});
   assert.strictEqual(path.querySelectorAll("clipPath").length, 0);
+});
+
+test("clip insets keep the batches of a renderer that only draws batches, such as WebGL", () => {
+  const calls = [];
+  const renderer = {rects: (I) => calls.push(I)};
+  const value = {x: [0], y: [0], width: [10], height: [10], clipTop: [0.5]};
+  cm.rect(withInsets(renderer, [0], value), [0], value);
+  assert.deepStrictEqual(calls, [[0]]);
 });

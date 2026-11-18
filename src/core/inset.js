@@ -5,6 +5,9 @@ import {outlineOf} from "./transition/outline.js";
 // for none of it, which a transition opens from the bottom, or clipRight: 0.5 for its left half.
 export const insets = ["clipTop", "clipRight", "clipBottom", "clipLeft"];
 
+// The batches of primitives that renderers may draw, such as WebGL's, by their primitive.
+const batches = {rects: "rect", circles: "circle", triangles: "triangle"};
+
 // The primitives that a shape draws, which take clip insets.
 const primitives = ["point", "circle", "rect", "line", "triangle", "path", "polygon", "text", "arc"];
 
@@ -69,7 +72,8 @@ function textCorners({text, format, x = 0, y = 0, fontSize = 14, textAlign, text
 // its row, in order, or of the first row of its group for a shape that draws one per group, such
 // as a line, and is clipped by them, as drawPrimitive draws it. A renderer that records primitives,
 // for transitions, keeps the insets as attributes instead, so that they interpolate. Shapes draw
-// one primitive at a time through it, rather than in batches, such as the rects of WebGL.
+// one primitive at a time through it, rather than in batches, unless the renderer only draws
+// batches, such as WebGL, which doesn't clip.
 export function withInsets(renderer, I, value) {
   const keys = insets.filter((key) => key in value);
   if (!keys.length) return renderer;
@@ -86,7 +90,9 @@ export function withInsets(renderer, I, value) {
   return new Proxy(renderer, {
     get(target, key) {
       if (primitives.includes(key) && typeof target[key] === "function") return draw(key);
-      if (key === "rects" || key === "circles" || key === "triangles") return undefined;
+      // A batch is drawn one primitive at a time, if the renderer can, such as SVG; WebGL only
+      // draws batches, and doesn't clip, so it keeps them.
+      if (batches[key] && typeof target[batches[key]] === "function") return undefined;
       const v = target[key];
       return typeof v === "function" ? v.bind(target) : v;
     },
