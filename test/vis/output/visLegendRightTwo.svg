@@ -93,19 +93,19 @@
   <rect x="492" y="179" width="10" height="10" fill="#91cc75"></rect>
   <rect x="492" y="193" width="10" height="10" fill="#fac858"></rect>
   <rect x="492" y="207" width="10" height="10" fill="#ee6666"></rect>
-  <rect x="492" y="221" width="10" height="10" fill="#73c0de"></rect>
-  <rect x="492" y="235" width="10" height="10" fill="#3ba272"></rect>
-  <rect x="492" y="249" width="10" height="10" fill="#fc8452"></rect>
-  <rect x="492" y="263" width="10" height="10" fill="#9a60b4"></rect>
-  <rect x="492" y="277" width="10" height="10" fill="#ea7ccc"></rect>
-  <rect x="492" y="291" width="10" height="10" fill="#5470c6"></rect>
-  <rect x="492" y="305" width="10" height="10" fill="#91cc75"></rect>
-  <rect x="492" y="319" width="10" height="10" fill="#fac858"></rect>
-  <rect x="492" y="333" width="10" height="10" fill="#ee6666"></rect>
-  <rect x="492" y="347" width="10" height="10" fill="#73c0de"></rect>
-  <rect x="524" y="39" width="10" height="10" fill="#3ba272"></rect>
-  <rect x="524" y="53" width="10" height="10" fill="#fc8452"></rect>
-  <rect x="524" y="67" width="10" height="10" fill="#9a60b4"></rect>
+  <rect x="524" y="39" width="10" height="10" fill="#73c0de"></rect>
+  <rect x="524" y="53" width="10" height="10" fill="#3ba272"></rect>
+  <rect x="524" y="67" width="10" height="10" fill="#fc8452"></rect>
+  <rect x="524" y="81" width="10" height="10" fill="#9a60b4"></rect>
+  <rect x="524" y="95" width="10" height="10" fill="#ea7ccc"></rect>
+  <rect x="524" y="109" width="10" height="10" fill="#5470c6"></rect>
+  <rect x="524" y="123" width="10" height="10" fill="#91cc75"></rect>
+  <rect x="524" y="137" width="10" height="10" fill="#fac858"></rect>
+  <rect x="524" y="151" width="10" height="10" fill="#ee6666"></rect>
+  <rect x="524" y="165" width="10" height="10" fill="#73c0de"></rect>
+  <rect x="524" y="179" width="10" height="10" fill="#3ba272"></rect>
+  <rect x="524" y="193" width="10" height="10" fill="#fc8452"></rect>
+  <rect x="524" y="207" width="10" height="10" fill="#9a60b4"></rect>
   <text x="506" y="38" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">A</text>
   <text x="506" y="52" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">B</text>
   <text x="506" y="66" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">C</text>
@@ -119,19 +119,19 @@
   <text x="506" y="178" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">K</text>
   <text x="506" y="192" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">L</text>
   <text x="506" y="206" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">M</text>
-  <text x="506" y="220" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">N</text>
-  <text x="506" y="234" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">O</text>
-  <text x="506" y="248" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">P</text>
-  <text x="506" y="262" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Q</text>
-  <text x="506" y="276" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">R</text>
-  <text x="506" y="290" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">S</text>
-  <text x="506" y="304" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">T</text>
-  <text x="506" y="318" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">U</text>
-  <text x="506" y="332" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">V</text>
-  <text x="506" y="346" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">W</text>
-  <text x="538" y="38" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">X</text>
-  <text x="538" y="52" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Y</text>
-  <text x="538" y="66" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Z</text>
+  <text x="538" y="38" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">N</text>
+  <text x="538" y="52" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">O</text>
+  <text x="538" y="66" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">P</text>
+  <text x="538" y="80" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Q</text>
+  <text x="538" y="94" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">R</text>
+  <text x="538" y="108" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">S</text>
+  <text x="538" y="122" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">T</text>
+  <text x="538" y="136" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">U</text>
+  <text x="538" y="150" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">V</text>
+  <text x="538" y="164" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">W</text>
+  <text x="538" y="178" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">X</text>
+  <text x="538" y="192" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Y</text>
+  <text x="538" y="206" font-family="system-ui, sans-serif" font-size="10" dominant-baseline="text-before-edge" fill="currentColor">Z</text>
   <text x="564" y="24" font-family="system-ui, sans-serif" font-size="10" font-weight="bold" dominant-baseline="text-before-edge" fill="currentColor">frequency</text>
   <rect x="564" y="159.125" width="10" height="2.875" fill="currentColor" fill-opacity="0.30546875"></rect>
   <rect x="564" y="157.25" width="10" height="2.875" fill="currentColor" fill-opacity="0.31640625"></rect>

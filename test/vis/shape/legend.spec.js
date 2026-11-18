@@ -1,4 +1,5 @@
 import assert from "node:assert";
+import * as d3 from "d3";
 import {test} from "vitest";
 import "../../install-canvas-mock.js";
 import * as cm from "../../../src/index.js";
@@ -366,4 +367,23 @@ test("cm.polar gives room to the legends at the top over its disc", () => {
   assertInDelta(cy - outerRadius, 3 + 14 + 14 + 10 + 40);
   const swatches = rects(renderer.node()).filter((r) => r.getAttribute("width") === "10");
   assert.ok(swatches.every((r) => +r.getAttribute("y") + 10 <= cy - outerRadius));
+});
+
+test("cm.legend balances the columns of swatches on the right, like CSS's columns", () => {
+  const renderer = cm.svg({width: 400, height: 200});
+  const root = cm.flow().renderer(renderer);
+  root
+    .data(["a", "b", "c", "d", "e"].map((k, i) => ({k, v: i})))
+    .transform(cm.encode, {x: "v", y: "v", fill: "k"})
+    // The frame is 10 to 80 tall: under the title, 14, four swatches fit per column.
+    .transform(cm.plane, {marginRight: 150, marginBottom: 120, x: {axis: null}, y: {axis: null}})
+    .add(cm.legend, {anchor: "right"});
+  root.render();
+  // Five swatches in two columns of three and two, rather than four and one.
+  const columns = d3.rollup(
+    rects(renderer.node()),
+    (R) => R.length,
+    (r) => r.getAttribute("x"),
+  );
+  assert.deepStrictEqual(Array.from(columns.values()), [3, 2]);
 });

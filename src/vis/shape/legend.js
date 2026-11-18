@@ -37,7 +37,8 @@ function titleWidth(label) {
 }
 
 // A categorical color on the right: its title, then a swatch per value with its label, one per
-// line, shortened to fit the column; past the height of the frame, in more columns side by side.
+// line, shortened to fit the column; past the height of the frame, in as few columns side by side
+// as fit it, balanced, like CSS's columns, such as 13 and 13 rather than 22 and 4.
 function swatches(key, scale, options, maxWidth, maxHeight = Infinity) {
   const {domain, range} = scale;
   const color = (d) => range[domain.indexOf(d) % range.length];
@@ -45,7 +46,8 @@ function swatches(key, scale, options, maxWidth, maxHeight = Infinity) {
   const format = (d) => fit(formatValue(d), maxWidth - swatchSize - 4);
   const label = labelOf(scale, options, maxWidth);
   const top = label == null ? 0 : lineHeight;
-  const rows = Math.max(1, Math.floor((maxHeight - top) / lineHeight));
+  const fitting = Math.max(1, Math.floor((maxHeight - top) / lineHeight));
+  const rows = Math.min(fitting, Math.ceil(domain.length / Math.ceil(domain.length / fitting))) || 1;
   const items = [];
   let x = 0;
   for (let i = 0; i < domain.length; i += rows) {
