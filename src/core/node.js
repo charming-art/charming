@@ -9,6 +9,8 @@ export function Node(state = null, children = [], parent = null, shared = false)
     _children: {value: children, writable: true},
     _parent: {value: parent},
     _shared: {value: shared},
+    // The shapes that a composite shape made for each group, when the tree was expanded.
+    _made: {value: null, writable: true},
   });
 }
 

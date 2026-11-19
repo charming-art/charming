@@ -897,22 +897,21 @@ export function guidesOf(id, options, nameX, nameY, sides, defaults) {
   };
 }
 
-// The implicit marks of the guides of contexts, for cm.plane and cm.polar: an axis of x and of y
-// per side that any context draws, in two layers, and a legend if any context has one.
-export function guideMarks(values, {axisX, axisY, legend}) {
+// The implicit marks of the guides of cm.plane and cm.polar: an axis of x and of y on each of their
+// two sides, in two layers, its grid under the shapes added to the chart, and its tick marks, labels
+// and title in front of them, such as the labels of the radius of cm.polar, and a legend. They're
+// the same for every chart, so that they're known as it's built; each draws only what the guides of
+// its contexts ask for, such as an axis on a side given, and nothing without them. They're marked
+// implicit, so that a guide of the same kind added explicitly replaces them.
+export function guideMarks({axisX, axisY, legend}) {
   const marks = [];
-  const sides = (axis) => Math.max(0, ...values.map(({guides}) => guides?.[axis].anchors.length ?? 0));
-  // Each axis is drawn in two layers: its grid under the shapes added to the chart, and its tick
-  // marks, labels and title in front of them, such as the labels of the radius of cm.polar.
-  for (const [axis, shape] of [
-    ["x", axisX],
-    ["y", axisY],
-  ]) {
-    for (let side = 0; side < sides(axis); side++) {
-      marks.push([shape, {side, layer: "grid"}]);
-      marks.push([shape, {side, layer: "axis"}, {front: true}]);
+  const implicit = {implicit: true};
+  for (const shape of [axisX, axisY]) {
+    for (const side of [0, 1]) {
+      marks.push([shape, {...implicit, side, layer: "grid"}]);
+      marks.push([shape, {...implicit, side, layer: "axis"}, {front: true}]);
     }
   }
-  if (values.some(({guides}) => guides && Object.keys(guides.legends).length)) marks.push([legend, {}]);
+  marks.push([legend, implicit]);
   return marks;
 }

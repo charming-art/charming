@@ -73,7 +73,7 @@ export function flow$append(render, options = {}) {
 // The node of a shape added to a flow, whose values for each group are computed when it's needed. A
 // flow of an array has one group, drawn under every parent row; a flow of a function, such as
 // flow.data((d) => d.children), has one group per parent row, across the parent's groups.
-export function appendNode(flow, render, options) {
+function appendNode(flow, render, options) {
   const state = step(flow._context, () => {
     const groups = flow._groups;
     const data = flow._values;

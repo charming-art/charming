@@ -51,17 +51,10 @@ function renderNode(renderer, node, index, context, path, scope, time, pick) {
   const {builtin, keyframe} = render;
   const children = node._children;
   if (!builtin) {
-    // A composite shape makes its own children, such as the ticks of an axis, which are drawn once.
-    // They're kept apart from the children appended to it, which are drawn for each of its rows,
-    // so that a composite drawn for several groups draws only the children it made for each one.
-    node._children = [];
-    const flow = new Flow(concrete([I]), I, node, context);
-    // A composite shape also receives the context of its flow, such as the scales recorded by
-    // transforms, and its options as given.
-    render(flow, value, {...bound, options});
-    const made = node._children;
-    node._children = children;
-    for (let c = 0; c < made.length; c++) renderNode(renderer, made[c], 0, context, `${path}/m${c}`, scope, time);
+    // A composite shape draws the shapes it made for the group when the tree was expanded, as
+    // children of its own, such as the keyframes it made, which play one moment at a time.
+    const made = node._made?.[index] ?? [];
+    renderChildren(renderer, made, () => 0, context, `${path}/m`, scope, time);
   }
   // A shape is clipped to the clip shape of its context, such as the frame of cm.plane, if its clip
   // option says so, else if the context's does, such as cm.plane({clip: true}), on renderers that
@@ -127,9 +120,10 @@ function renderChildren(renderer, children, indexOf, context, path, scope, time)
   order.sort((a, b) => (children[a]._front ? 1 : 0) - (children[b]._front ? 1 : 0));
   for (const c of order) {
     const child = children[c];
-    // A node without values, such as the slot of a transform's marks, draws nothing.
-    if (!child._data) continue;
     const j = indexOf(child);
+    // A node without values for the group, such as the marks of a transform that resolved none,
+    // draws nothing.
+    if (!child._data?.[j]) continue;
     if (time && child._data[j]?.render.keyframe) {
       // Keyframes without rows have no moment to draw.
       if (moment?.child !== child) continue;
@@ -163,10 +157,36 @@ function sceneTiming(timings) {
   return timing;
 }
 
+// Expands the composite shapes of a tree, such as an axis made of ticks and labels: each makes its
+// shapes once per group, before anything is drawn, after every step has run, so that it sees what
+// the steps wrote, such as the shapes beside it, and drawing only draws. The shapes it makes are kept
+// apart from the shapes appended to it, which are drawn for each of its rows, so that a composite
+// drawn for several groups draws only the shapes it made for each one; they're made in flows of
+// their own, whose steps run as they're built, and are expanded in turn. A composite also receives
+// the context of its flow, such as the scales recorded by transforms, and its options as given.
+function expand(nodes, context) {
+  for (const node of nodes) {
+    const data = node._data;
+    if (!data) continue;
+    if (data.length && !data[0].render.builtin) {
+      const children = node._children;
+      node._made = data.map(({render, I, value, options, context: bound}) => {
+        node._children = [];
+        render(new Flow(concrete([I]), I, node, context), value, {...bound, options});
+        return node._children;
+      });
+      node._children = children;
+      for (const made of node._made) expand(made, context);
+    }
+    expand(node._children, context);
+  }
+}
+
 // Whether a flow has keyframes, which are then animated, from moment to moment.
 function hasKeyframe(nodes) {
   for (const node of nodes) {
     if (node._data?.[0]?.render.keyframe || hasKeyframe(node._children)) return true;
+    if (node._made?.some(hasKeyframe)) return true;
   }
   return false;
 }
@@ -174,8 +194,9 @@ function hasKeyframe(nodes) {
 export function flow$render() {
   const context = this._context;
   if (!context.renderer) throw new Error("No renderer: call flow.renderer(renderer) before flow.render().");
-  // The steps built run first, in the order they were built, then the tree is drawn; the flows built
-  // as it's drawn, such as an axis's ticks, run as they're built. A render that throws discards what
+  // The steps built run first, in the order they were built, then the composite shapes are expanded,
+  // and the tree is drawn; the flows built as composites expand, such as an axis's ticks, run as
+  // they're built. A render that throws discards what
   // was built, as one that draws does, so that the next one, such as the next frame of an animation,
   // starts anew rather than throwing the same error.
   try {
@@ -197,6 +218,7 @@ function draw() {
   const context = this._context;
   const {root, renderer} = context;
   const children = root._children;
+  expand(children, context);
   if (!context.transitionState) context.transitionState = {};
   // With keyframes, each moment is recorded as a scene, and the scenes are played in turn, with
   // transitions even if they're off.
