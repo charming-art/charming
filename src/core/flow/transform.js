@@ -1,6 +1,6 @@
 import {Flow} from "./index.js";
 import {flow$add} from "./add.js";
-import {step} from "./step.js";
+import {force, step} from "./step.js";
 
 // A transform may return contexts with new rows, such as one row per unit of a count: the new flow
 // takes its groups from the contexts, so that later transforms and shapes use the new rows. The
@@ -9,6 +9,8 @@ import {step} from "./step.js";
 export function flow$transform(transform, ...params) {
   const flow = this._data ? this : this.data((d) => [d]);
   const context = flow._context;
+  // Its marks are known before it's queued, so that if they throw, nothing of it is left to run.
+  const marks = transform.marks ? transform.marks(...params) : null;
   const state = step(context, () => {
     const values = transform(flow, flow._values, ...params);
     const branches = flow._branches;
@@ -23,12 +25,18 @@ export function flow$transform(transform, ...params) {
   // them, given the transform's params, as [shape, options] pairs, which are added right after it,
   // before the shapes added to the flow, in every branch of a joined flow. A pair may end with
   // {front: true}: that shape is drawn in front, after the shapes added to the flow, rather than
-  // under them. A shape without data to draw draws nothing.
-  if (transform.marks) {
+  // under them. They draw what the transform resolved, its contexts: none if it returns none.
+  if (marks) {
+    const own = step(context, () => {
+      const {groups, values, branches} = force(state);
+      if (values) return {groups, values, branches};
+      return {groups: [], values: null, branches: branches?.map((branch) => ({...branch, count: 0})) ?? null};
+    });
+    const marked = new Flow(own, flow._data, flow._parent, context, flow._join);
     const children = flow._parent._children;
-    for (const [shape, options, {front} = {}] of transform.marks(...params)) {
+    for (const [shape, options, {front} = {}] of marks) {
       const start = children.length;
-      flow$add.call(transformed, shape, options);
+      flow$add.call(marked, shape, options);
       if (front) for (const node of children.slice(start)) Object.defineProperty(node, "_front", {value: true});
     }
   }

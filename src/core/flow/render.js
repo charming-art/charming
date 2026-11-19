@@ -51,9 +51,10 @@ function renderNode(renderer, node, index, context, path, scope, time, pick) {
   const {builtin, keyframe} = render;
   const children = node._children;
   if (!builtin) {
-    // A composite shape draws the shapes it made for the group when the tree was expanded.
+    // A composite shape draws the shapes it made for the group when the tree was expanded, as
+    // children of its own, such as the keyframes it made, which play one moment at a time.
     const made = node._made?.[index] ?? [];
-    for (let c = 0; c < made.length; c++) renderNode(renderer, made[c], 0, context, `${path}/m${c}`, scope, time);
+    renderChildren(renderer, made, () => 0, context, `${path}/m`, scope, time);
   }
   // A shape is clipped to the clip shape of its context, such as the frame of cm.plane, if its clip
   // option says so, else if the context's does, such as cm.plane({clip: true}), on renderers that
@@ -119,9 +120,10 @@ function renderChildren(renderer, children, indexOf, context, path, scope, time)
   order.sort((a, b) => (children[a]._front ? 1 : 0) - (children[b]._front ? 1 : 0));
   for (const c of order) {
     const child = children[c];
-    // A node without values, such as the slot of a transform's marks, draws nothing.
-    if (!child._data) continue;
     const j = indexOf(child);
+    // A node without values for the group, such as the marks of a transform that resolved none,
+    // draws nothing.
+    if (!child._data?.[j]) continue;
     if (time && child._data[j]?.render.keyframe) {
       // Keyframes without rows have no moment to draw.
       if (moment?.child !== child) continue;
@@ -184,6 +186,7 @@ function expand(nodes, context) {
 function hasKeyframe(nodes) {
   for (const node of nodes) {
     if (node._data?.[0]?.render.keyframe || hasKeyframe(node._children)) return true;
+    if (node._made?.some(hasKeyframe)) return true;
   }
   return false;
 }

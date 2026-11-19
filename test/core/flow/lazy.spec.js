@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import {test} from "vitest";
+import {test, vi} from "vitest";
 import "../../install-canvas-mock.js";
 import * as cm from "../../../src/index.js";
 import {probe} from "../../helpers.js";
@@ -179,4 +179,47 @@ test("a composite shape sees the shapes built after it, as it's expanded once ev
   );
   flow.render();
   assert.deepStrictEqual(seen, ["composite", "later"]);
+});
+
+test("the marks of a transform that resolves no contexts draw nothing, whether it returns null or none", () => {
+  for (const result of [null, []]) {
+    const drawn = [];
+    const shape = (name) => Object.assign(() => drawn.push(name), {builtin: true});
+    const transform = Object.assign(() => result, {marks: () => [[shape("mark"), {}]]});
+    const flow = root();
+    flow.data([1, 2]).transform(transform).append(shape("later"));
+    flow.render();
+    assert.deepStrictEqual(drawn, result ? [] : ["later"]);
+  }
+});
+
+test("a transform whose marks throw leaves nothing of it to run", () => {
+  let runs = 0;
+  const failing = Object.assign((_, data) => (runs++, data), {
+    marks() {
+      throw new Error("marks failed");
+    },
+  });
+  const flow = root();
+  assert.throws(() => flow.data([1]).transform(failing), /marks failed/);
+  flow.render();
+  assert.strictEqual(runs, 0);
+});
+
+test("the keyframes that a composite shape makes play one moment at a time", () => {
+  // Fake timers keep the sequence at its first moment.
+  vi.useFakeTimers();
+  const renderer = cm.svg({width: 100, height: 100});
+  const composite = (flow) =>
+    flow
+      .data([1, 2])
+      .append(cm.keyframe)
+      .append(cm.circle, {x: (d) => d * 10, y: 10, r: 3});
+  const flow = cm.flow().renderer(renderer);
+  flow.data([0]).append(composite);
+  flow.render();
+  // The first moment is drawn, not both at once.
+  const xs = Array.from(renderer.node().querySelectorAll("circle"), (c) => +c.getAttribute("cx"));
+  vi.useRealTimers();
+  assert.deepStrictEqual(xs, [10]);
 });
