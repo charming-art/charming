@@ -34,7 +34,7 @@ export function visTransitionGantt() {
       .add(cm.rect, {fill: "steelblue", appear: true, enter: {clipRight: 1}})
       .add(cm.label, {
         position: "right",
-        text: (d) => d.datum.event,
+        text: "event",
         fill: "#333",
         fontSize: 12,
         padding: 6,

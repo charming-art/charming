@@ -33,7 +33,7 @@ export const visStatePopulationChange = withSVG(async () => {
         })
         .add(cm.rect)
         .add(cm.label, {
-          text: (d) => d.datum.State,
+          text: "State",
           position: (d) => (change(d.datum) >= 0 ? "left" : "right"),
           padding: 9,
         })

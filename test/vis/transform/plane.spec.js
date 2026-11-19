@@ -732,7 +732,7 @@ function clipMarks(plane, rect, text) {
     .transform(cm.encode, {x: (d) => d, y: (d) => d})
     .transform(cm.plane, {margin: 10, x: {axis: null}, y: {axis: null}, ...plane})
     .add(cm.rect, {width: 5, height: 5, ...rect})
-    .add(cm.text, {text: "a", ...text});
+    .add(cm.text, {text: () => "a", ...text});
   root.render();
   const node = renderer.node();
   return ["rect", "text"].map((name) =>

@@ -288,9 +288,17 @@ export function polar(
     // stack, y is the outer radius and y1 the baseline.
     const newValue = {...scaled.value};
     const n = Object.values(value)[0]?.length ?? 0; // all channels have one value per row
+    // What's added to draw, rather than encoded, so that a string of a shape names a field, not it.
+    const derived = [...(context.derived ?? []), "cx", "cy"];
     // A missing position spans the frame whichever way its scale goes.
-    if (!hasAny(value, ownKeysY)) [newValue[keysY[1]], newValue[keysY[0]]] = span(n, [r0, outerRadius]); // y outer, y1 inner
-    if (!hasAny(value, ownKeysX)) [newValue[keysX[0]], newValue[keysX[1]]] = span(n, [startAngle, endAngle]);
+    if (!hasAny(value, ownKeysY)) {
+      [newValue[keysY[1]], newValue[keysY[0]]] = span(n, [r0, outerRadius]); // y outer, y1 inner
+      derived.push(keysY[0], keysY[1]);
+    }
+    if (!hasAny(value, ownKeysX)) {
+      [newValue[keysX[0]], newValue[keysX[1]]] = span(n, [startAngle, endAngle]);
+      derived.push(keysX[0], keysX[1]);
+    }
     newValue.cx = Array.from({length: n}, () => cx);
     newValue.cy = Array.from({length: n}, () => cy);
     // As in cm.plane, the frame is kept as a clip shape, and the clip option is the default of marks.
@@ -303,7 +311,17 @@ export function polar(
     const guides = guidesOf(id, options, nameX, nameY, sidesOfPolar, {x: [], y: []});
     if (legendX !== undefined) guides.legendX = legendX;
     if (j === legendAt?.index) guides.legendAt = legendAt;
-    return {...withoutHints(scaled), value: newValue, scales, frame, titles, clip: shape, clipped: clip, guides};
+    return {
+      ...withoutHints(scaled),
+      value: newValue,
+      scales,
+      frame,
+      titles,
+      clip: shape,
+      clipped: clip,
+      guides,
+      derived,
+    };
   });
 }
 

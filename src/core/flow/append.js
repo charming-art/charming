@@ -73,7 +73,10 @@ export function flow$append(render, options = {}) {
     const bound = context?.value;
     const I = context?.I ?? group.map((_, i) => i);
     if (empty) return {I, render, options, value: {...bound}, group, context};
-    const value = valueOf(bound ? rowsOf(bound, group) : group, options, bound);
+    // A context may resolve the options of the shapes added to it, such as a context whose strings
+    // name the fields of its data.
+    const resolved = context?.resolve ? context.resolve(options, context) : options;
+    const value = valueOf(bound ? rowsOf(bound, group) : group, resolved, bound);
     return {I, render, options, value: {...bound, ...value}, group, context};
   });
   // A flow of an array has one group, drawn under every parent row; a flow of a function, such as

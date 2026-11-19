@@ -1,10 +1,13 @@
 // A position option read like .add reads it: a function of the row, an array of values by row, the
-// name of a bound channel, or a constant; without one, the bound channel of the position itself.
+// name of a bound channel, a field of the datum of a row of an encoded flow, or a constant; without
+// one, the bound channel of the position itself.
 function positionOf(option, key) {
   if (option === undefined) return (d) => d[key];
   if (typeof option === "function") return option;
   if (Array.isArray(option)) return (d, i) => option[i];
-  if (typeof option === "string") return (d) => (Object.hasOwn(d, option) ? d[option] : option);
+  if (typeof option === "string") {
+    return (d) => (Object.hasOwn(d, option) ? d[option] : Object.hasOwn(d, "datum") ? d.datum?.[option] : option);
+  }
   return () => option;
 }
 

@@ -449,7 +449,8 @@ export function withSeries(context) {
   const {value} = context;
   if ("z" in value) return context;
   const {Z} = seriesOf(context);
-  return Z ? {...context, value: {...value, z: Z}} : context;
+  // The series is added to draw, not encoded: a string z of a shape names a field, not it.
+  return Z ? {...context, value: {...value, z: Z}, derived: [...(context.derived ?? []), "z"]} : context;
 }
 
 // Whether a flow is nested in a mark, such as flow.append(cm.g).data((d) => d.rows), rather

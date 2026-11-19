@@ -172,3 +172,21 @@ test("cm.annotate transforms its radii in polar with the transform of their scal
   const [transformed] = renderer.node().querySelectorAll("circle");
   assert.deepStrictEqual(attributes(transformed, "cx", "cy"), attributes(circle, "cx", "cy"));
 });
+
+test("cm.annotate reads strings of channels as fields of its data, and as constants without data", () => {
+  const notes = [
+    {at: 0, value: 50, note: "a"},
+    {at: 10, value: 100, note: "b"},
+  ];
+  const texts = annotation(cm.text, {data: notes, x: "at", y: "value", text: "note"}, {selector: "text"});
+  assert.deepStrictEqual(
+    texts.map((t) => [...attributes(t, "x", "y"), t.textContent]),
+    [
+      [0, 100, "a"],
+      [200, 0, "b"],
+    ],
+  );
+  // Without data, there are no fields: the text is as given.
+  const [label] = annotation(cm.text, {x: 5, y: 50, text: "note"}, {selector: "text"});
+  assert.strictEqual(label.textContent, "note");
+});

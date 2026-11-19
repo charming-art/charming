@@ -357,7 +357,7 @@ test("cm.axis keys its ticks apart from the keys of marks, so that marks split f
     .transform(cm.encode, {x: (d) => d, y: (d) => d})
     .transform(cm.plane)
     .add(cm.axis)
-    .add(cm.circle, {r: 3, groupKey: "a"});
+    .add(cm.circle, {r: 3, groupKey: () => "a"});
   root.render();
   vi.advanceTimersByTime(80);
   const count = (s) => renderer.node().querySelectorAll(s).length;

@@ -29,8 +29,8 @@ export const visNonFacetedMarks = withSVG(async () => {
         .add(cm.annotate(cm.rect), {fill: "none", stroke: "currentColor"})
         .add(cm.annotate(cm.circle), {
           data: penguins,
-          x: (d) => d.culmen_length_mm,
-          y: (d) => d.culmen_depth_mm,
+          x: "culmen_length_mm",
+          y: "culmen_depth_mm",
           fill: "#aaa",
           r: 1,
         })

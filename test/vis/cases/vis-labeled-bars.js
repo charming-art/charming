@@ -18,7 +18,7 @@ export const visLabeledBars = withSVG(async () => {
         .transform(cm.plane, {x: {label: "Frequency", tickFormat: "%"}, y: {label: null}})
         .add(cm.rect, {fill: "steelblue"})
         .add(cm.label, {
-          text: (d) => d.datum.frequency,
+          text: "frequency",
           format: ".1%",
           position: (d) => (room(d) ? "inside-right" : "right"),
           fill: (d) => (room(d) ? "white" : "currentColor"),

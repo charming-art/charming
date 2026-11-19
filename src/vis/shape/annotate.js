@@ -1,5 +1,6 @@
 import {link} from "../../core/shape/link.js";
 import {rect} from "../../core/shape/rect.js";
+import {fieldOptions} from "../transform/encode.js";
 
 // The shapes with extents, which span the frame along a position that isn't given.
 const spans = new Set([link, rect]);
@@ -8,10 +9,16 @@ function constant(value) {
   return typeof value === "function" ? value : () => value;
 }
 
-// The values of a position option for each row of the data, if it's given.
-function valuesOf(option, data) {
+// An accessor of a field of the data.
+function field(name) {
+  return (d) => d?.[name];
+}
+
+// The values of a position option for each row of the data, if it's given: a string names a field
+// of the data, if any.
+function valuesOf(option, data, fields) {
   if (option === undefined) return null;
-  const f = constant(option);
+  const f = fields && typeof option === "string" ? field(option) : constant(option);
   return data.map((d, i) => f(d, i, data));
 }
 
@@ -75,21 +82,32 @@ function polarPositions({x, y}, frame, P, shape) {
 }
 
 // Turns a shape into an annotation: it draws its own data, given as the data option or a single
-// row, with positions x, x1, y and y1 in data units, mapped through the scales recorded by
-// cm.plane or cm.polar. A missing position spans the frame for shapes with extents, such as a rule
-// drawn with cm.link or a band drawn with cm.rect, else sits in the middle of the frame. The other
-// options are passed to the shape. Annotations don't change the scales.
+// row, with positions x, x1, y and y1 in data units, mapped through the scales recorded by cm.plane
+// or cm.polar; with data, the strings of its channels name fields of it. A missing position spans
+// the frame for shapes with extents, such as a rule drawn with cm.link or a band drawn with
+// cm.rect, else sits in the middle of the frame. The other options are passed to the shape.
+// Annotations don't change the scales.
 export function annotate(shape) {
   function annotation(flow, value, {scales = {}, frame, options = {}} = {}) {
     if (!frame) return;
-    const {data = [null], x, x1, y, y1, ...rest} = options;
-    const D = Array.from(data);
-    const P = {x: valuesOf(x, D), x1: valuesOf(x1, D), y: valuesOf(y, D), y1: valuesOf(y1, D)};
+    const {data, x, x1, y, y1, ...rest} = options;
+    // Like the marks of an encoded flow, an annotation with data reads the strings of its channels
+    // as fields of it, such as {x: "length", text: "note"}; one without data, a single row, has
+    // none, so its strings are constants, such as {x: "A"} for a band.
+    const fields = data !== undefined;
+    const D = fields ? Array.from(data) : [null];
+    const P = {
+      x: valuesOf(x, D, fields),
+      x1: valuesOf(x1, D, fields),
+      y: valuesOf(y, D, fields),
+      y1: valuesOf(y1, D, fields),
+    };
+    const own = fields ? fieldOptions(rest, new Set(), field) : rest;
     const positions = frame.type === "polar" ? polarPositions : planePositions;
     const {X, X1, Y, Y1} = positions(scales, frame, P, shape);
     const at = (V) => (d, i) => V[i];
     flow.data(D).append(shape, {
-      ...rest,
+      ...own,
       x: at(X),
       y: at(Y),
       ...(X1 && {x1: at(X1)}),

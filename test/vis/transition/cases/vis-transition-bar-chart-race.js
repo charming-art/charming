@@ -44,8 +44,8 @@ export async function visTransitionBarChartRace() {
       })
       // Like d3's, bars entering or leaving the top 12 slide in and out from below the chart.
       .add(cm.rect, {fillOpacity: 0.7, enter: {y: 500}, exit: {y: 500}})
-      .add(cm.label, {...label, position: "inside-right", text: (d) => d.datum.name, fontWeight: "bold"})
-      .add(cm.label, {...label, position: "right", text: (d) => d.datum.value, format: ",d"});
+      .add(cm.label, {...label, position: "inside-right", text: "name", fontWeight: "bold"})
+      .add(cm.label, {...label, position: "right", text: "value", format: ",d"});
   };
   return replay(renderer.node(), root, draw);
 }

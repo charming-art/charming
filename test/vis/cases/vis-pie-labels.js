@@ -33,13 +33,13 @@ export const visPieLabels = withSVG(async () => {
         })
         .add(cm.arc, {cornerRadius: 4, stroke: "#fff", strokeWidth: 2})
         .add(cm.label, {
-          text: (d) => d.datum.value,
+          text: "value",
           position: "inside",
           padding: 14,
           fontWeight: "bold",
           contrast: true,
         })
-        .add(cm.label, {...outside, text: (d) => d.datum.id, dy: (d) => (above(d) ? -12 : 0)})
+        .add(cm.label, {...outside, text: "id", dy: (d) => (above(d) ? -12 : 0)})
         .add(cm.label, {
           ...outside,
           text: (d) => d.datum.value / total,
