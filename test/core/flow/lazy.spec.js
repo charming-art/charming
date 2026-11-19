@@ -109,3 +109,24 @@ test("the flows that a composite shape builds as it's drawn run as they're built
   flow.render();
   assert.deepStrictEqual(calls[0].x, [1, 2, 3]);
 });
+
+test("a render that throws discards what was built, so that the next one draws anew", () => {
+  const renderer = cm.svg({width: 100, height: 100});
+  const flow = cm.flow().renderer(renderer);
+  let fail = true;
+  const frame = () => {
+    flow
+      .data([1, 2])
+      .transform((_, data) => {
+        if (fail) throw new Error("transient");
+        return data;
+      })
+      .transform(cm.bind, {x: (d) => d * 10, y: 10, r: 3})
+      .append(cm.circle);
+    flow.render();
+  };
+  assert.throws(frame, /transient/);
+  fail = false;
+  frame();
+  assert.strictEqual(renderer.node().querySelectorAll("circle").length, 2);
+});

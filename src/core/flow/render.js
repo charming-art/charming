@@ -173,13 +173,21 @@ export function flow$render() {
   const context = this._context;
   if (!context.renderer) throw new Error("No renderer: call flow.renderer(renderer) before flow.render().");
   // The steps built run first, in the order they were built, then the tree is drawn; the flows built
-  // as it's drawn, such as an axis's ticks, run as they're built.
-  flush(context);
-  context.depth++;
+  // as it's drawn, such as an axis's ticks, run as they're built. A render that throws discards what
+  // was built, as one that draws does, so that the next one, such as the next frame of an animation,
+  // starts anew rather than throwing the same error.
   try {
-    return draw.call(this);
-  } finally {
-    context.depth--;
+    flush(context);
+    context.depth++;
+    try {
+      return draw.call(this);
+    } finally {
+      context.depth--;
+    }
+  } catch (error) {
+    context.root._children = [];
+    context.queue.length = 0;
+    throw error;
   }
 }
 
