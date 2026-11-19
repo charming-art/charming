@@ -78,3 +78,47 @@ test("cm.encode(options) drops the hints of the channels it encodes again", () =
     .transform(cm.encode, {x: (d) => d.letter, fill: "red"})._values;
   assert.deepStrictEqual(context.hints, {y: {label: "frequency"}});
 });
+
+// The values that a shape added with options to an encoded flow receives.
+function marked(data, encoding, options) {
+  const [shape, calls] = probe();
+  const root = cm.flow().renderer(cm.canvas({width: 100, height: 100, dpi: 1}));
+  root.data(data).transform(cm.encode, encoding).add(shape, options);
+  root.render();
+  return calls[0];
+}
+
+test("the marks of an encoded flow read a string of a channel as a field of the datum, like cm.encode", () => {
+  const {text, title, key} = marked(data, {x: "letter"}, {text: "frequency", title: "letter", key: "letter"});
+  assert.deepStrictEqual(text, [0.08, 0.01]);
+  assert.deepStrictEqual(title, ["A", "B"]);
+  assert.deepStrictEqual(key, ["A", "B"]);
+});
+
+test("the marks of an encoded flow read a string naming a channel as the channel first", () => {
+  const {y} = marked(data, {x: "letter", y: "frequency", v2: (d) => d.frequency * 2}, {y: "v2"});
+  assert.deepStrictEqual(y, [0.16, 0.02]);
+});
+
+test("the marks of an encoded flow keep colors for fill and stroke, and options of style, as constants", () => {
+  const options = {fill: "red", stroke: "color", textAlign: "end", fontWeight: "bold", position: "top", curve: "step"};
+  const {fill, stroke, textAlign, fontWeight, position, curve} = marked(data, {x: "letter"}, options);
+  assert.deepStrictEqual(fill, ["red", "red"]);
+  // A string that isn't a color names a field.
+  assert.deepStrictEqual(stroke, ["steelblue", "orange"]);
+  assert.deepStrictEqual(textAlign, ["end", "end"]);
+  assert.deepStrictEqual(fontWeight, ["bold", "bold"]);
+  assert.deepStrictEqual(position, ["top", "top"]);
+  assert.deepStrictEqual(curve, ["step", "step"]);
+});
+
+test("the marks of an encoded flow keep colors of states as constants, and take a literal of a channel as a function", () => {
+  const {enterFill, enterText, text} = marked(
+    data,
+    {x: "letter"},
+    {enter: {fill: "red", text: "letter"}, text: () => "Total"},
+  );
+  assert.deepStrictEqual(enterFill, ["red", "red"]);
+  assert.deepStrictEqual(enterText, ["A", "B"]);
+  assert.deepStrictEqual(text, ["Total", "Total"]);
+});

@@ -36,9 +36,10 @@ export function encode(flow, data, options = {}) {
     else if (label) hints[key] = label;
     else if (scaledKeys.includes(key) && (typeof channel === "function" || Array.isArray(channel))) hints[key] = {};
   }
-  // The hints of the channels encoded again are replaced, and the others are kept.
+  // The hints of the channels encoded again are replaced, and the others are kept. The marks of an
+  // encoded flow read the strings of their channels as fields, like cm.encode.
   return bind(flow, data, channels).map((context) => {
     const kept = Object.entries(context.hints ?? {}).filter(([key]) => !(key in options));
-    return {...context, hints: {...Object.fromEntries(kept), ...hints}};
+    return {...context, hints: {...Object.fromEntries(kept), ...hints}, encoded: true};
   });
 }

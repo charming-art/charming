@@ -133,3 +133,10 @@ test("flow.append(shape, options) flattens enter and exit states into channels, 
   assert.deepStrictEqual(context.value.exitFillOpacity, [0, 0]);
   assert.strictEqual(context.value.enter, undefined);
 });
+
+test("flow.append(shape, options) keeps strings that don't name a bound channel as constants, outside encoded flows", () => {
+  const [shape, calls] = probe();
+  render((root) => root.data([{name: "a"}]).append(shape, {text: "name", fill: "steelblue"}));
+  assert.deepStrictEqual(calls[0].text, ["name"]);
+  assert.deepStrictEqual(calls[0].fill, ["steelblue"]);
+});

@@ -23,7 +23,7 @@ export const visConnectedScatterplot = withSVG(async () => {
       line
         .add(cm.line, {stroke: "currentColor", strokeWidth: 2})
         .add(cm.circle, {r: 3, fill: "white", stroke: "currentColor", strokeWidth: 1.5});
-      labels.add(cm.label, {text: (d) => d.datum.year, position: "side", padding: 6, halo: true, haloWidth: 4});
+      labels.add(cm.label, {text: "year", position: "side", padding: 6, halo: true, haloWidth: 4});
     },
     {width: 640, height: 480},
   );
