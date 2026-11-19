@@ -1,6 +1,6 @@
 import {link} from "../../core/shape/link.js";
 import {rect} from "../../core/shape/rect.js";
-import {isField} from "../../core/flow/append.js";
+import {isField} from "../transform/encode.js";
 
 // The shapes with extents, which span the frame along a position that isn't given.
 const spans = new Set([link, rect]);

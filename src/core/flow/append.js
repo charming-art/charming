@@ -32,46 +32,14 @@ function flatten(options) {
 // "x" of a text, rather than the values of a channel x.
 const functions = new Set(["format", "ease", "appearEase", "enterEase", "exitEase"]);
 
-// Options whose strings are literal, the style of a shape rather than its data, such as the
-// alignment or the font of a text, the curve of a line or the position of a label.
-const literals = new Set([
-  "anchor",
-  "contrast",
-  "curve",
-  "d",
-  "fontFamily",
-  "fontStyle",
-  "fontWeight",
-  "paintOrder",
-  "position",
-  "strokeCap",
-  "strokeJoin",
-  "textAlign",
-  "textBaseline",
-  "transformOrigin",
-]);
-
-// Whether a string option names a field of the data, like a channel in cm.encode, in the flows it
-// encodes: an option of a channel, such as text or x, rather than of style, and other than a color
-// for fill or stroke, also in a state, such as enter: {fill: "red"}.
-export function isField(key, value) {
-  if (typeof value !== "string" || functions.has(key)) return false;
-  const name = key.replace(/^(appear|enter|exit)([A-Z])/, (_, stage, c) => c.toLowerCase());
-  if (literals.has(name)) return false;
-  return !((name === "fill" || name === "stroke") && isColor(value));
-}
-
 // Channels are plain arrays, even for typed array data, so they can hold any value. A string that
-// names a bound channel takes its values, such as {y: "v2"}; in a flow encoded by cm.encode, a
-// string option of a channel names a field of the datum otherwise, such as {text: "name"}, like in
-// cm.encode; other strings are constants.
-export function valueOf(data, options, channels, encoded = false) {
+// names a bound channel takes its values, such as {y: "v2"}; other strings are constants.
+export function valueOf(data, options, channels) {
   const values = flatten(options).map(([key, value]) => {
     if (value !== null && typeof value === "object" && value.preserve) return [key, value];
     if (!functions.has(key) && isChannel(key, value, channels)) {
       return [key, Array.from(data, (d) => d[value])];
     }
-    if (encoded && isField(key, value)) return [key, Array.from(data, (d) => d.datum?.[value])];
     if (Array.isArray(value)) return [key, Array.from(data, (d, i) => value[+d || i])];
     const v = typeof value === "function" && !functions.has(key) ? value : () => value;
     const V = Array.from(data, (d, i) => v(d, i, data));
@@ -105,7 +73,10 @@ export function flow$append(render, options = {}) {
     const bound = context?.value;
     const I = context?.I ?? group.map((_, i) => i);
     if (empty) return {I, render, options, value: {...bound}, group, context};
-    const value = valueOf(bound ? rowsOf(bound, group) : group, options, bound, context?.encoded);
+    // A context may resolve the options of the shapes added to it, given the bound channels, such
+    // as a context whose strings name the fields of its data.
+    const resolved = context?.resolve ? context.resolve(options, bound) : options;
+    const value = valueOf(bound ? rowsOf(bound, group) : group, resolved, bound);
     return {I, render, options, value: {...bound, ...value}, group, context};
   });
   // A flow of an array has one group, drawn under every parent row; a flow of a function, such as
