@@ -130,3 +130,32 @@ test("a render that throws discards what was built, so that the next one draws a
   frame();
   assert.strictEqual(renderer.node().querySelectorAll("circle").length, 2);
 });
+
+test("reading a step discarded by a render that threw throws its error, without running the next frame's", () => {
+  const calls = [];
+  const flow = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  flow.data([1]).transform(() => {
+    throw new Error("bad");
+  });
+  const later = flow.data([2]).transform((_, data) => (calls.push("later"), data));
+  assert.throws(() => flow.render(), /bad/);
+  flow.data([3]).transform((_, data) => (calls.push("new"), data));
+  assert.throws(() => later._values, /bad/);
+  assert.deepStrictEqual(calls, []);
+});
+
+test("marks that fail when read early fail the render too, and the next frame draws anew", () => {
+  const renderer = cm.svg({width: 100, height: 100});
+  const flow = cm.flow().renderer(renderer);
+  const failing = Object.assign((_, data) => data, {
+    marks() {
+      throw new Error("marks failed");
+    },
+  });
+  const chart = flow.data([1]).transform(cm.bind, {x: 10, y: 10, r: 3}).transform(failing);
+  assert.throws(() => chart.append(cm.circle)._values, /marks failed/);
+  assert.throws(() => flow.render(), /marks failed/);
+  flow.data([1]).transform(cm.bind, {x: 10, y: 10, r: 3}).append(cm.circle);
+  flow.render();
+  assert.strictEqual(renderer.node().querySelectorAll("circle").length, 1);
+});

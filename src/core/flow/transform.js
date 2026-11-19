@@ -1,7 +1,7 @@
 import {Flow} from "./index.js";
 import {Node} from "../node.js";
 import {appendNode} from "./append.js";
-import {step} from "./step.js";
+import {failed, step} from "./step.js";
 
 // A transform may return contexts with new rows, such as one row per unit of a count: the new flow
 // takes its groups from the contexts, so that later transforms and shapes use the new rows. The
@@ -31,19 +31,30 @@ export function flow$transform(transform, ...params) {
   });
   const transformed = new Flow(state, flow._data, flow._parent, context, flow._join);
   if (slot) {
+    // The slot is replaced by the marks, or, if they fail, by a node that throws their error again
+    // when it's drawn, so that the render fails as the transform did.
+    const replace = (...nodes) => {
+      const i = children.indexOf(slot);
+      if (i >= 0) children.splice(i, 1, ...nodes);
+    };
     step(context, () => {
-      const values = transformed._values;
-      const marks = (values && transform.marks(values, ...params)) || [];
-      const nodes = [];
-      for (const [shape, options, {front} = {}] of marks) {
-        // In a joined flow, a mark is added in every branch, such as an axis for all the layers.
-        for (const branch of transformed) {
-          const node = appendNode(branch, shape, {...options, implicit: true});
-          if (front) Object.defineProperty(node, "_front", {value: true});
-          nodes.push(node);
+      try {
+        const values = transformed._values;
+        const marks = (values && transform.marks(values, ...params)) || [];
+        const nodes = [];
+        for (const [shape, options, {front} = {}] of marks) {
+          // In a joined flow, a mark is added in every branch, such as an axis for all the layers.
+          for (const branch of transformed) {
+            const node = appendNode(branch, shape, {...options, implicit: true});
+            if (front) Object.defineProperty(node, "_front", {value: true});
+            nodes.push(node);
+          }
         }
+        replace(...nodes);
+      } catch (error) {
+        replace(new Node(failed(error), [], flow._parent));
+        throw error;
       }
-      children.splice(children.indexOf(slot), 1, ...nodes);
     });
   }
   return transformed;

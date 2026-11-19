@@ -5,15 +5,27 @@
 // step runs, or while the flow renders, the steps built then run right away, such as the flows that
 // an axis builds as it draws. A step keeps what it runs, so that it may run again.
 export function step(context, run) {
-  const s = {context, run, state: "pending", value: undefined};
+  const s = {context, run, state: "pending", value: undefined, queued: false};
   if (context.depth > 0) runStep(s);
-  else context.queue.push(s);
+  else (context.queue.push(s), (s.queued = true));
   return s;
 }
 
 // A step already run, with its value, such as the root of a flow.
 export function done(value) {
-  return {context: null, run: null, state: "done", value};
+  return {context: null, run: null, state: "done", value, queued: false};
+}
+
+// A step that failed with an error, which it throws again when it's needed.
+export function failed(error) {
+  return {context: null, run: null, state: "failed", value: error, queued: false};
+}
+
+// Drops the steps queued in a context, failed with an error, such as when a render throws, so that
+// reading one of them throws it again rather than running the steps queued since.
+export function discard(context, error) {
+  for (const s of context.queue) Object.assign(s, {state: "failed", value: error, queued: false});
+  context.queue.length = 0;
 }
 
 // The state of a flow whose rows are known as it's built, such as the root's.
@@ -26,8 +38,9 @@ export function concrete(groups) {
 export function force(s) {
   const {context} = s;
   while (s.state === "pending") {
-    if (!context.queue.length) throw new Error("A step of the flow was never queued.");
-    runStep(context.queue.shift());
+    // Only the steps queued before it run; one that isn't queued has no place in the order.
+    if (!s.queued) throw new Error("A step of the flow was never queued.");
+    runStep(shift(context));
   }
   if (s.state === "running") throw new Error("A step of the flow depends on itself.");
   if (s.state === "failed") throw s.value;
@@ -36,7 +49,13 @@ export function force(s) {
 
 // Runs every step queued in a context, such as before a render.
 export function flush(context) {
-  while (context.queue.length) runStep(context.queue.shift());
+  while (context.queue.length) runStep(shift(context));
+}
+
+function shift(context) {
+  const s = context.queue.shift();
+  s.queued = false;
+  return s;
 }
 
 function runStep(s) {

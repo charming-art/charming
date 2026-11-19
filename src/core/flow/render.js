@@ -1,5 +1,5 @@
 import {Flow} from "./index.js";
-import {concrete, flush} from "./step.js";
+import {concrete, discard, flush} from "./step.js";
 import {animate, play, stopSequence, transitionOptions} from "../transition/index.js";
 import {recorder} from "../transition/record.js";
 import {withInsets} from "../inset.js";
@@ -111,7 +111,7 @@ function renderChildren(renderer, children, indexOf, context, path, scope, time)
     for (let c = 0; c < children.length; c++) {
       const child = children[c];
       const j = indexOf(child);
-      const data = child._data[j];
+      const data = child._data?.[j];
       if (!data?.render.keyframe) continue;
       // A keyframe's moments would each need a span of time for the keyframes in it.
       if (time.inside) throw new Error("Keyframes nested in keyframes aren't supported yet.");
@@ -127,6 +127,8 @@ function renderChildren(renderer, children, indexOf, context, path, scope, time)
   order.sort((a, b) => (children[a]._front ? 1 : 0) - (children[b]._front ? 1 : 0));
   for (const c of order) {
     const child = children[c];
+    // A node without values, such as the slot of a transform's marks, draws nothing.
+    if (!child._data) continue;
     const j = indexOf(child);
     if (time && child._data[j]?.render.keyframe) {
       // Keyframes without rows have no moment to draw.
@@ -164,7 +166,7 @@ function sceneTiming(timings) {
 // Whether a flow has keyframes, which are then animated, from moment to moment.
 function hasKeyframe(nodes) {
   for (const node of nodes) {
-    if (node._data[0]?.render.keyframe || hasKeyframe(node._children)) return true;
+    if (node._data?.[0]?.render.keyframe || hasKeyframe(node._children)) return true;
   }
   return false;
 }
@@ -186,7 +188,7 @@ export function flow$render() {
     }
   } catch (error) {
     context.root._children = [];
-    context.queue.length = 0;
+    discard(context, error);
     throw error;
   }
 }
