@@ -79,7 +79,7 @@ test("cm.fit throws an error if the flow has no renderer", () => {
         .flow()
         .data([1])
         .transform(cm.bind, {x: (d) => d})
-        .transform(cm.fit),
+        .transform(cm.fit)._values,
     /No renderer/,
   );
 });

@@ -1,6 +1,7 @@
 import {Flow} from "./index.js";
 import {Node} from "../node.js";
 import {isColor} from "../color.js";
+import {step} from "./step.js";
 
 // Whether a string option names a bound channel. Like cm.encode, a color for fill or stroke is a
 // constant, even if a channel has its name.
@@ -61,27 +62,34 @@ function rowsOf(value, group) {
 
 export function flow$append(render, options = {}) {
   // Each branch nests under its own shape, so a joined flow is split first.
-  if (this._branches) throw new Error("Split a joined flow before appending into it: const [a, b] = flow.");
+  if (this._join) throw new Error("Split a joined flow before appending into it: const [a, b] = flow.");
   const flow = this._data ? this : this.data((d) => [d]);
-  const groups = flow._groups;
-  const parent = this._parent;
-  const data = flow._values;
-  // A shape marked raw, such as an axis, receives its options as they are, not per datum.
-  const empty = render.raw || Object.keys(options).length === 0;
-  const values = groups.map((group, j) => {
-    const context = data?.[j];
-    const bound = context?.value;
-    const I = context?.I ?? group.map((_, i) => i);
-    if (empty) return {I, render, options, value: {...bound}, group, context};
-    // A context may resolve the options of the shapes added to it, such as a context whose strings
-    // name the fields of its data.
-    const resolved = context?.resolve ? context.resolve(options, context) : options;
-    const value = valueOf(bound ? rowsOf(bound, group) : group, resolved, bound);
-    return {I, render, options, value: {...bound, ...value}, group, context};
+  const node = appendNode(flow, render, options);
+  this._parent._children.push(node);
+  const state = step(this._context, () => ({groups: flow._groups, values: null, branches: null}));
+  return new Flow(state, null, node, this._context);
+}
+
+// The node of a shape added to a flow, whose values for each group are computed when it's needed. A
+// flow of an array has one group, drawn under every parent row; a flow of a function, such as
+// flow.data((d) => d.children), has one group per parent row, across the parent's groups.
+export function appendNode(flow, render, options) {
+  const state = step(flow._context, () => {
+    const groups = flow._groups;
+    const data = flow._values;
+    // A shape marked raw, such as an axis, receives its options as they are, not per datum.
+    const empty = render.raw || Object.keys(options).length === 0;
+    return groups.map((group, j) => {
+      const context = data?.[j];
+      const bound = context?.value;
+      const I = context?.I ?? group.map((_, i) => i);
+      if (empty) return {I, render, options, value: {...bound}, group, context};
+      // A context may resolve the options of the shapes added to it, such as a context whose
+      // strings name the fields of its data.
+      const resolved = context?.resolve ? context.resolve(options, context) : options;
+      const value = valueOf(bound ? rowsOf(bound, group) : group, resolved, bound);
+      return {I, render, options, value: {...bound, ...value}, group, context};
+    });
   });
-  // A flow of an array has one group, drawn under every parent row; a flow of a function, such as
-  // flow.data((d) => d.children), has one group per parent row, across the parent's groups.
-  const node = new Node(values, [], parent, typeof flow._data !== "function");
-  parent._children.push(node);
-  return new Flow(groups, null, node, this._context);
+  return new Node(state, [], flow._parent, typeof flow._data !== "function");
 }

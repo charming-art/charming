@@ -90,8 +90,8 @@ test("cm.stackY splits the y bands of cm.spreadY among the series, for grouped b
 });
 
 test("cm.stackX and cm.stackY throw an error without channels", () => {
-  assert.throws(() => cm.flow().data([1]).transform(cm.stackY), /No channels.*cm.stackY/);
-  assert.throws(() => cm.flow().data([1]).transform(cm.stackX), /No channels.*cm.stackX/);
+  assert.throws(() => cm.flow().data([1]).transform(cm.stackY)._values, /No channels.*cm.stackY/);
+  assert.throws(() => cm.flow().data([1]).transform(cm.stackX)._values, /No channels.*cm.stackX/);
 });
 
 test("cm.stackY with chunk stacks equal values in rows of chunk, in data units", () => {

@@ -1,4 +1,5 @@
 import {Flow} from "./index.js";
+import {concrete, discard, flush} from "./step.js";
 import {animate, play, stopSequence, transitionOptions} from "../transition/index.js";
 import {recorder} from "../transition/record.js";
 import {withInsets} from "../inset.js";
@@ -54,7 +55,7 @@ function renderNode(renderer, node, index, context, path, scope, time, pick) {
     // They're kept apart from the children appended to it, which are drawn for each of its rows,
     // so that a composite drawn for several groups draws only the children it made for each one.
     node._children = [];
-    const flow = new Flow([I], I, node, context);
+    const flow = new Flow(concrete([I]), I, node, context);
     // A composite shape also receives the context of its flow, such as the scales recorded by
     // transforms, and its options as given.
     render(flow, value, {...bound, options});
@@ -110,7 +111,7 @@ function renderChildren(renderer, children, indexOf, context, path, scope, time)
     for (let c = 0; c < children.length; c++) {
       const child = children[c];
       const j = indexOf(child);
-      const data = child._data[j];
+      const data = child._data?.[j];
       if (!data?.render.keyframe) continue;
       // A keyframe's moments would each need a span of time for the keyframes in it.
       if (time.inside) throw new Error("Keyframes nested in keyframes aren't supported yet.");
@@ -126,6 +127,8 @@ function renderChildren(renderer, children, indexOf, context, path, scope, time)
   order.sort((a, b) => (children[a]._front ? 1 : 0) - (children[b]._front ? 1 : 0));
   for (const c of order) {
     const child = children[c];
+    // A node without values, such as the slot of a transform's marks, draws nothing.
+    if (!child._data) continue;
     const j = indexOf(child);
     if (time && child._data[j]?.render.keyframe) {
       // Keyframes without rows have no moment to draw.
@@ -163,15 +166,36 @@ function sceneTiming(timings) {
 // Whether a flow has keyframes, which are then animated, from moment to moment.
 function hasKeyframe(nodes) {
   for (const node of nodes) {
-    if (node._data[0]?.render.keyframe || hasKeyframe(node._children)) return true;
+    if (node._data?.[0]?.render.keyframe || hasKeyframe(node._children)) return true;
   }
   return false;
 }
 
 export function flow$render() {
   const context = this._context;
+  if (!context.renderer) throw new Error("No renderer: call flow.renderer(renderer) before flow.render().");
+  // The steps built run first, in the order they were built, then the tree is drawn; the flows built
+  // as it's drawn, such as an axis's ticks, run as they're built. A render that throws discards what
+  // was built, as one that draws does, so that the next one, such as the next frame of an animation,
+  // starts anew rather than throwing the same error.
+  try {
+    flush(context);
+    context.depth++;
+    try {
+      return draw.call(this);
+    } finally {
+      context.depth--;
+    }
+  } catch (error) {
+    context.root._children = [];
+    discard(context, error);
+    throw error;
+  }
+}
+
+function draw() {
+  const context = this._context;
   const {root, renderer} = context;
-  if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before flow.render().");
   const children = root._children;
   if (!context.transitionState) context.transitionState = {};
   // With keyframes, each moment is recorded as a scene, and the scenes are played in turn, with

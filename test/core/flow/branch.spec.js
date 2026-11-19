@@ -8,12 +8,13 @@ const xs = (flow) => flow.transform(cm.bind, {x: (d) => d});
 
 test("flow.branch(...branches) joins the contexts of the branches, so that the next transform sees them all", () => {
   let seen;
-  cm.flow()
+  cm
+    .flow()
     .branch(
       (flow) => xs(flow.data([1, 2])),
       (flow) => xs(flow.data([3])),
     )
-    .transform((_, data) => ((seen = data.map((d) => d.value.x)), data));
+    .transform((_, data) => ((seen = data.map((d) => d.value.x)), data))._values;
   assert.deepStrictEqual(seen, [[1, 2], [3]]);
 });
 
@@ -100,7 +101,7 @@ test("flow.branch(...branches) throws an error for branches with and without cha
       cm.flow().branch(
         (flow) => xs(flow.data([1])),
         (flow) => flow.data([2]),
-      ),
+      )._values,
     /Either every branch or none binds channels/,
   );
 });
@@ -110,7 +111,7 @@ test("flow.transform throws an error for a transform that changes the number of 
     (flow) => xs(flow.data([1])),
     (flow) => xs(flow.data([3])),
   );
-  assert.throws(() => joined.transform((_, data) => data.slice(1)), /keep one context per context/);
+  assert.throws(() => joined.transform((_, data) => data.slice(1))._values, /keep one context per context/);
 });
 
 test("flow.branch(...branches) throws an error for a branch of a nested flow that replaces its rows with an array", () => {

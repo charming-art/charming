@@ -25,7 +25,7 @@ test("flow.data(fn) returns a new flow with one group per datum, computed by fn"
 test("flow.data(fn) passes the datum, index, group and flow to fn", () => {
   const calls = [];
   const flow = cm.flow().data(["a", "b"]);
-  flow.data((d, i, group, f) => (calls.push([d, i, group, f]), [d]));
+  flow.data((d, i, group, f) => (calls.push([d, i, group, f]), [d])).data();
   assert.deepStrictEqual(calls, [
     ["a", 0, ["a", "b"], flow],
     ["b", 1, ["a", "b"], flow],

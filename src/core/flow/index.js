@@ -9,17 +9,41 @@ import {flow$renderer} from "./renderer.js";
 import {flow$render} from "./render.js";
 import {flow$finished} from "./finished.js";
 import {Node} from "../node.js";
+import {concrete, force} from "./step.js";
 
-export function Flow(groups = null, data = null, parent = null, context = null, values = null, branches = null) {
+// A flow: where the next shape is added, its parent, and the step that computes its rows, which runs
+// when the flow is drawn or its rows are read, such as by a transform after it. What's known as it's
+// built stays as it is: its data, an array or a function, and for a joined flow the data of its
+// branches, join, which splits it.
+export function Flow(state, data = null, parent = null, context = null, join = null) {
   Object.defineProperties(this, {
-    _branches: {value: branches},
-    _groups: {value: groups},
+    _state: {value: state},
+    _data: {value: data},
     _parent: {value: parent},
     _context: {value: context},
-    _data: {value: data},
-    _values: {value: values},
+    _join: {value: join},
   });
 }
+
+// The rows of a flow by group, the contexts of its transforms, and the branches of a joined flow,
+// computed by its step.
+Object.defineProperties(Flow.prototype, {
+  _groups: {
+    get() {
+      return force(this._state).groups;
+    },
+  },
+  _values: {
+    get() {
+      return force(this._state).values;
+    },
+  },
+  _branches: {
+    get() {
+      return force(this._state).branches;
+    },
+  },
+});
 
 Object.defineProperties(Flow.prototype, {
   call: {value: flow$call},
@@ -39,6 +63,8 @@ Object.defineProperties(Flow.prototype, {
 // as {duration: 500, ease: "linear"}.
 export function flow({transition} = {}) {
   const root = new Node();
-  const context = {root, renderer: null, transition};
-  return new Flow([[0]], [0], root, context);
+  // The steps built and not yet run, in order, and how deep the steps running or the render are, while
+  // which the steps built run right away; flows built otherwise run when they're drawn.
+  const context = {root, renderer: null, transition, queue: [], depth: 0};
+  return new Flow(concrete([[0]]), [0], root, context);
 }
