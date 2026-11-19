@@ -127,11 +127,44 @@ test("the marks of an encoded flow keep colors of states as constants, and take 
 test("fieldOptions reads the strings of channels as fields with a given accessor, also in states", () => {
   const options = fieldOptions(
     {text: "note", fill: "red", textAlign: "end", enter: {text: "note", fill: "red"}},
-    {},
+    new Set(),
     (name) => (d) => d[name],
   );
   const d = {note: "a"};
   assert.strictEqual(options.text(d), "a");
   assert.strictEqual(options.enter.text(d), "a");
   assert.deepStrictEqual([options.fill, options.textAlign, options.enter.fill], ["red", "end", "red"]);
+});
+
+test("the marks of an encoded flow keep colors of a halo as constants", () => {
+  const {halo, enterHalo} = marked(data, {x: "letter"}, {halo: "black", enter: {halo: "white"}});
+  assert.deepStrictEqual(halo, ["black", "black"]);
+  assert.deepStrictEqual(enterHalo, ["white", "white"]);
+  assert.deepStrictEqual(marked(data, {x: "letter"}, {halo: "color"}).halo, ["steelblue", "orange"]);
+});
+
+test("the marks of a chart read a field rather than the channels that cm.plane adds to draw", () => {
+  const [shape, calls] = probe();
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  root
+    .data([{z: "field-z", y: "field-y", name: "n"}])
+    .transform(cm.encode, {x: "name", fill: "red"})
+    .transform(cm.plane)
+    .add(shape, {text: "z", title: "y", key: "x"});
+  root.render();
+  // The series copied from fill to z and the middle of y aren't encoded; x is.
+  assert.deepStrictEqual(calls[0].text, ["field-z"]);
+  assert.deepStrictEqual(calls[0].title, ["field-y"]);
+  assert.notStrictEqual(calls[0].key[0], "n");
+});
+
+test("cm.inset reads a string of a position as a bound channel, else a field of the datum", () => {
+  const [shape, calls] = probe();
+  const root = cm.flow().renderer(cm.svg({width: 100, height: 100}));
+  root
+    .data([{a: 10, b: 30}])
+    .transform(cm.encode, {x: "a"})
+    .add(shape, cm.inset(2, {x: "x", x1: "b"}));
+  root.render();
+  assert.deepStrictEqual([calls[0].x, calls[0].x1], [[12], [28]]);
 });

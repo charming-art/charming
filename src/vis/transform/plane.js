@@ -191,24 +191,24 @@ const sidesOfPlane = {
 // enterDelay: "start" and enterDuration: "length", share one scale, time, unless a timing names
 // another: {time: {range: [0, 3000]}} plays them from 0 to the largest in 3s, and {time: {domain:
 // [0, 1], range: [0, 600]}} at 600ms per unit; options given under the name of a timing, such as
-// {enterDelay: {range: [0, 3000]}}, are its scale's; without a range, timings are milliseconds.
-// The type "identity" leaves a color, radius or opacity as it is. Like Plot's, any scale also takes transform, a function of its values, such
-// as (d) => d / 1000, or percent, mapping proportions to percentages; and a continuous one zero, to
-// include 0 in its domain, but for log, nice, to round it, true or a count of ticks, a log scale
-// rounding to powers of its base, and clamp, to pin values past it to its ends. The other options
-// of the plane can't name a scale. Like Plot's, a chart draws the axes of its positions, at the
-// bottom and the left: the options of a position also take axis, "top", "both" or null for x,
-// "right", "both" or null for y, and the options of cm.axis, such as {x: {axis: "top", grid:
-// true}}; a scale such as fill takes legend: true to draw its legend, and the options of cm.legend.
-// An axis or legend added to the chart explicitly replaces the one of its kind drawn for the same
-// scale, such as cm.axisY with anchor "right" for a second scale of y.
-// In a nested flow, such as one chart per row of a parent mark, each context is drawn in the frame
-// of its parent row: the cell of a band, or a width × height box around a point. The resolved
-// scales are kept in context.scales, and the chart area in context.frame. With clip, the marks are
-// clipped to the frame, like Plot's clip, such as bars sliding in from outside it, unless a mark
-// gives its own clip option, false to draw outside it or true to be clipped without the plane's
-// clip; axes aren't. A chart nested in a chart draws no axes unless asked, such as x: {axis:
-// "bottom"}.
+// {enterDelay: {range: [0, 3000]}}, are its scale's; without a range, timings are milliseconds. The
+// type "identity" leaves a color, radius or opacity as it is. Like Plot's, any scale also takes
+// transform, a function of its values, such as (d) => d / 1000, or percent, mapping proportions to
+// percentages; and a continuous one zero, to include 0 in its domain, but for log, nice, to round
+// it, true or a count of ticks, a log scale rounding to powers of its base, and clamp, to pin
+// values past it to its ends. The other options of the plane can't name a scale. Like Plot's, a
+// chart draws the axes of its positions, at the bottom and the left: the options of a position also
+// take axis, "top", "both" or null for x, "right", "both" or null for y, and the options of
+// cm.axis, such as {x: {axis: "top", grid: true}}; a scale such as fill takes legend: true to draw
+// its legend, and the options of cm.legend. An axis or legend added to the chart explicitly
+// replaces the one of its kind drawn for the same scale, such as cm.axisY with anchor "right" for a
+// second scale of y. In a nested flow, such as one chart per row of a parent mark, each context is
+// drawn in the frame of its parent row: the cell of a band, or a width × height box around a point.
+// The resolved scales are kept in context.scales, and the chart area in context.frame. With clip,
+// the marks are clipped to the frame, like Plot's clip, such as bars sliding in from outside it,
+// unless a mark gives its own clip option, false to draw outside it or true to be clipped without
+// the plane's clip; axes aren't. A chart nested in a chart draws no axes unless asked, such as x:
+// {axis: "bottom"}.
 export function plane(
   flow,
   data,
@@ -428,10 +428,16 @@ export function plane(
     for (const key of ownKeysY) if (key in value) scales[key] = recordY;
 
     const newValue = {...scaled.value};
-    if (hasAny(value, ownKeysX) && !hasAny(value, ownKeysY))
+    // A position that isn't encoded is added to draw, so a string of a shape names a field, not it.
+    const derived = [...(context.derived ?? [])];
+    if (hasAny(value, ownKeysX) && !hasAny(value, ownKeysY)) {
       newValue[keysY[0]] = middle(value, ownKeysX, [frame.top, frame.bottom]);
-    if (hasAny(value, ownKeysY) && !hasAny(value, ownKeysX))
+      derived.push(keysY[0]);
+    }
+    if (hasAny(value, ownKeysY) && !hasAny(value, ownKeysX)) {
       newValue[keysX[0]] = middle(value, ownKeysY, [frame.left, frame.right]);
+      derived.push(keysX[0]);
+    }
     // The frame is kept as a clip shape, so that a mark can opt in with its own clip option; the
     // clip option is the default of the marks.
     const {left, top, right, bottom} = frame;
@@ -448,7 +454,7 @@ export function plane(
     );
     if (legendX !== undefined) guides.legendX = legendX;
     if (j === legendAt?.index) guides.legendAt = legendAt;
-    return {...withoutHints(scaled), value: newValue, scales, frame, clip: shape, clipped: clip, guides};
+    return {...withoutHints(scaled), value: newValue, scales, frame, clip: shape, clipped: clip, guides, derived};
   });
 }
 

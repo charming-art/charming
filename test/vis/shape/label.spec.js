@@ -141,7 +141,7 @@ test("cm.label places labels on the wedges of cm.polar: center, inside or outsid
       .transform(cm.encode, {x: "v"})
       .transform(cm.stackX)
       .transform(cm.polar, {margin: 0, innerRadius: 0.5})
-      .add(cm.label, {text: "a", ...options});
+      .add(cm.label, {text: () => "a", ...options});
     root.render();
     return Array.from(renderer.node().querySelectorAll("text"), (t) => [
       Math.round(+t.getAttribute("x")),

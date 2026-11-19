@@ -73,9 +73,9 @@ export function flow$append(render, options = {}) {
     const bound = context?.value;
     const I = context?.I ?? group.map((_, i) => i);
     if (empty) return {I, render, options, value: {...bound}, group, context};
-    // A context may resolve the options of the shapes added to it, given the bound channels, such
-    // as a context whose strings name the fields of its data.
-    const resolved = context?.resolve ? context.resolve(options, bound) : options;
+    // A context may resolve the options of the shapes added to it, such as a context whose strings
+    // name the fields of its data.
+    const resolved = context?.resolve ? context.resolve(options, context) : options;
     const value = valueOf(bound ? rowsOf(bound, group) : group, resolved, bound);
     return {I, render, options, value: {...bound, ...value}, group, context};
   });

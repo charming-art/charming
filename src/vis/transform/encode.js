@@ -45,19 +45,25 @@ const literals = new Set([
 // The stages of transitions, whose states are options of their own, such as enter: {fill: "red"}.
 const stages = new Set(["appear", "enter", "exit"]);
 
+// The options whose strings may be colors, which stay constants: fill, stroke and the halo of a
+// label.
+const paintKeys = [...colorKeys, "halo"];
+
 // Whether a string option names a field of the data, like a channel of cm.encode: an option of a
-// channel, such as text or x, rather than of style, and other than a color for fill or stroke.
+// channel, such as text or x, rather than of style, and other than a color for a paint, such as
+// fill, stroke or halo.
 export function isField(key, value) {
   if (typeof value !== "string" || literals.has(key)) return false;
-  return !(colorKeys.includes(key) && isColor(value));
+  return !(paintKeys.includes(key) && isColor(value));
 }
 
 // Options with the strings of their channels as accessors of fields, like cm.encode, by field,
-// unless they name a bound channel, which the shape reads, such as {y: "v2"}; also in the states of
-// transitions, such as enter: {text: "name"}. The shapes added to an encoded flow read the fields
-// of the datum of each row, and those of cm.annotate the fields of its own data.
-export function fieldOptions(options, channels = {}, field = (name) => (d) => d.datum?.[name]) {
-  const resolve = (key, value) => (isField(key, value) && !Object.hasOwn(channels, value) ? field(value) : value);
+// unless they name a bound channel, one of the given names, which the shape reads, such as {y:
+// "v2"}; also in the states of transitions, such as enter: {text: "name"}. The shapes added to an
+// encoded flow read the fields of the datum of each row, and those of cm.annotate the fields of its
+// own data.
+export function fieldOptions(options, channels = new Set(), field = (name) => (d) => d.datum?.[name]) {
+  const resolve = (key, value) => (isField(key, value) && !channels.has(value) ? field(value) : value);
   const resolved = {};
   for (const [key, value] of Object.entries(options)) {
     const state = stages.has(key) && value !== null && typeof value === "object" && !Array.isArray(value);
@@ -66,6 +72,19 @@ export function fieldOptions(options, channels = {}, field = (name) => (d) => d.
       : resolve(key, value);
   }
   return resolved;
+}
+
+// The bound channels of a context, which its shapes read by name: the channels encoded and those of
+// later transforms, such as y1 of a stack, but not those that cm.plane and cm.polar add to draw,
+// such as the series copied from fill to z, or the middle of a position that isn't encoded.
+function channelsOf({value = {}, derived = []}) {
+  return new Set(Object.keys(value).filter((key) => !derived.includes(key)));
+}
+
+// The options of the shapes added to an encoded flow, with the strings of their channels as
+// fields of the datum.
+function resolveFields(options, context) {
+  return fieldOptions(options, channelsOf(context));
 }
 
 export function encode(flow, data, options = {}) {
@@ -88,6 +107,6 @@ export function encode(flow, data, options = {}) {
   // to an encoded flow read the strings of their channels as fields, like cm.encode.
   return bind(flow, data, channels).map((context) => {
     const kept = Object.entries(context.hints ?? {}).filter(([key]) => !(key in options));
-    return {...context, hints: {...Object.fromEntries(kept), ...hints}, resolve: fieldOptions};
+    return {...context, hints: {...Object.fromEntries(kept), ...hints}, resolve: resolveFields};
   });
 }

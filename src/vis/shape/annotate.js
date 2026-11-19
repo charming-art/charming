@@ -102,7 +102,7 @@ export function annotate(shape) {
       y: valuesOf(y, D, fields),
       y1: valuesOf(y1, D, fields),
     };
-    const own = fields ? fieldOptions(rest, {}, field) : rest;
+    const own = fields ? fieldOptions(rest, new Set(), field) : rest;
     const positions = frame.type === "polar" ? polarPositions : planePositions;
     const {X, X1, Y, Y1} = positions(scales, frame, P, shape);
     const at = (V) => (d, i) => V[i];
