@@ -1,4 +1,5 @@
 import {Flow} from "./index.js";
+import {concrete} from "./step.js";
 import {animate, play, stopSequence, transitionOptions} from "../transition/index.js";
 import {recorder} from "../transition/record.js";
 import {withInsets} from "../inset.js";
@@ -54,7 +55,7 @@ function renderNode(renderer, node, index, context, path, scope, time, pick) {
     // They're kept apart from the children appended to it, which are drawn for each of its rows,
     // so that a composite drawn for several groups draws only the children it made for each one.
     node._children = [];
-    const flow = new Flow([I], I, node, context);
+    const flow = new Flow(concrete([I]), I, node, context);
     // A composite shape also receives the context of its flow, such as the scales recorded by
     // transforms, and its options as given.
     render(flow, value, {...bound, options});
