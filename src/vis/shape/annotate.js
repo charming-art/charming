@@ -1,6 +1,6 @@
 import {link} from "../../core/shape/link.js";
 import {rect} from "../../core/shape/rect.js";
-import {isField} from "../transform/encode.js";
+import {fieldOptions} from "../transform/encode.js";
 
 // The shapes with extents, which span the frame along a position that isn't given.
 const spans = new Set([link, rect]);
@@ -82,17 +82,18 @@ function polarPositions({x, y}, frame, P, shape) {
 }
 
 // Turns a shape into an annotation: it draws its own data, given as the data option or a single
-// row, with positions x, x1, y and y1 in data units, strings naming fields of its data, mapped through the scales recorded by
-// cm.plane or cm.polar. A missing position spans the frame for shapes with extents, such as a rule
-// drawn with cm.link or a band drawn with cm.rect, else sits in the middle of the frame. The other
-// options are passed to the shape. Annotations don't change the scales.
+// row, with positions x, x1, y and y1 in data units, mapped through the scales recorded by cm.plane
+// or cm.polar; with data, the strings of its channels name fields of it. A missing position spans
+// the frame for shapes with extents, such as a rule drawn with cm.link or a band drawn with
+// cm.rect, else sits in the middle of the frame. The other options are passed to the shape.
+// Annotations don't change the scales.
 export function annotate(shape) {
   function annotation(flow, value, {scales = {}, frame, options = {}} = {}) {
     if (!frame) return;
     const {data, x, x1, y, y1, ...rest} = options;
     // Like the marks of an encoded flow, an annotation with data reads the strings of its channels
-    // as fields of it, such as {x: "length", text: "note"}; one without data, a single row, has none,
-    // so its strings are constants, such as {x: "A"} for a band.
+    // as fields of it, such as {x: "length", text: "note"}; one without data, a single row, has
+    // none, so its strings are constants, such as {x: "A"} for a band.
     const fields = data !== undefined;
     const D = fields ? Array.from(data) : [null];
     const P = {
@@ -101,12 +102,12 @@ export function annotate(shape) {
       y: valuesOf(y, D, fields),
       y1: valuesOf(y1, D, fields),
     };
-    if (fields) for (const key in rest) if (isField(key, rest[key])) rest[key] = field(rest[key]);
+    const own = fields ? fieldOptions(rest, {}, field) : rest;
     const positions = frame.type === "polar" ? polarPositions : planePositions;
     const {X, X1, Y, Y1} = positions(scales, frame, P, shape);
     const at = (V) => (d, i) => V[i];
     flow.data(D).append(shape, {
-      ...rest,
+      ...own,
       x: at(X),
       y: at(Y),
       ...(X1 && {x1: at(X1)}),

@@ -2,6 +2,7 @@ import assert from "node:assert";
 import {test} from "vitest";
 import "../../install-canvas-mock.js";
 import * as cm from "../../../src/index.js";
+import {fieldOptions} from "../../../src/vis/transform/encode.js";
 import {probe} from "../../helpers.js";
 
 function values(data, options) {
@@ -121,4 +122,16 @@ test("the marks of an encoded flow keep colors of states as constants, and take 
   assert.deepStrictEqual(enterFill, ["red", "red"]);
   assert.deepStrictEqual(enterText, ["A", "B"]);
   assert.deepStrictEqual(text, ["Total", "Total"]);
+});
+
+test("fieldOptions reads the strings of channels as fields with a given accessor, also in states", () => {
+  const options = fieldOptions(
+    {text: "note", fill: "red", textAlign: "end", enter: {text: "note", fill: "red"}},
+    {},
+    (name) => (d) => d[name],
+  );
+  const d = {note: "a"};
+  assert.strictEqual(options.text(d), "a");
+  assert.strictEqual(options.enter.text(d), "a");
+  assert.deepStrictEqual([options.fill, options.textAlign, options.enter.fill], ["red", "end", "red"]);
 });

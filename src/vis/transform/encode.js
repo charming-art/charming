@@ -52,13 +52,12 @@ export function isField(key, value) {
   return !(colorKeys.includes(key) && isColor(value));
 }
 
-// The options of the shapes added to an encoded flow, with the strings of their channels as
-// accessors of the fields of the datum, like cm.encode, unless they name a bound channel, which
-// the shape reads, such as {y: "v2"}; also in the states of transitions, such as enter: {text:
-// "name"}.
-function fieldOptions(options, channels = {}) {
-  const resolve = (key, value) =>
-    isField(key, value) && !Object.hasOwn(channels, value) ? (d) => d.datum?.[value] : value;
+// Options with the strings of their channels as accessors of fields, like cm.encode, by field,
+// unless they name a bound channel, which the shape reads, such as {y: "v2"}; also in the states of
+// transitions, such as enter: {text: "name"}. The shapes added to an encoded flow read the fields
+// of the datum of each row, and those of cm.annotate the fields of its own data.
+export function fieldOptions(options, channels = {}, field = (name) => (d) => d.datum?.[name]) {
+  const resolve = (key, value) => (isField(key, value) && !Object.hasOwn(channels, value) ? field(value) : value);
   const resolved = {};
   for (const [key, value] of Object.entries(options)) {
     const state = stages.has(key) && value !== null && typeof value === "object" && !Array.isArray(value);
