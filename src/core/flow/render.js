@@ -1,5 +1,5 @@
 import {Flow} from "./index.js";
-import {concrete} from "./step.js";
+import {concrete, flush} from "./step.js";
 import {animate, play, stopSequence, transitionOptions} from "../transition/index.js";
 import {recorder} from "../transition/record.js";
 import {withInsets} from "../inset.js";
@@ -171,8 +171,21 @@ function hasKeyframe(nodes) {
 
 export function flow$render() {
   const context = this._context;
+  if (!context.renderer) throw new Error("No renderer: call flow.renderer(renderer) before flow.render().");
+  // The steps built run first, in the order they were built, then the tree is drawn; the flows built
+  // as it's drawn, such as an axis's ticks, run as they're built.
+  flush(context);
+  context.depth++;
+  try {
+    return draw.call(this);
+  } finally {
+    context.depth--;
+  }
+}
+
+function draw() {
+  const context = this._context;
   const {root, renderer} = context;
-  if (!renderer) throw new Error("No renderer: call flow.renderer(renderer) before flow.render().");
   const children = root._children;
   if (!context.transitionState) context.transitionState = {};
   // With keyframes, each moment is recorded as a scene, and the scenes are played in turn, with

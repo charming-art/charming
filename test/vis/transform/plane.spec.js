@@ -1065,7 +1065,7 @@ test("cm.plane fits its margins to the ends of the tick labels of x, rotated tic
 test("cm.plane sizes an auto height with the top and bottom margins of its axes", () => {
   const heightOf = (data, channels, options) => {
     const renderer = cm.svg();
-    cm.flow().renderer(renderer).data(data).transform(cm.encode, channels).transform(cm.plane, options);
+    cm.flow().renderer(renderer).data(data).transform(cm.encode, channels).transform(cm.plane, options)._values;
     return renderer._props.height;
   };
   const dots = [{v: 1}, {v: 2}];

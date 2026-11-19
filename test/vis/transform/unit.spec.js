@@ -57,8 +57,8 @@ test("cm.unitX mirrors cm.unitY", () => {
 });
 
 test("cm.unitX and cm.unitY throw an error without channels", () => {
-  assert.throws(() => cm.flow().data([1]).transform(cm.unitY), /No channels.*cm.unitY/);
-  assert.throws(() => cm.flow().data([1]).transform(cm.unitX), /No channels.*cm.unitX/);
+  assert.throws(() => cm.flow().data([1]).transform(cm.unitY)._values, /No channels.*cm.unitY/);
+  assert.throws(() => cm.flow().data([1]).transform(cm.unitX)._values, /No channels.*cm.unitX/);
 });
 
 test("cm.unitY groups by position and series, even if their values contain commas", () => {

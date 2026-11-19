@@ -64,7 +64,7 @@ Object.defineProperties(Flow.prototype, {
 export function flow({transition} = {}) {
   const root = new Node();
   // The steps built and not yet run, in order, and how deep the steps running or the render are, while
-  // which the steps built run right away.
-  const context = {root, renderer: null, transition, queue: [], depth: 1};
+  // which the steps built run right away; flows built otherwise run when they're drawn.
+  const context = {root, renderer: null, transition, queue: [], depth: 0};
   return new Flow(concrete([[0]]), [0], root, context);
 }
