@@ -56,11 +56,14 @@ test("a flow built but never drawn still runs when the flow renders", () => {
   assert.strictEqual(count, 1);
 });
 
-test("the marks of a transform, as many as its contexts ask, are drawn where it was built, with front marks last", () => {
+test("the marks of a transform are added as it's built, where it was built, with front marks drawn last", () => {
   const order = [];
   const shape = (name) => Object.assign((renderer, I) => order.push(`${name} ${I.length}`), {builtin: true});
   const marked = Object.assign((flow, data) => data, {
-    marks: (values) => [...values.map((_, i) => [shape(`mark${i}`), {}]), [shape("front"), {}, {front: true}]],
+    marks: () => [
+      [shape("mark"), {}],
+      [shape("front"), {}, {front: true}],
+    ],
   });
   const flow = root();
   flow
@@ -69,7 +72,7 @@ test("the marks of a transform, as many as its contexts ask, are drawn where it 
     .transform(marked)
     .append(shape("added"));
   flow.render();
-  assert.deepStrictEqual(order, ["mark0 2", "added 2", "front 2"]);
+  assert.deepStrictEqual(order, ["mark 2", "added 2", "front 2"]);
 });
 
 test("the errors of a transform are thrown when the flow renders, not as it's built", () => {
@@ -144,18 +147,36 @@ test("reading a step discarded by a render that threw throws its error, without 
   assert.deepStrictEqual(calls, []);
 });
 
-test("marks that fail when read early fail the render too, and the next frame draws anew", () => {
-  const renderer = cm.svg({width: 100, height: 100});
-  const flow = cm.flow().renderer(renderer);
+test("the marks of a transform throw as it's built, as they're known then", () => {
   const failing = Object.assign((_, data) => data, {
     marks() {
       throw new Error("marks failed");
     },
   });
-  const chart = flow.data([1]).transform(cm.bind, {x: 10, y: 10, r: 3}).transform(failing);
-  assert.throws(() => chart.append(cm.circle)._values, /marks failed/);
-  assert.throws(() => flow.render(), /marks failed/);
-  flow.data([1]).transform(cm.bind, {x: 10, y: 10, r: 3}).append(cm.circle);
+  assert.throws(() => root().data([1]).transform(failing), /marks failed/);
+});
+
+test("a composite shape is expanded once per group, before anything is drawn, even across keyframes", () => {
+  const events = [];
+  const builtin = Object.assign(() => events.push("draw"), {builtin: true});
+  const composite = (flow) => (events.push("expand"), flow.data([0]).append(builtin));
+  const flow = root();
+  flow.data([0]).append(composite);
+  flow.data([1, 2]).append(cm.keyframe);
   flow.render();
-  assert.strictEqual(renderer.node().querySelectorAll("circle").length, 1);
+  // One expansion, then the drawing of each scene of the two moments.
+  assert.deepStrictEqual(events, ["expand", "draw", "draw"]);
+});
+
+test("a composite shape sees the shapes built after it, as it's expanded once every step has run", () => {
+  let seen;
+  const composite = (flow) => (seen = flow._parent._parent._children.map((node) => node._data[0].options.name));
+  const flow = root();
+  flow.data([0]).append(composite, {name: "composite"});
+  flow.data([0]).append(
+    Object.assign(() => {}, {builtin: true}),
+    {name: "later"},
+  );
+  flow.render();
+  assert.deepStrictEqual(seen, ["composite", "later"]);
 });

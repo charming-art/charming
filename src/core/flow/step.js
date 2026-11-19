@@ -16,11 +16,6 @@ export function done(value) {
   return {context: null, run: null, state: "done", value, queued: false};
 }
 
-// A step that failed with an error, which it throws again when it's needed.
-export function failed(error) {
-  return {context: null, run: null, state: "failed", value: error, queued: false};
-}
-
 // Drops the steps queued in a context, failed with an error, such as when a render throws, so that
 // reading one of them throws it again rather than running the steps queued since.
 export function discard(context, error) {

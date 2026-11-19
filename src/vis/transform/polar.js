@@ -326,4 +326,4 @@ export function polar(
 }
 
 // The axes and legends that a polar chart draws, when asked, before the shapes added to it.
-polar.marks = (values) => guideMarks(values, {axisX, axisY, legend});
+polar.marks = () => guideMarks({axisX, axisY, legend});

@@ -460,4 +460,4 @@ export function plane(
 
 // The axes and legends that a chart draws, from the guides of its contexts, before the shapes
 // added to it; one of the same kind added explicitly replaces them.
-plane.marks = (values) => guideMarks(values, {axisX, axisY, legend});
+plane.marks = () => guideMarks({axisX, axisY, legend});

@@ -4,6 +4,14 @@ import "../../install-canvas-mock.js";
 import * as cm from "../../../src/index.js";
 import {probe} from "../../helpers.js";
 
+// A builtin shape that records the values it draws, in the order it draws them, unlike probe's
+// composite, which records them as the tree is expanded.
+function drawn() {
+  const calls = [];
+  const shape = Object.assign((renderer, I, value) => calls.push(value), {builtin: true});
+  return [shape, calls];
+}
+
 test("flow.render() throws an error if no renderer is set", () => {
   assert.throws(() => cm.flow().render(), /No renderer/);
 });
@@ -37,7 +45,7 @@ test("flow.render() clears the tree, so rendering again draws nothing new", () =
 });
 
 test("flow.render() renders children for each index of the parent in order", () => {
-  const [shape, calls] = probe();
+  const [shape, calls] = drawn();
   const root = cm.flow().renderer(cm.canvas({width: 10, height: 10}));
   root
     .data(["a", "b", "c"])
@@ -71,7 +79,7 @@ test("flow.render() draws each nested group under its own parent row, at any dep
 });
 
 test("flow.render() draws a nested flow of an array under every parent row", () => {
-  const [shape, calls] = probe();
+  const [shape, calls] = drawn();
   const root = cm.flow().renderer(cm.canvas({width: 10, height: 10}));
   root
     .data([
