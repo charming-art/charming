@@ -10,7 +10,6 @@ export default defineConfig({
   extends: config,
   vite: {
     ssr: {
-      noExternal: ["points-on-path"],
     },
   },
   head: [["link", {rel: "icon", type: "image/png", href: "/logo.png"}]],
@@ -40,7 +39,7 @@ export default defineConfig({
           ],
         },
         {
-          text: "Pretext",
+          text: "Calligram",
           items: [
             {text: "U.S. Map Paper", link: "/gallery/#u-s-map-paper"},
             {text: "Yin Yang", link: "/gallery/#yin-yang"},
@@ -116,7 +115,6 @@ export default defineConfig({
             {text: "Charming DOM", link: "/dom"},
             {text: "Charming Context2D", link: "/context2d"},
             {text: "Charming Path", link: "/path"},
-            {text: "Charming Text", link: "/text"},
             {text: "Charming Vector", link: "/vector"},
             {text: "Charming Noise", link: "/noise"},
           ],

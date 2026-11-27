@@ -3,7 +3,7 @@
 **Charming** is a free, open-source JavaScript library for creative coding and data-driven drawing. It has two parts:
 
 - **[Charming Core](/flow)**, a declarative language for drawing shapes from data, with renderers for [Canvas](/canvas#cm-canvas), [WebGL](/webgl) and [the terminal](/terminal) (ASCII art).
-- **Utilities** for working with [SVG and HTML](/dom), [Canvas](/context2d), [paths](/path), [text](/text), [vectors](/vector) and [noise](/noise) directly, with little boilerplate.
+- **Utilities** for working with [SVG and HTML](/dom), [Canvas](/context2d), [paths](/path), [vectors](/vector) and [noise](/noise) directly, with little boilerplate.
 
 Both are designed to work alongside other libraries such as [D3](https://d3js.org/) and [p5](https://p5js.org/), and can be adopted independently.
 
