@@ -1,6 +1,6 @@
 # API Index
 
-Charming offers a declarative language for drawing shapes from data on Canvas, WebGL and the terminal, and a set of utilities for working with SVG, Canvas, HTML and text directly. They can be used together or independently.
+Charming offers a declarative language for drawing shapes from data on Canvas, WebGL and the terminal, and a set of utilities for working with SVG, Canvas and HTML directly. They can be used together or independently.
 
 ## Charming Core
 
@@ -81,7 +81,7 @@ Draw ASCII art.
 
 ## Utilities
 
-Work with SVG, HTML, Canvas, paths, text, vectors and noise directly.
+Work with SVG, HTML, Canvas, paths, vectors and noise directly.
 
 ### [Charming DOM](/dom)
 
@@ -113,14 +113,6 @@ Build SVG path strings for common shapes.
 - [_cm_.**pathEllipse**](/path#cm-path-ellipse) — closed axis-aligned ellipse.
 - [_cm_.**pathPolygon**](/path#cm-path-polygon) — closed path through `[x, y]` points.
 - [_cm_.**pathContext**](/path#cm-path-context) — a d3-path context that records path commands as arrays, for _cm_.path.
-
-### [Charming Text](/text)
-
-Text measurement and path-bound layout on top of [Pretext](https://github.com/chenglou/pretext).
-
-- [_cm_.**prepare**](/text#cm-prepare) — prepare a string with font options for Pretext.
-- [_cm_.**layoutTextInPath**](/text#cm-layout-text-in-path) — flow prepared text through a closed SVG path.
-- [_cm_.**clearPrepareCache**](/text#cm-clear-prepare-cache) — clear memoized prepare and Pretext caches.
 
 ### [Charming Vector](/vector)
 
