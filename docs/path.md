@@ -1,6 +1,6 @@
 # Charming Path
 
-**Charming Path** builds SVG [`d`](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d) path strings from numbers, handy for `<path>`, [`getPointAtLength`](https://developer.mozilla.org/en-US/docs/Web/API/SVGGeometryElement/getPointAtLength), or APIs such as `layoutTextInPath` that expect a path description. Shapes are axis-aligned in user space (no rotation in the path itself). [_cm_.pathContext](#cm-path-context) records paths as command arrays for [_cm_.path](/shape#cm-path).
+**Charming Path** builds SVG [`d`](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d) path strings from numbers, handy for `<path>`, [`getPointAtLength`](https://developer.mozilla.org/en-US/docs/Web/API/SVGGeometryElement/getPointAtLength), or any API that expects a path description. Shapes are axis-aligned in user space (no rotation in the path itself). [_cm_.pathContext](#cm-path-context) records paths as command arrays for [_cm_.path](/shape#cm-path).
 
 ```js eval code=false
 (() => {

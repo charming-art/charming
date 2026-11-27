@@ -1,6 +1,6 @@
 # API Index
 
-Charming offers a declarative language for drawing shapes from data on Canvas, WebGL and the terminal, and a set of utilities for working with SVG, Canvas, HTML and text directly. They can be used together or independently.
+Charming offers a declarative language for drawing shapes from data on Canvas, WebGL and the terminal, and a set of utilities for working with SVG, Canvas and HTML directly. They can be used together or independently.
 
 ## Charming Core
 
@@ -81,7 +81,7 @@ Draw ASCII art.
 
 ## Utilities
 
-Work with SVG, HTML, Canvas, paths, text, vectors and noise directly.
+Work with SVG, HTML, Canvas, paths, vectors and noise directly.
 
 ### [Charming DOM](/dom)
 
